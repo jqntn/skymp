@@ -189,6 +189,13 @@ Napi::Value DevApi::BlockPapyrusEvents(const Napi::CallbackInfo& info)
   return info.Env().Undefined();
 }
 
+Napi::Value DevApi::AllowQuestPapyrusEvents(const Napi::CallbackInfo& info)
+{
+  bool allow = NapiHelper::ExtractBoolean(info[0], "allow");
+  TESModPlatform::AllowQuestPapyrusEvents(allow);
+  return info.Env().Undefined();
+}
+
 namespace {
 class WrapperScreenShotEventHandler : public RE::MenuEventHandler
 {

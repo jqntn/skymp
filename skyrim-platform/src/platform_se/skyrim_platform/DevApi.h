@@ -18,6 +18,8 @@ Napi::Value GetJsMemoryUsage(const Napi::CallbackInfo& info);
 
 Napi::Value BlockPapyrusEvents(const Napi::CallbackInfo& info);
 
+Napi::Value AllowQuestPapyrusEvents(const Napi::CallbackInfo& info);
+
 void DisableCtrlPrtScnHotkey();
 
 using NativeExportsMap =
@@ -68,5 +70,8 @@ inline void Register(Napi::Env env, Napi::Object& exports,
   exports.Set("blockPapyrusEvents",
               Napi::Function::New(
                 env, NapiHelper::WrapCppExceptions(BlockPapyrusEvents)));
+  exports.Set("allowQuestPapyrusEvents",
+              Napi::Function::New(
+                env, NapiHelper::WrapCppExceptions(AllowQuestPapyrusEvents)));
 }
 }

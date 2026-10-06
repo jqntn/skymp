@@ -100,3 +100,20 @@ TEST_CASE("Actor factions in changeForm", "[Actor]")
     FormDesc::FromFormId(0x000123, p.worldState.espmFiles), false);
   REQUIRE(actor.GetChangeForm().factions.value().size() == 0);
 }
+
+TEST_CASE("VisitProperties skips private properties", "[Actor]")
+{
+  MpChangeForm changeForm;
+  changeForm.recType = MpChangeForm::ACHR;
+  changeForm.dynamicFields.SetValueDump("private.questLog", "[[1,2]]");
+  changeForm.dynamicFields.SetValueDump("myProp", "1");
+
+  MpActor actor(LocationalData(), FormCallbacks::DoNothing(), 0xff000000);
+  actor.ApplyChangeForm(changeForm);
+
+  CreateActorMessage message;
+  actor.VisitProperties(message, VisitPropertiesMode::All);
+
+  REQUIRE(message.customPropsJsonDumps.size() == 1);
+  REQUIRE(message.customPropsJsonDumps[0].propName == "myProp");
+}

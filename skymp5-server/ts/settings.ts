@@ -17,6 +17,13 @@ export interface DiscordAuthSettings {
   guilds: DiscordGuildConfig[];
 }
 
+export interface StartPoint {
+  pos: number[];
+  worldOrCell: string;
+  angleZ: number;
+  questStages?: [number, number][];
+}
+
 export class Settings {
   masterKey: string | null = null;
   port = 7777;
@@ -27,13 +34,15 @@ export class Settings {
   loadOrder = new Array<string>();
   dataDir = './data';
   offlineMode = false;
-  startPoints = [
+  startPoints: StartPoint[] = [
     {
-      pos: [133857, -61130, 14662],
+      pos: [12155.9, -71991.3, 6015.5],
       worldOrCell: '0x3c',
-      angleZ: 72,
+      angleZ: 286.1,
+      questStages: [[0x2610a, 0], [0x2610a, 30]],
     },
   ];
+  partyMaxSize = 4;
   discordAuth: DiscordAuthSettings | null = null;
 
   allSettings: Record<string, unknown> | null = null;
@@ -70,6 +79,7 @@ export class Settings {
       'loadOrder',
       'dataDir',
       'startPoints',
+      'partyMaxSize',
       'offlineMode',
       'discordAuth',
     ].forEach((prop) => {

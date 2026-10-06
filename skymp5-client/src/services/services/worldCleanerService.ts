@@ -3,6 +3,7 @@ import { NiPoint3 } from "../../sync/movement";
 import { ObjectReferenceEx } from "../../extensions/objectReferenceEx";
 import { Actor } from "skyrimPlatform";
 import { logTrace } from "../../logging";
+import { CoopService } from "./coopService";
 
 export class WorldCleanerService extends ClientListener {
   constructor(private sp: Sp, private controller: CombinedController) {
@@ -18,6 +19,10 @@ export class WorldCleanerService extends ClientListener {
 
   getWcProtection(actorId: number): number {
     return this.protection.get(actorId) || 0;
+  }
+
+  pauseUntil(timestampMs: number): void {
+    this.pausedUntil = timestampMs;
   }
 
   private onGameLoad() {
@@ -36,7 +41,7 @@ export class WorldCleanerService extends ClientListener {
 
   private processOneActor() {
     const pc = this.sp.Game.getPlayer();
-    if (pc === null) {
+    if (pc === null || Date.now() < this.pausedUntil) {
       return;
     }
 
@@ -58,6 +63,10 @@ export class WorldCleanerService extends ClientListener {
     }
 
     if (actorId === 0x14 || actor.isDisabled() || actor.isDeleted()) {
+      return;
+    }
+
+    if (this.controller.lookupListener(CoopService).isQuestActor(actor)) {
       return;
     }
 
@@ -112,6 +121,7 @@ export class WorldCleanerService extends ClientListener {
   }
 
   private protection = new Map<number, number>();
+  private pausedUntil = 0;
   private initialPos?: NiPoint3;
   private initialCellOrWorld?: number;
 }

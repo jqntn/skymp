@@ -5,6 +5,16 @@ export declare interface Bot {
   send(msg: Record<string, unknown>): void;
 }
 
+export interface EspmLookupResult {
+  record?: {
+    id: number;
+    editorId: string;
+    type: string;
+    flags: number;
+    fields: { type: string; data: Uint8Array }[];
+  };
+}
+
 export type SendChatMessageFn = (
   formId: number,
   message: Record<string, unknown>
@@ -44,6 +54,10 @@ export interface ScampServer {
   getUserByActor(formId: number): number;
   getUserIp(userId: number): string;
   kick(userId: number): void;
+  get(formId: number, propertyName: string): unknown;
+  set(formId: number, propertyName: string, value: unknown): void;
+  getDescFromId(formId: number): string;
+  lookupEspmRecordById(globalRecordId: number): EspmLookupResult;
 
   executeJavaScriptOnChakra(src: string): void;
   clear(): void;

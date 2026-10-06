@@ -430,6 +430,9 @@ void MpObjectReference::VisitProperties(CreateActorMessage& message,
   // checked by a caller (PartOne.cpp in this case)
   ChangeForm().dynamicFields.ForEachValueDump(
     [&](const std::string& propName, const std::string& valueDump) {
+      if (propName.starts_with(GetPropertyPrefixPrivate())) {
+        return;
+      }
       CustomPropsEntry customPropsEntry;
       customPropsEntry.propName = propName;
       customPropsEntry.propValueJsonDump = valueDump;

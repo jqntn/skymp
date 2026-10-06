@@ -19,6 +19,7 @@ import { Settings } from "./settings";
 import { System } from "./systems/system";
 import { MasterClient } from "./systems/masterClient";
 import { Spawn } from "./systems/spawn";
+import { Coop } from "./systems/coop";
 import { Login } from "./systems/login";
 import { DiscordBanSystem } from "./systems/discordBanSystem";
 import { MasterApiBalanceSystem } from "./systems/masterApiBalanceSystem";
@@ -185,7 +186,7 @@ const setupGamemode = (server: any, gamemodePath: string) => {
 const main = async () => {
   const settingsObject = await Settings.get();
   const {
-    port, master, maxPlayers, name, masterKey, offlineMode, gamemodePath
+    port, master, maxPlayers, name, masterKey, offlineMode, gamemodePath, partyMaxSize
   } = settingsObject;
 
   const log = console.log;
@@ -194,6 +195,7 @@ const main = async () => {
     new MetricsSystem(),
     new MasterClient(log, port, master, maxPlayers, name, masterKey, 5000, offlineMode),
     new Spawn(log),
+    new Coop(log, partyMaxSize),
     new Login(log, maxPlayers, master, port, masterKey, offlineMode),
     new DiscordBanSystem(),
     new MasterApiBalanceSystem(log, maxPlayers, master, port, masterKey, offlineMode),

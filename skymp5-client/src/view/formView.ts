@@ -1,4 +1,4 @@
-import { Actor, ActorBase, createText, destroyText, Form, FormType, Game, Keyword, NetImmerse, ObjectReference, once, printConsole, setTextPos, setTextSize, setTextString, storage, TESModPlatform, Utility, worldPointToScreenPoint } from "skyrimPlatform";
+import { Actor, ActorBase, createText, destroyText, Form, FormType, Game, Keyword, NetImmerse, ObjectReference, once, printConsole, ReferenceAlias, setTextPos, setTextSize, setTextString, storage, TESModPlatform, Utility, worldPointToScreenPoint } from "skyrimPlatform";
 import { setDefaultAnimsDisabled, applyAnimation } from "../sync/animation";
 import { Appearance, applyAppearance } from "../sync/appearance";
 import { isBadMenuShown, applyEquipment } from "../sync/equipment";
@@ -32,8 +32,27 @@ export const getScreenResolution = (): ScreenResolution => {
   return _screenResolution;
 }
 
+const espActorIdOffset = 0x100000000;
+const questAliasBridgeIntervalMs = 2000;
+
+const moveQuestAliases = (from: ObjectReference | null, to: ObjectReference | null): boolean => {
+  if (!from || !to) {
+    return false;
+  }
+  const aliases = new Array<ReferenceAlias>();
+  const n = from.getNumReferenceAliases();
+  for (let i = 0; i < n; ++i) {
+    const alias = from.getNthReferenceAlias(i);
+    if (alias) {
+      aliases.push(alias);
+    }
+  }
+  aliases.forEach((alias) => alias.forceRefTo(to));
+  return aliases.length > 0;
+};
+
 export class FormView {
-  constructor(private remoteRefrId?: number) { }
+  constructor(private remoteRefrId?: number, private bridgesQuestAliases = false) { }
 
   update(model: FormModel): void {
     // Other players mutate into PC clones when moving to another location
@@ -305,6 +324,17 @@ export class FormView {
       }
       this.applyAll(refr, model);
 
+      const espRefrId = this.getEspRefrId();
+      if (espRefrId && Date.now() - this.lastQuestAliasBridge > questAliasBridgeIntervalMs) {
+        this.lastQuestAliasBridge = Date.now();
+        const original = ObjectReference.from(Game.getFormEx(espRefrId));
+        if (original && !original.isDeleted() && moveQuestAliases(original, refr) && !this.hidesOriginal) {
+          this.hidesOriginal = true;
+          SpApiInteractor.getControllerInstance().lookupListener(WorldCleanerService).modWcProtection(espRefrId, 1);
+          original.disableNoWait(false);
+        }
+      }
+
       const gamemodeUpdateService = SpApiInteractor.getControllerInstance().lookupListener(GamemodeUpdateService);
       gamemodeUpdateService.updateNeighbor(refr, model, this.state);
     }
@@ -314,10 +344,20 @@ export class FormView {
     this.isOnScreen = false;
     this.spawnMoment = 0;
     const refrId = this.refrId;
+    const espRefrId = this.getEspRefrId();
+    const hidesOriginal = this.hidesOriginal;
+    this.hidesOriginal = false;
     once("update", () => {
+      if (hidesOriginal) {
+        ObjectReference.from(Game.getFormEx(espRefrId))?.enableNoWait(false);
+        SpApiInteractor.getControllerInstance().lookupListener(WorldCleanerService).modWcProtection(espRefrId, -1);
+      }
       if (refrId >= 0xff000000) {
         const refr = ObjectReference.from(Game.getFormEx(refrId));
         if (refr) {
+          if (espRefrId) {
+            moveQuestAliases(refr, ObjectReference.from(Game.getFormEx(espRefrId)));
+          }
           refr.delete();
         }
         SpApiInteractor.getControllerInstance().lookupListener(WorldCleanerService).modWcProtection(refrId, -1);
@@ -332,6 +372,13 @@ export class FormView {
     this.removeNickname();
   }
 
+  private getEspRefrId(): number {
+    const remoteRefrId = this.remoteRefrId ?? 0;
+    return this.bridgesQuestAliases && remoteRefrId > espActorIdOffset ? remoteRefrId - espActorIdOffset : 0;
+  }
+
+  private lastQuestAliasBridge = 0;
+  private hidesOriginal = false;
   private lastHarvestedApply = 0;
   private lastOpenApply = 0;
   private isSetNodeTextureSetApplied = false;

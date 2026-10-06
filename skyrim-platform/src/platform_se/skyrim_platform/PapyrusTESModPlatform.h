@@ -106,6 +106,8 @@ int GetWeapDrawnMode(uint32_t actorId);
 uint64_t GetNumPapyrusUpdates();
 std::shared_ptr<RE::BSTArray<RE::TintMask*>> GetTintsFor(uint32_t actorId);
 bool GetPapyrusEventsBlocked();
+void AllowQuestPapyrusEvents(bool allowed);
+bool GetQuestPapyrusEventsAllowed();
 
 void Update();
 

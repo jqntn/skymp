@@ -8,7 +8,7 @@ export class FormViewArray {
   updateForm(form: FormModel, i: number) {
     const view = this.formViews[i];
     if (!view) {
-      this.formViews[i] = new FormView(form.refrId);
+      this.formViews[i] = new FormView(form.refrId, !this.isCloneView);
     } else {
       view.update(form);
     }
@@ -34,6 +34,7 @@ export class FormViewArray {
   updateAll(model: WorldModel, showMe: boolean, isCloneView: boolean) {
     const gamemodeUpdateService = SpApiInteractor.getControllerInstance().lookupListener(GamemodeUpdateService);
     gamemodeUpdateService.setFormViewArray(this);
+    this.isCloneView = isCloneView;
 
     const forms = model.forms;
     const n = forms.length;
@@ -113,4 +114,5 @@ export class FormViewArray {
   }
 
   private formViews = new Array<FormView | undefined>();
+  private isCloneView = false;
 }

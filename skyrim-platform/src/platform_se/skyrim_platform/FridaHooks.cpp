@@ -41,6 +41,13 @@ void OnSendEventEnter(GumInvocationContext* ic)
   EventsApi::SendPapyrusEventEnter(selfId, eventNameStr);
 
   auto blockEvents = TESModPlatform::GetPapyrusEventsBlocked();
+  if (blockEvents && policy &&
+      TESModPlatform::GetQuestPapyrusEventsAllowed() &&
+      (policy->HandleIsType(RE::FormType::Quest, handle) ||
+       policy->HandleIsType(RE::BGSRefAlias::VMTYPEID, handle) ||
+       policy->HandleIsType(RE::BGSLocAlias::VMTYPEID, handle))) {
+    blockEvents = false;
+  }
   if (blockEvents && strcmp(*eventName, "OnUpdate") != 0 && vm) {
     vm->attachedScriptsLock.Lock();
     auto it = vm->attachedScripts.find(handle);

@@ -22,6 +22,7 @@ struct
   std::recursive_mutex m;
 } share;
 std::atomic<bool> papyrusEventsBlocked;
+std::atomic<bool> questPapyrusEventsAllowed;
 
 struct
 {
@@ -981,6 +982,16 @@ std::shared_ptr<RE::BSTArray<RE::TintMask*>> TESModPlatform::GetTintsFor(
 bool TESModPlatform::GetPapyrusEventsBlocked()
 {
   return papyrusEventsBlocked;
+}
+
+void TESModPlatform::AllowQuestPapyrusEvents(bool allowed)
+{
+  questPapyrusEventsAllowed = allowed;
+}
+
+bool TESModPlatform::GetQuestPapyrusEventsAllowed()
+{
+  return questPapyrusEventsAllowed;
 }
 
 void TESModPlatform::CloseMenu(IVM* vm, StackID stackId,

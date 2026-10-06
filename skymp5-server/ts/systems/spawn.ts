@@ -1,5 +1,6 @@
 import { Settings } from "../settings";
 import { System, Log, SystemContext } from "./system";
+import { QUEST_LOG_PROPERTY } from "./coop";
 
 type Mp = any; // TODO
 
@@ -23,15 +24,23 @@ export class Spawn implements System {
         ctx.svr.setEnabled(actorId, true);
         ctx.svr.setUserActor(userId, actorId);
       } else {
-        const idx = randomInteger(0, startPoints.length - 1);
+        const startPoint = startPoints[randomInteger(0, startPoints.length - 1)];
         actorId = ctx.svr.createActor(
           0,
-          startPoints[idx].pos,
-          startPoints[idx].angleZ,
-          +startPoints[idx].worldOrCell,
+          startPoint.pos,
+          startPoint.angleZ,
+          +startPoint.worldOrCell,
           userProfileId
         );
         this.log("Creating character", actorId.toString(16));
+        ctx.svr.set(actorId, "spawnPoint", {
+          pos: startPoint.pos,
+          rot: [0, 0, startPoint.angleZ],
+          cellOrWorldDesc: ctx.svr.getDescFromId(+startPoint.worldOrCell),
+        });
+        if (startPoint.questStages) {
+          ctx.svr.set(actorId, QUEST_LOG_PROPERTY, startPoint.questStages);
+        }
         ctx.svr.setUserActor(userId, actorId);
         ctx.svr.setRaceMenuOpen(actorId, true);
       }

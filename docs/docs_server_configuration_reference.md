@@ -243,17 +243,37 @@ Searches for `index.js` if a directory specified.
 ## startPoints
 
 Contains a list of spawn points, one of which will be chosen at random.
+A new character spawns at this point, and respawns at it after death.
+
+`questStages` is optional. It is a list of `[questFormId, stage]` pairs that a new character starts with.
+The client sets these stages when the character enters the world for the first time.
+
+The default start point is the exit of the Helgen cave, after the escape with Ralof.
+Its quest stages are `MQ102B` stages 0 and 30. Ralof leaves the keep, and the journal shows "Before the Storm" with the Riverwood objective.
 
 ```json5
 {
   // ...
   "startPoints": [
     {
-      "pos": [22659, -8697, -3594],
-      "worldOrCell": "0x1a26f",
-      "angleZ": 268
+      "pos": [12155.9, -71991.3, 6015.5],
+      "worldOrCell": "0x3c",
+      "angleZ": 286.1,
+      "questStages": [[0x2610a, 0], [0x2610a, 30]] // use 155914 in strict JSON
     }
   ]
+  // ...
+}
+```
+
+## partyMaxSize
+
+The maximum number of players in a party. `4` by default.
+
+```json5
+{
+  // ...
+  "partyMaxSize": 4
   // ...
 }
 ```
