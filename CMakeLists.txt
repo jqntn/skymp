@@ -86,6 +86,7 @@ endif()
 option(PREPARE_NEXUS_ARCHIVES "Prepare SP and other archives during build or not" OFF)
 option(BUILD_UNIT_TESTS "Build unit tests (excluded from build when off - workaround for #1182)" ON)
 option(INSTALL_CLIENT_DIST "Install the client into SKYRIM_DIR after build" OFF)
+option(PUBLISH_CLIENT_DIST "Publish the client zip in dist/server/data/client after build" OFF)
 option(BUILD_GAMEMODE "Build gamemode" OFF)
 option(BUILD_CLIENT "Build client" ON)
 option(BUILD_FRONT "Build front" OFF)
@@ -248,6 +249,23 @@ if(INSTALL_CLIENT_DIST)
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
   )
   add_dependencies(install_client_dist skymp5-client skyrim-platform)
+endif()
+
+if(PUBLISH_CLIENT_DIST)
+  add_custom_target(
+    publish_client_dist ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+      ${CMAKE_SOURCE_DIR}/misc/rolling-release/skymp-update-and-play.ps1
+      ${CMAKE_SOURCE_DIR}/misc/rolling-release/skymp-update-and-play.bat
+      ${CMAKE_BINARY_DIR}/dist/client
+    COMMAND ${CMAKE_COMMAND}
+      -DCLIENT_DIR=${CMAKE_BINARY_DIR}/dist/client
+      -DOUT_DIR=${CMAKE_BINARY_DIR}/dist/server/data/client
+      -DSTAMP_FILE=${CMAKE_BINARY_DIR}/publish_client_dist.stamp
+      -P ${CMAKE_SOURCE_DIR}/cmake/publish_client_dist.cmake
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+  )
+  add_dependencies(publish_client_dist skymp5-client skyrim-platform)
 endif()
 
 # Integration tests from misc/tests
