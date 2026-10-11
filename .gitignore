@@ -9,3 +9,6 @@ node_modules
 # vim
 .*.swp
 skyrim_data_files/
+
+# e2e loop output
+misc/e2e/out/
