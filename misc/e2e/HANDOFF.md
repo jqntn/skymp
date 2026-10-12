@@ -19,6 +19,7 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 - `fix(coop): let players talk through a dialogue with a puppet NPC (S1.5)`: AI on while a puppet is in dialogue with the local player; S1.5 check.
 - `test(e2e): run the Bleak Falls Barrow puzzles on the server VM (S2)`: S2 check (bot player, archives setting, trace log); plan edit with the 2B.2 scope.
 - `test(e2e): prove the client hooks and events that script sync needs (S3.1, S3.2, S3.3)`: S3.1 animation hook on an activator, S3.2 containerChanged on a script AddItem, S3.3 activate event for a script activate() on blocked refs; plan edits for 2A.5 and 1B.5/2B.2.
+- `test(e2e): block S3.4 until the corpse branch of 2A.1`: S3.4 reports BLOCKED with the reason; plan edit.
 
 ## What the last two commits hold
 
@@ -56,8 +57,8 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 
 ## Next steps
 
-1. S3.4 (red first): an alias item ref must stay in the player's inventory after applyInventory, with the fix of phase 2A step 3 (`resetBase` calls `removeAllItems(null, false, false)`). Note: `resetBase` runs once per base per session, and every applyInventory also removes items missing from the server inventory (S3.2 saw script items go within 1 s). First find how a quest alias item ref gets into the inventory (MQ103 Dragonstone, MS13 Golden Claw) and in which order it meets resetBase and the diff.
-2. Then 1A.x step checks, 1B.x, G1, and later steps. P8 stays red until reached.
+1. Step checks 1A.1 to 1A.5 (plan order after S3.4, which is BLOCKED until 2A.1). A step check is the Catch2 tag or bot test of the step: run `build/unit/Release/unit.exe` with a test name or tag from a check script (engines 0). Much of 1A was done for S1.1 (commit a2651591, `[NpcHost]` tests); map each bullet of 1A.1-1A.5 to a test, write the missing ones red first.
+2. Then 1B.x, G1, 2A (S3.4 comes back with 2A.1), 2B, G2, P. P8 stays red until reached.
 
 ## Runner
 

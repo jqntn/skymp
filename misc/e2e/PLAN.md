@@ -161,6 +161,7 @@ Do these first. Their results set the scope of phases 1 and 2.
    - S3.2: does `containerChanged` fire for a script `AddItem`?
    - S3.3: does `activationService` receive a script `activate()` on a blocked ref?
    - S3.4: does an alias item ref stay after `applyInventory`, with the fix in phase 2A step 3?
+     - Plan edit (loop, 2026-10-12): S3.4 is BLOCKED until phase 2A step 1. An alias item ref meets `resetBase` only when the client applies a corpse or container inventory. The quest items of MQ102-104 are created in actors (Golden Claw: MS13 alias 11 in Arvel; Dragonstone: MQ103 alias 18 in alias 52), the server opens a corpse only after the corpse branch of 2A.1, and a server `mp.set` of a container inventory does not reach the client. SP `Quest.getAlias` returns null for every quest; `ObjectReference.getNumReferenceAliases` (SKSE) works from the item side. When 2A.1 is in, S3.4 loots the Golden Claw from Arvel's corpse and checks that the same ref keeps its alias.
    - The result of each spike sets the next step. There is no open case:
      - S1.1, S1.2, S1.4, S3.1, S3.4: a FAIL is a bug. Fix it like a FAIL of a check.
      - S1.3 FAIL (user decision, 2026-10-12): accept it, and continue. NPCs pause while no player is near. When a player arrives, they continue from their last server position and walk to the place of their schedule. Skip the "first movement" bullet of phase 1B step 4. Add this to "Known limits" on the wiki.
