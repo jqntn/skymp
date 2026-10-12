@@ -22,9 +22,9 @@ const HELGEN_EXIT = { pos: [12155.9, -71991.3, 6015.5], angleZ: 286.1, worldOrCe
 
 const range = (prefix, n) => Array.from({ length: n }, (_, i) => `${prefix}${i + 1}`);
 const ORDER = [
-  "L1", "S0", "S0b", "S1.1", "S1.2", "S1.4", "S1.3", "S2", "S3.1", "S3.2", "S3.3", "S3.4",
+  "L1", "S0", "S0b", "S0c", "S1.1", "S1.2", "S1.4", "S1.3", "S2", "S3.1", "S3.2", "S3.3", "S3.4",
   ...range("1A.", 5), ...range("1B.", 5), ...range("G1.", 5),
-  ...range("2A.", 5), ...range("2B.", 5), ...range("G2.", 6), ...range("P", 7),
+  ...range("2A.", 5), ...range("2B.", 5), ...range("G2.", 6), ...range("P", 8),
 ];
 
 class Env extends Error {}
@@ -181,6 +181,37 @@ const runnerServer = () =>
 
 const engineDir = (n) => (n === 1 ? GAME : path.join(BUILD, `e2e-game${n}`));
 const profileId = (n) => 990000 + n;
+const COPIED = [...fs.readdirSync(path.join(BUILD, "dist", "client", "Data")).map((d) => path.join("Data", d)), path.join("Data", "Platform"), path.join("Data", "SKSE")];
+
+const mirror = (src, dst, copy) => {
+  fs.mkdirSync(dst, { recursive: true });
+  for (const e of fs.readdirSync(src, { withFileTypes: true })) {
+    const s = path.join(src, e.name);
+    const d = path.join(dst, e.name);
+    if (e.isDirectory()) mirror(s, d, copy);
+    else copy(s, d);
+  }
+};
+
+const prepareEngineDir = (n) => {
+  const dir = engineDir(n);
+  const copied = (rel) => COPIED.some((c) => rel === c || rel.startsWith(c + path.sep));
+  if (!fs.existsSync(path.join(dir, "steam_appid.txt"))) {
+    mirror(GAME, dir, (s, d) => !copied(path.relative(GAME, s)) && !fs.existsSync(d) && fs.linkSync(s, d));
+    fs.writeFileSync(path.join(dir, "steam_appid.txt"), "489830");
+  }
+  const skip = new Set([path.join("Data", "Platform", "PluginsDev"), path.join("Data", "Platform", "Plugins", "skymp5-client-settings.txt")]);
+  for (const c of COPIED) {
+    if (!fs.existsSync(path.join(GAME, c))) continue;
+    mirror(path.join(GAME, c), path.join(dir, c), (s, d) => {
+      const rel = path.relative(GAME, s);
+      if ([...skip].some((k) => rel === k || rel.startsWith(k + path.sep))) return;
+      const a = fs.statSync(s);
+      const b = fs.existsSync(d) && fs.statSync(d);
+      if (!b || b.size !== a.size || b.mtimeMs < a.mtimeMs) fs.copyFileSync(s, d);
+    });
+  }
+};
 
 const prepareServer = () => {
   fs.rmSync(SERVER, { recursive: true, force: true });
@@ -204,6 +235,7 @@ const startServer = async (check, ctx) => {
 
 const startGame = async (n, ctx) => {
   const dir = engineDir(n);
+  if (n > 1) prepareEngineDir(n);
   const plugins = path.join(dir, "Data", "Platform", "Plugins");
   const dev = path.join(dir, "Data", "Platform", "PluginsDev");
   const settingsFile = path.join(plugins, "skymp5-client-settings.txt");
@@ -215,9 +247,9 @@ const startGame = async (n, ctx) => {
   writeJson(path.join(dev, "e2e-driver-settings.txt"), { port: PORT.runner, engine: n });
 
   const before = new Set(procs("SkyrimSE.exe"));
-  spawn(path.join(dir, "skse64_loader.exe"), [], { cwd: dir, detached: true, stdio: "ignore", env: { ...process.env, ...(n > 1 ? { SKYMP_MULTI_INSTANCE: "1" } : {}) } }).unref();
+  spawn(path.join(dir, "skse64_loader.exe"), [], { cwd: dir, detached: true, stdio: "ignore" }).unref();
   let pid;
-  await ctx.waitFor(() => (pid = procs("SkyrimSE.exe").find((p) => !before.has(p))), 60000, `SkyrimSE.exe of engine ${n}`, Env);
+  await ctx.waitFor(() => (pid = procs("SkyrimSE.exe").find((p) => !before.has(p))), 60000, `SkyrimSE.exe of engine ${n}`, Env, 100);
   own(pid, "SkyrimSE.exe");
   ctx.gamePids[n] = pid;
 };
@@ -243,13 +275,17 @@ const makeCtx = (id, dir) => {
       for (const [n, pid] of Object.entries(ctx.gamePids)) if (!procs("SkyrimSE.exe").includes(pid)) throw new Env(`engine ${n} exited`);
       if (ctx.serverPid && !procs("node.exe").includes(ctx.serverPid)) throw new Env("the server exited");
     },
-    waitFor: async (fn, ms, what, Err = Error) => {
+    running: (engine) => procs("SkyrimSE.exe").includes(ctx.gamePids[engine]),
+    skyrimPids: () => procs("SkyrimSE.exe"),
+    engineDir,
+    own: (pid) => own(pid, "SkyrimSE.exe"),
+    waitFor: async (fn, ms, what, Err = Error, every = 500) => {
       const end = Date.now() + ms;
       for (;;) {
         const v = await fn();
         if (v) return v;
         if (Date.now() > end) throw new Err(`timeout after ${ms / 1000} s: ${what}`);
-        await sleep(500);
+        await sleep(every);
       }
     },
     probe: async (code) => {

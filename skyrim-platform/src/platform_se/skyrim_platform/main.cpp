@@ -442,8 +442,7 @@ public:
 
   bool Detach() override
   {
-    FlowManager::CloseProcess(L"SkyrimSE.exe");
-    FlowManager::CloseProcess(L"SkyrimPlatformCEF.exe.hidden");
+    FlowManager::CloseProcessTree();
     return true;
   }
 
