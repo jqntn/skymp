@@ -21,6 +21,7 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 - `test(e2e): prove the client hooks and events that script sync needs (S3.1, S3.2, S3.3)`: S3.1 animation hook on an activator, S3.2 containerChanged on a script AddItem, S3.3 activate event for a script activate() on blocked refs; plan edits for 2A.5 and 1B.5/2B.2.
 - `test(e2e): block S3.4 until the corpse branch of 2A.1`: S3.4 reports BLOCKED with the reason; plan edit.
 - `feat(coop): claim, release and clean up NPC hosts on the server (1A.1, 1A.2, 1A.3)`: `ctx.unit(tag)` step checks; [1A.1] load filter tests (exact banned list, StartsDead/Deleted reasons, Mirmulnir, fixture flags); host claims with a location (NPCs only, same cell, 4096, finite pos, 2 s rule), release by the hoster, hoster cleared on unsubscribe (HostStop) and on disconnect.
+- `feat(coop): take hosted NPC movement, health and death from the hoster (1A.4, 1A.5)`: NPC movement skips player validation (cell change allowed; non-cell or missing record and non-finite position rejected), health and death from the hoster (essential NPCs cannot be killed this way), no Kill at health 0 for ESP NPCs, no respawn for unique ESP NPCs; 1A.5 step check reuses the S1.1 follow metric (red with the remoteServer fix reverted).
 
 ## What the last two commits hold
 
@@ -58,10 +59,10 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 
 ## Next steps
 
-1. 1A.4 (movement, health and death of hosted NPCs): NPC movement skips MovementValidation, a cell change calls SetCellOrWorld, copy healthPercentage/isDead, no Kill for ESP NPCs in SetPercentage(s), no respawn for unique ESP NPCs. Write [1A.4] Catch2 tests red first (see unit/NpcHostTest.cpp helpers: ConnectClaimer, Claim, CellOf).
-2. 1A.5 (property path fix, done in remoteServer.ts for S1.1): a step check needs a test that fails without it (client side; maybe a driver check that a puppet gets isHostedByOther).
-3. Then 1B.x, G1, 2A (S3.4 comes back with 2A.1), 2B, G2, P. P8 stays red until reached.
-4. Known review gaps: [1A.2] UpdateHoster(0) on release, rot/SetAngle, HostStart after a location claim, the write order, and the client type are not asserted; [1A.3] a grid exit inside the same worldspace is not tested separately (same callback as the cell change).
+1. Phase 1B step checks (client side, driver checks). 1B.1 (real actor in FormView): much was done for S1.1/S1.2 (formView.ts realActor, destroy releases holds, no localImmortal/name/equipment for real actors). Map each bullet to an observable on the client (e.g. a real actor keeps its own health and name; an initially disabled NPC enabled by a claim; formViewArray skips ids >= 0x100000000) and write red-first checks where something is missing.
+2. Then 1B.2-1B.5, G1, 2A (S3.4 comes back with 2A.1), 2B, G2, P. P8 stays red until reached.
+3. Open question (LESSONS): custom gamemode properties set on an ESP NPC showed no effect on the client; isHostedByOther does reach the FormView.
+4. Known review gaps: see the 1A notes in the log; teleport of a hosted NPC by the server can be undone by the hoster's next packet; an unhosted ESP NPC never dies (no hoster reports death).
 
 ## Runner
 

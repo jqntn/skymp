@@ -33,7 +33,7 @@ module.exports = {
     const npcLoaded = (id) => `const a = sp.Actor.from(sp.Game.getFormEx(${id})); return !sp.Ui.isMenuOpen("Loading Menu") && !!a && a.is3DLoaded();`;
     const npcPos = (id) => `const a = sp.Actor.from(sp.Game.getFormEx(${id})); return a && a.is3DLoaded() ? [a.getPositionX(), a.getPositionY(), a.getPositionZ()] : null;`;
 
-    for (const [name, id] of NPCS) {
+    for (const [name, id] of ctx.npcs || NPCS) {
       const loc = await ctx.probe(`return mp.get(${id}, "locationalData");`);
       for (const actor of actors) await ctx.probe(`mp.set(${actor}, "locationalData", ${JSON.stringify(loc)}); return 0;`);
       for (const n of [1, 2]) {

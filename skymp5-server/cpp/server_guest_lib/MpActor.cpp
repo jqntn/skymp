@@ -650,8 +650,12 @@ void MpActor::SetPercentage(espm::ActorValue av, float percentage)
     return;
   }
   if (av == espm::ActorValue::Health && percentage <= 0.f) {
-    Kill(nullptr);
-    return;
+    if (IsEspmForm()) {
+      percentage = 0.f;
+    } else {
+      Kill(nullptr);
+      return;
+    }
   }
   EditChangeForm([&](MpChangeForm& changeForm) {
     switch (av) {
@@ -680,7 +684,7 @@ void MpActor::SetPercentages(const ActorValues& actorValues,
   if (IsDead() || pImpl->isRespawning) {
     return;
   }
-  if (actorValues.healthPercentage == 0.f) {
+  if (actorValues.healthPercentage == 0.f && !IsEspmForm()) {
     Kill(aggressor);
     return;
   }
@@ -1355,6 +1359,15 @@ void MpActor::RespawnWithDelay(bool shouldTeleport)
 
   if (pImpl->isRespawning) {
     return;
+  }
+  auto worldStateForUnique = GetParent();
+  if (IsEspmForm() && worldStateForUnique && worldStateForUnique->HasEspm()) {
+    auto base =
+      worldStateForUnique->GetEspm().GetBrowser().LookupById(GetBaseId());
+    auto npc = espm::Convert<espm::NPC_>(base.rec);
+    if (npc && npc->GetData(worldStateForUnique->GetEspmCache()).isUnique) {
+      return;
+    }
   }
   pImpl->isRespawning = true;
 

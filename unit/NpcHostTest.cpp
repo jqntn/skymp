@@ -467,3 +467,169 @@ TEST_CASE("A player who is not the hoster leaves, and the hoster stays",
   partOne.DestroyActor(kOtherPlayer);
   DisconnectClaimer(partOne);
 }
+
+namespace {
+void HostAlvor(PartOne& partOne, MpActor& alvor)
+{
+  partOne.worldState.hosters[kAlvor] = 0;
+  partOne.worldState.lastMovUpdateByIdx.clear();
+  ConnectClaimer(partOne, alvor, CellOf(partOne, alvor));
+  DoMessage(partOne, 0,
+            nlohmann::json{ { "t", MsgType::Host },
+                            { "remoteId", 0x100000000 + kAlvor } });
+  REQUIRE(partOne.worldState.hosters[kAlvor] == kClaimer);
+}
+
+void ReleaseAlvor(PartOne& partOne, MpActor& alvor, uint32_t cell,
+                  NiPoint3 pos)
+{
+  partOne.worldState.hosters[kAlvor] = 0;
+  alvor.UpdateHoster(0);
+  alvor.SetCellOrWorld(FormDesc::FromFormId(cell, partOne.worldState.espmFiles));
+  alvor.SetPos(pos);
+  DisconnectClaimer(partOne);
+}
+
+nlohmann::json Movement(uint32_t idx, uint32_t cell, NiPoint3 pos,
+                        float health = 1.f, bool isDead = false)
+{
+  auto j = jMovement;
+  j["idx"] = idx;
+  j["data"]["worldOrCell"] = cell;
+  j["data"]["pos"] = { pos.x, pos.y, pos.z };
+  j["data"]["healthPercentage"] = health;
+  j["data"]["isDead"] = isDead;
+  return j;
+}
+}
+
+TEST_CASE("A hoster's movement moves an NPC to another cell and far away",
+          "[NpcHost][espm][1A.4]")
+{
+  auto& partOne = GetNpcHostPartOne();
+  auto& alvor = partOne.worldState.GetFormAt<MpActor>(kAlvor);
+  const auto cell = CellOf(partOne, alvor);
+  const auto start = alvor.GetPos();
+  HostAlvor(partOne, alvor);
+
+  const NiPoint3 target = { 20587.f, -45138.f, -81.f };
+  DoMessage(partOne, 0, Movement(alvor.GetIdx(), kTamriel, target));
+
+  REQUIRE(CellOf(partOne, alvor) == kTamriel);
+  REQUIRE((alvor.GetPos() - target).Length() < 1.f);
+
+  ReleaseAlvor(partOne, alvor, cell, start);
+}
+
+TEST_CASE("A player's own movement is still validated",
+          "[NpcHost][espm][1A.4]")
+{
+  auto& partOne = GetNpcHostPartOne();
+  auto& alvor = partOne.worldState.GetFormAt<MpActor>(kAlvor);
+  const auto cell = CellOf(partOne, alvor);
+  ConnectClaimer(partOne, alvor, cell);
+  auto& claimer = partOne.worldState.GetFormAt<MpActor>(kClaimer);
+  const auto start = claimer.GetPos();
+
+  DoMessage(partOne, 0,
+            Movement(claimer.GetIdx(), cell,
+                     start + NiPoint3(5000.f, 0.f, 0.f)));
+
+  REQUIRE((claimer.GetPos() - start).Length() < 1.f);
+
+  DisconnectClaimer(partOne);
+}
+
+TEST_CASE("A hoster's movement carries the health and the death of an NPC",
+          "[NpcHost][espm][1A.4]")
+{
+  auto& partOne = GetNpcHostPartOne();
+  auto& alvor = partOne.worldState.GetFormAt<MpActor>(kAlvor);
+  const auto cell = CellOf(partOne, alvor);
+  const auto start = alvor.GetPos();
+  HostAlvor(partOne, alvor);
+
+  DoMessage(partOne, 0, Movement(alvor.GetIdx(), cell, start, 0.4f));
+  REQUIRE(alvor.GetActorValues().healthPercentage == Catch::Approx(0.4f));
+  REQUIRE(!alvor.IsDead());
+
+  DoMessage(partOne, 0, Movement(alvor.GetIdx(), cell, start, 0.f, true));
+  REQUIRE(alvor.IsDead());
+
+  alvor.SetIsDead(false);
+  ReleaseAlvor(partOne, alvor, cell, start);
+}
+
+TEST_CASE("Health 0 alone does not kill an ESP NPC", "[NpcHost][espm][1A.4]")
+{
+  auto& partOne = GetNpcHostPartOne();
+  auto& alvor = partOne.worldState.GetFormAt<MpActor>(kAlvor);
+
+  ActorValues zero;
+  zero.healthPercentage = 0.f;
+  alvor.SetPercentages(zero);
+  REQUIRE(!alvor.IsDead());
+  alvor.SetPercentage(espm::ActorValue::Health, 0.f);
+  REQUIRE(!alvor.IsDead());
+
+  ActorValues full;
+  alvor.SetPercentages(full);
+}
+
+TEST_CASE("A unique ESP NPC stays dead, a non-unique one respawns",
+          "[NpcHost][espm][1A.4]")
+{
+  auto& partOne = GetNpcHostPartOne();
+  auto& alvor = partOne.worldState.GetFormAt<MpActor>(kAlvor);
+  auto& guard = partOne.worldState.GetFormAt<MpActor>(kCrimeFactionGuard);
+
+  alvor.SetRespawnTime(0.f);
+  guard.SetRespawnTime(0.f);
+  alvor.Kill();
+  guard.Kill();
+  REQUIRE(alvor.IsDead());
+  REQUIRE(guard.IsDead());
+
+  partOne.Tick();
+
+  REQUIRE(alvor.IsDead());
+  REQUIRE(!guard.IsDead());
+
+  alvor.SetIsDead(false);
+  alvor.SetRespawnTime(MpChangeForm().spawnDelay);
+  guard.SetRespawnTime(WorldState::kEspmNpcSpawnDelay);
+}
+
+TEST_CASE("A hoster cannot kill an essential ESP NPC or move an NPC to a "
+          "record that is not a cell",
+          "[NpcHost][espm][1A.4]")
+{
+  auto& partOne = GetNpcHostPartOne();
+  auto& alvor = partOne.worldState.GetFormAt<MpActor>(kAlvor);
+  auto& hadvar = partOne.worldState.GetFormAt<MpActor>(kHadvar);
+  auto& br = partOne.worldState.GetEspm().GetBrowser();
+  REQUIRE(espm::Convert<espm::NPC_>(br.LookupById(hadvar.GetBaseId()).rec)
+            ->GetData(partOne.worldState.GetEspmCache())
+            .isEssential);
+  const auto cell = CellOf(partOne, alvor);
+  const auto start = alvor.GetPos();
+  HostAlvor(partOne, alvor);
+
+  DoMessage(partOne, 0, Movement(alvor.GetIdx(), kAlvor, start));
+  REQUIRE(CellOf(partOne, alvor) == cell);
+  DoMessage(partOne, 0, Movement(alvor.GetIdx(), 0x00fffff0, start));
+  REQUIRE(CellOf(partOne, alvor) == cell);
+
+  partOne.worldState.hosters[kHadvar] = kClaimer;
+  partOne.worldState.lastMovUpdateByIdx.clear();
+  DoMessage(partOne, 0,
+            Movement(hadvar.GetIdx(), CellOf(partOne, hadvar), hadvar.GetPos(),
+                     0.f, true));
+  REQUIRE(!hadvar.IsDead());
+
+  partOne.worldState.hosters[kHadvar] = 0;
+  hadvar.UpdateHoster(0);
+  ActorValues full;
+  hadvar.SetPercentages(full);
+  ReleaseAlvor(partOne, alvor, cell, start);
+}

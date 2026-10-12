@@ -115,6 +115,19 @@ void ActionListener::OnCustomPacket(const RawMessageData& rawMsgData,
   }
 }
 
+namespace {
+bool IsEssentialEspmNpc(MpActor& actor)
+{
+  auto worldState = actor.GetParent();
+  if (!actor.IsEspmForm() || !worldState || !worldState->HasEspm()) {
+    return false;
+  }
+  auto npc = espm::Convert<espm::NPC_>(
+    worldState->GetEspm().GetBrowser().LookupById(actor.GetBaseId()).rec);
+  return npc && npc->GetData(worldState->GetEspmCache()).isEssential;
+}
+}
+
 void ActionListener::OnUpdateMovement(const RawMessageData& rawMsgData,
                                       const UpdateMovementMessage& msg)
 {
@@ -135,13 +148,37 @@ void ActionListener::OnUpdateMovement(const RawMessageData& rawMsgData,
     const auto& currentRot = actor->GetAngle();
     const auto& currentCellOrWorld = actor->GetCellOrWorld();
 
-    if (!MovementValidation::Validate(
-          partOne, currentPos, currentRot, currentCellOrWorld,
-          teleportFlag
-            ? kInfinityPos
-            : NiPoint3{ msg.data.pos[0], msg.data.pos[1], msg.data.pos[2] },
-          FormDesc::FromFormId(msg.data.worldOrCell, espmFiles),
-          rawMsgData.userId, actor, espmFiles)) {
+    const bool isNpc =
+      partOne.serverState.UserByActor(actor) == Networking::InvalidUserId;
+    const auto newCellOrWorld =
+      FormDesc::FromFormId(msg.data.worldOrCell, espmFiles);
+
+    if (isNpc) {
+      auto& worldState = partOne.worldState;
+      auto cell = worldState.HasEspm()
+        ? worldState.GetEspm().GetBrowser().LookupById(msg.data.worldOrCell)
+        : espm::LookupResult();
+      const bool badCell = worldState.HasEspm() &&
+        (!cell.rec ||
+         (cell.rec->GetType() != "CELL" && cell.rec->GetType() != "WRLD"));
+      const bool badPos =
+        !std::all_of(msg.data.pos.begin(), msg.data.pos.end(),
+                     [](float v) { return std::isfinite(v); });
+      if (badCell || badPos) {
+        partOne.GetLogger().warn(
+          "Rejected movement of NPC {:x}: bad cell {:x} or position",
+          actor->GetFormId(), msg.data.worldOrCell);
+        return;
+      }
+      if (newCellOrWorld != currentCellOrWorld) {
+        actor->SetCellOrWorld(newCellOrWorld);
+      }
+    } else if (!MovementValidation::Validate(
+                 partOne, currentPos, currentRot, currentCellOrWorld,
+                 teleportFlag ? kInfinityPos
+                              : NiPoint3{ msg.data.pos[0], msg.data.pos[1],
+                                          msg.data.pos[2] },
+                 newCellOrWorld, rawMsgData.userId, actor, espmFiles)) {
       return;
     }
 
@@ -174,6 +211,17 @@ void ActionListener::OnUpdateMovement(const RawMessageData& rawMsgData,
 
     if (msg.data.runMode != "Standing") {
       actor->SetLastAnimEvent(std::nullopt);
+    }
+
+    if (isNpc && !actor->IsDead()) {
+      if (msg.data.isDead) {
+        if (!IsEssentialEspmNpc(*actor)) {
+          actor->Kill();
+        }
+      } else {
+        actor->SetPercentage(espm::ActorValue::Health,
+                             msg.data.healthPercentage);
+      }
     }
 
     if (partOne.worldState.lastMovUpdateByIdx.size() <= msg.idx) {
