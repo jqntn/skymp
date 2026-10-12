@@ -135,6 +135,9 @@ export class SendInputsService extends ClientListener {
     }
 
     private sendActorValuePercentage(_refrId?: number, form?: FormModel) {
+        if (_refrId) {
+          return;
+        }
         const canSend = form && (form.isDead ?? false) === false;
         if (!canSend) {
           return;

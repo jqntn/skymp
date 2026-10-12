@@ -16,9 +16,8 @@ export class HitService extends ClientListener {
         // TODO: add more logging in case of 'return'
         // TODO: allow non-weapon sources
         const aggressor = e.aggressor.getFormID();
-        if (aggressor < 0xff000000 && aggressor !== 0x14) return; // all skymp npcs are FF+
 
-        if (aggressor >= 0xff000000) {
+        if (aggressor !== 0x14) {
             // TODO: make host service
             const hosted = storage['hosted'];
             let alreadyHosted = false;

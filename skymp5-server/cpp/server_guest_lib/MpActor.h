@@ -148,6 +148,7 @@ public:
   void Kill(MpActor* killer = nullptr, bool shouldTeleport = false);
   void Respawn(bool shouldTeleport = true);
   void RespawnWithDelay(bool shouldTeleport = true);
+  bool RespawnedWithin(std::chrono::steady_clock::duration window) const;
   void Teleport(const LocationalData& position);
   void SetSpawnPoint(const LocationalData& position);
   LocationalData GetSpawnPoint() const;

@@ -633,3 +633,23 @@ TEST_CASE("A hoster cannot kill an essential ESP NPC or move an NPC to a "
   hadvar.SetPercentages(full);
   ReleaseAlvor(partOne, alvor, cell, start);
 }
+
+TEST_CASE("A hoster's stale death right after a server respawn is ignored",
+          "[NpcHost][espm][1B.3]")
+{
+  auto& partOne = GetNpcHostPartOne();
+  auto& alvor = partOne.worldState.GetFormAt<MpActor>(kAlvor);
+  const auto cell = CellOf(partOne, alvor);
+  const auto start = alvor.GetPos();
+  HostAlvor(partOne, alvor);
+
+  alvor.SetIsDead(true);
+  REQUIRE(alvor.IsDead());
+  alvor.SetIsDead(false);
+  REQUIRE(!alvor.IsDead());
+
+  DoMessage(partOne, 0, Movement(alvor.GetIdx(), cell, start, 0.f, true));
+  REQUIRE(!alvor.IsDead());
+
+  ReleaseAlvor(partOne, alvor, cell, start);
+}

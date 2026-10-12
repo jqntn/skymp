@@ -36,7 +36,7 @@ export class DeathService extends ClientListener {
         },
         leave() { },
       },
-      0xff000000,
+      0,
       0xffffffff,
       "KillMove*"
     );

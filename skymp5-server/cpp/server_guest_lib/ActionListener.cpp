@@ -215,7 +215,8 @@ void ActionListener::OnUpdateMovement(const RawMessageData& rawMsgData,
 
     if (isNpc && !actor->IsDead()) {
       if (msg.data.isDead) {
-        if (!IsEssentialEspmNpc(*actor)) {
+        if (!IsEssentialEspmNpc(*actor) &&
+            !actor->RespawnedWithin(std::chrono::seconds(3))) {
           actor->Kill();
         }
       } else {

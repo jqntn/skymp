@@ -23,6 +23,7 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 - `feat(coop): claim, release and clean up NPC hosts on the server (1A.1, 1A.2, 1A.3)`: `ctx.unit(tag)` step checks; [1A.1] load filter tests (exact banned list, StartsDead/Deleted reasons, Mirmulnir, fixture flags); host claims with a location (NPCs only, same cell, 4096, finite pos, 2 s rule), release by the hoster, hoster cleared on unsubscribe (HostStop) and on disconnect.
 - `feat(coop): take hosted NPC movement, health and death from the hoster (1A.4, 1A.5)`: NPC movement skips player validation (cell change allowed; non-cell or missing record and non-finite position rejected), health and death from the hoster (essential NPCs cannot be killed this way), no Kill at health 0 for ESP NPCs, no respawn for unique ESP NPCs; 1A.5 step check reuses the S1.1 follow metric (red with the remoteServer fix reverted).
 - `fix(coop): keep puppet NPCs harmless and alive until the hoster decides (1B.1, 1B.2)`: 1B.1 check (real actor, no clone, no immortality, own name, hosted; source asserts); puppets get deferred kill and attackDamageMult 0, restored when hosted or destroyed; a puppet hit to 0 is resurrected on release unless the server says dead (then its server health is reapplied); the hold is re-armed if lost.
+- `fix(coop): send hits and activations of hosted NPCs and keep revived NPCs alive (1B.3)`: client accepts hosted ESP aggressors and casters, blocks KillMove for all ids, sends no actor values for hosted NPCs, drives puppet AI from the actor's real state; server ignores a hoster's death for 3 s after a respawn (RespawnedWithin, [1B.3] unit test); 1B.3 check gives engine 2 an appearance so engine 1 renders it.
 
 ## What the last two commits hold
 
@@ -60,10 +61,10 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 
 ## Next steps
 
-1. 1B.3 (death and hits): resurrectActor in deathService.ts for real actors (resurrect, not RespawnNeededError), accept a hosted ESP aggressor in hitService.ts and a hosted ESP caster in activationService.ts, block KillMove for all ids, sendActorValuePercentage returns early when _refrId is set. Map each to an observable and write red-first checks.
-2. Then 1B.4, 1B.5, G1, 2A (S3.4 comes back with 2A.1), 2B, G2, P. P8 stays red until reached.
-3. Open: custom gamemode properties on ESP NPCs showed no effect (LESSONS). 1B.1 coverage is partial (enable() of a disabled actor, dead model, equipment not observed; the clone scan cannot see skymp clones).
-4. 1B.2 residual risks: resurrect() side effects on a hosted real actor are untested; a lethal puppet hit whose health is restored between frames could be missed.
+1. 1B.4 (host policy and world cleaner): never delete actors below 0xff000000; claim a real actor with a location (3D loaded, enabled, alive, no hoster, no FormView, same cell, within 4096) using the 1A.2 location claim; HostStop for an actor without FormView hides it and retries the claim every 5 s; release hosted actors that are gone/unloaded/disabled; party rule for quest alias actors; no claims while CoopService.reporting is false. The "first movement" bullet is skipped (S1.3 PASS... check the plan: it says skip if S1.3 FAILS; S1.3 passed on the client, so decide with the plan text). Write red-first checks.
+2. Then 1B.5, G1, 2A (S3.4 comes back with 2A.1), 2B, G2, P. P8 stays red until reached.
+3. Watch in play: a hosted NPC's hits on its own hoster's player now also reach the server (possible double damage; hosted clones already behaved so). The 1B.3 hit scenario is flaky (ENV and retry).
+4. Open: custom gamemode properties on ESP NPCs (LESSONS). 1B.1 coverage partial. 1B.2: resurrect side effects untested.
 
 ## Runner
 

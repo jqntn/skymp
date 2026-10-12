@@ -1,4 +1,4 @@
-import { ActivateEvent, Actor } from "skyrimPlatform";
+import { ActivateEvent, Actor, storage } from "skyrimPlatform";
 import { ClientListener, CombinedController, Sp } from "./clientListener";
 import { MsgType } from "../../messages";
 import { getInventory } from "../../sync/inventory";
@@ -26,8 +26,8 @@ export class ActivationService extends ClientListener {
           return;
         }
 
-        // Actors never have non-ff ids locally in skymp
-        if (caster !== 0x14 && caster < 0xff000000) {
+        const hosted = storage["hosted"];
+        if (caster !== 0x14 && caster < 0xff000000 && !(Array.isArray(hosted) && hosted.includes(caster + 0x100000000))) {
           return;
         }
 

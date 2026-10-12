@@ -344,7 +344,6 @@ export class FormView {
     const healthPercentage = this.serverHealthPercentage;
     this.puppetLethalHit = false;
     this.realActor = false;
-    this.aiOn = false;
     this.puppetMode = undefined;
     once("update", () => {
       if (realActor) {
@@ -375,7 +374,6 @@ export class FormView {
 
   private realActor = false;
   private hostedHere = false;
-  private aiOn = false;
   private puppetMode?: boolean;
   private savedDamageMult = 1;
   private puppetLethalHit = false;
@@ -533,8 +531,7 @@ export class FormView {
     const ac = Actor.from(refr);
     if (this.realActor && ac) {
       const wantAI = this.hostedHere || talksToPlayer;
-      if (wantAI !== this.aiOn) {
-        this.aiOn = wantAI;
+      if (wantAI !== ac.isAIEnabled()) {
         ac.enableAI(wantAI);
       }
       if (!wantAI && ac.isInCombat()) {

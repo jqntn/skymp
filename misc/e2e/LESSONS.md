@@ -65,3 +65,8 @@ Facts about the engine, the server, and the harness. Add one after each ENV, eac
 - Deferred kill keeps a pending kill once health reaches 0: endDeferredKill then kills the actor even if its health was restored above 0, and isDead() is still false right after endDeferredKill. Calling resurrect() right after endDeferredKill, in the same call, keeps the actor alive and no death reaches the server. Disable then enable (separate frames) also clears it.
 - Locally spawned actors (placeAtMe from the driver) are deleted by the world cleaner within a second; test on real ESP NPCs instead.
 - `Cell.getNumRefs(type)` filters by the base form type (actors: 43 NPC_) and does not list skymp's placed clones.
+- A character made with `ctx.character` has no appearance, so other clients never render it (no clone). A check that needs one player to see another sets an appearance first (`mp.set(actor, "appearance", { raceId: 0x13746, ... })`), see 1B.3.
+- A server-side revive of a hosted NPC raced with the hoster's next movement packet (still isDead) and killed it again; the server now ignores a hoster's death for 3 s after a respawn.
+- A frenzied NPC (Aggression 3 + startCombat) lands a hit on a nearby clone in about half the runs within 45 s; 1B.3 reports ENV when no hit lands, and the retry usually passes.
+- Running a check while the shell's working directory is inside `misc/e2e/out/runs/...` makes the runner fail with EPERM when it clears that folder.
+- Packet history (`mp.setPacketHistoryRecording`) recorded nothing for a user in a check; do not rely on it.

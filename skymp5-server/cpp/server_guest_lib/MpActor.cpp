@@ -52,6 +52,7 @@ struct MpActor::Impl
   uint32_t respawnTimerIndex = 0;
   bool isRespawning = false;
   bool isBlockActive = false;
+  std::chrono::steady_clock::time_point lastRespawn;
   std::chrono::steady_clock::time_point lastAttributesUpdateTimePoint;
   std::vector<std::pair<uint32_t, std::chrono::steady_clock::time_point>>
     lastHitTimesLRU;
@@ -1352,6 +1353,11 @@ void MpActor::Kill(MpActor* killer, bool shouldTeleport)
   AddDeathItem();
 }
 
+bool MpActor::RespawnedWithin(std::chrono::steady_clock::duration window) const
+{
+  return std::chrono::steady_clock::now() - pImpl->lastRespawn < window;
+}
+
 void MpActor::RespawnWithDelay(bool shouldTeleport)
 {
   spdlog::trace("MpActor::RespawnWithDelay {:x} - isRespawning: {}",
@@ -1441,6 +1447,7 @@ void MpActor::Respawn(bool shouldTeleport)
     return;
   }
   pImpl->isRespawning = false;
+  pImpl->lastRespawn = std::chrono::steady_clock::now();
 
   RespawnEvent respawnEvent(this, shouldTeleport);
   respawnEvent.Fire(GetParent());
