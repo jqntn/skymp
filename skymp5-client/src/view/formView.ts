@@ -34,6 +34,18 @@ export const getScreenResolution = (): ScreenResolution => {
 
 const espActorIdOffset = 0x100000000;
 
+const endPuppetHold = (ac: Actor, damageMult: number, lethalHit: boolean, serverDead: boolean, healthPercentage?: number) => {
+  ac.endDeferredKill();
+  if (!serverDead && (lethalHit || ac.getActorValue("health") <= 0)) {
+    ac.resurrect();
+    if (healthPercentage !== undefined && healthPercentage < 1) {
+      const missing = ac.getBaseActorValue("health") * (1 - Math.max(healthPercentage, 0.01));
+      ac.damageActorValue("health", missing);
+    }
+  }
+  ac.setActorValue("attackDamageMult", damageMult);
+};
+
 export class FormView {
   constructor(private remoteRefrId?: number) { }
 
@@ -325,13 +337,23 @@ export class FormView {
     this.spawnMoment = 0;
     const refrId = this.refrId;
     const realActor = this.realActor;
+    const wasPuppet = this.puppetMode === true;
+    const damageMult = this.savedDamageMult;
+    const lethalHit = this.puppetLethalHit;
+    const serverDead = this.serverDead;
+    const healthPercentage = this.serverHealthPercentage;
+    this.puppetLethalHit = false;
     this.realActor = false;
     this.aiOn = false;
+    this.puppetMode = undefined;
     once("update", () => {
       if (realActor) {
         const ac = Actor.from(Game.getFormEx(refrId));
         ac?.clearKeepOffsetFromActor();
         ac?.enableAI(false);
+        if (ac && wasPuppet) {
+          endPuppetHold(ac, damageMult, lethalHit, serverDead, healthPercentage);
+        }
         setDefaultAnimsDisabled(refrId, false);
       }
       if (refrId >= 0xff000000) {
@@ -354,6 +376,11 @@ export class FormView {
   private realActor = false;
   private hostedHere = false;
   private aiOn = false;
+  private puppetMode?: boolean;
+  private savedDamageMult = 1;
+  private puppetLethalHit = false;
+  private serverDead = false;
+  private serverHealthPercentage?: number;
   private lastHarvestedApply = 0;
   private lastOpenApply = 0;
   private isSetNodeTextureSetApplied = false;
@@ -512,6 +539,30 @@ export class FormView {
       }
       if (!wantAI && ac.isInCombat()) {
         ac.stopCombat();
+      }
+      const puppet = !this.hostedHere;
+      this.serverDead = !!model.isDead;
+      this.serverHealthPercentage = model.movement?.healthPercentage;
+      if (this.puppetMode && !this.serverDead && ac.getActorValue("health") <= 0) {
+        this.puppetLethalHit = true;
+      }
+      if (this.puppetMode && puppet && ac.getActorValue("attackDamageMult") !== 0) {
+        ac.startDeferredKill();
+        ac.setActorValue("attackDamageMult", 0);
+      }
+      if (puppet !== this.puppetMode) {
+        if (puppet) {
+          const damageMult = ac.getActorValue("attackDamageMult");
+          if (damageMult > 0) {
+            this.savedDamageMult = damageMult;
+          }
+          ac.startDeferredKill();
+          ac.setActorValue("attackDamageMult", 0);
+        } else if (this.puppetMode) {
+          endPuppetHold(ac, this.savedDamageMult, this.puppetLethalHit, this.serverDead, this.serverHealthPercentage);
+          this.puppetLethalHit = false;
+        }
+        this.puppetMode = puppet;
       }
     }
 

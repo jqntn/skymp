@@ -22,6 +22,7 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 - `test(e2e): block S3.4 until the corpse branch of 2A.1`: S3.4 reports BLOCKED with the reason; plan edit.
 - `feat(coop): claim, release and clean up NPC hosts on the server (1A.1, 1A.2, 1A.3)`: `ctx.unit(tag)` step checks; [1A.1] load filter tests (exact banned list, StartsDead/Deleted reasons, Mirmulnir, fixture flags); host claims with a location (NPCs only, same cell, 4096, finite pos, 2 s rule), release by the hoster, hoster cleared on unsubscribe (HostStop) and on disconnect.
 - `feat(coop): take hosted NPC movement, health and death from the hoster (1A.4, 1A.5)`: NPC movement skips player validation (cell change allowed; non-cell or missing record and non-finite position rejected), health and death from the hoster (essential NPCs cannot be killed this way), no Kill at health 0 for ESP NPCs, no respawn for unique ESP NPCs; 1A.5 step check reuses the S1.1 follow metric (red with the remoteServer fix reverted).
+- `fix(coop): keep puppet NPCs harmless and alive until the hoster decides (1B.1, 1B.2)`: 1B.1 check (real actor, no clone, no immortality, own name, hosted; source asserts); puppets get deferred kill and attackDamageMult 0, restored when hosted or destroyed; a puppet hit to 0 is resurrected on release unless the server says dead (then its server health is reapplied); the hold is re-armed if lost.
 
 ## What the last two commits hold
 
@@ -59,10 +60,10 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 
 ## Next steps
 
-1. Phase 1B step checks (client side, driver checks). 1B.1 (real actor in FormView): much was done for S1.1/S1.2 (formView.ts realActor, destroy releases holds, no localImmortal/name/equipment for real actors). Map each bullet to an observable on the client (e.g. a real actor keeps its own health and name; an initially disabled NPC enabled by a claim; formViewArray skips ids >= 0x100000000) and write red-first checks where something is missing.
-2. Then 1B.2-1B.5, G1, 2A (S3.4 comes back with 2A.1), 2B, G2, P. P8 stays red until reached.
-3. Open question (LESSONS): custom gamemode properties set on an ESP NPC showed no effect on the client; isHostedByOther does reach the FormView.
-4. Known review gaps: see the 1A notes in the log; teleport of a hosted NPC by the server can be undone by the hoster's next packet; an unhosted ESP NPC never dies (no hoster reports death).
+1. 1B.3 (death and hits): resurrectActor in deathService.ts for real actors (resurrect, not RespawnNeededError), accept a hosted ESP aggressor in hitService.ts and a hosted ESP caster in activationService.ts, block KillMove for all ids, sendActorValuePercentage returns early when _refrId is set. Map each to an observable and write red-first checks.
+2. Then 1B.4, 1B.5, G1, 2A (S3.4 comes back with 2A.1), 2B, G2, P. P8 stays red until reached.
+3. Open: custom gamemode properties on ESP NPCs showed no effect (LESSONS). 1B.1 coverage is partial (enable() of a disabled actor, dead model, equipment not observed; the clone scan cannot see skymp clones).
+4. 1B.2 residual risks: resurrect() side effects on a hosted real actor are untested; a lethal puppet hit whose health is restored between frames could be missed.
 
 ## Runner
 
