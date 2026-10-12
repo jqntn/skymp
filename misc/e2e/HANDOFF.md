@@ -17,6 +17,7 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 - `test(e2e): run each engine on its own hidden desktop and relaunch early exits (S0b)`: runner changes below.
 - `fix(coop): run NPC AI only on the hoster and animate puppets from its movement (S1.1, S1.3, S1.4, S1.6)`: client, checks, plan, lessons, this file.
 - `fix(coop): let players talk through a dialogue with a puppet NPC (S1.5)`: AI on while a puppet is in dialogue with the local player; S1.5 check.
+- `test(e2e): run the Bleak Falls Barrow puzzles on the server VM (S2)`: S2 check (bot player, archives setting, trace log); plan edit with the 2B.2 scope.
 
 ## What the last two commits hold
 
@@ -45,6 +46,7 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 - Full run at 13:56 UTC (560 s): L1, S0, S0b, S0c, S1.1, S1.2, S1.3, S1.4, S1.6 PASS; no engine relaunch with one desktop per engine. S1.5 and later have no script. P8 red.
 - After the prediction fix: S1.1 3/3 PASS (worst 14.5 units), S1.4 3/3 PASS (new version), S1.6 3/3 PASS (0.5 s), S1.3 PASS (new version).
 - Reviews: S1.1, S1.3, S1.4, S1.5 and S1.6 agree (YES/YES).
+- S2 PASS: the server VM runs the pillars and the claw door with the archives setting; what it does not do is listed in the plan (phase 0 step 3, S2 PASS bullet).
 - S1.5: red before the fix (a puppet with AI off never finished its greeting, so no topic got an answer), PASS after; S1.2 and S1.4 still PASS.
 - Known gaps from the reviews, for later steps:
   - S1.3: the server still has Alvor in RiverwoodAlvorsHouse (0x133c8) while the client shows him at the forge. The claim with location of phase 1B step 4 must fix this; its check should assert that the server agrees.
@@ -52,8 +54,8 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 
 ## Next steps
 
-1. S2, server Papyrus spike: add `"archives": ["Skyrim - Misc.bsa"]` to the e2e server settings (ScriptStorageFactory::AddBsa reads it), then test the Bleak Falls Barrow pillars and the claw door on the server VM with the probe (no client needed). The pillars workaround is at MpObjectReference.cpp:457-477. The result decides phase 2B step 2 (PASS: keep only what the VM does not do; FAIL: all of it).
-2. Then S3.1-S3.4, 1A.x, and later steps. P8 stays red until reached.
+1. S3.1 is red: `sp.hooks.sendAnimationEvent` saw nothing when `playAnimation("Open")` ran on the BFB gate 0x3b9f1 (an ACTI) on the client. First add a positive control on the player (0x14) to prove the hook setup in the driver works, then find the cause in FridaHooks.cpp (the hook is on the animation graph of all refs, `refr = rcx - 0x38`).
+2. Then S3.2-S3.4, 1A.x, and later steps. P8 stays red until reached.
 
 ## Runner
 
