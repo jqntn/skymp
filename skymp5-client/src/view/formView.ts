@@ -349,6 +349,7 @@ export class FormView {
   }
 
   private realActor = false;
+  private hostedHere = false;
   private lastHarvestedApply = 0;
   private lastOpenApply = 0;
   private isSetNodeTextureSetApplied = false;
@@ -362,11 +363,11 @@ export class FormView {
       this.lastOpenApply = 0;
     }
     const now = Date.now();
-    if (now - this.lastHarvestedApply > 666) {
+    if (!this.realActor && now - this.lastHarvestedApply > 666) {
       this.lastHarvestedApply = now;
       ModelApplyUtils.applyModelIsHarvested(refr, !!model.isHarvested);
     }
-    if (now - this.lastOpenApply > 133) {
+    if (!this.realActor && now - this.lastOpenApply > 133) {
       this.lastOpenApply = now;
       ModelApplyUtils.applyModelIsOpen(refr, !!model.isOpen);
     }
@@ -413,9 +414,16 @@ export class FormView {
     }
     setDefaultAnimsDisabled(this.refrId, alreadyHosted ? false : true);
 
-    if (alreadyHosted) {
+    if (alreadyHosted && !this.hostedHere) {
       Actor.from(refr)?.clearKeepOffsetFromActor();
     }
+    this.hostedHere = alreadyHosted;
+
+    const talksToPlayer = this.realActor && !!Actor.from(refr)?.isInDialogueWithPlayer();
+    if (talksToPlayer && !this.movState.talksToPlayer) {
+      Actor.from(refr)?.clearKeepOffsetFromActor();
+    }
+    this.movState.talksToPlayer = talksToPlayer;
 
     if (model.movement) {
       let ac = Actor.from(refr);
@@ -439,7 +447,9 @@ export class FormView {
         Date.now() - this.movState.lastApply > 2000
       ) {
         this.movState.lastApply = Date.now();
-        if (model.isHostedByOther || !this.movState.everApplied) {
+        if (talksToPlayer && model.isHostedByOther) {
+          this.movState.lastNumChanges = +(model.numMovementChanges as number);
+        } else if (model.isHostedByOther || !this.movState.everApplied) {
           const backup = model.movement.isWeapDrawn;
           if (forcedWeapDrawn === true || forcedWeapDrawn === false) {
             model.movement.isWeapDrawn = forcedWeapDrawn;
@@ -486,6 +496,13 @@ export class FormView {
             }
           }
         }
+      }
+    }
+
+    if (this.realActor && model.isHostedByOther) {
+      const ac = Actor.from(refr);
+      if (ac?.isInCombat()) {
+        ac.stopCombat();
       }
     }
 
@@ -694,6 +711,7 @@ export class FormView {
     lastApply: 0,
     lastRehost: 0,
     everApplied: false,
+    talksToPlayer: false,
   };
   private appearanceState = this.getDefaultAppearanceState();
   private eqState = this.getDefaultEquipState();

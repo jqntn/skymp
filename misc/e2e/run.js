@@ -18,6 +18,7 @@ const GAME = fs.readFileSync(path.join(BUILD, "CMakeCache.txt"), "utf8").match(/
 const MYGAMES = path.join(os.homedir(), "Documents", "My Games", "Skyrim Special Edition");
 const PORT = { server: 7790, probe: 7792, runner: 7793 };
 const SKYRIM_VERSION = "1.6.1170.0";
+const DESKTOP = process.argv.includes("--visible") ? "Default" : "skymp-e2e";
 const HELGEN_EXIT = { pos: [12155.9, -71991.3, 6015.5], angleZ: 286.1, worldOrCell: 0x3c };
 
 const range = (prefix, n) => Array.from({ length: n }, (_, i) => `${prefix}${i + 1}`);
@@ -236,6 +237,11 @@ const startServer = async (check, ctx) => {
   await ctx.waitFor(() => ctx.probe("return 1").catch(() => 0), 90000, "the server probe", Env);
 };
 
+const launchGame = (dir) => {
+  const r = spawnSync("powershell", ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", path.join(__dirname, "desktop.ps1"), "-desktop", DESKTOP, "-exe", path.join(dir, "skse64_loader.exe"), "-cwd", dir], { encoding: "utf8" });
+  if (r.status !== 0) throw new Env(`launch failed: ${r.stderr}`);
+};
+
 const startGame = async (n, ctx) => {
   const dir = engineDir(n);
   if (n > 1) prepareEngineDir(n);
@@ -243,14 +249,16 @@ const startGame = async (n, ctx) => {
   const dev = path.join(dir, "Data", "Platform", "PluginsDev");
   const settingsFile = path.join(plugins, "skymp5-client-settings.txt");
   backup(settingsFile);
-  writeJson(settingsFile, { gameData: { profileId: profileId(n) }, master: "", "server-ip": "127.0.0.1", "server-master-key": null, "server-port": PORT.server });
+  const now = new Date();
+  const hoursOffset = ((((ctx.gameHour - now.getUTCHours() - now.getUTCMinutes() / 60) % 24) + 24) % 24);
+  writeJson(settingsFile, { gameData: { profileId: profileId(n) }, master: "", "server-ip": "127.0.0.1", "server-master-key": null, "server-port": PORT.server, hoursOffset });
   backup(dev);
   fs.mkdirSync(dev, { recursive: true });
   fs.copyFileSync(path.join(__dirname, "driver.js"), path.join(dev, "e2e-driver.js"));
   writeJson(path.join(dev, "e2e-driver-settings.txt"), { port: PORT.runner, engine: n });
 
   const before = new Set(procs("SkyrimSE.exe"));
-  spawn(path.join(dir, "skse64_loader.exe"), [], { cwd: dir, detached: true, stdio: "ignore" }).unref();
+  launchGame(dir);
   let pid;
   await ctx.waitFor(() => (pid = procs("SkyrimSE.exe").find((p) => !before.has(p))), 60000, `SkyrimSE.exe of engine ${n}`, Env, 100);
   own(pid, "SkyrimSE.exe");
@@ -259,12 +267,13 @@ const startGame = async (n, ctx) => {
 
 const lowCostMode = () => {
   const skyrimIni = path.join(MYGAMES, "Skyrim.ini");
-  if (iniEntries(read(skyrimIni)).find(([s, k]) => s === "General" && k === "bAlwaysActive")?.[2] !== "1") editIni(skyrimIni, [["General", "bAlwaysActive", "1"]]);
+  editIni(skyrimIni, [["General", "bAlwaysActive", "1"], ["Controls", "bBackgroundMouse", "1"]]);
   editIni(path.join(MYGAMES, "SkyrimPrefs.ini"), [
     ...iniEntries(read(path.join(GAME, "Low.ini"))),
     ["Display", "iSize W", "640"], ["Display", "iSize H", "400"], ["Display", "bBorderless", "0"], ["Display", "bFull Screen", "0"],
+    ["AudioMenu", "fAudioMasterVolume", "0.0000"],
   ]);
-  editIni(path.join(GAME, "Data", "SKSE", "Plugins", "SSEDisplayTweaks.ini"), [["Render", "FramerateLimit", "30"], ["Render", "UIFramerateLimit", "30"]]);
+  editIni(path.join(GAME, "Data", "SKSE", "Plugins", "SSEDisplayTweaks.ini"), [["Render", "FramerateLimit", "30"], ["Render", "UIFramerateLimit", "30"], ["Window", "LockCursor", "false"]]);
 };
 
 const makeCtx = (id, dir) => {
@@ -281,6 +290,7 @@ const makeCtx = (id, dir) => {
     running: (engine) => procs("SkyrimSE.exe").includes(ctx.gamePids[engine]),
     skyrimPids: () => procs("SkyrimSE.exe"),
     engineDir,
+    launchGame,
     own: (pid) => own(pid, "SkyrimSE.exe"),
     waitFor: async (fn, ms, what, Err = Error, every = 500) => {
       const end = Date.now() + ms;
@@ -300,9 +310,10 @@ const makeCtx = (id, dir) => {
     drv: (code, engine = 1, ms = 15000) =>
       new Promise((resolve, reject) => {
         const cmdId = drivers.nextId++;
+        const site = (new Error().stack.split("\n").find((l) => l.includes(`${path.sep}checks${path.sep}`)) || "").trim();
         const timer = setTimeout(() => {
           drivers.pending.delete(cmdId);
-          reject(new Env(`engine ${engine} driver did not answer in ${ms / 1000} s`));
+          reject(new Env(`engine ${engine} driver did not answer in ${ms / 1000} s (${site})`));
         }, ms);
         drivers.pending.set(cmdId, { resolve: (v) => (clearTimeout(timer), resolve(v)), reject: (e) => (clearTimeout(timer), reject(e)) });
         (drivers.queue[engine] ||= []).push({ id: cmdId, code });
@@ -312,7 +323,7 @@ const makeCtx = (id, dir) => {
     character: (engine = 1, at = HELGEN_EXIT) => ctx.probe(`return mp.createActor(0, ${JSON.stringify(at.pos)}, ${at.angleZ}, ${at.worldOrCell}, ${profileId(engine)});`),
     shot: (name, engine = 1) => {
       const file = path.join(dir, `${name}.png`);
-      const r = spawnSync("powershell", ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", path.join(__dirname, "shot.ps1"), "-procId", String(ctx.gamePids[engine]), "-out", file], { encoding: "utf8" });
+      const r = spawnSync("powershell", ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", path.join(__dirname, "desktop.ps1"), "-desktop", DESKTOP, "-procId", String(ctx.gamePids[engine]), "-out", file], { encoding: "utf8" });
       if (r.status !== 0) ctx.log(`screenshot failed: ${r.stderr}`);
       else ctx.shots.push(path.relative(OUT, file).replace(/\\/g, "/"));
     },
@@ -332,6 +343,7 @@ const runOnce = async (id, check, n, attempt) => {
   fs.rmSync(dir, { recursive: true, force: true });
   fs.mkdirSync(dir, { recursive: true });
   const ctx = makeCtx(id, dir);
+  ctx.gameHour = check.gameHour ?? 12;
   drivers.lines = {};
   drivers.logFile = (engine) => path.join(dir, `client${engine}.log`);
   const t = Date.now();
@@ -366,7 +378,7 @@ const runOnce = async (id, check, n, attempt) => {
 };
 
 const runCheck = async (id, opts, envStreak) => {
-  const file = path.join(CHECKS, `${id}.js`);
+  const file = opts.adhoc && id === "adhoc" ? path.resolve(opts.adhoc) : path.join(CHECKS, `${id}.js`);
   if (!fs.existsSync(file)) return { result: "FAIL", reason: "no check script", secs: 0, evidence: [], shots: [] };
   delete require.cache[require.resolve(file)];
   const check = require(file);
@@ -423,7 +435,7 @@ const main = async () => {
   const args = process.argv.slice(2);
   const arg = (name) => { const i = args.indexOf(name); return i >= 0 ? args[i + 1] : undefined; };
   const only = arg("--only")?.split(",");
-  const opts = { runs: Number(arg("--runs")) || 0 };
+  const opts = { runs: Number(arg("--runs")) || 0, adhoc: arg("--check") };
   fs.mkdirSync(OUT, { recursive: true });
 
   await waitNoForeignSkyrim();
@@ -446,6 +458,13 @@ const main = async () => {
       save("L1", { ...(await level1()), secs: Math.round((Date.now() - t) / 1000), shots: [] });
       log(`L1: ${results.L1.result} ${results.L1.reason}`);
       if (results.L1.result !== "PASS") stopped = "level 1 FAIL";
+    }
+    if (opts.adhoc) {
+      prepareServer();
+      const r = await runCheck("adhoc", opts, { n: 0 });
+      log(`adhoc: ${r.result} ${r.reason}`);
+      for (const e of r.evidence) log(e);
+      return;
     }
     if (!stopped) {
       prepareServer();

@@ -4,16 +4,20 @@ const http = new sp.HttpClient(`http://127.0.0.1:${cfg.port}`);
 const opts = { headers: {} };
 const queue = [];
 const lines = [];
-let polling = false;
+let pollStarted = 0;
 let lastFlush = 0;
 
-const post = (path, body) => http.post(path, { body: JSON.stringify(body), contentType: "application/json", headers: {} }, () => {});
+const post = (path, body, tries = 3) =>
+  http.post(path, { body: JSON.stringify(body), contentType: "application/json", headers: {} }, (res) => {
+    if (res.status !== 200 && tries > 1) post(path, body, tries - 1);
+  });
 
 const poll = () => {
-  if (polling) return;
-  polling = true;
+  if (pollStarted && Date.now() - pollStarted < 5000) return;
+  const started = Date.now();
+  pollStarted = started;
   http.get(`/cmd?engine=${cfg.engine}`, opts, (res) => {
-    polling = false;
+    if (pollStarted === started) pollStarted = 0;
     if (res.status !== 200 || !res.body) return;
     for (const cmd of JSON.parse(res.body)) queue.push(cmd);
   });

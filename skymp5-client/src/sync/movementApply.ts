@@ -79,6 +79,9 @@ const keepOffsetFromActor = (ac: Actor, m: Movement) => {
   }
 
   if (m.runMode === "Standing") {
+    if (ac.getFormID() < 0xff000000) {
+      return ac.clearKeepOffsetFromActor();
+    }
     return ac.keepOffsetFromActor(ac, 0, 0, 0, 0, 0, offsetAngle, 1, 1);
   }
   const offset = [

@@ -1,6 +1,5 @@
 const fs = require("fs");
 const path = require("path");
-const { spawn } = require("child_process");
 
 module.exports = {
   engines: 1,
@@ -10,7 +9,7 @@ module.exports = {
     const actor = await ctx.ready(1);
     const dir = ctx.engineDir(1);
     const before = new Set(ctx.skyrimPids());
-    spawn(path.join(dir, "skse64_loader.exe"), [], { cwd: dir, detached: true, stdio: "ignore" }).unref();
+    ctx.launchGame(dir);
     let second;
     await ctx.waitFor(() => (second = ctx.skyrimPids().find((p) => !before.has(p))), 30000, "a second SkyrimSE.exe starts from the same folder", Error, 100);
     ctx.own(second);
