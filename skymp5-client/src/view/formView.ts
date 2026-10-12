@@ -505,7 +505,7 @@ export class FormView {
 
     const ac = Actor.from(refr);
     if (this.realActor && ac) {
-      const wantAI = this.hostedHere;
+      const wantAI = this.hostedHere || talksToPlayer;
       if (wantAI !== this.aiOn) {
         this.aiOn = wantAI;
         ac.enableAI(wantAI);
