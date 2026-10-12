@@ -1,11 +1,25 @@
 import { ClientListener, CombinedController, Sp } from "./clientListener";
-import { Actor } from "skyrimPlatform";
+import { Actor, ObjectLoadedEvent } from "skyrimPlatform";
 import { CoopService } from "./coopService";
 
 export class WorldCleanerService extends ClientListener {
   constructor(private sp: Sp, private controller: CombinedController) {
     super();
     this.controller.on("update", () => this.onUpdate());
+    this.controller.on("objectLoaded", (e) => this.onObjectLoaded(e));
+  }
+
+  private onObjectLoaded(e: ObjectLoadedEvent) {
+    const actor = this.sp.Actor.from(e.object);
+    if (!e.isLoaded || !actor) {
+      return;
+    }
+    const id = actor.getFormID();
+    const hosted = this.sp.storage["hosted"];
+    if (id === 0x14 || id >= 0xff000000 || (Array.isArray(hosted) && hosted.includes(id + 0x100000000))) {
+      return;
+    }
+    actor.enableAI(false);
   }
 
   modWcProtection(actorId: number, mod: number): void {

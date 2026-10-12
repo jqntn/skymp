@@ -78,10 +78,11 @@ const keepOffsetFromActor = (ac: Actor, m: Movement) => {
     offsetAngle = 0;
   }
 
+  if (ac.getFormID() < 0xff000000) {
+    return applyLocomotion(ac, m);
+  }
+
   if (m.runMode === "Standing") {
-    if (ac.getFormID() < 0xff000000) {
-      return ac.clearKeepOffsetFromActor();
-    }
     return ac.keepOffsetFromActor(ac, 0, 0, 0, 0, 0, offsetAngle, 1, 1);
   }
   const offset = [
@@ -101,6 +102,19 @@ const keepOffsetFromActor = (ac: Actor, m: Movement) => {
     m.runMode === "Walking" ? 2048 : 1,
     1,
   );
+};
+
+const movingActors = new Set<number>();
+
+const applyLocomotion = (ac: Actor, m: Movement) => {
+  const id = ac.getFormID();
+  const moving = m.runMode !== "Standing";
+  if (moving !== movingActors.has(id)) {
+    moving ? movingActors.add(id) : movingActors.delete(id);
+    Debug.sendAnimationEvent(ac, moving ? "moveStart" : "moveStop");
+  }
+  ac.setAnimationVariableFloat("Speed", moving ? m.speed : 0);
+  ac.setAnimationVariableFloat("Direction", moving ? (m.direction % 360) / 360 : 0);
 };
 
 const getOffsetZ = (runMode: RunMode) => {
@@ -167,7 +181,7 @@ const translateTo = (refr: ObjectReference, m: Movement) => {
 
   // Local lag compensation
   // TODO: Remove "|| 0" hack (added to support old MpClientPlugin)
-  const distanceAdd = (m.speed || 0) * time;
+  const distanceAdd = refr.getFormID() < 0xff000000 ? 0 : (m.speed || 0) * time;
   const direction = m.rot[2] + m.direction;
   gTempTargetPos[0] = m.pos[0];
   gTempTargetPos[1] = m.pos[1];

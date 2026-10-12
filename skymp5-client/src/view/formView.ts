@@ -326,9 +326,12 @@ export class FormView {
     const refrId = this.refrId;
     const realActor = this.realActor;
     this.realActor = false;
+    this.aiOn = false;
     once("update", () => {
       if (realActor) {
-        Actor.from(Game.getFormEx(refrId))?.clearKeepOffsetFromActor();
+        const ac = Actor.from(Game.getFormEx(refrId));
+        ac?.clearKeepOffsetFromActor();
+        ac?.enableAI(false);
         setDefaultAnimsDisabled(refrId, false);
       }
       if (refrId >= 0xff000000) {
@@ -350,6 +353,7 @@ export class FormView {
 
   private realActor = false;
   private hostedHere = false;
+  private aiOn = false;
   private lastHarvestedApply = 0;
   private lastOpenApply = 0;
   private isSetNodeTextureSetApplied = false;
@@ -499,9 +503,14 @@ export class FormView {
       }
     }
 
-    if (this.realActor && model.isHostedByOther) {
-      const ac = Actor.from(refr);
-      if (ac?.isInCombat()) {
+    const ac = Actor.from(refr);
+    if (this.realActor && ac) {
+      const wantAI = this.hostedHere;
+      if (wantAI !== this.aiOn) {
+        this.aiOn = wantAI;
+        ac.enableAI(wantAI);
+      }
+      if (!wantAI && ac.isInCombat()) {
         ac.stopCombat();
       }
     }

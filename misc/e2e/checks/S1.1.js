@@ -73,7 +73,10 @@ module.exports = {
       ctx.evidence.push(`${name} (${id.toString(16)}): hoster engine ${h} translates it 200 units to ${target.map(Math.round)}, NPC path on the hoster ${moved.toFixed(0)} units, ${late.length} puppet samples on engine ${p}, worst distance to the hoster path of the last ${WINDOW_MS} ms: ${worst.toFixed(1)}`);
       ctx.shot(`S1_1-${name}-engine${h}`, h);
       ctx.shot(`S1_1-${name}-engine${p}`, p);
-      ctx.assert.ok(moved > 100, `${name} did not move on the hoster (${moved.toFixed(0)} units)`);
+      const net = hostPath.length ? dist(hostPath[hostPath.length - 1].pos, before) : 0;
+      ctx.assert.ok(net > 100, `${name} did not move on the hoster (${net.toFixed(0)} units from its start)`);
+      const hosters = [...new Set(server.map((x) => x.hoster))];
+      ctx.assert.ok(hosters.length === 1 && hosters[0] === hoster, `${name} changed hoster during the samples: ${hosters.map((x) => x.toString(16))}`);
       ctx.assert.ok(late.length >= 20, `${name}: only ${late.length} puppet samples`);
       ctx.assert.ok(worst <= TOLERANCE, `${name}: the puppet was ${worst.toFixed(1)} units from the hoster path of the last ${WINDOW_MS} ms`);
     }
