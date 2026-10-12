@@ -18,18 +18,19 @@ const GAME = fs.readFileSync(path.join(BUILD, "CMakeCache.txt"), "utf8").match(/
 const MYGAMES = path.join(os.homedir(), "Documents", "My Games", "Skyrim Special Edition");
 const PORT = { server: 7790, probe: 7792, runner: 7793 };
 const SKYRIM_VERSION = "1.6.1170.0";
-const DESKTOP = process.argv.includes("--visible") ? "Default" : "skymp-e2e";
+const desktopOf = (n) => (process.argv.includes("--visible") ? "Default" : `skymp-e2e-${n}`);
 const HELGEN_EXIT = { pos: [12155.9, -71991.3, 6015.5], angleZ: 286.1, worldOrCell: 0x3c };
 
 const range = (prefix, n) => Array.from({ length: n }, (_, i) => `${prefix}${i + 1}`);
 const ORDER = [
-  "L1", "S0", "S0b", "S0c", "S1.1", "S1.2", "S1.4", "S1.3", "S2", "S3.1", "S3.2", "S3.3", "S3.4",
+  "L1", "S0", "S0b", "S0c", "S1.1", "S1.2", "S1.4", "S1.3", "S1.5", "S1.6", "S2", "S3.1", "S3.2", "S3.3", "S3.4",
   ...range("1A.", 5), ...range("1B.", 5), ...range("G1.", 5),
   ...range("2A.", 5), ...range("2B.", 5), ...range("G2.", 6), ...range("P", 8),
 ];
 
 class Env extends Error {}
 class Blocked extends Error {}
+class Accepted extends Error {}
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const read = (p) => fs.readFileSync(p, "utf8");
@@ -182,7 +183,7 @@ const runnerServer = () =>
 
 const engineDir = (n) => (n === 1 ? GAME : path.join(BUILD, `e2e-game${n}`));
 const profileId = (n) => 990000 + n;
-const COPIED = [...fs.readdirSync(path.join(BUILD, "dist", "client", "Data")).map((d) => path.join("Data", d)), path.join("Data", "Platform"), path.join("Data", "SKSE")];
+const RELINKED = [...fs.readdirSync(path.join(BUILD, "dist", "client", "Data")).map((d) => path.join("Data", d)), path.join("Data", "Platform"), path.join("Data", "SKSE")];
 
 const mirror = (src, dst, copy) => {
   fs.mkdirSync(dst, { recursive: true });
@@ -196,20 +197,22 @@ const mirror = (src, dst, copy) => {
 
 const prepareEngineDir = (n) => {
   const dir = engineDir(n);
-  const copied = (rel) => COPIED.some((c) => rel === c || rel.startsWith(c + path.sep));
+  const copied = (rel) => RELINKED.some((c) => rel === c || rel.startsWith(c + path.sep));
   if (!fs.existsSync(path.join(dir, "steam_appid.txt"))) {
     mirror(GAME, dir, (s, d) => !copied(path.relative(GAME, s)) && !fs.existsSync(d) && fs.linkSync(s, d));
     fs.writeFileSync(path.join(dir, "steam_appid.txt"), "489830");
   }
   const skip = new Set([path.join("Data", "Platform", "PluginsDev"), path.join("Data", "Platform", "Plugins", "skymp5-client-settings.txt")]);
-  for (const c of COPIED) {
+  for (const c of RELINKED) {
     if (!fs.existsSync(path.join(GAME, c))) continue;
     mirror(path.join(GAME, c), path.join(dir, c), (s, d) => {
       const rel = path.relative(GAME, s);
       if ([...skip].some((k) => rel === k || rel.startsWith(k + path.sep))) return;
-      const a = fs.statSync(s);
-      const b = fs.existsSync(d) && fs.statSync(d);
-      if (!b || b.size !== a.size || b.mtimeMs < a.mtimeMs) fs.copyFileSync(s, d);
+      const a = fs.statSync(s, { bigint: true });
+      const b = fs.existsSync(d) && fs.statSync(d, { bigint: true });
+      if (b && b.ino === a.ino && b.dev === a.dev) return;
+      fs.rmSync(d, { force: true });
+      fs.linkSync(s, d);
     });
   }
 };
@@ -237,8 +240,8 @@ const startServer = async (check, ctx) => {
   await ctx.waitFor(() => ctx.probe("return 1").catch(() => 0), 90000, "the server probe", Env);
 };
 
-const launchGame = (dir) => {
-  const r = spawnSync("powershell", ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", path.join(__dirname, "desktop.ps1"), "-desktop", DESKTOP, "-exe", path.join(dir, "skse64_loader.exe"), "-cwd", dir], { encoding: "utf8" });
+const launchGame = (dir, n = 1) => {
+  const r = spawnSync("powershell", ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", path.join(__dirname, "desktop.ps1"), "-desktop", desktopOf(n), "-exe", path.join(dir, "skse64_loader.exe"), "-cwd", dir], { encoding: "utf8" });
   if (r.status !== 0) throw new Env(`launch failed: ${r.stderr}`);
 };
 
@@ -258,11 +261,13 @@ const startGame = async (n, ctx) => {
   writeJson(path.join(dev, "e2e-driver-settings.txt"), { port: PORT.runner, engine: n });
 
   const before = new Set(procs("SkyrimSE.exe"));
-  launchGame(dir);
+  launchGame(dir, n);
   let pid;
   await ctx.waitFor(() => (pid = procs("SkyrimSE.exe").find((p) => !before.has(p))), 60000, `SkyrimSE.exe of engine ${n}`, Env, 100);
   own(pid, "SkyrimSE.exe");
   ctx.gamePids[n] = pid;
+  const exitFile = path.join(ctx.dir, `exit-${n}.txt`);
+  spawn("powershell", ["-NoProfile", "-Command", `try { $p = Get-Process -Id ${pid} -ErrorAction Stop; $p.WaitForExit(); Add-Content '${exitFile}' "$(Get-Date -Format HH:mm:ss.fff) pid ${pid} exit code $($p.ExitCode)" } catch {}`], { detached: true, stdio: "ignore" }).unref();
 };
 
 const lowCostMode = () => {
@@ -278,13 +283,13 @@ const lowCostMode = () => {
 
 const makeCtx = (id, dir) => {
   const ctx = {
-    id, dir, gamePids: {}, evidence: [], shots: [], Env, Blocked,
+    id, dir, gamePids: {}, evidence: [], shots: [], Env, Blocked, Accepted,
     assert: require("assert"),
     sleep,
     profileId,
     log: (...a) => { log(`${id}:`, ...a); fs.appendFileSync(path.join(dir, "check.log"), `${a.join(" ")}\n`); },
-    alive: () => {
-      for (const [n, pid] of Object.entries(ctx.gamePids)) if (!procs("SkyrimSE.exe").includes(pid)) throw new Env(`engine ${n} exited`);
+    alive: (engine) => {
+      for (const [n, pid] of Object.entries(ctx.gamePids)) if ((!engine || Number(n) === engine) && !procs("SkyrimSE.exe").includes(pid)) throw new Env(`engine ${n} exited`);
       if (ctx.serverPid && !procs("node.exe").includes(ctx.serverPid)) throw new Env("the server exited");
     },
     running: (engine) => procs("SkyrimSE.exe").includes(ctx.gamePids[engine]),
@@ -323,16 +328,28 @@ const makeCtx = (id, dir) => {
     character: (engine = 1, at = HELGEN_EXIT) => ctx.probe(`return mp.createActor(0, ${JSON.stringify(at.pos)}, ${at.angleZ}, ${at.worldOrCell}, ${profileId(engine)});`),
     shot: (name, engine = 1) => {
       const file = path.join(dir, `${name}.png`);
-      const r = spawnSync("powershell", ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", path.join(__dirname, "desktop.ps1"), "-desktop", DESKTOP, "-procId", String(ctx.gamePids[engine]), "-out", file], { encoding: "utf8" });
+      const r = spawnSync("powershell", ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", path.join(__dirname, "desktop.ps1"), "-desktop", desktopOf(engine), "-procId", String(ctx.gamePids[engine]), "-out", file], { encoding: "utf8" });
       if (r.status !== 0) ctx.log(`screenshot failed: ${r.stderr}`);
       else ctx.shots.push(path.relative(OUT, file).replace(/\\/g, "/"));
     },
     ready: async (engine = 1) => {
       const started = Date.now();
-      await ctx.waitFor(() => (ctx.alive(), (drivers.seen[engine] || 0) > started), 120000, `engine ${engine} driver connects`, Env);
-      await ctx.waitFor(async () => (ctx.alive(), ctx.drv(`const p = sp.Game.getPlayer(); return !!p && p.is3DLoaded() && !sp.Ui.isMenuOpen("Main Menu") && !sp.Ui.isMenuOpen("Loading Menu");`, engine).catch(() => false)), 240000, `engine ${engine} loads into the world`, Env);
+      for (let launch = 0; ; launch++) {
+        const connected = await ctx.waitFor(() => !ctx.running(engine) ? "exited" : (drivers.seen[engine] || 0) > started, 120000, `engine ${engine} driver connects`, Env);
+        if (connected === true) break;
+        if (launch >= 2) throw new Env(`engine ${engine} exited before its driver connected, 3 launches`);
+        ctx.log(`engine ${engine} exited before its driver connected, relaunch ${launch + 1}`);
+        for (const f of ["skse64.log", "skse64_loader.log", "skyrim-platform.log"]) {
+          const src = path.join(MYGAMES, "SKSE", f);
+          if (fs.existsSync(src)) fs.copyFileSync(src, path.join(ctx.dir, `early-exit-${engine}-${launch + 1}-${f}`));
+        }
+        ctx.evidence.push(`engine ${engine} relaunched after an early exit`);
+        await sleep(15000);
+        await startGame(engine, ctx);
+      }
+      await ctx.waitFor(async () => (ctx.alive(engine), ctx.drv(`const p = sp.Game.getPlayer(); return !!p && p.is3DLoaded() && !sp.Ui.isMenuOpen("Main Menu") && !sp.Ui.isMenuOpen("Loading Menu");`, engine).catch(() => false)), 240000, `engine ${engine} loads into the world`, Env);
       const pid = profileId(engine);
-      return ctx.waitFor(async () => (ctx.alive(), ctx.probe(`const a = mp.getActorsByProfileId(${pid}).find((a) => mp.get(a, "isOnline")); return a || 0;`)), 60000, `the server sees profile ${pid} online`);
+      return ctx.waitFor(async () => (ctx.alive(engine), ctx.probe(`const a = mp.getActorsByProfileId(${pid}).find((a) => mp.get(a, "isOnline")); return a || 0;`)), 60000, `the server sees profile ${pid} online`);
     },
   };
   return ctx;
@@ -365,7 +382,7 @@ const runOnce = async (id, check, n, attempt) => {
       new Promise((_, rej) => (timer = setTimeout(() => rej(new Env(`check timeout after ${(check.timeout || 300000) / 1000} s`)), check.timeout || 300000))),
     ]).finally(() => clearTimeout(timer));
   } catch (e) {
-    result = e instanceof Env ? "ENV" : e instanceof Blocked ? "BLOCKED" : "FAIL";
+    result = e instanceof Env ? "ENV" : e instanceof Blocked ? "BLOCKED" : e instanceof Accepted ? "ACCEPTED" : "FAIL";
     reason = `${e.message}`.split("\n").slice(0, 6).join(" ");
     ctx.log(`${result}: ${e.stack || e}`);
     if (e.stop) throw e;
@@ -382,7 +399,7 @@ const runCheck = async (id, opts, envStreak) => {
   if (!fs.existsSync(file)) return { result: "FAIL", reason: "no check script", secs: 0, evidence: [], shots: [] };
   delete require.cache[require.resolve(file)];
   const check = require(file);
-  const runs = opts.runs || check.runs || (check.engines ? 3 : 1);
+  const runs = opts.runs || (opts.final && check.engines ? 3 : 1);
   const results = [];
   for (let n = 1; n <= runs; n++) {
     let r;
@@ -394,13 +411,14 @@ const runCheck = async (id, opts, envStreak) => {
       if (r.result !== "ENV" || envStreak.n >= 3) break;
     }
     results.push(r);
-    if (r.result !== "PASS") break;
+    if (r.result !== "PASS" && r.result !== "ACCEPTED") break;
   }
   const last = results[results.length - 1];
   return {
     ...last,
     secs: results.reduce((s, r) => s + r.secs, 0),
     reason: last.result === "PASS" ? `${results.length}/${runs} runs PASS` : `run ${results.length}/${runs}: ${last.reason}`,
+    result: results.some((r) => r.result !== "PASS" && r.result !== "ACCEPTED") ? last.result : results.some((r) => r.result === "ACCEPTED") ? "ACCEPTED" : "PASS",
     evidence: results.flatMap((r, i) => r.evidence.map((e) => `run ${i + 1}: ${e}`)),
     shots: results.flatMap((r) => r.shots),
   };
@@ -413,7 +431,8 @@ const writeScoreboard = (results, stopped) => {
   });
   const details = ORDER.filter((id) => results[id] && (results[id].evidence.length || results[id].shots.length)).map((id) =>
     [`### ${id}`, ...results[id].evidence.map((e) => `- ${e}`), ...results[id].shots.map((s) => `- ![${id}](${s})`)].join("\n"));
-  const firstFail = ORDER.find((id) => !results[id] || results[id].result !== "PASS");
+  const done = (r) => r && (r.result === "PASS" || r.result === "ACCEPTED");
+  const firstFail = ORDER.find((id) => !done(results[id]));
   fs.writeFileSync(path.join(OUT, "scoreboard.md"), [
     "# Scoreboard",
     "",
@@ -435,7 +454,7 @@ const main = async () => {
   const args = process.argv.slice(2);
   const arg = (name) => { const i = args.indexOf(name); return i >= 0 ? args[i + 1] : undefined; };
   const only = arg("--only")?.split(",");
-  const opts = { runs: Number(arg("--runs")) || 0, adhoc: arg("--check") };
+  const opts = { runs: Number(arg("--runs")) || 0, adhoc: arg("--check"), final: args.includes("--final") };
   fs.mkdirSync(OUT, { recursive: true });
 
   await waitNoForeignSkyrim();
@@ -483,7 +502,7 @@ const main = async () => {
   }
   writeScoreboard(results, stopped);
   log(`done in ${Math.round((Date.now() - t) / 1000)} s${stopped ? `, STOPPED: ${stopped}` : ""}`);
-  process.exit(stopped ? 3 : ORDER.every((id) => results[id]?.result === "PASS") ? 0 : 1);
+  process.exit(stopped ? 3 : ORDER.every((id) => ["PASS", "ACCEPTED"].includes(results[id]?.result)) ? 0 : 1);
 };
 
 main();

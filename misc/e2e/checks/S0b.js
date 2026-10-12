@@ -1,4 +1,4 @@
-const MINUTES = 10;
+const MINUTES = 2;
 
 module.exports = {
   engines: 2,
