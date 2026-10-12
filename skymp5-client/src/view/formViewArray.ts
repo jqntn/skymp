@@ -8,7 +8,7 @@ export class FormViewArray {
   updateForm(form: FormModel, i: number) {
     const view = this.formViews[i];
     if (!view) {
-      this.formViews[i] = new FormView(form.refrId, !this.isCloneView);
+      this.formViews[i] = new FormView(form.refrId);
     } else {
       view.update(form);
     }
@@ -60,7 +60,7 @@ export class FormViewArray {
 
       if (isCloneView) {
         // Prevent using the same refr by normal and clone views
-        if (!form.refrId || form.refrId >= 0xff000000) {
+        if (!form.refrId || (form.refrId >= 0xff000000 && form.refrId < 0x100000000)) {
           const backup = form.isHostedByOther;
           form.isHostedByOther = true;
           // TODO: Explain why do not GamemodeApiSupport.setI(i); here

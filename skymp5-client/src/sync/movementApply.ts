@@ -1,9 +1,11 @@
 import {
   ObjectReference,
   Actor,
+  Cell,
   Game,
   TESModPlatform,
-  Debug
+  Debug,
+  WorldSpace
 } from "skyrimPlatform";
 import { RespawnNeededError } from "../lib/errors";
 import { Movement, RunMode, AnimationVariables, Transform, NiPoint3 } from "./movement";
@@ -55,7 +57,9 @@ export const applyMovement = (refr: ObjectReference, m: Movement, isMyClone?: bo
   }
 
   // ac.stopCombat();
-  ac.blockActivation(true);
+  if (ac.getFormID() >= 0xff000000) {
+    ac.blockActivation(true);
+  }
 
   keepOffsetFromActor(ac, m);
 
@@ -210,7 +214,17 @@ const teleportIfNeed = (refr: ObjectReference, m: Transform) => {
     isInDifferentWorldOrCell(refr, m.worldOrCell) ||
     (!refr.is3DLoaded() && isInDifferentExteriorCell(refr, m.pos))
   ) {
-    throw new RespawnNeededError("needs to be respawned");
+    if (refr.getFormID() >= 0xff000000) {
+      throw new RespawnNeededError("needs to be respawned");
+    }
+    TESModPlatform.moveRefrToPosition(
+      refr,
+      Cell.from(Game.getFormEx(m.worldOrCell)),
+      WorldSpace.from(Game.getFormEx(m.worldOrCell)),
+      m.pos[0], m.pos[1], m.pos[2],
+      m.rot[0], m.rot[1], m.rot[2],
+    );
+    return true;
   }
   return false;
 };

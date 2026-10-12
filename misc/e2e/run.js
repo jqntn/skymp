@@ -228,6 +228,9 @@ const startServer = async (check, ctx) => {
   const fd = fs.openSync(path.join(ctx.dir, "server.log"), "a");
   const child = spawn("node", ["dist_back/skymp5-server.js"], { cwd: SERVER, stdio: ["ignore", fd, fd], env: { ...process.env, E2E_PROBE_PORT: String(PORT.probe) } });
   fs.closeSync(fd);
+  child.on("exit", (code) => fs.appendFileSync(path.join(ctx.dir, "server.log"), `
+[e2e] server exited with code ${code}
+`));
   own(child.pid, "node.exe");
   ctx.serverPid = child.pid;
   await ctx.waitFor(() => ctx.probe("return 1").catch(() => 0), 90000, "the server probe", Env);
@@ -324,8 +327,8 @@ const makeCtx = (id, dir) => {
   return ctx;
 };
 
-const runOnce = async (id, check, n) => {
-  const dir = path.join(OUT, "runs", id.replace(/\./g, "_"), String(n));
+const runOnce = async (id, check, n, attempt) => {
+  const dir = path.join(OUT, "runs", id.replace(/\./g, "_"), attempt ? `${n}-retry${attempt}` : String(n));
   fs.rmSync(dir, { recursive: true, force: true });
   fs.mkdirSync(dir, { recursive: true });
   const ctx = makeCtx(id, dir);
@@ -373,7 +376,7 @@ const runCheck = async (id, opts, envStreak) => {
     let r;
     for (let attempt = 0; attempt < 3; attempt++) {
       log(`${id} run ${n}/${runs}${attempt ? ` retry ${attempt}` : ""}`);
-      r = await runOnce(id, check, n);
+      r = await runOnce(id, check, n, attempt);
       log(`${id} run ${n}: ${r.result} ${r.reason}`);
       envStreak.n = r.result === "ENV" ? envStreak.n + 1 : 0;
       if (r.result !== "ENV" || envStreak.n >= 3) break;

@@ -1,4 +1,4 @@
-import { Actor, ActorBase, createText, destroyText, Form, FormType, Game, Keyword, NetImmerse, ObjectReference, once, printConsole, ReferenceAlias, setTextPos, setTextSize, setTextString, storage, TESModPlatform, Utility, worldPointToScreenPoint } from "skyrimPlatform";
+import { Actor, ActorBase, createText, destroyText, Form, FormType, Game, Keyword, NetImmerse, ObjectReference, once, printConsole, setTextPos, setTextSize, setTextString, storage, TESModPlatform, Utility, worldPointToScreenPoint } from "skyrimPlatform";
 import { setDefaultAnimsDisabled, applyAnimation } from "../sync/animation";
 import { Appearance, applyAppearance } from "../sync/appearance";
 import { isBadMenuShown, applyEquipment } from "../sync/equipment";
@@ -33,28 +33,13 @@ export const getScreenResolution = (): ScreenResolution => {
 }
 
 const espActorIdOffset = 0x100000000;
-const questAliasBridgeIntervalMs = 2000;
-
-const moveQuestAliases = (from: ObjectReference | null, to: ObjectReference | null): boolean => {
-  if (!from || !to) {
-    return false;
-  }
-  const aliases = new Array<ReferenceAlias>();
-  const n = from.getNumReferenceAliases();
-  for (let i = 0; i < n; ++i) {
-    const alias = from.getNthReferenceAlias(i);
-    if (alias) {
-      aliases.push(alias);
-    }
-  }
-  aliases.forEach((alias) => alias.forceRefTo(to));
-  return aliases.length > 0;
-};
 
 export class FormView {
-  constructor(private remoteRefrId?: number, private bridgesQuestAliases = false) { }
+  constructor(private remoteRefrId?: number) { }
 
   update(model: FormModel): void {
+    const realActorId = model.refrId && model.refrId > espActorIdOffset ? model.refrId - espActorIdOffset : 0;
+
     // Other players mutate into PC clones when moving to another location
     if (model.movement) {
       if (!this.lastWorldOrCell)
@@ -76,7 +61,7 @@ export class FormView {
 
 
     // Don't spawn dead actors if not already
-    if (model.isDead) {
+    if (model.isDead && !realActorId) {
       if (this.refrId === 0) {
         return;
       }
@@ -133,17 +118,23 @@ export class FormView {
     }
 
     const refId =
-      model.refrId && model.refrId < 0xff000000 ? model.refrId : undefined;
+      model.refrId && model.refrId < 0xff000000 ? model.refrId : realActorId;
     if (refId) {
       if (this.refrId !== refId) {
         this.destroy();
-        this.refrId = model.refrId as number;
+        this.refrId = refId;
+        this.realActor = !!realActorId;
         this.ready = true;
         const refr = ObjectReference.from(Game.getFormEx(this.refrId));
-        if (refr) {
-          const base = refr.getBaseObject();
-          if (base) {
-            ObjectReferenceEx.dealWithRef(refr, base);
+        const base = refr?.getBaseObject();
+        if (refr && base && !realActorId) {
+          ObjectReferenceEx.dealWithRef(refr, base);
+        }
+        const actor = Actor.from(refr);
+        if (actor && realActorId) {
+          actor.blockActivation(false);
+          if (actor.isDisabled()) {
+            actor.enable(false);
           }
         }
       }
@@ -316,24 +307,13 @@ export class FormView {
     const refr = ObjectReference.from(Game.getFormEx(this.refrId));
     if (refr) {
       const actor = Actor.from(refr);
-      if (actor && !this.localImmortal) {
+      if (actor && !this.localImmortal && !this.realActor) {
         actor.startDeferredKill();
         actor.setActorValue("health", 1000000);
         actor.setActorValue("magicka", 1000000);
         this.localImmortal = true;
       }
       this.applyAll(refr, model);
-
-      const espRefrId = this.getEspRefrId();
-      if (espRefrId && Date.now() - this.lastQuestAliasBridge > questAliasBridgeIntervalMs) {
-        this.lastQuestAliasBridge = Date.now();
-        const original = ObjectReference.from(Game.getFormEx(espRefrId));
-        if (original && !original.isDeleted() && moveQuestAliases(original, refr) && !this.hidesOriginal) {
-          this.hidesOriginal = true;
-          SpApiInteractor.getControllerInstance().lookupListener(WorldCleanerService).modWcProtection(espRefrId, 1);
-          original.disableNoWait(false);
-        }
-      }
 
       const gamemodeUpdateService = SpApiInteractor.getControllerInstance().lookupListener(GamemodeUpdateService);
       gamemodeUpdateService.updateNeighbor(refr, model, this.state);
@@ -344,20 +324,16 @@ export class FormView {
     this.isOnScreen = false;
     this.spawnMoment = 0;
     const refrId = this.refrId;
-    const espRefrId = this.getEspRefrId();
-    const hidesOriginal = this.hidesOriginal;
-    this.hidesOriginal = false;
+    const realActor = this.realActor;
+    this.realActor = false;
     once("update", () => {
-      if (hidesOriginal) {
-        ObjectReference.from(Game.getFormEx(espRefrId))?.enableNoWait(false);
-        SpApiInteractor.getControllerInstance().lookupListener(WorldCleanerService).modWcProtection(espRefrId, -1);
+      if (realActor) {
+        Actor.from(Game.getFormEx(refrId))?.clearKeepOffsetFromActor();
+        setDefaultAnimsDisabled(refrId, false);
       }
       if (refrId >= 0xff000000) {
         const refr = ObjectReference.from(Game.getFormEx(refrId));
         if (refr) {
-          if (espRefrId) {
-            moveQuestAliases(refr, ObjectReference.from(Game.getFormEx(espRefrId)));
-          }
           refr.delete();
         }
         SpApiInteractor.getControllerInstance().lookupListener(WorldCleanerService).modWcProtection(refrId, -1);
@@ -372,13 +348,7 @@ export class FormView {
     this.removeNickname();
   }
 
-  private getEspRefrId(): number {
-    const remoteRefrId = this.remoteRefrId ?? 0;
-    return this.bridgesQuestAliases && remoteRefrId > espActorIdOffset ? remoteRefrId - espActorIdOffset : 0;
-  }
-
-  private lastQuestAliasBridge = 0;
-  private hidesOriginal = false;
+  private realActor = false;
   private lastHarvestedApply = 0;
   private lastOpenApply = 0;
   private isSetNodeTextureSetApplied = false;
@@ -565,7 +535,7 @@ export class FormView {
       }
     }
 
-    if (model.equipment) {
+    if (model.equipment && !this.realActor) {
       if (this.eqState.lastNumChanges !== model.equipment.numChanges) {
         const ac = Actor.from(refr);
         // If we do not block inventory here, we will be able to reproduce the bug:

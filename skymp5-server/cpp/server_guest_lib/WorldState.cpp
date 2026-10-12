@@ -408,6 +408,7 @@ bool WorldState::AttachEspmRecord(const espm::CombineBrowser& br,
     return false;
   }
 
+  bool isUniqueNpc = false;
   bool startsDead = false;
   if (isNpc) {
     auto* achr = reinterpret_cast<const espm::ACHR*>(record);
@@ -421,20 +422,13 @@ bool WorldState::AttachEspmRecord(const espm::CombineBrowser& br,
     }
   }
 
-  // TODO: Load disabled references
   enum
   {
     InitiallyDisabled = 0x800,
     DeletedRecord = 0x20
   };
 
-  if (refr->GetFlags() & InitiallyDisabled) {
-    if (optionalOutTrace) {
-      *optionalOutTrace << fmt::format(
-        "AttachEspmRecord - the server skips initially disabled references\n");
-    }
-    return false;
-  }
+  const bool initiallyDisabled = refr->GetFlags() & InitiallyDisabled;
 
   if (refr->GetFlags() & DeletedRecord) {
     if (optionalOutTrace) {
@@ -466,44 +460,9 @@ bool WorldState::AttachEspmRecord(const espm::CombineBrowser& br,
       }
       return false;
     }
-    auto npcData =
-      reinterpret_cast<const espm::NPC_*>(base.rec)->GetData(cache);
-
-    if (npcData.isEssential || npcData.isProtected || npcData.isUnique) {
-      if (optionalOutTrace) {
-        *optionalOutTrace << fmt::format("Skip NPC due to its flags")
-                          << std::endl;
-      }
-      return false;
-    }
-
-    enum class ListType : uint32_t
-    {
-      CrimeFactionsList = 0x26953
-    };
-
-    auto factionBaseId = static_cast<std::underlying_type_t<ListType>>(
-      ListType::CrimeFactionsList);
-    espm::LookupResult res = br.LookupById(factionBaseId);
-    auto* formList = reinterpret_cast<const espm::FLST*>(res.rec);
-    std::vector<uint32_t> factionFormIds = formList->GetData(cache).formIds;
-    for (auto& formId : factionFormIds) {
-      formId = res.ToGlobalId(formId);
-    }
-
-    for (auto fact : npcData.factions) {
-      auto it = std::find(factionFormIds.begin(), factionFormIds.end(),
-                          base.ToGlobalId(fact.formId));
-      if (it != factionFormIds.end()) {
-        logger->info("Skipping actor {:#x} because it's in faction {:#x}",
-                     record->GetId(), *it);
-        if (optionalOutTrace) {
-          *optionalOutTrace << fmt::format("Skip NPC due to faction")
-                            << std::endl;
-        }
-        return false;
-      }
-    }
+    isUniqueNpc = reinterpret_cast<const espm::NPC_*>(base.rec)
+                    ->GetData(cache)
+                    .isUnique;
 
     const int kPcLevel = 0; // Shouldn't mean much to races
 
@@ -647,7 +606,15 @@ bool WorldState::AttachEspmRecord(const espm::CombineBrowser& br,
     form.reset(
       new MpActor(formLocationalData, formCallbacksFactory(), baseId));
   }
+  auto refrRawPtr = form->AsObjectReference();
   AddForm(std::move(form), formId, true, changeForm);
+
+  refrRawPtr->EditChangeFormNoSave([&](MpChangeForm& f) {
+    f.isDisabled = initiallyDisabled;
+    if (isNpc && !isUniqueNpc) {
+      f.spawnDelay = kEspmNpcSpawnDelay;
+    }
+  });
 
   // Do not TriggerFormInitEvent here, doing it later after changeForm apply
 

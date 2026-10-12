@@ -682,12 +682,16 @@ void ActionListener::OnHostAttempt(const RawMessageData& rawMsgData,
   if (hoster == 0 || !lastRemoteUpdate ||
       std::chrono::system_clock::now() - *lastRemoteUpdate >
         hostResetTimeout) {
-    partOne.GetLogger().info("Hoster changed from {0:x} to {0:x}", prevHoster,
+    partOne.GetLogger().info("Hoster changed from {:x} to {:x}", prevHoster,
                              me->GetFormId());
     hoster = me->GetFormId();
     remote.UpdateHoster(hoster);
 
     // Prevents too fast host switch
+    if (partOne.worldState.lastMovUpdateByIdx.size() <= remoteIdx) {
+      partOne.worldState.lastMovUpdateByIdx.resize(
+        static_cast<size_t>(remoteIdx) + 1);
+    }
     partOne.worldState.lastMovUpdateByIdx[remoteIdx] =
       std::chrono::system_clock::now();
 

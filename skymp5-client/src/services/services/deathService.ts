@@ -107,6 +107,8 @@ export class DeathService extends ClientListener {
       this.allowedPlayerAnimations = null;
       actor.setDontMove(false);
       this.ressurectWithPushKill(actor);
+    } else if (actor.getFormID() < 0xff000000) {
+      actor.resurrect();
     } else {
       throw new RespawnNeededError("needs to be respawned");
     }

@@ -1180,6 +1180,12 @@ MpChangeForm MpObjectReference::GetChangeForm() const
   return res;
 }
 
+void MpObjectReference::EditChangeFormNoSave(
+  const std::function<void(MpChangeForm&)>& f)
+{
+  EditChangeForm(f, Mode::NoRequestSave);
+}
+
 void MpObjectReference::ApplyChangeForm(const MpChangeForm& changeForm)
 {
   ANTIGO_CONTEXT_INIT(ctx);

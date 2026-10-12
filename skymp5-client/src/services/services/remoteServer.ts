@@ -728,8 +728,9 @@ export class RemoteServer extends ClientListener {
   private onUpdatePropertyMessage(event: ConnectionMessage<UpdatePropertyMessage>): void {
     const msg = event.message;
     const msgData = this.extractUpdatePropertyMessageData(msg);
+    const form = this.worldModel.forms[this.getIdManager().getId(msg.idx)];
 
-    if (this.skipFormViewCreation(msg)) {
+    if (this.skipFormViewCreation(msg) && !form) {
       const refrId = msg.refrId;
       once('update', () => {
         const refr = ObjectReference.from(Game.getFormEx(refrId));
@@ -749,8 +750,6 @@ export class RemoteServer extends ClientListener {
       });
       return;
     }
-    const i = this.getIdManager().getId(msg.idx);
-    const form = this.worldModel.forms[i];
     (form as Record<string, unknown>)[msg.propName] = msgData;
   }
 

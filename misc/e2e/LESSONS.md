@@ -17,3 +17,9 @@ Facts about the engine, the server, and the harness. Add one after each ENV, eac
 - In S0b, the screenshot right after `ready()` can be black on the second engine. 10 min later it shows the world.
 - The client always shows "LOAD ORDER WARNING ... could not receive server mod list" for 5 s: `getServerMods` asks the master API, which answers 400 in offline mode. The playtest server has the same warning.
 - A second engine costs about 10 s more to boot. S0b runs 10 min per run, so S0b alone takes 32 min of each full run.
+- `mp.set(actor, "locationalData", { cellOrWorldDesc, pos, rot })` teleports a player across cells. A client `setPosition` into another cell is rejected and teleported back.
+- Editor locations: Alvor 0x13482 and Gerdur 0x13489 are in their house interiors, Hadvar 0x2bfa2 is at Helgen (20044, -79479). The ESM scan in the probe (`mp.lookupEspmRecordById` over 0..0x110000) takes 6 s.
+- The unit test `GetPartOne()` clears `bannedEspmCharacterRaceIds`. A test of the race filter must restore `WorldState().bannedEspmCharacterRaceIds`.
+- MQ101AlduinREF does not resolve to AlduinRace through its template, so it is not a test of the ban. The mannequin 0x1028fd and the undead dragon 0x83588 are.
+- `pathToReference` in a small interior stalls when players stand in the way. `translateTo` 200 units on the hoster gives a sure movement for a sync check.
+- A server crash shows as "fetch failed" in a check. `server.log` ends with `[e2e] server exited with code N`; 3221225477 is an access violation.

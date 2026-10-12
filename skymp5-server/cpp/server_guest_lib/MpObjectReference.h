@@ -190,6 +190,7 @@ public:
 
   virtual MpChangeForm GetChangeForm() const;
   virtual void ApplyChangeForm(const MpChangeForm& changeForm);
+  void EditChangeFormNoSave(const std::function<void(MpChangeForm&)>& f);
   const DynamicFields& GetDynamicFields() const;
 
   // This method removes ObjectReference from a current grid and doesn't attach
