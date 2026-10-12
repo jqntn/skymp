@@ -57,3 +57,6 @@ Facts about the engine, the server, and the harness. Add one after each ENV, eac
 - Parent-activation-only refs (XAPD flag 1, e.g. the BFB gate) raise no TESActivateEvent for a caster that is not one of their activation parents.
 - SP `Quest.getAlias(id)` returns null for every quest on the client (MS13, MQ103 at stage 5). Use `ref.getNumReferenceAliases()` / `getNthReferenceAlias(n)` (SKSE) from the item ref instead; `dropObject` gives the ref of a persistent inventory item.
 - A server `mp.set(container, "inventory", ...)` on an ESP container in the player's neighbourhood did not change the client's container within 4 s. The client applies a container inventory on CreateActor props and on UpdateProperty for ESP refs, so the server apparently does not send it on that set.
+- Step checks run Catch2 tags through `ctx.unit("[id]")` (cwd `build`, `server: false`). After a C++ test change, `cmake --build . --config Release --target unit` in `build` takes about 2 min; L1 does the same plus ctest.
+- `near` and `far` are macros on Windows (windef.h); do not use them as names in C++.
+- S1.1: an NPC's own AI can walk it back after the test's translateTo (Hadvar ended 87 units from the start), so "moved" means the farthest point from the start, not the end point.

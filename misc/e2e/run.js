@@ -296,6 +296,14 @@ const makeCtx = (id, dir) => {
     skyrimPids: () => procs("SkyrimSE.exe"),
     engineDir,
     launchGame,
+    unit: (spec) => {
+      const r = spawnSync(path.join(BUILD, "unit", "Release", "unit.exe"), [spec], { cwd: BUILD, encoding: "utf8", maxBuffer: 1 << 28 });
+      const out = `${r.stdout || ""}${r.stderr || ""}`;
+      fs.writeFileSync(path.join(dir, "unit.log"), out);
+      const summary = out.split("\n").filter((l) => /test cases|All tests passed|No test cases matched/.test(l)).join(" ").trim();
+      ctx.evidence.push(`unit ${spec}: exit ${r.status}; ${summary}`);
+      ctx.assert.ok(r.status === 0 && /All tests passed/.test(out), `unit ${spec} failed: ${summary || "no summary"}`);
+    },
     own: (pid) => own(pid, "SkyrimSE.exe"),
     waitFor: async (fn, ms, what, Err = Error, every = 500) => {
       const end = Date.now() + ms;

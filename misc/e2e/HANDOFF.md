@@ -20,6 +20,7 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 - `test(e2e): run the Bleak Falls Barrow puzzles on the server VM (S2)`: S2 check (bot player, archives setting, trace log); plan edit with the 2B.2 scope.
 - `test(e2e): prove the client hooks and events that script sync needs (S3.1, S3.2, S3.3)`: S3.1 animation hook on an activator, S3.2 containerChanged on a script AddItem, S3.3 activate event for a script activate() on blocked refs; plan edits for 2A.5 and 1B.5/2B.2.
 - `test(e2e): block S3.4 until the corpse branch of 2A.1`: S3.4 reports BLOCKED with the reason; plan edit.
+- `feat(coop): claim, release and clean up NPC hosts on the server (1A.1, 1A.2, 1A.3)`: `ctx.unit(tag)` step checks; [1A.1] load filter tests (exact banned list, StartsDead/Deleted reasons, Mirmulnir, fixture flags); host claims with a location (NPCs only, same cell, 4096, finite pos, 2 s rule), release by the hoster, hoster cleared on unsubscribe (HostStop) and on disconnect.
 
 ## What the last two commits hold
 
@@ -57,8 +58,10 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 
 ## Next steps
 
-1. Step checks 1A.1 to 1A.5 (plan order after S3.4, which is BLOCKED until 2A.1). A step check is the Catch2 tag or bot test of the step: run `build/unit/Release/unit.exe` with a test name or tag from a check script (engines 0). Much of 1A was done for S1.1 (commit a2651591, `[NpcHost]` tests); map each bullet of 1A.1-1A.5 to a test, write the missing ones red first.
-2. Then 1B.x, G1, 2A (S3.4 comes back with 2A.1), 2B, G2, P. P8 stays red until reached.
+1. 1A.4 (movement, health and death of hosted NPCs): NPC movement skips MovementValidation, a cell change calls SetCellOrWorld, copy healthPercentage/isDead, no Kill for ESP NPCs in SetPercentage(s), no respawn for unique ESP NPCs. Write [1A.4] Catch2 tests red first (see unit/NpcHostTest.cpp helpers: ConnectClaimer, Claim, CellOf).
+2. 1A.5 (property path fix, done in remoteServer.ts for S1.1): a step check needs a test that fails without it (client side; maybe a driver check that a puppet gets isHostedByOther).
+3. Then 1B.x, G1, 2A (S3.4 comes back with 2A.1), 2B, G2, P. P8 stays red until reached.
+4. Known review gaps: [1A.2] UpdateHoster(0) on release, rot/SetAngle, HostStart after a location claim, the write order, and the client type are not asserted; [1A.3] a grid exit inside the same worldspace is not tested separately (same callback as the cell change).
 
 ## Runner
 

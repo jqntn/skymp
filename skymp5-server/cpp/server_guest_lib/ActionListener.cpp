@@ -20,6 +20,8 @@
 #include <fmt/format.h>
 #include <fmt/ranges.h>
 #include <spdlog/spdlog.h>
+#include <algorithm>
+#include <cmath>
 #include <unordered_set>
 
 #include "CustomPacketMessage.h"
@@ -670,6 +672,47 @@ void ActionListener::OnHostAttempt(const RawMessageData& rawMsgData,
   auto& hoster = partOne.worldState.hosters[remoteId];
   const uint32_t prevHoster = hoster;
 
+  if (msg.release.value_or(false)) {
+    if (hoster == me->GetFormId()) {
+      hoster = 0;
+      remote.UpdateHoster(0);
+      if (msg.disabled.value_or(false)) {
+        remote.Disable();
+      }
+    }
+    return;
+  }
+
+  if (msg.worldOrCell) {
+    auto& worldState = partOne.worldState;
+    auto lookup = worldState.HasEspm()
+      ? worldState.GetEspm().GetBrowser().LookupById(*msg.worldOrCell)
+      : espm::LookupResult();
+    const char* reason = nullptr;
+    if (!remote.AsActor()) {
+      reason = "the target is not an NPC";
+    } else if (!lookup.rec ||
+        (lookup.rec->GetType() != "CELL" && lookup.rec->GetType() != "WRLD")) {
+      reason = "the location is not a cell or a worldspace";
+    } else if (me->GetCellOrWorld().ToFormId(worldState.espmFiles) !=
+               *msg.worldOrCell) {
+      reason = "the claimer is in another cell";
+    } else if (!msg.pos ||
+               !std::all_of(msg.pos->begin(), msg.pos->end(),
+                            [](float v) { return std::isfinite(v); }) ||
+               (NiPoint3((*msg.pos)[0], (*msg.pos)[1], (*msg.pos)[2]) -
+                me->GetPos())
+                   .Length() > 4096.f) {
+      reason = "the position is missing, not finite, or more than 4096 "
+               "units from the claimer";
+    }
+    if (reason) {
+      partOne.GetLogger().warn("Rejected host claim on {:x} by {:x}: {}",
+                               remoteId, me->GetFormId(), reason);
+      return;
+    }
+  }
+
   auto remoteIdx = remote.GetIdx();
 
   std::optional<std::chrono::system_clock::time_point> lastRemoteUpdate;
@@ -685,6 +728,15 @@ void ActionListener::OnHostAttempt(const RawMessageData& rawMsgData,
     partOne.GetLogger().info("Hoster changed from {:x} to {:x}", prevHoster,
                              me->GetFormId());
     hoster = me->GetFormId();
+    if (msg.worldOrCell) {
+      remote.Enable();
+      remote.SetCellOrWorld(
+        FormDesc::FromFormId(*msg.worldOrCell, partOne.worldState.espmFiles));
+      remote.SetPos({ (*msg.pos)[0], (*msg.pos)[1], (*msg.pos)[2] });
+      if (msg.rot) {
+        remote.SetAngle({ (*msg.rot)[0], (*msg.rot)[1], (*msg.rot)[2] });
+      }
+    }
     remote.UpdateHoster(hoster);
 
     // Prevents too fast host switch

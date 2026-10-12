@@ -455,6 +455,16 @@ void PartOne::HandlePacket(void* partOneInstance, Networking::UserId userId,
           // TODO: apply dependency inversion here: connection handling code
           // should not depend on animation system
           this_->animationSystem.ClearInfo(actor);
+          for (auto& [npcId, hosterId] : this_->worldState.hosters) {
+            if (hosterId != actor->GetFormId()) {
+              continue;
+            }
+            hosterId = 0;
+            auto& npc = this_->worldState.LookupFormByIdNoLoad(npcId);
+            if (auto refr = npc ? npc->AsObjectReference() : nullptr) {
+              refr->UpdateHoster(0);
+            }
+          }
         }
         this_->serverState.Disconnect(userId);
         this_->serverState.disconnectingUserId = Networking::InvalidUserId;
@@ -887,8 +897,20 @@ void PartOne::Init()
     }
 
     auto listenerUserId = serverState.UserByActor(listenerAsActor);
-    if (listenerUserId != Networking::InvalidUserId &&
-        listenerUserId != serverState.disconnectingUserId) {
+    const bool listenerOnline = listenerUserId != Networking::InvalidUserId &&
+      listenerUserId != serverState.disconnectingUserId;
+
+    auto hoster = worldState.hosters.find(emitter->GetFormId());
+    if (hoster != worldState.hosters.end() &&
+        hoster->second == listener->GetFormId()) {
+      hoster->second = 0;
+      emitter->UpdateHoster(0);
+      if (listenerOnline) {
+        SendHostStop(listenerUserId, *emitter);
+      }
+    }
+
+    if (listenerOnline) {
       DestroyActorMessage message;
       message.idx = emitter->GetIdx();
       sendTarget->Send(listenerUserId, message, true);
