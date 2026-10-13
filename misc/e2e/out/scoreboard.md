@@ -5,12 +5,12 @@ First non-PASS in plan order: S3.4
 
 | id | result | secs | at | detail |
 |---|---|---|---|---|
-| L1 | PASS | 87 | 2026-10-13 16:06 |  |
+| L1 | PASS | 127 | 2026-10-13 16:50 |  |
 | S0 | PASS | 30 | 2026-10-13 15:22 | 1/1 runs PASS |
 | S0b | PASS | 161 | 2026-10-13 15:25 | 1/1 runs PASS |
 | S0c | PASS | 30 | 2026-10-13 15:25 | 1/1 runs PASS |
 | S1.1 | PASS | 162 | 2026-10-13 16:16 | 2/2 runs PASS |
-| S1.2 | PASS | 44 | 2026-10-13 15:28 | 1/1 runs PASS |
+| S1.2 | PASS | 52 | 2026-10-13 16:30 | 1/1 runs PASS |
 | S1.4 | PASS | 69 | 2026-10-13 15:30 | 1/1 runs PASS |
 | S1.3 | PASS | 23 | 2026-10-13 15:30 | 1/1 runs PASS |
 | S1.5 | PASS | 56 | 2026-10-13 15:31 | 1/1 runs PASS |
@@ -32,7 +32,7 @@ First non-PASS in plan order: S3.4
 | 1B.5 | PASS | 52 | 2026-10-13 15:46 | 1/1 runs PASS |
 | G1.1 | PASS | 221 | 2026-10-13 15:50 | 1/1 runs PASS |
 | G1.2 | PASS | 168 | 2026-10-13 16:20 | 3/3 runs PASS |
-| G1.3 | FAIL | 0 | 2026-10-12 16:53 | no check script |
+| G1.3 | PASS | 265 | 2026-10-13 17:00 | 3/3 runs PASS |
 | G1.4 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | G1.5 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | 2A.1 | FAIL | 0 | 2026-10-12 16:53 | no check script |
@@ -63,9 +63,9 @@ First non-PASS in plan order: S3.4
 ## Evidence
 
 ### L1
-- build: ok in 27 s (l1-build.log)
-- ts: ok in 1 s (l1-ts.log)
-- ctest: ok in 59 s (l1-ctest.log)
+- build: ok in 67 s (l1-build.log)
+- ts: ok in 0 s (l1-ts.log)
+- ctest: ok in 60 s (l1-ctest.log)
 ### S0
 - run 1: actor ff000000, RaceMenu open: false
 - run 1: client moved 365 units from 12156,-71991,6010, server moved 365 units from 12156,-71991,6010
@@ -237,6 +237,49 @@ First non-PASS in plan order: S3.4
 - ![G1.2](runs/G1_2/3/G1_2-forge.png)
 - ![G1.2](runs/G1_2/3/G1_2-Gerdur.png)
 - ![G1.2](runs/G1_2/3/G1_2-Alvor.png)
+### G1.3
+- run 1: Gerdur (13489) on engine 2 (puppet): greeting "Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
+- run 1: Gerdur on engine 2 (puppet): the dialogue closed: true
+- run 1: Gerdur (13489) on engine 1 (hoster): greeting "Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
+- run 1: Gerdur on engine 1 (hoster): the dialogue closed: true
+- run 1: Gerdur: hoster ff000000 (engine 1) before the talks, ff000000 after
+- run 1: Alvor (13482) on engine 2 (puppet): greeting "C'est pas tous les jours qu'on a des visites à Rivebois.", topic "Vous avez besoin d'aide à la forge ?", answer "Tiens, oui. Et si vous me fabriquiez une dague de fer ? Voici tout ce qu'il vous faut. Allez-y."
+- run 1: Alvor on engine 2 (puppet): the dialogue closed: true
+- run 1: Alvor (13482) on engine 1 (hoster): greeting "C'est pas tous les jours qu'on a des visites à Rivebois.", topic "Vous avez besoin d'aide à la forge ?", answer "Tiens, oui. Et si vous me fabriquiez une dague de fer ? Voici tout ce qu'il vous faut. Allez-y."
+- run 1: Alvor on engine 1 (hoster): the dialogue closed: true
+- run 1: Alvor: hoster ff000000 (engine 1) before the talks, ff000000 after
+- run 2: Gerdur (13489) on engine 2 (puppet): greeting "Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
+- run 2: Gerdur on engine 2 (puppet): the dialogue closed: true
+- run 2: Gerdur (13489) on engine 1 (hoster): greeting "Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
+- run 2: Gerdur on engine 1 (hoster): the dialogue closed: true
+- run 2: Gerdur: hoster ff000000 (engine 1) before the talks, ff000000 after
+- run 2: Alvor (13482) on engine 1 (puppet): greeting "C'est pas tous les jours qu'on a des visites à Rivebois.", topic "Vous avez besoin d'aide à la forge ?", answer "Tiens, oui. Et si vous me fabriquiez une dague de fer ? Voici tout ce qu'il vous faut. Allez-y."
+- run 2: Alvor on engine 1 (puppet): the dialogue closed: true
+- run 2: Alvor (13482) on engine 2 (hoster): greeting "Dites-moi ce qu'il vous faut. Par Ysmir, si c'est simple et solide, je peux le forger.", topic "Vous avez besoin d'aide à la forge ?", answer "Tiens, oui. Et si vous me fabriquiez une dague de fer ? Voici tout ce qu'il vous faut. Allez-y."
+- run 2: Alvor on engine 2 (hoster): the dialogue closed: true
+- run 2: Alvor: hoster ff000001 (engine 2) before the talks, ff000001 after
+- run 3: Gerdur (13489) on engine 2 (puppet): greeting "Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
+- run 3: Gerdur on engine 2 (puppet): the dialogue closed: true
+- run 3: Gerdur (13489) on engine 1 (hoster): greeting "D'après Lucan, du Marché de Rivebois, des voleurs se seraient introduits dans sa boutique. Ils n'ont quasiment rien pris, c'est étrange.", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
+- run 3: Gerdur on engine 1 (hoster): the dialogue closed: true
+- run 3: Gerdur: hoster ff000000 (engine 1) before the talks, ff000000 after
+- run 3: Alvor (13482) on engine 1 (puppet): greeting "C'est pas tous les jours qu'on a des visites à Rivebois.", topic "Vous avez besoin d'aide à la forge ?", answer "Tiens, oui. Et si vous me fabriquiez une dague de fer ? Voici tout ce qu'il vous faut. Allez-y."
+- run 3: Alvor on engine 1 (puppet): the dialogue closed: true
+- run 3: Alvor (13482) on engine 2 (hoster): greeting "C'est pas tous les jours qu'on a des visites à Rivebois.", topic "Vous avez besoin d'aide à la forge ?", answer "Tiens, oui. Et si vous me fabriquiez une dague de fer ? Voici tout ce qu'il vous faut. Allez-y."
+- run 3: Alvor on engine 2 (hoster): the dialogue closed: true
+- run 3: Alvor: hoster ff000001 (engine 2) before the talks, ff000001 after
+- ![G1.3](runs/G1_3/1/G1_3-Gerdur-engine2-puppet.png)
+- ![G1.3](runs/G1_3/1/G1_3-Gerdur-engine1-hoster.png)
+- ![G1.3](runs/G1_3/1/G1_3-Alvor-engine2-puppet.png)
+- ![G1.3](runs/G1_3/1/G1_3-Alvor-engine1-hoster.png)
+- ![G1.3](runs/G1_3/2/G1_3-Gerdur-engine2-puppet.png)
+- ![G1.3](runs/G1_3/2/G1_3-Gerdur-engine1-hoster.png)
+- ![G1.3](runs/G1_3/2/G1_3-Alvor-engine1-puppet.png)
+- ![G1.3](runs/G1_3/2/G1_3-Alvor-engine2-hoster.png)
+- ![G1.3](runs/G1_3/3/G1_3-Gerdur-engine2-puppet.png)
+- ![G1.3](runs/G1_3/3/G1_3-Gerdur-engine1-hoster.png)
+- ![G1.3](runs/G1_3/3/G1_3-Alvor-engine1-puppet.png)
+- ![G1.3](runs/G1_3/3/G1_3-Alvor-engine2-hoster.png)
 ### P8
 - run 1: 115 client log lines, 2 [Exception] lines
 - run 1: exception: [Exception] failed to get key 'data': failed to call custom Serialize for type struct Equipment: failed to get key 'inv': failed to call cus.

@@ -30,6 +30,7 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 - `fix(coop): start new characters at the cave exit with Ralof outside and let Alduin fly (G1.1)`: start log with MQ102B 5 and MQ102 15, world cleaner keeps the AI of the server's banned races, G1.1 check (details in the G1.1 log line).
 - `test(e2e): make Hadvar flee on the Riverwood road in the puppet animation check (S1.6)`: see the Status bullet on S1.6.
 - `fix(coop): keep client positions of unhosted NPCs and re-enable hidden hosts (G1.2)`: see below.
+- `test(e2e): talk to Gerdur and Alvor on both clients (G1.3)`: G1.3 check (2 engines, talk through on the puppet and the hoster engine for Gerdur and Alvor); red with the S1.5 puppet AI-in-dialogue rule reverted.
 
 ## What the last commit holds (G1.2)
 
@@ -37,7 +38,7 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 - Check G1.2 (1 engine, gameHour 7.975): the house is set public; the client Alvor is put at the forge if he is home, and the start asserts the client does not move him to the stale server position in the house; then he is moved home, the player waits on the lower floor (-503,96,60), then at the Riverwood marker once Alvor is outside; PASS when the server has him within 500 units of the forge for 5 s, then Gerdur and Alvor open the dialogue menu.
 - Plan edits under S1.3 (decisions: kept, and the client position wins always), 1B.4 first movement and G1.2; lessons: proximity stall at load doors, off-screen schedules, probes, npcLocation.
 - Runner: `ctx.npcLocation(id, engine = 1)`. Check edits (how only): S1.1 (and 1A.5), S1.6, 1B.1, 1B.2 go to the client position of the NPC; S1.6 places Hadvar on both clients; S1.1 waits until the puppet is at the hoster position before the move.
-- Regression after the check edits: S1.6, 1B.1, 1B.2, 1B.4, G1.1 PASS; S1.1 and 1A.5 2/2; G1.2 3/3. The other checks passed in the 15:20-15:51 regression with the same client. The installed client is the red build (client-position change reverted): the next run must rebuild (L1).
+- Regression after the check edits: S1.6, 1B.1, 1B.2, 1B.4, G1.1 PASS; S1.1 and 1A.5 2/2; G1.2 3/3. The other checks passed in the 15:20-15:51 regression with the same client. The installed client matches HEAD (L1 at 16:50).
 
 ## Uncommitted
 
@@ -64,7 +65,7 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 
 ## Next steps
 
-1. Gate 1: G1.3 (2 engines), G1.4, G1.5. Write each check red first; the fix for a gate is the phase 1 steps, so a FAIL means a missing or broken step.
+1. Gate 1: G1.4, G1.5. Write each check red first; the fix for a gate is the phase 1 steps, so a FAIL means a missing or broken step.
 2. Then 2A (S3.4 comes back with 2A.1), 2B (2B.3 also tests that a hoster does not allow a dragon's script events), G2, P. P8 stays red until reached.
 3. Watch:
    - S1.2 had a flaky period (LESSONS). The 1B.4 claim after a replay failed once (23:20).
