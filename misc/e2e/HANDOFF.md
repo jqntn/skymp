@@ -32,6 +32,7 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 - `fix(coop): keep client positions of unhosted NPCs and re-enable hidden hosts (G1.2)`: see below.
 - `test(e2e): talk to Gerdur and Alvor on both clients (G1.3)`: G1.3 check (2 engines, talk through on the puppet and the hoster engine for Gerdur and Alvor); red with the S1.5 puppet AI-in-dialogue rule reverted.
 - `test(e2e): keep a killed bandit dead after a server restart (G1.4)`: G1.4 check and ctx.restartServer in run.js; red with the ESP NPC spawnDelay reverted.
+- `test(e2e): bring the Whiterun guards, Balgruuf and Farengar and start MQ103 (G1.5)`: G1.5 check; plan edits (G1.5 measure; playtest decisions G1.6-G1.9 and the 2A.1 check); runner ORDER (G1.1-G1.8, 2A, G1.9, 2B); lessons (torch unit test flake, rolling-release zip, Steam).
 
 ## What the last commit holds (G1.2)
 
@@ -54,7 +55,7 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 - S1.6 holds for 0.5 s (the loop had proposed 1 s).
 - The loop's memory is in git, to resume on another PC: PLAN, LOOP (project-neutral method template), HANDOFF, LESSONS, out/log.md, out/scoreboard.md, out/results.json, out/history.jsonl. Screenshots, run folders and out/backup/ stay local.
 - The loop pushes each commit to `fork` (jqntn/skymp) and the wiki commits to the wiki remote.
-- No pending user decisions.
+- Pending: the user to confirm the G1.5 reading of "the Whiterun guards" (at least 2 guards near the Dragonsreach porch, loaded, alive, and hosted by the player).
 
 ## Status
 
@@ -62,11 +63,14 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 - S1.6 (check edit, committed): the old moves (600 units from Hadvar by the Riverwood mill) put the hoster player inside a building and in the river, and Hadvar's package MQ101HadvarHoldPosition (always valid in a test game) fights keepOffsetFromActor (standing still or walking in place, about 25% of runs). Now Hadvar starts at (17000,-47100,-105) on the road west of Riverwood, the hoster player alternates between fixed stops (17600,-47120,-120) and (16400,-47060,-30), the walk command is a flee (Confidence 0, startCombat(player); stopCombat and setDontMove(true) stop him), and the move loop (up to 10 legs) ends only when the moving and standing counts and a hoster path over 300 units are reached. Asserts unchanged. Flee: 8 of 8 PASS (3 official runs). Red proof (puppet Speed frozen at 0): FAIL, 0 of 88 animated. Review AGREE WITH NOTES: in about a third of runs Hadvar mostly runs in place (path 350-394 units), so the walked > 300 guard (unchanged from HEAD) is weak; the red proof covers only the moving half; Confidence 0 stays on the hoster (fresh world each run).
 - G1.2 PASS (2026-10-13, commit `fix(coop): keep client positions of unhosted NPCs and re-enable hidden hosts (G1.2)`): client changes: (a) formView.ts: the first update of a real NPC that nobody hosts and that is not dead keeps the local position (user decision); (b) fix 4: no movement or animation apply on NPCs hosted here (the server echoes them); (c) fixes 1+3: onTeleportMessage resolves the local refr id on arrival and blocks location claims for that NPC (teleportingHosts) until the move is applied; (d) updateHiddenHosts re-enables a hidden host as soon as its FormView exists. Check: the player no longer follows Alvor (he does not leave through a load door while the player is near him); it waits on the house lower floor (-503,96,60), then at the Riverwood marker; the start asserts (a). Red: without (a) 3/3 FAIL, without (d) 3/3 FAIL; (b) and (c) alone each passed 2 runs, removed together 2 FAILs. Fix 5 (resetAI) dropped. Review AGREE WITH NOTES: known risks below.
 - User decisions 2026-10-13: the client position wins for an NPC nobody hosts, and it stays after the stall turned out to have another cause (the client runs the AI); it wins always, also over server-side moves of such an NPC; the G1.2 check must not keep the player near Alvor.
+- G1.5 PASS 3/3 (2026-10-13 22:30 local). Start: settings.ts log and MQ102 stage 30. Guards near the Dragonsreach porch (37058, 37070, sometimes 37057; each must be loaded on the client and hosted by the player), Balgruuf and Farengar in Dragonsreach, then the talk: MQ102 75 -> 110 -> 150 (MQ103 8) -> 160 (MQ103 10) on the client and in the server log. Red: race filter back (all four parts FAIL), world cleaner deletes again (guards FAIL), coop questStage ignored (server log FAIL). Review AGREE WITH NOTES, fixed: guards paired, asserts collected, MQ103 below 10 at the start, shot after the fade.
+- Playtest 2026-10-13 (user and a friend, two PCs, fresh world): NPCs hosted by the other player are in an A-pose from the start and never animate (both directions, no mods); no talk to an NPC the other hosts (Gerdur once); no corpse loot on the other side; no voice or scene lines on the other side. Checks G1.6-G1.9 and 2A.1 approved (PLAN).
+- G1.6 diagnostics (scratchpad adhoc/g16diag*.js): the A-pose did not show in the bone numbers on this PC; a puppet (AI off) keeps a fixed arm pose while it walks (Faendal shoulder-to-hand drop constant 33 on the puppet, 23-27 on the hoster), so AI off seems to freeze the skeleton. S1.6 reads the Speed graph variable, which does not prove the body moves. The approved G1.6 condition (hand at least 30 below the shoulder) fails on normal NPCs (children 27, walking adults 23); a measure change needs the user.
 - No game, server or runner is running between passes.
 
 ## Next steps
 
-1. Gate 1: G1.5. Write each check red first; the fix for a gate is the phase 1 steps, so a FAIL means a missing or broken step.
+1. G1.6 (puppet animation): run adhoc/g16diag3.js (arm motion against the pelvis on both engines, close shots), then propose a measured condition to the user, then the fix (puppets need a running skeleton: AI on with own decisions blocked, or another way). Then G1.7, G1.8, phase 2A (with the 2A.1 corpse check), G1.9.
 2. Then 2A (S3.4 comes back with 2A.1), 2B (2B.3 also tests that a hoster does not allow a dragon's script events), G2, P. P8 stays red until reached.
 3. Watch:
    - S1.2 had a flaky period (LESSONS). The 1B.4 claim after a replay failed once (23:20).

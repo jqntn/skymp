@@ -216,12 +216,19 @@ Do these first. Their results set the scope of phases 1 and 2.
   - Plan edit (loop, 2026-10-13): the check talks through, as S1.5: on the puppet engine, then on the hoster engine, the player opens the dialogue, picks the first topic, gets an answer other than the greeting, and closes the dialogue. Opening the menu alone did not depend on any phase 1 rule.
 - G1.4: A killed bandit stays dead after 30 s and after a server restart.
 - G1.5: The Whiterun guards, Balgruuf, and Farengar are there, and MQ103 starts.
+  - Plan edit (loop, 2026-10-13): MQ103 runs from the game start (stage 5 is a start-up stage), so "MQ103 starts" means stage 10 (Balgruuf's task after MQ102 stage 160), on the client and in the server quest log. The check starts with the settings.ts log and MQ102 stage 30, puts the player at the Dragonsreach porch (at least 2 guards loaded, alive, and hosted by the player), then in Dragonsreach (Balgruuf and Farengar the same), and talks to Balgruuf (first topic not picked yet) until MQ103 stage 10.
+- User decisions, 2026-10-13 (playtest with two players; checks approved as written, in this order: G1.6, G1.7, G1.8, then phase 2A, then G1.9):
+  - G1.6 (2 engines): engine 2 hosts the Riverwood NPCs, then engine 1 arrives. On engine 1, each NPC that engine 2 hosts within 3000 units has its right hand at least 30 units below its right shoulder (an A-pose puts them level) for 10 s, and a walking NPC passes the S1.6 walk test. Then the same with the engines swapped. (Playtest: all NPCs that the friend hosted stood in an A-pose.)
+  - G1.7 (2 engines): for Gerdur, Alvor, and Sven, hosted by engine 2, engine 1 faces the NPC and presses the activate key (a real key press, not `activate()`). The dialogue opens, and a topic gets an answer other than the greeting. (Playtest: no player could talk to an NPC hosted by the other, except Gerdur once.)
+  - G1.8 (2 engines): when an NPC hosted by engine 2 speaks (a topic answer to engine 2's player, and the Sven and Hilde scene at the Riverwood entrance), engine 1 plays the same line from the same NPC within 1 s, without subtitles.
+  - G1.9 (2 engines): in a party, each client shows a compass marker for each other member, within 10° of the member's direction, and no marker for players outside the party. The marker is an overlay of the client's web UI, not a plugin.
 
 ## Phase 2A: server fixes and quest items
 
 1. **Container and corpse fixes** in `MpObjectReference.cpp`, with Catch2 tests:
    - Call `EnsureBaseContainerAdded` inside `AddItem` (:820-826) and `AddItems` (:853). Today an add to an unopened ESP container sets `baseContainerAdded` and loses its base loot (:1950-1954).
    - Add a corpse branch to the CONT branch of `ProcessActivateNormal` (:1515): `(t == CONT || (AsActor() && AsActor()->IsDead())) && actorActivator`.
+   - Check 2A.1 (2 engines, user decision 2026-10-13): engine 2 hosts a bandit and kills it. Engine 1 opens the corpse and takes an item. Engine 1 has the item, and the server and engine 2 no longer have it on the corpse. (Playtest: a player could not loot an NPC killed by the party and hosted by the other player.)
 2. **Disabled state** (`MpObjectReference.cpp:510-536`):
    - For an ESP non-actor ref, `Disable()` changes only the change form. Only the Papyrus wrapper sends a `Disable` SpSnippet (`PapyrusObjectReference.cpp:471-476`). Send an update from `Disable()` and `Enable()`.
    - For an ESP actor, `Disable()` removes it from the grid. The puppet clients then destroy the FormView, and the real actor stays enabled. Send `isDisabled` before the grid removal, and the client disables the real actor.

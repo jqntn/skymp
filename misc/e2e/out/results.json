@@ -17,13 +17,13 @@
     "result": "PASS",
     "reason": "",
     "evidence": [
-      "build: ok in 29 s (l1-build.log)",
-      "ts: ok in 0 s (l1-ts.log)",
-      "ctest: ok in 60 s (l1-ctest.log)"
+      "build: ok in 27 s (l1-build.log)",
+      "ts: ok in 1 s (l1-ts.log)",
+      "ctest: ok in 61 s (l1-ctest.log)"
     ],
-    "secs": 90,
+    "secs": 89,
     "shots": [],
-    "at": "2026-10-13T17:14:48.822Z"
+    "at": "2026-10-13T20:24:27.059Z"
   },
   "S0b": {
     "result": "PASS",
@@ -441,12 +441,41 @@
     "at": "2026-10-13T17:31:42.170Z"
   },
   "G1.5": {
-    "result": "FAIL",
-    "reason": "no check script",
-    "secs": 0,
-    "evidence": [],
-    "shots": [],
-    "at": "2026-10-12T16:53:46.486Z"
+    "result": "PASS",
+    "reason": "3/3 runs PASS",
+    "secs": 370,
+    "evidence": [
+      "run 1: start log: settings.ts and MQ102 stage 30: [[155914,0],[155914,5],[320781,15],[155914,30],[320781,30]]",
+      "run 1: Whiterun guards near the porch: 37058 (client loaded true, disabled false, dead false; server 1a26f:Skyrim.esm, dead false, disabled false, hoster ff000000); 37070 (client loaded true, disabled false, dead false; server 1a26f:Skyrim.esm, dead false, disabled false, hoster ff000000)",
+      "run 1: Balgruuf 1a677: client loaded true, disabled false, dead false; server 165a3:Skyrim.esm, dead false, disabled false, hoster ff000000",
+      "run 1: Farengar 1a67e: client loaded true, disabled false, dead false; server 165a3:Skyrim.esm, dead false, disabled false, hoster ff000000",
+      "run 1: dialogue: 5 topics picked (\"J'ai des nouvelles d'Helgen. C'est à propos de l'attaque de dragon.\", \"Oui. J'avais une vue imprenable pendant que les Impériaux essayaient de me trancher la tête.\", \"Le dragon a détruit Helgen. Quand je l'ai perdu de vue, il se dirigeait par ici.\", \"Les Impériaux allaient exécuter Ulfric Sombrage quand le dragon a attaqué.\", \"Le dragon a détruit Helgen. Quand je l'ai perdu de vue, il se dirigeait par ici.\"); client MQ102/MQ103 stages 75/5 at the start, then 75/5 -> 110/5 -> 150/8 -> 160/10; Balgruuf says \"Prenez ceci, en gage de mon estime pour vous.\"",
+      "run 1: server log of MQ102 (4e50d) and MQ103 (d0800): [[\"4e50d\",15],[\"4e50d\",30],[\"4e50d\",75],[\"4e50d\",110],[\"4e50d\",50],[\"4e50d\",150],[\"d0800\",8],[\"4e50d\",23],[\"4e50d\",160],[\"d0800\",10]]",
+      "run 2: start log: settings.ts and MQ102 stage 30: [[155914,0],[155914,5],[320781,15],[155914,30],[320781,30]]",
+      "run 2: Whiterun guards near the porch: 37058 (client loaded true, disabled false, dead false; server 1a26f:Skyrim.esm, dead false, disabled false, hoster ff000000); 37070 (client loaded true, disabled false, dead false; server 1a26f:Skyrim.esm, dead false, disabled false, hoster ff000000)",
+      "run 2: Balgruuf 1a677: client loaded true, disabled false, dead false; server 165a3:Skyrim.esm, dead false, disabled false, hoster ff000000",
+      "run 2: Farengar 1a67e: client loaded true, disabled false, dead false; server 165a3:Skyrim.esm, dead false, disabled false, hoster ff000000",
+      "run 2: dialogue: 5 topics picked (\"J'ai des nouvelles d'Helgen. C'est à propos de l'attaque de dragon.\", \"Oui. J'avais une vue imprenable pendant que les Impériaux essayaient de me trancher la tête.\", \"Le dragon a détruit Helgen. Quand je l'ai perdu de vue, il se dirigeait par ici.\", \"Les Impériaux allaient exécuter Ulfric Sombrage quand le dragon a attaqué.\", \"Le dragon a détruit Helgen. Quand je l'ai perdu de vue, il se dirigeait par ici.\"); client MQ102/MQ103 stages 75/5 at the start, then 75/5 -> 110/5 -> 150/8 -> 160/10; Balgruuf says \"Prenez ceci, en gage de mon estime pour vous.\"",
+      "run 2: server log of MQ102 (4e50d) and MQ103 (d0800): [[\"4e50d\",15],[\"4e50d\",30],[\"4e50d\",75],[\"4e50d\",110],[\"4e50d\",50],[\"4e50d\",150],[\"d0800\",8],[\"4e50d\",23],[\"4e50d\",160],[\"d0800\",10]]",
+      "run 3: start log: settings.ts and MQ102 stage 30: [[155914,0],[155914,5],[320781,15],[155914,30],[320781,30]]",
+      "run 3: Whiterun guards near the porch: 37057 (client loaded true, disabled false, dead false; server 1a26f:Skyrim.esm, dead false, disabled false, hoster ff000000); 37058 (client loaded true, disabled false, dead false; server 1a26f:Skyrim.esm, dead false, disabled false, hoster ff000000); 37070 (client loaded true, disabled false, dead false; server 1a26f:Skyrim.esm, dead false, disabled false, hoster ff000000)",
+      "run 3: Balgruuf 1a677: client loaded true, disabled false, dead false; server 165a3:Skyrim.esm, dead false, disabled false, hoster ff000000",
+      "run 3: Farengar 1a67e: client loaded true, disabled false, dead false; server 165a3:Skyrim.esm, dead false, disabled false, hoster ff000000",
+      "run 3: dialogue: 5 topics picked (\"J'ai des nouvelles d'Helgen. C'est à propos de l'attaque de dragon.\", \"Oui. J'avais une vue imprenable pendant que les Impériaux essayaient de me trancher la tête.\", \"Le dragon a détruit Helgen. Quand je l'ai perdu de vue, il se dirigeait par ici.\", \"Les Impériaux allaient exécuter Ulfric Sombrage quand le dragon a attaqué.\", \"Le dragon a détruit Helgen. Quand je l'ai perdu de vue, il se dirigeait par ici.\"); client MQ102/MQ103 stages 75/5 at the start, then 75/5 -> 110/5 -> 150/8 -> 160/10; Balgruuf says \"Prenez ceci, en gage de mon estime pour vous.\"",
+      "run 3: server log of MQ102 (4e50d) and MQ103 (d0800): [[\"4e50d\",15],[\"4e50d\",30],[\"4e50d\",75],[\"4e50d\",110],[\"4e50d\",50],[\"4e50d\",150],[\"d0800\",8],[\"4e50d\",23],[\"4e50d\",160],[\"d0800\",10]]"
+    ],
+    "shots": [
+      "runs/G1_5/1/G1_5-guards.png",
+      "runs/G1_5/1/G1_5-dragonsreach.png",
+      "runs/G1_5/1/G1_5-mq103.png",
+      "runs/G1_5/2/G1_5-guards.png",
+      "runs/G1_5/2/G1_5-dragonsreach.png",
+      "runs/G1_5/2/G1_5-mq103.png",
+      "runs/G1_5/3/G1_5-guards.png",
+      "runs/G1_5/3/G1_5-dragonsreach.png",
+      "runs/G1_5/3/G1_5-mq103.png"
+    ],
+    "at": "2026-10-13T20:30:38.126Z"
   },
   "2A.1": {
     "result": "FAIL",

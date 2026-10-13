@@ -24,8 +24,8 @@ const HELGEN_EXIT = { pos: [12155.9, -71991.3, 6015.5], angleZ: 286.1, worldOrCe
 const range = (prefix, n) => Array.from({ length: n }, (_, i) => `${prefix}${i + 1}`);
 const ORDER = [
   "L1", "S0", "S0b", "S0c", "S1.1", "S1.2", "S1.4", "S1.3", "S1.5", "S1.6", "S2", "S3.1", "S3.2", "S3.3", "S3.4",
-  ...range("1A.", 5), ...range("1B.", 5), ...range("G1.", 5),
-  ...range("2A.", 5), ...range("2B.", 5), ...range("G2.", 6), ...range("P", 8),
+  ...range("1A.", 5), ...range("1B.", 5), ...range("G1.", 8),
+  ...range("2A.", 5), "G1.9", ...range("2B.", 5), ...range("G2.", 6), ...range("P", 8),
 ];
 
 class Env extends Error {}

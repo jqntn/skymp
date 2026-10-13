@@ -5,7 +5,7 @@ First non-PASS in plan order: S3.4
 
 | id | result | secs | at | detail |
 |---|---|---|---|---|
-| L1 | PASS | 90 | 2026-10-13 17:14 |  |
+| L1 | PASS | 89 | 2026-10-13 20:24 |  |
 | S0 | PASS | 30 | 2026-10-13 15:22 | 1/1 runs PASS |
 | S0b | PASS | 161 | 2026-10-13 15:25 | 1/1 runs PASS |
 | S0c | PASS | 30 | 2026-10-13 15:25 | 1/1 runs PASS |
@@ -34,12 +34,16 @@ First non-PASS in plan order: S3.4
 | G1.2 | PASS | 168 | 2026-10-13 16:20 | 3/3 runs PASS |
 | G1.3 | PASS | 265 | 2026-10-13 17:00 | 3/3 runs PASS |
 | G1.4 | PASS | 424 | 2026-10-13 17:31 | 3/3 runs PASS |
-| G1.5 | FAIL | 0 | 2026-10-12 16:53 | no check script |
+| G1.5 | PASS | 370 | 2026-10-13 20:30 | 3/3 runs PASS |
+| G1.6 | FAIL | 0 | - | not run |
+| G1.7 | FAIL | 0 | - | not run |
+| G1.8 | FAIL | 0 | - | not run |
 | 2A.1 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | 2A.2 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | 2A.3 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | 2A.4 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | 2A.5 | FAIL | 0 | 2026-10-12 16:53 | no check script |
+| G1.9 | FAIL | 0 | - | not run |
 | 2B.1 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | 2B.2 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | 2B.3 | FAIL | 0 | 2026-10-12 16:53 | no check script |
@@ -63,9 +67,9 @@ First non-PASS in plan order: S3.4
 ## Evidence
 
 ### L1
-- build: ok in 29 s (l1-build.log)
-- ts: ok in 0 s (l1-ts.log)
-- ctest: ok in 60 s (l1-ctest.log)
+- build: ok in 27 s (l1-build.log)
+- ts: ok in 1 s (l1-ts.log)
+- ctest: ok in 61 s (l1-ctest.log)
 ### S0
 - run 1: actor ff000000, RaceMenu open: false
 - run 1: client moved 365 units from 12156,-71991,6010, server moved 365 units from 12156,-71991,6010
@@ -296,6 +300,34 @@ First non-PASS in plan order: S3.4
 - ![G1.4](runs/G1_4/2/G1_4-restart.png)
 - ![G1.4](runs/G1_4/3/G1_4-dead.png)
 - ![G1.4](runs/G1_4/3/G1_4-restart.png)
+### G1.5
+- run 1: start log: settings.ts and MQ102 stage 30: [[155914,0],[155914,5],[320781,15],[155914,30],[320781,30]]
+- run 1: Whiterun guards near the porch: 37058 (client loaded true, disabled false, dead false; server 1a26f:Skyrim.esm, dead false, disabled false, hoster ff000000); 37070 (client loaded true, disabled false, dead false; server 1a26f:Skyrim.esm, dead false, disabled false, hoster ff000000)
+- run 1: Balgruuf 1a677: client loaded true, disabled false, dead false; server 165a3:Skyrim.esm, dead false, disabled false, hoster ff000000
+- run 1: Farengar 1a67e: client loaded true, disabled false, dead false; server 165a3:Skyrim.esm, dead false, disabled false, hoster ff000000
+- run 1: dialogue: 5 topics picked ("J'ai des nouvelles d'Helgen. C'est à propos de l'attaque de dragon.", "Oui. J'avais une vue imprenable pendant que les Impériaux essayaient de me trancher la tête.", "Le dragon a détruit Helgen. Quand je l'ai perdu de vue, il se dirigeait par ici.", "Les Impériaux allaient exécuter Ulfric Sombrage quand le dragon a attaqué.", "Le dragon a détruit Helgen. Quand je l'ai perdu de vue, il se dirigeait par ici."); client MQ102/MQ103 stages 75/5 at the start, then 75/5 -> 110/5 -> 150/8 -> 160/10; Balgruuf says "Prenez ceci, en gage de mon estime pour vous."
+- run 1: server log of MQ102 (4e50d) and MQ103 (d0800): [["4e50d",15],["4e50d",30],["4e50d",75],["4e50d",110],["4e50d",50],["4e50d",150],["d0800",8],["4e50d",23],["4e50d",160],["d0800",10]]
+- run 2: start log: settings.ts and MQ102 stage 30: [[155914,0],[155914,5],[320781,15],[155914,30],[320781,30]]
+- run 2: Whiterun guards near the porch: 37058 (client loaded true, disabled false, dead false; server 1a26f:Skyrim.esm, dead false, disabled false, hoster ff000000); 37070 (client loaded true, disabled false, dead false; server 1a26f:Skyrim.esm, dead false, disabled false, hoster ff000000)
+- run 2: Balgruuf 1a677: client loaded true, disabled false, dead false; server 165a3:Skyrim.esm, dead false, disabled false, hoster ff000000
+- run 2: Farengar 1a67e: client loaded true, disabled false, dead false; server 165a3:Skyrim.esm, dead false, disabled false, hoster ff000000
+- run 2: dialogue: 5 topics picked ("J'ai des nouvelles d'Helgen. C'est à propos de l'attaque de dragon.", "Oui. J'avais une vue imprenable pendant que les Impériaux essayaient de me trancher la tête.", "Le dragon a détruit Helgen. Quand je l'ai perdu de vue, il se dirigeait par ici.", "Les Impériaux allaient exécuter Ulfric Sombrage quand le dragon a attaqué.", "Le dragon a détruit Helgen. Quand je l'ai perdu de vue, il se dirigeait par ici."); client MQ102/MQ103 stages 75/5 at the start, then 75/5 -> 110/5 -> 150/8 -> 160/10; Balgruuf says "Prenez ceci, en gage de mon estime pour vous."
+- run 2: server log of MQ102 (4e50d) and MQ103 (d0800): [["4e50d",15],["4e50d",30],["4e50d",75],["4e50d",110],["4e50d",50],["4e50d",150],["d0800",8],["4e50d",23],["4e50d",160],["d0800",10]]
+- run 3: start log: settings.ts and MQ102 stage 30: [[155914,0],[155914,5],[320781,15],[155914,30],[320781,30]]
+- run 3: Whiterun guards near the porch: 37057 (client loaded true, disabled false, dead false; server 1a26f:Skyrim.esm, dead false, disabled false, hoster ff000000); 37058 (client loaded true, disabled false, dead false; server 1a26f:Skyrim.esm, dead false, disabled false, hoster ff000000); 37070 (client loaded true, disabled false, dead false; server 1a26f:Skyrim.esm, dead false, disabled false, hoster ff000000)
+- run 3: Balgruuf 1a677: client loaded true, disabled false, dead false; server 165a3:Skyrim.esm, dead false, disabled false, hoster ff000000
+- run 3: Farengar 1a67e: client loaded true, disabled false, dead false; server 165a3:Skyrim.esm, dead false, disabled false, hoster ff000000
+- run 3: dialogue: 5 topics picked ("J'ai des nouvelles d'Helgen. C'est à propos de l'attaque de dragon.", "Oui. J'avais une vue imprenable pendant que les Impériaux essayaient de me trancher la tête.", "Le dragon a détruit Helgen. Quand je l'ai perdu de vue, il se dirigeait par ici.", "Les Impériaux allaient exécuter Ulfric Sombrage quand le dragon a attaqué.", "Le dragon a détruit Helgen. Quand je l'ai perdu de vue, il se dirigeait par ici."); client MQ102/MQ103 stages 75/5 at the start, then 75/5 -> 110/5 -> 150/8 -> 160/10; Balgruuf says "Prenez ceci, en gage de mon estime pour vous."
+- run 3: server log of MQ102 (4e50d) and MQ103 (d0800): [["4e50d",15],["4e50d",30],["4e50d",75],["4e50d",110],["4e50d",50],["4e50d",150],["d0800",8],["4e50d",23],["4e50d",160],["d0800",10]]
+- ![G1.5](runs/G1_5/1/G1_5-guards.png)
+- ![G1.5](runs/G1_5/1/G1_5-dragonsreach.png)
+- ![G1.5](runs/G1_5/1/G1_5-mq103.png)
+- ![G1.5](runs/G1_5/2/G1_5-guards.png)
+- ![G1.5](runs/G1_5/2/G1_5-dragonsreach.png)
+- ![G1.5](runs/G1_5/2/G1_5-mq103.png)
+- ![G1.5](runs/G1_5/3/G1_5-guards.png)
+- ![G1.5](runs/G1_5/3/G1_5-dragonsreach.png)
+- ![G1.5](runs/G1_5/3/G1_5-mq103.png)
 ### P8
 - run 1: 115 client log lines, 2 [Exception] lines
 - run 1: exception: [Exception] failed to get key 'data': failed to call custom Serialize for type struct Equipment: failed to get key 'inv': failed to call cus.
