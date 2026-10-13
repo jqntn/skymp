@@ -4,6 +4,8 @@ import { CoopService } from "./coopService";
 import { tryHost } from "../../view/hostAttempts";
 import { getViewFromStorage } from "../../view/worldViewMisc";
 
+const serverBannedRaceIds = [0x000e7713, 0x001052a3, 0x0010760a];
+
 export class WorldCleanerService extends ClientListener {
   constructor(private sp: Sp, private controller: CombinedController) {
     super();
@@ -19,6 +21,9 @@ export class WorldCleanerService extends ClientListener {
     const id = actor.getFormID();
     const hosted = this.sp.storage["hosted"];
     if (id === 0x14 || id >= 0xff000000 || (Array.isArray(hosted) && hosted.includes(id + 0x100000000))) {
+      return;
+    }
+    if (serverBannedRaceIds.includes(actor.getRace()?.getFormID() ?? 0)) {
       return;
     }
     actor.enableAI(false);

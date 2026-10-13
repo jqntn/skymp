@@ -206,6 +206,7 @@ Do these first. Their results set the scope of phases 1 and 2.
 
 **Gate 1 checks:**
 - G1.1: Ralof walks to Riverwood.
+  - Plan edit (loop, 2026-10-13): G1.1 needed two changes that no phase 1 step names. The default start log in `settings.ts` gains MQ102B stage 5 and MQ102 stage 15 (the cave exit, which moves Ralof out of the keep). The world cleaner leaves the AI of actors whose race the server does not load (Alduin) on, so that Alduin's flyover ends. The check reads the start log from `settings.ts`.
 - G1.2: Alvor goes from his house to the forge. Gerdur and Alvor open the dialogue menu on the client.
 - G1.3 (2 engines): Gerdur and Alvor talk on the two clients.
 - G1.4: A killed bandit stays dead after 30 s and after a server restart.

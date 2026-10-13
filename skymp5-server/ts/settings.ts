@@ -39,7 +39,7 @@ export class Settings {
       pos: [12155.9, -71991.3, 6015.5],
       worldOrCell: '0x3c',
       angleZ: 286.1,
-      questStages: [[0x2610a, 0], [0x2610a, 30]],
+      questStages: [[0x2610a, 0], [0x2610a, 5], [0x4e50d, 15], [0x2610a, 30]],
     },
   ];
   partyMaxSize = 4;

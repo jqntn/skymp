@@ -5,6 +5,7 @@ const MQ102 = 0x4e50d;
 const MQ102B = 0x2610a;
 const MQ00 = 0x1c5d9;
 const STOP = -1;
+const START = [[MQ102B, 0], [MQ102B, 5], [MQ102, 15], [MQ102B, 30]];
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const send = (bot, content) => bot.send({ t: 1, contentJsonDump: JSON.stringify(content) });
@@ -35,13 +36,13 @@ const main = async () => {
   assert.ok(Math.hypot(pos[0] - 12155.9, pos[1] + 71991.3, pos[2] - 6015.5) < 1, `start pos ${pos}`);
   assert.equal(mp.getActorCellOrWorld(a1), 0x3c);
   assert.ok(Math.abs(mp.get(a1, "spawnPoint").pos[0] - 12155.9) < 1);
-  assert.deepEqual(questLog(a1), [[MQ102B, 0], [MQ102B, 30]]);
+  assert.deepEqual(questLog(a1), START);
 
   send(bot1, { customPacketType: "questLogRequest" });
   send(bot1, { customPacketType: "questLogRequest" });
   await sleep(100);
   assert.equal(countTo(u1, "questApply"), 1);
-  assert.deepEqual(lastTo(u1, "questApply"), { customPacketType: "questApply", entries: [[MQ102B, 0], [MQ102B, 30]], replay: true });
+  assert.deepEqual(lastTo(u1, "questApply"), { customPacketType: "questApply", entries: START, replay: true });
 
   send(bot1, { customPacketType: "partyInvite", target: a2 });
   await sleep(100);
@@ -54,7 +55,7 @@ const main = async () => {
   send(bot1, { customPacketType: "questStage", quest: MQ102B, stage: 10 });
   await sleep(100);
   assert.deepEqual(lastTo(u2, "questApply").entries, [[MQ102B, 10]]);
-  assert.deepEqual(questLog(a2), [[MQ102B, 0], [MQ102B, 30], [MQ102B, 10]]);
+  assert.deepEqual(questLog(a2), [...START, [MQ102B, 10]]);
 
   send(bot2, { customPacketType: "questStage", quest: MQ102, stage: 10 });
   await sleep(100);
@@ -68,7 +69,7 @@ const main = async () => {
   send(bot1, { customPacketType: "questStage", quest: MQ00, stage: 5 });
   await sleep(100);
   assert.equal(sent.length, sentBefore);
-  assert.equal(questLog(a1).length, 4);
+  assert.equal(questLog(a1).length, START.length + 2);
 
   send(bot1, { customPacketType: "questStage", quest: MQ101, stage: 900 });
   send(bot1, { customPacketType: "questStop", quest: MQ101, completed: true });

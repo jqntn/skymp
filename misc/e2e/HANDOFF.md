@@ -26,16 +26,16 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 - `fix(coop): keep puppet NPCs harmless and alive until the hoster decides (1B.1, 1B.2)`: 1B.1 check (real actor, no clone, no immortality, own name, hosted; source asserts); puppets get deferred kill and attackDamageMult 0, restored when hosted or destroyed; a puppet hit to 0 is resurrected on release unless the server says dead (then its server health is reapplied); the hold is re-armed if lost.
 - `fix(coop): send hits and activations of hosted NPCs and keep revived NPCs alive (1B.3)`: client accepts hosted ESP aggressors and casters, blocks KillMove for all ids, sends no actor values for hosted NPCs, drives puppet AI from the actor's real state; server ignores a hoster's death for 3 s after a respawn (RespawnedWithin, [1B.3] unit test); 1B.3 check gives engine 2 an appearance so engine 1 renders it.
 - `feat(coop): host NPCs from the local engine and yield quest actors to the party leader (1B.4)`: real-actor claims with a location, release of lost hosts, hide and retry on HostStop, first movement skip, replay gate, party rule with the native getReferenceAliasQuests, server OpenContainer only to the activator's own user; 1B.4 check; S1.1, S1.4, S1.6 check edits.
-- `feat(coop): run actor script events only on the hoster (1B.5)`: see below.
+- `feat(coop): run actor script events only on the hoster (1B.5)`: SP allowed form set with setter and getter natives, SendEvent hook allows listed ids, client sets the hosted ESP ids without dragons; 1B.5 check (ambush draugr and boss in Bleak Falls Barrow).
+- `fix(coop): start new characters at the cave exit with Ralof outside and let Alduin fly (G1.1)`: see below.
 
-## What the last commit holds (1B.5)
+## What the last commit holds (G1.1)
 
-- SkyrimPlatform: a set of allowed form ids behind a `std::shared_mutex` (PapyrusTESModPlatform), the natives `setPapyrusEventsAllowedForms(ids)` (replaces the set) and `getPapyrusEventsAllowedForms()` (DevApi, declared in skyrimPlatform.ts), and the SendEvent hook (FridaHooks) allows an event when its self id is in the set.
-- Client: sendInputsService compares the ESP ids of `storage['hosted']` at each update and calls the setter when they change (HostStart, HostStop and release take the same path), without actors that have the ActorTypeDragon keyword.
-- Check 1B.5 (2 engines, Bleak Falls Barrow): ambush draugr whose ref has masterAmbushScript (Variable01 0 -> 1 when the ambush ends). Engine 1 hosts draugr 9bcb9: startCombat runs the script; with the list emptied by the driver it stays blocked; engine 2 (puppet) does not list it. Boss 9bcd6: hosted by engine 1 (listed), engine 1 leaves the cell, engine 2 takes it, engine 1 comes back: engine 1 no longer lists it, engine 2 lists it and runs the script.
-- Red proofs: pre-fix build (no native, startCombat on the hosters left Variable01 0), hook allowing every actor (the puppet ran its own ambush script), client never removing ids (the former hoster kept the boss). Review: AGREE WITH NOTES; the vacuity notes were applied (new hoster's boss still waiting, puppet assert split out).
-- Plan edits: the getter in step 5; the dragon rule is tested in the 2B.3 check.
-- The 1B.4 commit holds: real-actor claims with a location, release of lost hosts, hide and retry on HostStop, the first movement skip, the replay gate, the party rule with getReferenceAliasQuests, and OpenContainer only to the activator's own user (details in the 1B.4 log lines).
+- Start log (`skymp5-server/ts/settings.ts` startPoints): `[[0x2610a, 0], [0x2610a, 5], [0x4e50d, 15], [0x2610a, 30]]`. The two log entries of MQ102 stage 15 need GetStageDone(MQ102A or MQ102B, 5); stage 15 then sets 14, which moves the friend (Ralof) from the keep to ChargenExitMarker while MQ102 10 is not done, and enables Alduin for his flyover. The old log `[[MQ102B,0],[MQ102B,30]]` left Ralof in the keep. `misc/tests/test_coop.js` and `docs/docs_server_configuration_reference.md` follow the new log.
+- Client: `worldCleanerService` leaves the AI of actors whose race the server does not load (AlduinRace e7713, UndeadDragonRace 1052a3, Mannequin 10760a, the list in `WorldState.h:258`) on, because nobody can host them. Before, Alduin's patrol 3ccfa never ended (MQ102 17), and Ralof hid at the exit forever (9251e MQ102FriendWaitAtExitHide).
+- Check G1.1 (1 engine): the start log is read from settings.ts and set with mp.set; the player follows Ralof (teleport 200 units behind him when more than 400 away); PASS when the server Ralof is in Tamriel within 1500 units of the Riverwood marker in 10 min and no server step after the first hosted sample is over 1000 units.
+- Red proofs: old start log (Ralof stays in the keep, path 0), world cleaner change reverted (Ralof hides at the exit). Review: AGREE WITH NOTES; the walk assert was added (PASS: longest step 222 units).
+- Plan edit under G1.1 (the two changes no phase 1 step names). Lessons: stage log entry conditions and how to read them, fragments are not events, the world cleaner and banned races, no isInInterior in SP, engines: 0 diagnostics.
 
 ## Uncommitted
 
@@ -54,18 +54,20 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 
 ## Status
 
-- Regression run 2026-10-13 01:22-01:38 UTC with 1B.5: L1, S0, S0b, S0c, S1.1-S1.6, S2, S3.1-S3.3, 1A.1-1A.5, 1B.1-1B.5 all PASS. S3.4 BLOCKED until 2A.1.
-- First FAIL in plan order: G1.1 (no check script).
+- Regression run 2026-10-13 03:23-03:45 UTC with the G1.1 change: L1, S0, S0b, S0c, S1.1-S1.5, S2, S3.1-S3.3, 1A.1-1A.5, 1B.1-1B.5, G1.1 PASS. S3.4 BLOCKED until 2A.1.
+- S1.6 FAIL 3 runs in a row since 03:33 UTC: Hadvar walks in place on the hoster (Speed 78 for 6 s, 76-91 units, pkg 4679f), and the puppet engine's screenshot shows a wooden wall. A/B with the world cleaner change reverted fails the same, so it is not the G1.1 change (the server change only touches the start log, which S1.6 does not use). It passed at 23:55, 01:08 and 01:30 UTC with the same code. The failed run's logs are in the scratchpad (s16-fail-run).
 - No game, server or runner is running between passes.
 
 ## Next steps
 
-1. Gate 1: G1.1 (Ralof walks to Riverwood), G1.2, G1.3 (2 engines), G1.4, G1.5. Write each check red first; the fix for a gate is the phase 1 steps, so a FAIL means a missing or broken step.
-2. Then 2A (S3.4 comes back with 2A.1), 2B (2B.3 also tests that a hoster does not allow a dragon's script events), G2, P. P8 stays red until reached.
-3. Watch:
+1. Regression first: S1.6 (Hadvar walks in place on the Riverwood road; find where Hadvar and the players are when the walk starts and what blocks him).
+2. Gate 1: G1.2, G1.3 (2 engines), G1.4, G1.5. Write each check red first; the fix for a gate is the phase 1 steps, so a FAIL means a missing or broken step.
+3. Then 2A (S3.4 comes back with 2A.1), 2B (2B.3 also tests that a hoster does not allow a dragon's script events), G2, P. P8 stays red until reached.
+4. Watch:
    - S1.2 had a flaky period (LESSONS). The 1B.4 claim after a replay failed once (23:20).
    - Review gaps of 1B.4: the member's 10 s wait is not observed, a non-quest actor near the leader, release when unloaded or gone, claims of dead actors or from another cell. Add them when a step touches that code.
-   - The Helgen intro battle runs forever once players host it (S1.1 and S1.6 calm it). G1.1 (Ralof walks to Riverwood) will show it.
+   - The Helgen intro battle runs forever once players host it (S1.1 and S1.6 calm it). G1.1 did not meet it (Ralof is hosted at the cave exit).
+   - G1.1: every login replays the whole quest log, so MQ102B stage 0 moves Ralof into the keep and MQ102 stage 15 moves him to the exit again on each client (and enables Alduin, who now flies away on his own). The server position wins only through the FormView's first movement (see the first-movement lesson). Each client also has its own Alduin. G1.1 ran once per build; road combat (wolves) is untested.
    - A puppet's loaded copy whose FormView is destroyed stays frozen and visible (no HostStop for non-hosters).
    - A real actor whose first movement ran before the player was in place is never moved again (LESSONS).
    - A hosted NPC's hits on its own hoster's player also reach the server (possible double damage). The 1B.3 hit scenario is flaky (ENV and retry).

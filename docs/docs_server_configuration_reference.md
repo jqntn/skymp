@@ -249,7 +249,7 @@ A new character spawns at this point, and respawns at it after death.
 The client sets these stages when the character enters the world for the first time.
 
 The default start point is the exit of the Helgen cave, after the escape with Ralof.
-Its quest stages are `MQ102B` stages 0 and 30. Ralof leaves the keep, and the journal shows "Before the Storm" with the Riverwood objective.
+Its quest stages are `MQ102B` stages 0 and 5, `MQ102` stage 15 (the cave exit, which moves Ralof out of the keep), and `MQ102B` stage 30. Ralof leaves the keep, and the journal shows "Before the Storm" with the Riverwood objective.
 
 ```json5
 {
@@ -259,7 +259,7 @@ Its quest stages are `MQ102B` stages 0 and 30. Ralof leaves the keep, and the jo
       "pos": [12155.9, -71991.3, 6015.5],
       "worldOrCell": "0x3c",
       "angleZ": 286.1,
-      "questStages": [[0x2610a, 0], [0x2610a, 30]] // use 155914 in strict JSON
+      "questStages": [[0x2610a, 0], [0x2610a, 5], [0x4e50d, 15], [0x2610a, 30]] // use 155914 and 320781 in strict JSON
     }
   ]
   // ...
