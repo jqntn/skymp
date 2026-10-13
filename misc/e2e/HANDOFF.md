@@ -26,19 +26,16 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 - `fix(coop): keep puppet NPCs harmless and alive until the hoster decides (1B.1, 1B.2)`: 1B.1 check (real actor, no clone, no immortality, own name, hosted; source asserts); puppets get deferred kill and attackDamageMult 0, restored when hosted or destroyed; a puppet hit to 0 is resurrected on release unless the server says dead (then its server health is reapplied); the hold is re-armed if lost.
 - `fix(coop): send hits and activations of hosted NPCs and keep revived NPCs alive (1B.3)`: client accepts hosted ESP aggressors and casters, blocks KillMove for all ids, sends no actor values for hosted NPCs, drives puppet AI from the actor's real state; server ignores a hoster's death for 3 s after a respawn (RespawnedWithin, [1B.3] unit test); 1B.3 check gives engine 2 an appearance so engine 1 renders it.
 - `feat(coop): host NPCs from the local engine and yield quest actors to the party leader (1B.4)`: real-actor claims with a location, release of lost hosts, hide and retry on HostStop, first movement skip, replay gate, party rule with the native getReferenceAliasQuests, server OpenContainer only to the activator's own user; 1B.4 check; S1.1, S1.4, S1.6 check edits.
+- `feat(coop): run actor script events only on the hoster (1B.5)`: see below.
 
-## What the last commit holds (1B.4)
+## What the last commit holds (1B.5)
 
-- Client:
-  - sendInputsService: all host attempts wait for `CoopService.isReporting()` (no claims and no hosted movement during a quest replay). Real-actor claims carry worldOrCell, pos and rot (loaded, enabled, alive, same cell, 4096, no party yield, 10 s after a yield). A hosted real actor that is gone, unloaded or disabled for 2 s is released (disabled flag sent). On a HostStop for an actor without a FormView, the loaded actor is hidden with disableNoWait, claimed again every 5 s, and enabled on HostStart. getInputOwner maps ESP ids directly.
-  - worldCleanerService: claims real actors without a FormView (at most once per 5 s per actor).
-  - formView: the first movement of an unhosted, alive, 3D-loaded real actor in the player's cell is skipped and the actor is claimed at once (S1.3 passes, so the plan bullet applies).
-  - coopService: `isReporting()`, `yieldsToLeader(actor)` (party member, leader's clone in the same cell within 4096, quest alias actor), `isQuestActor` through the new SkyrimPlatform native `getReferenceAliasQuests(refrFormId)` (ObjectReferenceApi, ExtraAliasInstanceArray), declared in skyrimPlatform.ts and the clientListener augmentation.
-- Server: `SendOpenContainer` sends only to an activator with its own user (a hosted NPC's furniture activation made the hoster's player use the furniture).
-- Checks:
-  - 1B.4 (new, 2 engines): claim without a FormView, hide on HostStop and retry (waits up to 5 s for HostStart to show Alvor), walk-in first movement with a 6 s no-claim hold, replay gate for movement (furniture exit + translate every 400 ms) and for claims, release on disable with a 6 s hold, never deleted, party rule (member quest log [[TutorialBlacksmithing, 0]], partyInvite/partyAccept from the drivers, member hosts while the leader is away, yields within 25 s when the leader is back within 4096, leader keeps it 12 s).
-  - S1.1 and S1.6 calm the AI-on actors around the NPC on both engines (the Helgen intro battle cancelled the moves) and assert the puppet's AI is off. S1.4 provocation and control add startCombat(player). S1.6 places Hadvar on the Riverwood road and walks him with keepOffsetFromActor, stops him with clearKeepOffsetFromActor + setDontMove(true) (pathToReference never moved him).
-- Red proofs: replay gate off, party rule off (call sites), isQuestActor without the native: 1B.4 FAIL each; puppet locomotion off: S1.6 FAIL. Review: 1B.4, S1.1, S1.6 agree with notes, S1.4 agrees; the follow-up edits (puppet AI asserts, 1B.4 retry wait) were reviewed too.
+- SkyrimPlatform: a set of allowed form ids behind a `std::shared_mutex` (PapyrusTESModPlatform), the natives `setPapyrusEventsAllowedForms(ids)` (replaces the set) and `getPapyrusEventsAllowedForms()` (DevApi, declared in skyrimPlatform.ts), and the SendEvent hook (FridaHooks) allows an event when its self id is in the set.
+- Client: sendInputsService compares the ESP ids of `storage['hosted']` at each update and calls the setter when they change (HostStart, HostStop and release take the same path), without actors that have the ActorTypeDragon keyword.
+- Check 1B.5 (2 engines, Bleak Falls Barrow): ambush draugr whose ref has masterAmbushScript (Variable01 0 -> 1 when the ambush ends). Engine 1 hosts draugr 9bcb9: startCombat runs the script; with the list emptied by the driver it stays blocked; engine 2 (puppet) does not list it. Boss 9bcd6: hosted by engine 1 (listed), engine 1 leaves the cell, engine 2 takes it, engine 1 comes back: engine 1 no longer lists it, engine 2 lists it and runs the script.
+- Red proofs: pre-fix build (no native, startCombat on the hosters left Variable01 0), hook allowing every actor (the puppet ran its own ambush script), client never removing ids (the former hoster kept the boss). Review: AGREE WITH NOTES; the vacuity notes were applied (new hoster's boss still waiting, puppet assert split out).
+- Plan edits: the getter in step 5; the dragon rule is tested in the 2B.3 check.
+- The 1B.4 commit holds: real-actor claims with a location, release of lost hosts, hide and retry on HostStop, the first movement skip, the replay gate, the party rule with getReferenceAliasQuests, and OpenContainer only to the activator's own user (details in the 1B.4 log lines).
 
 ## Uncommitted
 
@@ -57,14 +54,14 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 
 ## Status
 
-- Regression run 2026-10-12 23:46-00:02 UTC (new client and server): L1, S0, S0b, S0c, S1.1, S1.3-S1.6, S2, S3.1-S3.3, 1A.1-1A.5, 1B.1-1B.3 PASS; S1.2 and 1B.4 FAIL once, then S1.2 5 of 5 and 1B.4 7 of 7 PASS (see the log and LESSONS). S3.4 BLOCKED until 2A.1.
-- First FAIL in plan order: 1B.5 (no check script).
+- Regression run 2026-10-13 01:22-01:38 UTC with 1B.5: L1, S0, S0b, S0c, S1.1-S1.6, S2, S3.1-S3.3, 1A.1-1A.5, 1B.1-1B.5 all PASS. S3.4 BLOCKED until 2A.1.
+- First FAIL in plan order: G1.1 (no check script).
 - No game, server or runner is running between passes.
 
 ## Next steps
 
-1. 1B.5 (actor script events on the hoster): write the check (red first), then the C++ set behind a shared_mutex, the DevApi native, the FridaHooks gate, and the client calls on HostStart, HostStop and release.
-2. Then G1, 2A (S3.4 comes back with 2A.1), 2B, G2, P. P8 stays red until reached.
+1. Gate 1: G1.1 (Ralof walks to Riverwood), G1.2, G1.3 (2 engines), G1.4, G1.5. Write each check red first; the fix for a gate is the phase 1 steps, so a FAIL means a missing or broken step.
+2. Then 2A (S3.4 comes back with 2A.1), 2B (2B.3 also tests that a hoster does not allow a dragon's script events), G2, P. P8 stays red until reached.
 3. Watch:
    - S1.2 had a flaky period (LESSONS). The 1B.4 claim after a replay failed once (23:20).
    - Review gaps of 1B.4: the member's 10 s wait is not observed, a non-quest actor near the leader, release when unloaded or gone, claims of dead actors or from another cell. Add them when a step touches that code.
@@ -73,6 +70,7 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
    - A real actor whose first movement ran before the player was in place is never moved again (LESSONS).
    - A hosted NPC's hits on its own hoster's player also reach the server (possible double damage). The 1B.3 hit scenario is flaky (ENV and retry).
    - Custom gamemode properties on ESP NPCs (LESSONS). 1B.1 coverage partial. 1B.2: resurrect side effects untested.
+   - 1B.5: hosted actors now run their own script events. Watch for scripts that act twice or fight the server (packages, item adds) in G1 and G2. HostStop and release remove ids through the same diff; no separate test for each.
 
 ## Runner
 

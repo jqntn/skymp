@@ -108,6 +108,9 @@ std::shared_ptr<RE::BSTArray<RE::TintMask*>> GetTintsFor(uint32_t actorId);
 bool GetPapyrusEventsBlocked();
 void AllowQuestPapyrusEvents(bool allowed);
 bool GetQuestPapyrusEventsAllowed();
+void SetPapyrusEventsAllowedForms(const std::vector<uint32_t>& formIds);
+bool IsPapyrusEventsAllowedForm(uint32_t formId);
+std::vector<uint32_t> GetPapyrusEventsAllowedForms();
 
 void Update();
 

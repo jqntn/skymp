@@ -20,6 +20,10 @@ Napi::Value BlockPapyrusEvents(const Napi::CallbackInfo& info);
 
 Napi::Value AllowQuestPapyrusEvents(const Napi::CallbackInfo& info);
 
+Napi::Value SetPapyrusEventsAllowedForms(const Napi::CallbackInfo& info);
+
+Napi::Value GetPapyrusEventsAllowedForms(const Napi::CallbackInfo& info);
+
 void DisableCtrlPrtScnHotkey();
 
 using NativeExportsMap =
@@ -73,5 +77,13 @@ inline void Register(Napi::Env env, Napi::Object& exports,
   exports.Set("allowQuestPapyrusEvents",
               Napi::Function::New(
                 env, NapiHelper::WrapCppExceptions(AllowQuestPapyrusEvents)));
+  exports.Set("setPapyrusEventsAllowedForms",
+              Napi::Function::New(env,
+                                  NapiHelper::WrapCppExceptions(
+                                    SetPapyrusEventsAllowedForms)));
+  exports.Set("getPapyrusEventsAllowedForms",
+              Napi::Function::New(env,
+                                  NapiHelper::WrapCppExceptions(
+                                    GetPapyrusEventsAllowedForms)));
 }
 }

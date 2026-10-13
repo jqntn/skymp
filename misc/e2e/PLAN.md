@@ -194,8 +194,10 @@ Do these first. Their results set the scope of phases 1 and 2.
 5. **Actor script events on the hoster**:
    - In `PapyrusTESModPlatform.cpp/.h`, add a set of form ids behind a `std::shared_mutex`, because SendEvent runs on VM threads.
    - Add the JS native `setPapyrusEventsAllowedForms(ids)` in `DevApi.cpp/.h`. It replaces the whole set.
+     - Plan edit (loop, 2026-10-13): also `getPapyrusEventsAllowedForms()`, which returns the set. The 1B.5 check reads it, because a check cannot put a puppet into combat to raise an event (LESSONS).
    - In `FridaHooks.cpp`, after the quest block (:44-50), if `selfId` (:26, set at :32 and :36) is in the set, allow the event.
    - The client calls the native on HostStart, HostStop, and release, with `storage['hosted']`. It does not add dragons (see phase 2B step 3).
+     - Plan edit (loop, 2026-10-13): the client compares `storage['hosted']` at each update and calls the native when it changes, so HostStart, HostStop, and release take the same path. Bleak Falls Barrow has no dragon, so the 1B.5 check does not test the dragon rule. The 2B.3 check must also show that a hoster does not allow the script events of a dragon it hosts.
 
 **Tests for phase 1:**
 - C++ unit tests with the tag `[NpcHost]` in `unit/`. The door test at `unit/PartOne_ActivateTest.cpp:242-292` is a template.

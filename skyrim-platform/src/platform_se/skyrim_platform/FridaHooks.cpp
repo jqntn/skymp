@@ -48,6 +48,10 @@ void OnSendEventEnter(GumInvocationContext* ic)
        policy->HandleIsType(RE::BGSLocAlias::VMTYPEID, handle))) {
     blockEvents = false;
   }
+  if (blockEvents && selfId &&
+      TESModPlatform::IsPapyrusEventsAllowedForm(selfId)) {
+    blockEvents = false;
+  }
   if (blockEvents && strcmp(*eventName, "OnUpdate") != 0 && vm) {
     vm->attachedScriptsLock.Lock();
     auto it = vm->attachedScripts.find(handle);

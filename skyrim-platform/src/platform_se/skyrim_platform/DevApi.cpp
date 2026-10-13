@@ -196,6 +196,29 @@ Napi::Value DevApi::AllowQuestPapyrusEvents(const Napi::CallbackInfo& info)
   return info.Env().Undefined();
 }
 
+Napi::Value DevApi::SetPapyrusEventsAllowedForms(
+  const Napi::CallbackInfo& info)
+{
+  auto formIds = NapiHelper::ExtractArray(info[0], "formIds");
+  std::vector<uint32_t> ids;
+  ids.reserve(formIds.Length());
+  for (uint32_t i = 0; i < formIds.Length(); ++i) {
+    ids.push_back(NapiHelper::ExtractUInt32(formIds.Get(i), "formIds[i]"));
+  }
+  TESModPlatform::SetPapyrusEventsAllowedForms(ids);
+  return info.Env().Undefined();
+}
+
+Napi::Value DevApi::GetPapyrusEventsAllowedForms(
+  const Napi::CallbackInfo& info)
+{
+  auto result = Napi::Array::New(info.Env());
+  for (auto formId : TESModPlatform::GetPapyrusEventsAllowedForms()) {
+    result.Set(result.Length(), Napi::Number::New(info.Env(), formId));
+  }
+  return result;
+}
+
 namespace {
 class WrapperScreenShotEventHandler : public RE::MenuEventHandler
 {

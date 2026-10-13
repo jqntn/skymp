@@ -56,6 +56,7 @@ export class SendInputsService extends ClientListener {
     private onUpdate() {
         if (!this.singlePlayerService.isSinglePlayer) {
             this.sendInputs();
+            this.updatePapyrusEventsAllowedForms();
 
             const player = this.sp.Game.getPlayer()!;
             const isPlayerCasting = player.getAnimationVariableBool("IsCastingRight")
@@ -66,6 +67,20 @@ export class SendInputsService extends ClientListener {
                 this.prevCastingDetectedTime = Date.now();
             }
         }
+    }
+
+    private updatePapyrusEventsAllowedForms() {
+        const hosted = this.sp.storage['hosted'];
+        const remoteIds = (Array.isArray(hosted) ? hosted as number[] : []).filter((remoteId) => remoteId >= espActorIdOffset);
+        const key = remoteIds.join(",");
+        if (key === this.papyrusEventsAllowedKey) {
+            return;
+        }
+        this.papyrusEventsAllowedKey = key;
+        const dragon = this.sp.Keyword.getKeyword("ActorTypeDragon");
+        this.sp.setPapyrusEventsAllowedForms(remoteIds
+            .map((remoteId) => remoteId - espActorIdOffset)
+            .filter((formId) => !dragon || !this.sp.Actor.from(this.sp.Game.getFormEx(formId))?.hasKeyword(dragon)));
     }
 
     private onEquip(event: EquipEvent) {
@@ -448,4 +463,5 @@ export class SendInputsService extends ClientListener {
     private yieldedAt = new Map<number, number>();
     private hiddenHosts = new Map<number, number>();
     private stoppedHosts = new Map<number, number>();
+    private papyrusEventsAllowedKey = "";
 }

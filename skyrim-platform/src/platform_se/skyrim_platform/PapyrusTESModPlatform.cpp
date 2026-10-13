@@ -7,6 +7,8 @@
 #include <RE/B/BSPointerHandle.h>
 #include <RE/N/NiPoint3.h>
 #include <REL/Relocation.h>
+#include <shared_mutex>
+#include <unordered_set>
 
 extern CallNativeApi::NativeCallRequirements g_nativeCallRequirements;
 
@@ -23,6 +25,12 @@ struct
 } share;
 std::atomic<bool> papyrusEventsBlocked;
 std::atomic<bool> questPapyrusEventsAllowed;
+
+struct
+{
+  std::unordered_set<uint32_t> formIds;
+  std::shared_mutex m;
+} papyrusEventsAllowedForms;
 
 struct
 {
@@ -992,6 +1000,27 @@ void TESModPlatform::AllowQuestPapyrusEvents(bool allowed)
 bool TESModPlatform::GetQuestPapyrusEventsAllowed()
 {
   return questPapyrusEventsAllowed;
+}
+
+void TESModPlatform::SetPapyrusEventsAllowedForms(
+  const std::vector<uint32_t>& formIds)
+{
+  std::unordered_set<uint32_t> newFormIds(formIds.begin(), formIds.end());
+  std::unique_lock l(papyrusEventsAllowedForms.m);
+  papyrusEventsAllowedForms.formIds = std::move(newFormIds);
+}
+
+bool TESModPlatform::IsPapyrusEventsAllowedForm(uint32_t formId)
+{
+  std::shared_lock l(papyrusEventsAllowedForms.m);
+  return papyrusEventsAllowedForms.formIds.count(formId) > 0;
+}
+
+std::vector<uint32_t> TESModPlatform::GetPapyrusEventsAllowedForms()
+{
+  std::shared_lock l(papyrusEventsAllowedForms.m);
+  return { papyrusEventsAllowedForms.formIds.begin(),
+           papyrusEventsAllowedForms.formIds.end() };
 }
 
 void TESModPlatform::CloseMenu(IVM* vm, StackID stackId,
