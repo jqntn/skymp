@@ -1,5 +1,6 @@
 const HADVAR = 0x2bfa2;
 const ALVOR = 0x13482;
+const ROAD = [20837, -45138, -21];
 const MOVING = 20;
 const HOLD_MS = 500;
 
@@ -19,12 +20,15 @@ module.exports = {
         await ctx.waitFor(() => ctx.drv(`const a = sp.Actor.from(sp.Game.getFormEx(${id})); return !sp.Ui.isMenuOpen("Loading Menu") && !!a && a.is3DLoaded();`, n).catch(() => false), 120000, `${id.toString(16)} is loaded on engine ${n}`);
       }
     };
+    await ctx.probe(`mp.set(${HADVAR}, "locationalData", { cellOrWorldDesc: "3c:Skyrim.esm", pos: ${JSON.stringify(ROAD)}, rot: [0, 0, 0] }); return 0;`);
     await teleport(ALVOR);
     await teleport(HADVAR);
     const hoster = await ctx.waitFor(() => ctx.probe(`return mp.get(${HADVAR}, "hoster");`), 30000, "Hadvar gets a hoster");
     const h = actors.indexOf(hoster) + 1;
     ctx.assert.ok(h > 0, `Hadvar hoster ${hoster.toString(16)} is not a player engine`);
     const p = 3 - h;
+    const calm = `const p = sp.Game.getPlayer(); for (let i = 0; i < 300; i++) { const r = sp.Game.findRandomActor(p.getPositionX(), p.getPositionY(), p.getPositionZ(), 4096); if (r && r.getFormID() !== 0x14 && r.isAIEnabled()) { r.setActorValue("Aggression", 0); r.stopCombat(); } } return 0;`;
+    await Promise.all([ctx.drv(calm, 1), ctx.drv(calm, 2)]);
     await ctx.sleep(2000);
 
     const state = `const a = sp.Actor.from(sp.Game.getFormEx(${HADVAR})); return [a.getPositionX(), a.getPositionY(), a.getAnimationVariableFloat("Speed")];`;
@@ -35,8 +39,10 @@ module.exports = {
     };
     const movingOf = () => samples.filter((s) => stable(s, (v) => v > MOVING));
     const standingOf = () => samples.filter((s) => stable(s, (v) => v < 1));
-    const sample = async (n) => {
+    const follow = `const a = sp.Actor.from(sp.Game.getFormEx(${HADVAR})); a.setDontMove(false); a.keepOffsetFromActor(sp.Game.getPlayer(), 0, 0, 0, 0, 0, 0, 2048, 100); return 0;`;
+    const sample = async (n, kick) => {
       for (let i = 0; i < n; i++) {
+        if (kick) await ctx.drv(kick, h);
         const [hs, ps] = await Promise.all([ctx.drv(state, h), ctx.drv(state, p)]);
         samples.push({ t: Date.now(), host: hs, puppet: ps });
         await ctx.sleep(300);
@@ -46,9 +52,8 @@ module.exports = {
       if (movingOf().length >= 10 && standingOf().length >= 10) break;
       await ctx.drv(`const a = sp.Actor.from(sp.Game.getFormEx(${HADVAR})); const pl = sp.Game.getPlayer(); pl.setPosition(a.getPositionX() + ${dx}, a.getPositionY() + ${dy}, a.getPositionZ()); return 0;`, h);
       await ctx.sleep(500);
-      await ctx.drv(`sp.Actor.from(sp.Game.getFormEx(${HADVAR})).pathToReference(sp.Game.getPlayer(), 1); return 0;`, h);
-      await sample(20);
-      await ctx.drv(`sp.Actor.from(sp.Game.getFormEx(${HADVAR})).moveTo(sp.Actor.from(sp.Game.getFormEx(${HADVAR})), 0, 0, 0, false); return 0;`, h);
+      await sample(20, follow);
+      await ctx.drv(`const a = sp.Actor.from(sp.Game.getFormEx(${HADVAR})); a.clearKeepOffsetFromActor(); a.setDontMove(true); return 0;`, h);
       await sample(10);
     }
     const moving = movingOf();
@@ -58,10 +63,14 @@ module.exports = {
     const pathOf = (k) => samples.reduce((d, s, i) => i ? d + Math.hypot(s[k][0] - samples[i - 1][k][0], s[k][1] - samples[i - 1][k][1]) : 0, 0);
     const walked = pathOf("host");
     const puppetWalked = pathOf("puppet");
+    const st = await ctx.drv(`const a = sp.Actor.from(sp.Game.getFormEx(${HADVAR})); const k = a.getCurrentPackage(); const sc = a.getCurrentScene(); return { ai: a.isAIEnabled(), combat: a.isInCombat(), pkg: k ? k.getFormID().toString(16) : 0, sit: a.getSitState(), scene: sc ? sc.getFormID().toString(16) : 0, dialogue: a.isInDialogueWithPlayer() };`, h);
+    const puppetAi = await ctx.drv(`return sp.Actor.from(sp.Game.getFormEx(${HADVAR})).isAIEnabled();`, p);
+    ctx.evidence.push(`Hadvar on the hoster after the moves: ${JSON.stringify(st)}; puppet AI on: ${puppetAi}`);
     ctx.evidence.push(`hoster engine ${h}, Hadvar walked ${walked.toFixed(0)} units on the hoster and ${puppetWalked.toFixed(0)} on the puppet; ${moving.length} samples with hoster Speed > ${MOVING} for ${HOLD_MS} ms, puppet Speed > ${MOVING} in ${animated.length}; ${standing.length} samples with hoster Speed < 1 for ${HOLD_MS} ms, puppet Speed < ${MOVING} in ${idle.length}`);
     ctx.evidence.push(`Speed pairs (hoster/puppet): ${samples.map((s) => `${Math.round(s.host[2])}/${Math.round(s.puppet[2])}`).join(" ")}`);
     ctx.shot("S1_6-puppet", p);
     ctx.assert.ok(walked > 300, `Hadvar walked only ${walked.toFixed(0)} units on the hoster`);
+    ctx.assert.ok(puppetAi === false, `the puppet Hadvar on engine ${p} has its own AI on`);
     ctx.assert.ok(puppetWalked > 0.5 * walked, `the puppet moved only ${puppetWalked.toFixed(0)} of ${walked.toFixed(0)} units`);
     ctx.assert.ok(moving.length >= 10, `only ${moving.length} moving samples`);
     ctx.assert.ok(animated.length >= 0.8 * moving.length, `puppet animated in ${animated.length} of ${moving.length} moving samples`);

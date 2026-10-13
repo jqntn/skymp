@@ -19,6 +19,7 @@ declare module "skyrimPlatform" {
     function getTextRefrNode(textId: number): string;
     function getTextRefrOffset(textId: number): number[];
     function getTextRefrScreenOffset(textId: number): number[];
+    function getReferenceAliasQuests(refrFormId: number): number[];
 }
 
 export type Sp = Omit<typeof sp, "on" | "once">;

@@ -1874,10 +1874,10 @@ void MpObjectReference::SendInventoryUpdate()
 void MpObjectReference::SendOpenContainer(uint32_t targetId)
 {
   auto actor = AsActor();
-  if (actor) {
+  if (actor && actor->GetUserId() != Networking::InvalidUserId) {
     OpenContainerMessage msg;
     msg.target = targetId;
-    actor->GetActorToSendTo().SendToUser(msg, true);
+    actor->SendToUser(msg, true);
   }
 }
 

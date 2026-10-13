@@ -11,4 +11,8 @@ node_modules
 skyrim_data_files/
 
 # e2e loop output
-misc/e2e/out/
+misc/e2e/out/*
+!misc/e2e/out/log.md
+!misc/e2e/out/scoreboard.md
+!misc/e2e/out/results.json
+!misc/e2e/out/history.jsonl

@@ -12,7 +12,9 @@ import { Actor, EquipEvent, FormType } from "skyrimPlatform";
 import { getAppearance } from "../../sync/appearance";
 import { ActorValues, getActorValues } from "../../sync/actorvalues";
 import { getEquipment } from "../../sync/equipment";
-import { nextHostAttempt } from "../../view/hostAttempts";
+import { nextHostAttempt, tryHost } from "../../view/hostAttempts";
+import { ObjectReferenceEx } from "../../extensions/objectReferenceEx";
+import { CoopService } from "./coopService";
 import { SkympClient } from "./skympClient";
 import { MessageWithRefrId } from "../events/sendMessageWithRefrIdEvent";
 import { UpdateMovementMessage } from "../messages/updateMovementMessage";
@@ -25,6 +27,7 @@ import { DeathService } from "./deathService";
 import { logTrace } from "../../logging";
 
 const playerFormId = 0x14;
+const espActorIdOffset = 0x100000000;
 
 // TODO: split this service into EquipmentService, MovementService, AnimationService, ActorValueService, HostAttemptsService
 export class SendInputsService extends ClientListener {
@@ -34,6 +37,20 @@ export class SendInputsService extends ClientListener {
         this.controller.on("equip", (e) => this.onEquip(e));
         this.controller.on("unequip", (e) => this.onUnequip(e));
         this.controller.on("loadGame", () => this.onLoadGame());
+        this.controller.emitter.on("hostStartMessage", (e) => this.onHostStart(e.message.target));
+        this.controller.emitter.on("hostStopMessage", (e) => this.onHostStop(e.message.target));
+    }
+
+    private onHostStart(remoteId: number) {
+        if (this.hiddenHosts.delete(remoteId)) {
+            this.getInputOwner(remoteId)?.enableNoWait(false);
+        }
+    }
+
+    private onHostStop(remoteId: number) {
+        if (remoteId >= espActorIdOffset) {
+            this.stoppedHosts.set(remoteId, Date.now());
+        }
     }
 
     private onUpdate() {
@@ -91,8 +108,13 @@ export class SendInputsService extends ClientListener {
     }
 
     private sendInputs() {
+        const reporting = this.controller.lookupListener(CoopService).isReporting();
+        if (reporting) {
+            this.releaseLostHosts();
+            this.updateHiddenHosts();
+        }
         const hosted =
-            typeof this.sp.storage['hosted'] === typeof [] ? this.sp.storage['hosted'] : [];
+            reporting && typeof this.sp.storage['hosted'] === typeof [] ? this.sp.storage['hosted'] : [];
         const targets = [undefined].concat(hosted as any);
 
         const modelSource = this.controller.lookupListener(RemoteServer);
@@ -289,22 +311,105 @@ export class SendInputsService extends ClientListener {
 
     private sendHostAttempts() {
         const remoteId = nextHostAttempt();
-        if (!remoteId) {
+        if (!remoteId || !this.controller.lookupListener(CoopService).isReporting()) {
           return;
+        }
+
+        if (remoteId < espActorIdOffset) {
+            this.controller.emitter.emit("sendMessage", {
+                message: {
+                    t: MsgType.Host,
+                    remoteId
+                },
+                reliability: "unreliable"
+            });
+            return;
+        }
+
+        const actor = this.getInputOwner(remoteId);
+        const player = this.sp.Game.getPlayer()!;
+        const hidden = this.hiddenHosts.has(remoteId);
+        if (
+            !actor || actor.isDead() || (!hidden && (!actor.is3DLoaded() || actor.isDisabled()))
+            || ObjectReferenceEx.getWorldOrCell(actor) !== ObjectReferenceEx.getWorldOrCell(player)
+            || actor.getDistance(player) > 4096
+            || Date.now() - (this.yieldedAt.get(remoteId) ?? 0) < 10000
+            || this.controller.lookupListener(CoopService).yieldsToLeader(actor)
+        ) {
+            return;
         }
 
         this.controller.emitter.emit("sendMessage", {
             message: {
                 t: MsgType.Host,
-                remoteId
+                remoteId,
+                worldOrCell: ObjectReferenceEx.getWorldOrCell(actor),
+                pos: [actor.getPositionX(), actor.getPositionY(), actor.getPositionZ()],
+                rot: [actor.getAngleX(), actor.getAngleY(), actor.getAngleZ()]
             },
             reliability: "unreliable"
         });
     }
 
+    private releaseLostHosts() {
+        const hosted = this.sp.storage['hosted'];
+        if (!Array.isArray(hosted)) {
+            return;
+        }
+        const now = Date.now();
+        hosted.filter((remoteId: number) => remoteId >= espActorIdOffset).forEach((remoteId: number) => {
+            const actor = this.getInputOwner(remoteId);
+            const yields = !!actor && this.controller.lookupListener(CoopService).yieldsToLeader(actor);
+            if (actor && actor.is3DLoaded() && !actor.isDisabled() && !yields) {
+                this.lostHostSince.delete(remoteId);
+                return;
+            }
+            const since = this.lostHostSince.get(remoteId) ?? now;
+            this.lostHostSince.set(remoteId, since);
+            if (now - since < 2000) {
+                return;
+            }
+            this.lostHostSince.delete(remoteId);
+            if (yields) {
+                this.yieldedAt.set(remoteId, now);
+            }
+            this.controller.emitter.emit("sendMessage", {
+                message: { t: MsgType.Host, remoteId, release: true, disabled: !!actor && actor.isDisabled() },
+                reliability: "reliable"
+            });
+            this.sp.storage['hosted'] = (this.sp.storage['hosted'] as number[]).filter((x) => x !== remoteId);
+        });
+    }
+
+    private updateHiddenHosts() {
+        const now = Date.now();
+        this.stoppedHosts.forEach((at, remoteId) => {
+            if (now - at < 1000) {
+                return;
+            }
+            this.stoppedHosts.delete(remoteId);
+            const actor = this.getInputOwner(remoteId);
+            if (actor && actor.is3DLoaded() && !worldViewMisc.getViewFromStorage()?.getLocalRefrId(remoteId)) {
+                actor.disableNoWait(false);
+                this.hiddenHosts.set(remoteId, now);
+            }
+        });
+        this.hiddenHosts.forEach((at, remoteId) => {
+            if (now - at < 5000) {
+                return;
+            }
+            if (worldViewMisc.getViewFromStorage()?.getLocalRefrId(remoteId)) {
+                this.hiddenHosts.delete(remoteId);
+                return;
+            }
+            this.hiddenHosts.set(remoteId, now);
+            tryHost(remoteId);
+        });
+    }
+
     private getInputOwner(_refrId?: number) {
         return _refrId
-            ? this.sp.Actor.from(this.sp.Game.getFormEx(worldViewMisc.remoteIdToLocalId(_refrId)))
+            ? this.sp.Actor.from(this.sp.Game.getFormEx(_refrId >= espActorIdOffset ? _refrId - espActorIdOffset : worldViewMisc.remoteIdToLocalId(_refrId)))
             : this.sp.Game.getPlayer();
     }
 
@@ -339,4 +444,8 @@ export class SendInputsService extends ClientListener {
     private prevValues: ActorValues = { health: 0, stamina: 0, magicka: 0 };
     private prevActorValuesUpdateTime = 0;
     private prevCastingDetectedTime = 0;
+    private lostHostSince = new Map<number, number>();
+    private yieldedAt = new Map<number, number>();
+    private hiddenHosts = new Map<number, number>();
+    private stoppedHosts = new Map<number, number>();
 }

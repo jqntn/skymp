@@ -43,69 +43,23 @@ Terms: "delete" destroys a ref, an actor, or a file. "Remove" takes an item out 
 
 ## The loop
 
-**Mandate (user decision, 2026-10-12):**
-- Goal: a production-ready result. All S, step, G, and P checks pass in 3 runs in a row.
-- Repeat passes without a pause until the goal or a stop condition.
-- The loop has autonomy for all work in this plan: code, builds, tests, game runs, local commits, and wiki commits. It asks the user only at a stop condition.
-- The loop adds a new check for each risk that it finds outside the existing checks. The new check must FAIL first. Existing pass conditions stay as they are (see Rules).
+The loop follows `misc/e2e/LOOP.md`: the checks, the scoreboard, one pass, the rules, self-improvement, and when to stop and ask the user. This section holds the rules of this project.
 
-The plan runs as a loop. Each pass runs the checks, takes the first failure, fixes it, and runs the checks again. The loop ends at the goal.
+**Mandate (user decision, 2026-10-12):**
+- Goal: a production-ready result, with all S, step, G, and P checks passing. Then the user plays the gates (Verification, level 5).
+- The loop's work includes game runs and wiki commits, and it can start the game at any time.
 
 **Checks:**
-- Each pass condition in this plan has an id: S (spikes), 1A.1 to 2B.5 (phase steps), G1 and G2 (gates), and P (production checks).
-- Each id has one script in `misc/e2e/checks/`. The script runs actions, waits, and asserts on the client and on the server.
-- The result is PASS, FAIL, ENV, or BLOCKED with a reason. The ids marked "2 engines" need the second engine of phase 0 step 0.
-- An id without a script is a FAIL. The first fix is to write the script.
-- Red first: a new check must FAIL on the code before the fix. A check that passes before the fix proves nothing. Rewrite it.
-- A level 1 FAIL comes before all checks. The fix for a gate check is the phase steps before that gate, in order.
-- Each phase step also has a step check with the id of the step, for example 1A.2. The step check is the Catch2 tag or the bot test of the step. Thus a pass shows progress inside a phase, not only at the gate.
-- ENV is a fault of the harness, not of the code. Examples: the game or the server did not start, a check ran past its timeout, or the game crashed during the load. The runner kills the processes and retries an ENV 2 times. 3 ENV results in a row stop the loop.
+- Ids: S (spikes), 1A.1 to 2B.5 (phase steps), G1 and G2 (gates), and P (production checks). One script per id in `misc/e2e/checks/`. The ids marked "2 engines" need the second engine of phase 0 step 0.
+- ENV examples: the game or the server did not start, a check ran past its timeout, or the game crashed during the load.
+- Each spike result has a next step (phase 0 step 3), so a spike result is never the stop condition "a result has no next step".
 
-**Scoreboard:**
-- `node misc/e2e/run.js` runs level 1, then all checks in the order of this plan.
-- It writes `misc/e2e/out/scoreboard.md`: the result of each id, the evidence (server state, client log lines, a screenshot), and the time.
-- The scoreboard is the progress of the plan.
+**Runner:** `node misc/e2e/run.js` runs level 1, then all checks in the order of this plan, and writes `misc/e2e/out/scoreboard.md`. A speed example: a changeForms snapshot as the start state of a check, in place of a quest replay.
 
-**One pass:**
-1. Read `misc/e2e/HANDOFF.md`, `misc/e2e/out/scoreboard.md`, `misc/e2e/out/log.md`, and `misc/e2e/LESSONS.md`. These files are the memory of the loop, not the conversation.
-2. Run the scoreboard.
-3. Take the first FAIL in plan order.
-4. Reproduce the FAIL at the lowest level: a Catch2 test, then a bot test, then the driver.
-5. Find the root cause and fix it. Keep the test from step 4 as a regression test.
-6. Run the scoreboard again. If a check that passed before fails now, fix it before anything else.
-7. Review: a new subagent gets only the pass condition, the check script, and the evidence. It does not get the fix. It answers two questions: does the script test the pass condition, and does the evidence show a PASS? A PASS counts only when the review agrees.
-8. If the review agrees, commit (see Rules). If the fix failed, `git stash push -m "<id> fix <n>"`. Do not reset, so that no attempt is lost.
-9. Add one line to `misc/e2e/out/log.md`: the id, the cause, the fix, the result, and the number of fixes for this id so far.
-10. Rewrite `misc/e2e/HANDOFF.md` (user decision, 2026-10-12): the commits, the uncommitted work and its state, the user decisions and the pending ones, the status of each failing or flaky id, the next steps, and the runner usage. A new session or a compacted one continues from it. It is in git and goes into each loop commit, with this plan. (User decision, 2026-10-12: the plan moved into git at `misc/e2e/PLAN.md`; `C:\Users\jqntn\.claude\plans\silly-herding-lark.md` points here.)
-
-**Rules:**
-- A pass condition does not change without the approval of the user. Do not weaken, skip, or delete a check or a test to get a PASS.
-- A check script can set up its start state with teleports and quest stages. It must not set the state that it checks.
-- A driver check passes only with 3 PASS results in a row. One FAIL in 3 runs is a FAIL. (User decision, 2026-10-12: intermediate passes run each check once; the goal run, `node misc/e2e/run.js --final`, runs each driver check 3 times in a row.)
-- Each PASS has evidence in the scoreboard.
-- Each bug that a playtest or a review finds becomes a new check id. The check must FAIL first. Then the loop goes on.
-- Spike code goes in a git worktree. Discard the worktree after the result is in the log.
-- Commits: the user allowed local commits for this loop only (2026-10-12). After each reviewed PASS, commit on `feat/coop-party`. Use a Conventional Commits subject line with the id, for example `fix(coop): keep the hoster on a cell change (G1.4)`. No body and no co-author. Never push. The user squashes later.
-- When all checks of a gate pass, send a notification to the user and go on.
-- The loop can start the game at any time (user decision, 2026-10-12).
-
-**Self-improvement:**
-- Plan edits: the loop can change the steps of this plan (the how), but never the pass conditions (the what). Examples are line numbers, file names, the order of steps, and a better approach that the code shows. Each plan edit gets a line in the log.
-- Lessons: the loop keeps `misc/e2e/LESSONS.md` in git. It holds facts that the loop learned about the engine, the server, and the harness. An example is the wait time after a load before `activate` works. Add a lesson after each ENV, each flaky result, and each fix that needed more than one try.
-- Harness faults are fix targets: an ENV cause gets a fix in the harness, as a FAIL gets a fix in the code.
-- Speed: the scoreboard records the time of each check. If a full run takes more than 30 min, the next task is to make the harness faster. An example is a changeForms snapshot as the start state of a check, in place of a quest replay.
-- Retro, every 10 passes: a new subagent reads the log, the lessons, and the scoreboard history. It finds repeated ENV causes, slow checks, flaky checks, and fixes that failed for the same reason. Its proposals become the next tasks, before the next FAIL.
-- Check the checks, in each retro: for each check that passes, revert its fix commit in a worktree and run the check. It must FAIL. If it passes, the check is weak. Rewrite it.
-- Escalation: after 3 failed fixes for one id, start a new Plan subagent. It gets the pass condition, the log lines, the lessons, and the stashed attempts. It proposes a different approach. Then the loop tries 2 more fixes.
-
-**Stop and ask the user when:**
-- All checks pass in 3 runs in a row. Then the user plays the gates (Verification, level 5).
-- A check stays FAIL after the escalation.
-- A result has no next step in this plan. Each spike result has one (phase 0 step 3).
-- A fix needs a change to a pass condition or to a decision of the user.
-- Only BLOCKED checks remain.
-
-**Run:** `/loop Run one pass of the loop in the plan misc/e2e/PLAN.md.` Each wake runs one pass. The loop stops itself at a stop condition. If the session ends, a new session runs the same command. All state is on disk.
+**Memory files:** in `misc/e2e/` and `misc/e2e/out/`, all in git as LOOP.md says (user decision, 2026-10-12). `out/backup/` stays ignored: it holds this PC's ini and world backups, which the runner restores at start.
+**Commits (user decisions, 2026-10-12):**
+- The user allowed commits for this loop only. After each reviewed PASS, commit on `feat/coop-party`. Use a Conventional Commits subject line with the id, for example `fix(coop): keep the hoster on a cell change (G1.4)`. No body and no co-author.
+- Then push: `git push fork feat/coop-party` (`fork` is https://github.com/jqntn/skymp). Never push to `origin` (skyrim-multiplayer/skymp), and never force-push. The user squashes later.
 
 ## Phase 0: spikes
 
@@ -142,7 +96,7 @@ Do these first. Their results set the scope of phases 1 and 2.
      - At each run, the runner copies the skymp files (`Data/Platform`, `Data/SKSE/Plugins`, the driver) into `build/e2e-game2/`, and does not link them. A build replaces these files, and a hard link keeps the old version.
      - The two instances write the same log files in `My Games`. Thus the driver sends its log lines to the runner over HTTP.
      - S0b: two instances run for 2 min with different profile ids. The server sees two users, and neither process exits. (User decision, 2026-10-12: 2 min, was 10 min.)
-1. NPC puppet spike, in a git worktree (see Rules):
+1. NPC puppet spike, in a git worktree (see the rules in LOOP.md):
    - Plan edit (loop, 2026-10-12): the spike changes are the same as phase 1 steps 1A.1 and 1B.1, so the loop made them as real phase 1 code on the branch, with tests, not in a worktree. S1.1 also needed 1A.5 (the property path), the bounded write of 1A.2, the cleaner bullet of 1B.4, and the resurrect fix of 1B.3. The banned race list keeps Mannequin, AlduinRace, and UndeadDragonRace; DragonRace is not banned, because Mirmulnir must load (phase 1A step 1).
    - Clear the banned race list and the flag filter.
    - Make `FormView` use the real actor. Skip `localImmortal`.
@@ -319,7 +273,7 @@ Update only the wiki at https://github.com/jqntn/skymp/wiki. Do not update other
 - Quest-Sync: quest items, script items, and the results from the authority client.
 - Testing-and-Limits: the loop, the harness, the check ids, "Known limits", and "Next steps".
 - When all checks of a gate pass, update the Status on Home and the pages of that phase.
-- Edit a clone of `https://github.com/jqntn/skymp.wiki.git` at `C:\Users\jqntn\source\repos\skymp.wiki`, outside the repo. Commit with the loop commit rules. The user pushes.
+- Edit a clone of `https://github.com/jqntn/skymp.wiki.git` at `C:\Users\jqntn\source\repos\skymp.wiki`, outside the repo. Commit with the loop commit rules, then push the wiki clone to its remote (user decision, 2026-10-12).
 
 ## Verification
 

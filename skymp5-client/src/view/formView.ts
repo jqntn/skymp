@@ -478,6 +478,13 @@ export class FormView {
         this.movState.lastApply = Date.now();
         if (talksToPlayer && model.isHostedByOther) {
           this.movState.lastNumChanges = +(model.numMovementChanges as number);
+        } else if (
+          this.realActor && ac && ac.is3DLoaded() && !model.isHostedByOther && !model.isDead && !this.movState.everApplied
+          && ObjectReferenceEx.getWorldOrCell(ac) === ObjectReferenceEx.getWorldOrCell(Game.getPlayer() as Actor)
+        ) {
+          this.movState.lastNumChanges = +(model.numMovementChanges as number);
+          this.movState.everApplied = true;
+          this.tryHostIfNeed(ac, this.remoteRefrId as number);
         } else if (model.isHostedByOther || !this.movState.everApplied) {
           const backup = model.movement.isWeapDrawn;
           if (forcedWeapDrawn === true || forcedWeapDrawn === false) {

@@ -32,6 +32,7 @@ module.exports = {
     const actors = [await ctx.ready(1), await ctx.ready(2)];
     const npcLoaded = (id) => `const a = sp.Actor.from(sp.Game.getFormEx(${id})); return !sp.Ui.isMenuOpen("Loading Menu") && !!a && a.is3DLoaded();`;
     const npcPos = (id) => `const a = sp.Actor.from(sp.Game.getFormEx(${id})); return a && a.is3DLoaded() ? [a.getPositionX(), a.getPositionY(), a.getPositionZ()] : null;`;
+    const calm = `const p = sp.Game.getPlayer(); for (let i = 0; i < 300; i++) { const r = sp.Game.findRandomActor(p.getPositionX(), p.getPositionY(), p.getPositionZ(), 4096); if (r && r.getFormID() !== 0x14 && r.isAIEnabled()) { r.setActorValue("Aggression", 0); r.stopCombat(); } } return 0;`;
 
     for (const [name, id] of ctx.npcs || NPCS) {
       const loc = await ctx.probe(`return mp.get(${id}, "locationalData");`);
@@ -44,6 +45,8 @@ module.exports = {
       const h = actors.indexOf(hoster) + 1;
       ctx.assert.ok(h > 0, `${name} hoster ${hoster.toString(16)} is not a player engine`);
       const p = 3 - h;
+      await Promise.all([ctx.drv(calm, 1), ctx.drv(calm, 2)]);
+      await ctx.sleep(1000);
 
       const before = await ctx.drv(npcPos(id), h);
       const target = await ctx.drv(`const a = sp.Actor.from(sp.Game.getFormEx(${id})); const c = a.getParentCell(); let door = null;
@@ -66,11 +69,13 @@ module.exports = {
         await ctx.sleep(150);
       }
 
-      fs.writeFileSync(path.join(ctx.dir, `${name}-samples.json`), JSON.stringify({ t0, hostPath, puppet, server }));
+      const aiState = `const a = sp.Actor.from(sp.Game.getFormEx(${id})); return { ai: a.isAIEnabled(), combat: a.isInCombat(), disabled: a.isDisabled() };`;
+      const states = [await ctx.drv(aiState, h), await ctx.drv(aiState, p)];
+      fs.writeFileSync(path.join(ctx.dir, `${name}-samples.json`), JSON.stringify({ t0, hostPath, puppet, server, states }));
       const moved = hostPath.reduce((s, x, i) => s + (i ? dist(x.pos, hostPath[i - 1].pos) : dist(x.pos, before)), 0);
       const late = puppet.filter((x) => x.t - t0 >= WINDOW_MS).map((x) => ({ t: x.t, d: distToPath(x.pos, hostPath.filter((y) => y.t >= x.t - WINDOW_MS && y.t <= x.t)) }));
       const worst = late.reduce((m, x) => Math.max(m, x.d), 0);
-      ctx.evidence.push(`${name} (${id.toString(16)}): hoster engine ${h} translates it 200 units to ${target.map(Math.round)}, NPC path on the hoster ${moved.toFixed(0)} units, ${late.length} puppet samples on engine ${p}, worst distance to the hoster path of the last ${WINDOW_MS} ms: ${worst.toFixed(1)}`);
+      ctx.evidence.push(`${name} (${id.toString(16)}): hoster engine ${h} translates it 200 units to ${target.map(Math.round)}, NPC path on the hoster ${moved.toFixed(0)} units, ${late.length} puppet samples on engine ${p}, worst distance to the hoster path of the last ${WINDOW_MS} ms: ${worst.toFixed(1)}; after the samples, hoster ${JSON.stringify(states[0])}, puppet ${JSON.stringify(states[1])}`);
       ctx.shot(`S1_1-${name}-engine${h}`, h);
       ctx.shot(`S1_1-${name}-engine${p}`, p);
       const net = hostPath.reduce((m, x) => Math.max(m, dist(x.pos, before)), 0);
@@ -78,6 +83,7 @@ module.exports = {
       const hosters = [...new Set(server.map((x) => x.hoster))];
       ctx.assert.ok(hosters.length === 1 && hosters[0] === hoster, `${name} changed hoster during the samples: ${hosters.map((x) => x.toString(16))}`);
       ctx.assert.ok(late.length >= 20, `${name}: only ${late.length} puppet samples`);
+      ctx.assert.ok(states[1].ai === false, `${name}: the puppet on engine ${p} has its own AI on`);
       ctx.assert.ok(worst <= TOLERANCE, `${name}: the puppet was ${worst.toFixed(1)} units from the hoster path of the last ${WINDOW_MS} ms`);
     }
   },

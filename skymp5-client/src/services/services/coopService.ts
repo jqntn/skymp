@@ -7,7 +7,7 @@ import { QueryKeyCodeBindings } from "../events/queryKeyCodeBindings";
 import { CustomPacketMessage } from "../messages/customPacketMessage";
 import { MsgType } from "../../messages";
 import { ClientListener, CombinedController, Sp } from "./clientListener";
-import { localIdToRemoteId } from "../../view/worldViewMisc";
+import { getViewFromStorage, localIdToRemoteId } from "../../view/worldViewMisc";
 import { WorldCleanerService } from "./worldCleanerService";
 
 const STOP = -1;
@@ -59,14 +59,20 @@ export class CoopService extends ClientListener {
     if (this.trackedQuests.size === 0) {
       return false;
     }
-    const n = actor.getNumReferenceAliases();
-    for (let i = 0; i < n; ++i) {
-      const quest = actor.getNthReferenceAlias(i)?.getOwningQuest();
-      if (quest && this.trackedQuests.has(quest.getFormID())) {
-        return true;
-      }
+    return this.sp.getReferenceAliasQuests(actor.getFormID()).some((questId) => this.trackedQuests.has(questId));
+  }
+
+  isReporting(): boolean {
+    return this.reporting;
+  }
+
+  yieldsToLeader(actor: Actor): boolean {
+    const party = this.partyState?.party;
+    if (!party || party.leader === this.partyState?.you || !this.isQuestActor(actor)) {
+      return false;
     }
-    return false;
+    const leader = ObjectReference.from(Game.getFormEx(getViewFromStorage()?.getLocalRefrId(party.leader) ?? 0));
+    return !!leader && ObjectReferenceEx.getWorldOrCell(leader) === ObjectReferenceEx.getWorldOrCell(actor) && leader.getDistance(actor) <= 4096;
   }
 
   private track(questId: number, stage: number) {

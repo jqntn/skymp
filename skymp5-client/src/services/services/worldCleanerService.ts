@@ -1,6 +1,8 @@
 import { ClientListener, CombinedController, Sp } from "./clientListener";
 import { Actor, ObjectLoadedEvent } from "skyrimPlatform";
 import { CoopService } from "./coopService";
+import { tryHost } from "../../view/hostAttempts";
+import { getViewFromStorage } from "../../view/worldViewMisc";
 
 export class WorldCleanerService extends ClientListener {
   constructor(private sp: Sp, private controller: CombinedController) {
@@ -62,7 +64,12 @@ export class WorldCleanerService extends ClientListener {
       return;
     }
 
-    if (actorId < 0xff000000 || actor.isDisabled() || actor.isDeleted()) {
+    if (actorId < 0xff000000) {
+      this.claim(actorId);
+      return;
+    }
+
+    if (actor.isDisabled() || actor.isDeleted()) {
       return;
     }
 
@@ -87,10 +94,25 @@ export class WorldCleanerService extends ClientListener {
     });
   }
 
+  private claim(actorId: number) {
+    const remoteId = actorId + 0x100000000;
+    const hosted = this.sp.storage["hosted"];
+    if (
+      actorId === 0x14 || Date.now() < (this.claimAfter.get(actorId) ?? 0)
+      || (Array.isArray(hosted) && hosted.includes(remoteId))
+      || getViewFromStorage()?.getLocalRefrId(remoteId)
+    ) {
+      return;
+    }
+    this.claimAfter.set(actorId, Date.now() + 5000);
+    tryHost(remoteId);
+  }
+
   private isActorInDialogue(ac: Actor) {
     return ac.isInDialogueWithPlayer() || ac.getDialogueTarget() !== null;
   }
 
   private protection = new Map<number, number>();
   private pausedUntil = 0;
+  private claimAfter = new Map<number, number>();
 }

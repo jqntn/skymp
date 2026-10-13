@@ -45,6 +45,7 @@ const provoke = (ids) => `const out = {}; const start = {};
     const d = Math.hypot(dx, dy) || 1;
     const k = (d > ${NUDGE} + 80 ? 1 : -1) * ${NUDGE} / d;
     a.setActorValue("Aggression", 3);
+    a.startCombat(p);
     a.stopTranslation();
     a.setPosition(from[0] + dx * k, from[1] + dy * k, from[2]);
     start[id] = from;
@@ -104,7 +105,7 @@ module.exports = {
     for (const [i, id] of npcs.entries()) if (hs[i]) (ownHosted[hs[i]] = ownHosted[hs[i]] || []).push(id);
     const control = [];
     for (const n of Object.keys(ownHosted).map(Number)) {
-      await ctx.drv(`for (const id of ${JSON.stringify(ownHosted[n])}) sp.Actor.from(sp.Game.getFormEx(id)).setActorValue("Aggression", 3); return 0;`, n);
+      await ctx.drv(`for (const id of ${JSON.stringify(ownHosted[n])}) { const a = sp.Actor.from(sp.Game.getFormEx(id)); a.setActorValue("Aggression", 3); a.startCombat(sp.Game.getPlayer()); } return 0;`, n);
     }
     await ctx.waitFor(async () => {
       control.length = 0;
@@ -156,7 +157,7 @@ module.exports = {
       else if (frenzied < 0.8 * afterProvoke || !afterProvoke) weak.push(`${id.toString(16)}: Aggression 3 held in ${frenzied} of ${afterProvoke} samples`);
     }
     ctx.evidence.push(`${npcs.length} hosted NPCs in the inn, ${samples.length} samples over ${SECONDS} s, ${violations.length} violations`);
-    ctx.evidence.push(`positive control, Aggression 3 on the hosted NPCs: in combat after at most 15 s: ${control.join(", ") || "none"}`);
+    ctx.evidence.push(`positive control, Aggression 3 and startCombat(player) on the hosted NPCs: in combat after at most 15 s: ${control.join(", ") || "none"}`);
     for (const v of violations) ctx.evidence.push(`violation: ${v}`);
     ctx.shot("S1_4-engine1", 1);
     ctx.shot("S1_4-engine2", 2);
