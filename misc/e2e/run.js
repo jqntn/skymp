@@ -223,9 +223,9 @@ const prepareServer = () => {
   fs.cpSync(DIST, SERVER, { recursive: true, filter: (src) => !skip.has(path.relative(DIST, src).replace(/\\/g, "/").toLowerCase()) });
 };
 
-const startServer = async (check, ctx) => {
-  fs.rmSync(path.join(SERVER, "world"), { recursive: true, force: true });
-  if (check.world) fs.cpSync(path.join(__dirname, "worlds", check.world), path.join(SERVER, "world", "changeForms"), { recursive: true });
+const startServer = async (check, ctx, keepWorld = false) => {
+  if (!keepWorld) fs.rmSync(path.join(SERVER, "world"), { recursive: true, force: true });
+  if (check.world && !keepWorld) fs.cpSync(path.join(__dirname, "worlds", check.world), path.join(SERVER, "world", "changeForms"), { recursive: true });
   const settings = { ...readJson(path.join(BUILD, "server-settings-base.json")), port: PORT.server, name: "e2e", ...(check.settings || {}) };
   writeJson(path.join(SERVER, "server-settings.json"), settings);
   fs.copyFileSync(path.join(__dirname, "probe.js"), path.join(SERVER, "gamemode.js"));
@@ -386,6 +386,11 @@ const runOnce = async (id, check, n, attempt) => {
       if (gameVersion() !== SKYRIM_VERSION) throw Object.assign(new Env(`SkyrimSE.exe is not ${SKYRIM_VERSION}: Steam updated the game`), { stop: true });
       lowCostMode();
     }
+    ctx.restartServer = async () => {
+      spawnSync("taskkill", ["/PID", String(ctx.serverPid), "/T", "/F"]);
+      await ctx.waitFor(() => !procs("node.exe").includes(ctx.serverPid), 15000, "the server exits", Env);
+      await startServer(check, ctx, true);
+    };
     if (check.server !== false) await startServer(check, ctx);
     if (check.setup) await check.setup(ctx);
     for (let e = 1; e <= engines; e++) await startGame(e, ctx);

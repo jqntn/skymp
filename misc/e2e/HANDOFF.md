@@ -31,6 +31,7 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 - `test(e2e): make Hadvar flee on the Riverwood road in the puppet animation check (S1.6)`: see the Status bullet on S1.6.
 - `fix(coop): keep client positions of unhosted NPCs and re-enable hidden hosts (G1.2)`: see below.
 - `test(e2e): talk to Gerdur and Alvor on both clients (G1.3)`: G1.3 check (2 engines, talk through on the puppet and the hoster engine for Gerdur and Alvor); red with the S1.5 puppet AI-in-dialogue rule reverted.
+- `test(e2e): keep a killed bandit dead after a server restart (G1.4)`: G1.4 check and ctx.restartServer in run.js; red with the ESP NPC spawnDelay reverted.
 
 ## What the last commit holds (G1.2)
 
@@ -65,7 +66,7 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 
 ## Next steps
 
-1. Gate 1: G1.4, G1.5. Write each check red first; the fix for a gate is the phase 1 steps, so a FAIL means a missing or broken step.
+1. Gate 1: G1.5. Write each check red first; the fix for a gate is the phase 1 steps, so a FAIL means a missing or broken step.
 2. Then 2A (S3.4 comes back with 2A.1), 2B (2B.3 also tests that a hoster does not allow a dragon's script events), G2, P. P8 stays red until reached.
 3. Watch:
    - S1.2 had a flaky period (LESSONS). The 1B.4 claim after a replay failed once (23:20).
@@ -78,6 +79,7 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
    - A hosted NPC's hits on its own hoster's player also reach the server (possible double damage). The 1B.3 hit scenario is flaky (ENV and retry).
    - Custom gamemode properties on ESP NPCs (LESSONS). 1B.1 coverage partial. 1B.2: resurrect side effects untested.
    - 1B.4 failed its start condition once in a full regression (engine 1 claimed Alvor before the first server read); it passed alone. Watch it in --final.
+   - G1.4 (review): on load, RespawnWithDelay restarts the 12 h timer from the restart, not from the death, so each restart pushes a respawn back; the restart half has no red proof (the server log shows the reload); a death not saved yet can be lost if the server dies right after the kill (P1).
    - G1.2 risks (review): a teleportingHosts entry stays if the ragdoll promise never resolves or moveRefrToPosition throws (no claim of that NPC for the session); two pending teleports for one NPC unblock after the first; G1.2 asserts no walk (a snap to the forge would pass); with (a), a new view of an NPC whose hoster left keeps the client spot, so the next claim moves the server NPC there (a follower left by a player who disconnected).
    - 1B.5: hosted actors now run their own script events. Watch for scripts that act twice or fight the server (packages, item adds) in G1 and G2. HostStop and release remove ids through the same diff; no separate test for each.
 

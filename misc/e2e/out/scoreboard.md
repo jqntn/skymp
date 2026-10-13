@@ -5,7 +5,7 @@ First non-PASS in plan order: S3.4
 
 | id | result | secs | at | detail |
 |---|---|---|---|---|
-| L1 | PASS | 127 | 2026-10-13 16:50 |  |
+| L1 | PASS | 90 | 2026-10-13 17:14 |  |
 | S0 | PASS | 30 | 2026-10-13 15:22 | 1/1 runs PASS |
 | S0b | PASS | 161 | 2026-10-13 15:25 | 1/1 runs PASS |
 | S0c | PASS | 30 | 2026-10-13 15:25 | 1/1 runs PASS |
@@ -33,7 +33,7 @@ First non-PASS in plan order: S3.4
 | G1.1 | PASS | 221 | 2026-10-13 15:50 | 1/1 runs PASS |
 | G1.2 | PASS | 168 | 2026-10-13 16:20 | 3/3 runs PASS |
 | G1.3 | PASS | 265 | 2026-10-13 17:00 | 3/3 runs PASS |
-| G1.4 | FAIL | 0 | 2026-10-12 16:53 | no check script |
+| G1.4 | PASS | 424 | 2026-10-13 17:31 | 3/3 runs PASS |
 | G1.5 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | 2A.1 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | 2A.2 | FAIL | 0 | 2026-10-12 16:53 | no check script |
@@ -63,7 +63,7 @@ First non-PASS in plan order: S3.4
 ## Evidence
 
 ### L1
-- build: ok in 67 s (l1-build.log)
+- build: ok in 29 s (l1-build.log)
 - ts: ok in 0 s (l1-ts.log)
 - ctest: ok in 60 s (l1-ctest.log)
 ### S0
@@ -280,6 +280,22 @@ First non-PASS in plan order: S3.4
 - ![G1.3](runs/G1_3/3/G1_3-Gerdur-engine1-hoster.png)
 - ![G1.3](runs/G1_3/3/G1_3-Alvor-engine1-puppet.png)
 - ![G1.3](runs/G1_3/3/G1_3-Alvor-engine2-hoster.png)
+### G1.4
+- run 1: bandit 1ebf6 (base b623a NPC_ LvlBanditMeleeAnyAggro1024) in 3c:Skyrim.esm at 7358,-41431,3578; hosted by the player ff000000, server dead false
+- run 1: 40 s after the kill: server dead true, client dead true, disabled false
+- run 1: after a server kill and restart: server dead true at once, true 10 s after the client came back (user 1); client dead true, disabled false
+- run 2: bandit 1ebf6 (base b623a NPC_ LvlBanditMeleeAnyAggro1024) in 3c:Skyrim.esm at 7358,-41431,3578; hosted by the player ff000000, server dead false
+- run 2: 40 s after the kill: server dead true, client dead true, disabled false
+- run 2: after a server kill and restart: server dead true at once, true 10 s after the client came back (user 1); client dead true, disabled false
+- run 3: bandit 1ebf6 (base b623a NPC_ LvlBanditMeleeAnyAggro1024) in 3c:Skyrim.esm at 7358,-41431,3578; hosted by the player ff000000, server dead false
+- run 3: 40 s after the kill: server dead true, client dead true, disabled false
+- run 3: after a server kill and restart: server dead true at once, true 10 s after the client came back (user 1); client dead true, disabled false
+- ![G1.4](runs/G1_4/1/G1_4-dead.png)
+- ![G1.4](runs/G1_4/1/G1_4-restart.png)
+- ![G1.4](runs/G1_4/2/G1_4-dead.png)
+- ![G1.4](runs/G1_4/2/G1_4-restart.png)
+- ![G1.4](runs/G1_4/3/G1_4-dead.png)
+- ![G1.4](runs/G1_4/3/G1_4-restart.png)
 ### P8
 - run 1: 115 client log lines, 2 [Exception] lines
 - run 1: exception: [Exception] failed to get key 'data': failed to call custom Serialize for type struct Equipment: failed to get key 'inv': failed to call cus.

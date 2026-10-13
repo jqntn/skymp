@@ -17,13 +17,13 @@
     "result": "PASS",
     "reason": "",
     "evidence": [
-      "build: ok in 67 s (l1-build.log)",
+      "build: ok in 29 s (l1-build.log)",
       "ts: ok in 0 s (l1-ts.log)",
       "ctest: ok in 60 s (l1-ctest.log)"
     ],
-    "secs": 127,
+    "secs": 90,
     "shots": [],
-    "at": "2026-10-13T16:50:29.348Z"
+    "at": "2026-10-13T17:14:48.822Z"
   },
   "S0b": {
     "result": "PASS",
@@ -416,12 +416,29 @@
     "at": "2026-10-13T17:00:15.944Z"
   },
   "G1.4": {
-    "result": "FAIL",
-    "reason": "no check script",
-    "secs": 0,
-    "evidence": [],
-    "shots": [],
-    "at": "2026-10-12T16:53:46.485Z"
+    "result": "PASS",
+    "reason": "3/3 runs PASS",
+    "secs": 424,
+    "evidence": [
+      "run 1: bandit 1ebf6 (base b623a NPC_ LvlBanditMeleeAnyAggro1024) in 3c:Skyrim.esm at 7358,-41431,3578; hosted by the player ff000000, server dead false",
+      "run 1: 40 s after the kill: server dead true, client dead true, disabled false",
+      "run 1: after a server kill and restart: server dead true at once, true 10 s after the client came back (user 1); client dead true, disabled false",
+      "run 2: bandit 1ebf6 (base b623a NPC_ LvlBanditMeleeAnyAggro1024) in 3c:Skyrim.esm at 7358,-41431,3578; hosted by the player ff000000, server dead false",
+      "run 2: 40 s after the kill: server dead true, client dead true, disabled false",
+      "run 2: after a server kill and restart: server dead true at once, true 10 s after the client came back (user 1); client dead true, disabled false",
+      "run 3: bandit 1ebf6 (base b623a NPC_ LvlBanditMeleeAnyAggro1024) in 3c:Skyrim.esm at 7358,-41431,3578; hosted by the player ff000000, server dead false",
+      "run 3: 40 s after the kill: server dead true, client dead true, disabled false",
+      "run 3: after a server kill and restart: server dead true at once, true 10 s after the client came back (user 1); client dead true, disabled false"
+    ],
+    "shots": [
+      "runs/G1_4/1/G1_4-dead.png",
+      "runs/G1_4/1/G1_4-restart.png",
+      "runs/G1_4/2/G1_4-dead.png",
+      "runs/G1_4/2/G1_4-restart.png",
+      "runs/G1_4/3/G1_4-dead.png",
+      "runs/G1_4/3/G1_4-restart.png"
+    ],
+    "at": "2026-10-13T17:31:42.170Z"
   },
   "G1.5": {
     "result": "FAIL",
