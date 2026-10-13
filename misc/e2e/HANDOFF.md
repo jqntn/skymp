@@ -29,14 +29,15 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 - `feat(coop): run actor script events only on the hoster (1B.5)`: SP allowed form set with setter and getter natives, SendEvent hook allows listed ids, client sets the hosted ESP ids without dragons; 1B.5 check (ambush draugr and boss in Bleak Falls Barrow).
 - `fix(coop): start new characters at the cave exit with Ralof outside and let Alduin fly (G1.1)`: start log with MQ102B 5 and MQ102 15, world cleaner keeps the AI of the server's banned races, G1.1 check (details in the G1.1 log line).
 - `test(e2e): make Hadvar flee on the Riverwood road in the puppet animation check (S1.6)`: see the Status bullet on S1.6.
+- `fix(coop): keep client positions of unhosted NPCs and re-enable hidden hosts (G1.2)`: see below.
 
-## What the last commit holds (G1.1)
+## What the last commit holds (G1.2)
 
-- Start log (`skymp5-server/ts/settings.ts` startPoints): `[[0x2610a, 0], [0x2610a, 5], [0x4e50d, 15], [0x2610a, 30]]`. The two log entries of MQ102 stage 15 need GetStageDone(MQ102A or MQ102B, 5); stage 15 then sets 14, which moves the friend (Ralof) from the keep to ChargenExitMarker while MQ102 10 is not done, and enables Alduin for his flyover. The old log `[[MQ102B,0],[MQ102B,30]]` left Ralof in the keep. `misc/tests/test_coop.js` and `docs/docs_server_configuration_reference.md` follow the new log.
-- Client: `worldCleanerService` leaves the AI of actors whose race the server does not load (AlduinRace e7713, UndeadDragonRace 1052a3, Mannequin 10760a, the list in `WorldState.h:258`) on, because nobody can host them. Before, Alduin's patrol 3ccfa never ended (MQ102 17), and Ralof hid at the exit forever (9251e MQ102FriendWaitAtExitHide).
-- Check G1.1 (1 engine): the start log is read from settings.ts and set with mp.set; the player follows Ralof (teleport 200 units behind him when more than 400 away); PASS when the server Ralof is in Tamriel within 1500 units of the Riverwood marker in 10 min and no server step after the first hosted sample is over 1000 units.
-- Red proofs: old start log (Ralof stays in the keep, path 0), world cleaner change reverted (Ralof hides at the exit). Review: AGREE WITH NOTES; the walk assert was added (PASS: longest step 222 units).
-- Plan edit under G1.1 (the two changes no phase 1 step names). Lessons: stage log entry conditions and how to read them, fragments are not events, the world cleaner and banned races, no isInInterior in SP, engines: 0 diagnostics.
+- Client: formView.ts (first update keeps the local position of an unhosted, not-dead real NPC; no movement or animation apply on NPCs hosted here), remoteServer.ts and hostAttempts.ts (Teleport resolves the local refr id on arrival; teleportingHosts), sendInputsService.ts (no location claim while a teleport is pending; a hidden host is re-enabled as soon as its FormView exists).
+- Check G1.2 (1 engine, gameHour 7.975): the house is set public; the client Alvor is put at the forge if he is home, and the start asserts the client does not move him to the stale server position in the house; then he is moved home, the player waits on the lower floor (-503,96,60), then at the Riverwood marker once Alvor is outside; PASS when the server has him within 500 units of the forge for 5 s, then Gerdur and Alvor open the dialogue menu.
+- Plan edits under S1.3 (decisions: kept, and the client position wins always), 1B.4 first movement and G1.2; lessons: proximity stall at load doors, off-screen schedules, probes, npcLocation.
+- Runner: `ctx.npcLocation(id, engine = 1)`. Check edits (how only): S1.1 (and 1A.5), S1.6, 1B.1, 1B.2 go to the client position of the NPC; S1.6 places Hadvar on both clients; S1.1 waits until the puppet is at the hoster position before the move.
+- Regression after the check edits: S1.6, 1B.1, 1B.2, 1B.4, G1.1 PASS; S1.1 and 1A.5 2/2; G1.2 3/3. The other checks passed in the 15:20-15:51 regression with the same client. The installed client is the red build (client-position change reverted): the next run must rebuild (L1).
 
 ## Uncommitted
 
@@ -57,12 +58,13 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 
 - Regression run 2026-10-13 03:23-03:45 UTC with the G1.1 change: L1, S0, S0b, S0c, S1.1-S1.5, S2, S3.1-S3.3, 1A.1-1A.5, 1B.1-1B.5, G1.1 PASS. S3.4 BLOCKED until 2A.1.
 - S1.6 (check edit, committed): the old moves (600 units from Hadvar by the Riverwood mill) put the hoster player inside a building and in the river, and Hadvar's package MQ101HadvarHoldPosition (always valid in a test game) fights keepOffsetFromActor (standing still or walking in place, about 25% of runs). Now Hadvar starts at (17000,-47100,-105) on the road west of Riverwood, the hoster player alternates between fixed stops (17600,-47120,-120) and (16400,-47060,-30), the walk command is a flee (Confidence 0, startCombat(player); stopCombat and setDontMove(true) stop him), and the move loop (up to 10 legs) ends only when the moving and standing counts and a hoster path over 300 units are reached. Asserts unchanged. Flee: 8 of 8 PASS (3 official runs). Red proof (puppet Speed frozen at 0): FAIL, 0 of 88 animated. Review AGREE WITH NOTES: in about a third of runs Hadvar mostly runs in place (path 350-394 units), so the walked > 300 guard (unchanged from HEAD) is weak; the red proof covers only the moving half; Confidence 0 stays on the hoster (fresh world each run).
-- G1.2 check written (misc/e2e/checks/G1.2.js, uncommitted, not yet run): player in Alvor's house before 8:00 (gameHour 7.975, game time follows real time), follows him (server teleport on a cell change, local teleport over 600 units), PASS part 1 when the server Alvor is in Tamriel within 500 units of the forge work marker (20587,-45138) for 5 s; part 2: Gerdur and Alvor each open the Dialogue Menu (S1.2 approach spots and activate).
+- G1.2 PASS (2026-10-13, commit `fix(coop): keep client positions of unhosted NPCs and re-enable hidden hosts (G1.2)`): client changes: (a) formView.ts: the first update of a real NPC that nobody hosts and that is not dead keeps the local position (user decision); (b) fix 4: no movement or animation apply on NPCs hosted here (the server echoes them); (c) fixes 1+3: onTeleportMessage resolves the local refr id on arrival and blocks location claims for that NPC (teleportingHosts) until the move is applied; (d) updateHiddenHosts re-enables a hidden host as soon as its FormView exists. Check: the player no longer follows Alvor (he does not leave through a load door while the player is near him); it waits on the house lower floor (-503,96,60), then at the Riverwood marker; the start asserts (a). Red: without (a) 3/3 FAIL, without (d) 3/3 FAIL; (b) and (c) alone each passed 2 runs, removed together 2 FAILs. Fix 5 (resetAI) dropped. Review AGREE WITH NOTES: known risks below.
+- User decisions 2026-10-13: the client position wins for an NPC nobody hosts, and it stays after the stall turned out to have another cause (the client runs the AI); it wins always, also over server-side moves of such an NPC; the G1.2 check must not keep the player near Alvor.
 - No game, server or runner is running between passes.
 
 ## Next steps
 
-1. Gate 1: G1.2 (run the written check red first), G1.3 (2 engines), G1.4, G1.5. Write each check red first; the fix for a gate is the phase 1 steps, so a FAIL means a missing or broken step.
+1. Gate 1: G1.3 (2 engines), G1.4, G1.5. Write each check red first; the fix for a gate is the phase 1 steps, so a FAIL means a missing or broken step.
 2. Then 2A (S3.4 comes back with 2A.1), 2B (2B.3 also tests that a hoster does not allow a dragon's script events), G2, P. P8 stays red until reached.
 3. Watch:
    - S1.2 had a flaky period (LESSONS). The 1B.4 claim after a replay failed once (23:20).
@@ -74,6 +76,8 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
    - A real actor whose first movement ran before the player was in place is never moved again (LESSONS).
    - A hosted NPC's hits on its own hoster's player also reach the server (possible double damage). The 1B.3 hit scenario is flaky (ENV and retry).
    - Custom gamemode properties on ESP NPCs (LESSONS). 1B.1 coverage partial. 1B.2: resurrect side effects untested.
+   - 1B.4 failed its start condition once in a full regression (engine 1 claimed Alvor before the first server read); it passed alone. Watch it in --final.
+   - G1.2 risks (review): a teleportingHosts entry stays if the ragdoll promise never resolves or moveRefrToPosition throws (no claim of that NPC for the session); two pending teleports for one NPC unblock after the first; G1.2 asserts no walk (a snap to the forge would pass); with (a), a new view of an NPC whose hoster left keeps the client spot, so the next claim moves the server NPC there (a follower left by a player who disconnected).
    - 1B.5: hosted actors now run their own script events. Watch for scripts that act twice or fight the server (packages, item adds) in G1 and G2. HostStop and release remove ids through the same diff; no separate test for each.
 
 ## Runner

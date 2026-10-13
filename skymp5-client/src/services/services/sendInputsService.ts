@@ -12,7 +12,7 @@ import { Actor, EquipEvent, FormType } from "skyrimPlatform";
 import { getAppearance } from "../../sync/appearance";
 import { ActorValues, getActorValues } from "../../sync/actorvalues";
 import { getEquipment } from "../../sync/equipment";
-import { nextHostAttempt, tryHost } from "../../view/hostAttempts";
+import { nextHostAttempt, teleportingHosts, tryHost } from "../../view/hostAttempts";
 import { ObjectReferenceEx } from "../../extensions/objectReferenceEx";
 import { CoopService } from "./coopService";
 import { SkympClient } from "./skympClient";
@@ -349,6 +349,7 @@ export class SendInputsService extends ClientListener {
             || ObjectReferenceEx.getWorldOrCell(actor) !== ObjectReferenceEx.getWorldOrCell(player)
             || actor.getDistance(player) > 4096
             || Date.now() - (this.yieldedAt.get(remoteId) ?? 0) < 10000
+            || teleportingHosts.has(remoteId)
             || this.controller.lookupListener(CoopService).yieldsToLeader(actor)
         ) {
             return;
@@ -410,11 +411,12 @@ export class SendInputsService extends ClientListener {
             }
         });
         this.hiddenHosts.forEach((at, remoteId) => {
-            if (now - at < 5000) {
-                return;
-            }
             if (worldViewMisc.getViewFromStorage()?.getLocalRefrId(remoteId)) {
                 this.hiddenHosts.delete(remoteId);
+                this.getInputOwner(remoteId)?.enableNoWait(false);
+                return;
+            }
+            if (now - at < 5000) {
                 return;
             }
             this.hiddenHosts.set(remoteId, now);

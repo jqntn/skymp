@@ -15,7 +15,7 @@ module.exports = {
     const actor = await ctx.ready(1);
     const other = await ctx.ready(2);
     const actors = [actor, other];
-    const loc = await ctx.probe(`return mp.get(${ALVOR}, "locationalData");`);
+    const loc = await ctx.npcLocation(ALVOR);
     const away = await ctx.probe(`return mp.get(${actor}, "locationalData");`);
     const goTo = async (l) => {
       await ctx.probe(`mp.set(${actor}, "locationalData", ${JSON.stringify(l)}); return 0;`);

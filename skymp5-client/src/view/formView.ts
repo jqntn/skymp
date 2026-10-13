@@ -454,7 +454,11 @@ export class FormView {
     }
     this.movState.talksToPlayer = talksToPlayer;
 
-    if (model.movement) {
+    if (model.movement && this.hostedHere) {
+      this.movState.lastNumChanges = +(model.numMovementChanges as number);
+      this.movState.lastApply = Date.now();
+      this.movState.everApplied = true;
+    } else if (model.movement) {
       let ac = Actor.from(refr);
       if (
         this.movState.lastApply &&
@@ -485,6 +489,9 @@ export class FormView {
           this.movState.lastNumChanges = +(model.numMovementChanges as number);
           this.movState.everApplied = true;
           this.tryHostIfNeed(ac, this.remoteRefrId as number);
+        } else if (this.realActor && !model.isHostedByOther && !model.isDead && !this.movState.everApplied) {
+          this.movState.lastNumChanges = +(model.numMovementChanges as number);
+          this.movState.everApplied = true;
         } else if (model.isHostedByOther || !this.movState.everApplied) {
           const backup = model.movement.isWeapDrawn;
           if (forcedWeapDrawn === true || forcedWeapDrawn === false) {
@@ -571,7 +578,7 @@ export class FormView {
     }
 
     if (refr.is3DLoaded()) {
-      if (model.animation) {
+      if (model.animation && !this.hostedHere) {
         applyAnimation(refr, model.animation, this.animState);
       }
       // Use them only once, for spawning actors with correct animations

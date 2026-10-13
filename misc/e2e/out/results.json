@@ -2,7 +2,7 @@
   "S0": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 25,
+    "secs": 30,
     "evidence": [
       "run 1: actor ff000000, RaceMenu open: false",
       "run 1: client moved 365 units from 12156,-71991,6010, server moved 365 units from 12156,-71991,6010",
@@ -11,26 +11,26 @@
     "shots": [
       "runs/S0/1/S0.png"
     ],
-    "at": "2026-10-13T03:25:43.138Z"
+    "at": "2026-10-13T15:22:34.756Z"
   },
   "L1": {
     "result": "PASS",
     "reason": "",
     "evidence": [
-      "build: ok in 42 s (l1-build.log)",
+      "build: ok in 68 s (l1-build.log)",
       "ts: ok in 1 s (l1-ts.log)",
-      "ctest: ok in 54 s (l1-ctest.log)"
+      "ctest: ok in 60 s (l1-ctest.log)"
     ],
-    "secs": 97,
+    "secs": 129,
     "shots": [],
-    "at": "2026-10-13T05:10:01.558Z"
+    "at": "2026-10-13T16:23:04.019Z"
   },
   "S0b": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 142,
+    "secs": 161,
     "evidence": [
-      "run 1: engine 1 pid 37936 actor ff000000, engine 2 pid 49312 actor ff000001",
+      "run 1: engine 1 pid 62764 actor ff000000, engine 2 pid 59960 actor ff000001",
       "run 1: 4 samples over 2 min: both processes alive, server online players include ff000000 and ff000001"
     ],
     "shots": [
@@ -39,34 +39,43 @@
       "runs/S0b/1/S0b-engine1-end.png",
       "runs/S0b/1/S0b-engine2-end.png"
     ],
-    "at": "2026-10-13T03:28:05.373Z"
+    "at": "2026-10-13T15:25:15.348Z"
   },
   "S1.1": {
     "result": "PASS",
-    "reason": "1/1 runs PASS",
-    "secs": 69,
+    "reason": "2/2 runs PASS",
+    "secs": 162,
     "evidence": [
-      "run 1: Alvor (13482): hoster engine 1 translates it 200 units to -556,152,239, NPC path on the hoster 501 units, 51 puppet samples on engine 2, worst distance to the hoster path of the last 1000 ms: 35.6; after the samples, hoster {\"ai\":true,\"combat\":true,\"disabled\":false}, puppet {\"ai\":false,\"combat\":false,\"disabled\":false}",
-      "run 1: Gerdur (13489): hoster engine 1 translates it 200 units to 504,-383,2, NPC path on the hoster 200 units, 50 puppet samples on engine 2, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {\"ai\":true,\"combat\":false,\"disabled\":false}, puppet {\"ai\":false,\"combat\":false,\"disabled\":false}",
-      "run 1: Hadvar (2bfa2): hoster engine 1 translates it 200 units to 20394,-79485,8475, NPC path on the hoster 3957 units, 52 puppet samples on engine 2, worst distance to the hoster path of the last 1000 ms: 0.7; after the samples, hoster {\"ai\":true,\"combat\":false,\"disabled\":false}, puppet {\"ai\":false,\"combat\":false,\"disabled\":false}"
+      "run 1: Alvor (13482): hoster engine 1 translates it 200 units to 20789,-44989,-81, NPC path on the hoster 200 units, 52 puppet samples on engine 2, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {\"ai\":true,\"combat\":false,\"disabled\":false}, puppet {\"ai\":false,\"combat\":false,\"disabled\":false}",
+      "run 1: Gerdur (13489): hoster engine 1 translates it 200 units to 504,-383,2, NPC path on the hoster 200 units, 53 puppet samples on engine 2, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {\"ai\":true,\"combat\":false,\"disabled\":false}, puppet {\"ai\":false,\"combat\":false,\"disabled\":false}",
+      "run 1: Hadvar (2bfa2): hoster engine 2 translates it 200 units to 22928,-95299,13930, NPC path on the hoster 200 units, 51 puppet samples on engine 1, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {\"ai\":true,\"combat\":false,\"disabled\":false}, puppet {\"ai\":false,\"combat\":false,\"disabled\":false}",
+      "run 2: Alvor (13482): hoster engine 1 translates it 200 units to 20659,-45225,-83, NPC path on the hoster 200 units, 52 puppet samples on engine 2, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {\"ai\":true,\"combat\":false,\"disabled\":false}, puppet {\"ai\":false,\"combat\":false,\"disabled\":false}",
+      "run 2: Gerdur (13489): hoster engine 1 translates it 200 units to 170,-539,2, NPC path on the hoster 200 units, 50 puppet samples on engine 2, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {\"ai\":true,\"combat\":false,\"disabled\":false}, puppet {\"ai\":false,\"combat\":false,\"disabled\":false}",
+      "run 2: Hadvar (2bfa2): hoster engine 2 translates it 200 units to 22928,-95299,13930, NPC path on the hoster 200 units, 51 puppet samples on engine 1, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {\"ai\":true,\"combat\":false,\"disabled\":false}, puppet {\"ai\":false,\"combat\":false,\"disabled\":false}"
     ],
     "shots": [
       "runs/S1_1/1/S1_1-Alvor-engine1.png",
       "runs/S1_1/1/S1_1-Alvor-engine2.png",
       "runs/S1_1/1/S1_1-Gerdur-engine1.png",
       "runs/S1_1/1/S1_1-Gerdur-engine2.png",
+      "runs/S1_1/1/S1_1-Hadvar-engine2.png",
       "runs/S1_1/1/S1_1-Hadvar-engine1.png",
-      "runs/S1_1/1/S1_1-Hadvar-engine2.png"
+      "runs/S1_1/2/S1_1-Alvor-engine1.png",
+      "runs/S1_1/2/S1_1-Alvor-engine2.png",
+      "runs/S1_1/2/S1_1-Gerdur-engine1.png",
+      "runs/S1_1/2/S1_1-Gerdur-engine2.png",
+      "runs/S1_1/2/S1_1-Hadvar-engine2.png",
+      "runs/S1_1/2/S1_1-Hadvar-engine1.png"
     ],
-    "at": "2026-10-13T03:29:42.243Z"
+    "at": "2026-10-13T16:16:22.415Z"
   },
   "S1.2": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 47,
+    "secs": 44,
     "evidence": [
       "run 1: Orgnar (13486) on engine 2 (puppet), approach spot 0 deg from its facing, 1 activation(s): Dialogue Menu open and in dialogue with the player: true",
-      "run 1: Orgnar (13486) on engine 1 (hoster), approach spot 0 deg from its facing, 2 activation(s): Dialogue Menu open and in dialogue with the player: true",
+      "run 1: Orgnar (13486) on engine 1 (hoster), approach spot 90 deg from its facing, 1 activation(s): Dialogue Menu open and in dialogue with the player: true",
       "run 1: Delphine (13485) on engine 1 (hoster), approach spot 0 deg from its facing, 1 activation(s): Dialogue Menu open and in dialogue with the player: true",
       "run 1: Delphine (13485) on engine 2 (puppet), approach spot 180 deg from its facing, 1 activation(s): Dialogue Menu open and in dialogue with the player: true"
     ],
@@ -76,42 +85,41 @@
       "runs/S1_2/1/S1_2-Delphine-engine1-hoster.png",
       "runs/S1_2/1/S1_2-Delphine-engine2-puppet.png"
     ],
-    "at": "2026-10-13T03:30:29.107Z"
+    "at": "2026-10-13T15:28:54.529Z"
   },
   "S1.4": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 62,
+    "secs": 69,
     "evidence": [
-      "run 1: 13486: 79 puppet samples; frenzied and nudged on engine 2 (largest move seen in the next 15 frames 150 units) at +11467 ms, Aggression 3 held in 51 of 51 later samples, worst distance to the hoster path in the 3000 ms after the nudge 4",
-      "run 1: 3550c: 78 puppet samples; frenzied and nudged on engine 2 (largest move seen in the next 15 frames 150 units) at +11467 ms, Aggression 3 held in 50 of 50 later samples, worst distance to the hoster path in the 3000 ms after the nudge 4",
-      "run 1: 13485: 79 puppet samples; frenzied and nudged on engine 2 (largest move seen in the next 15 frames 150 units) at +11467 ms, Aggression 3 held in 51 of 51 later samples, worst distance to the hoster path in the 3000 ms after the nudge 7",
-      "run 1: 3 hosted NPCs in the inn, 79 samples over 30 s, 0 violations",
-      "run 1: positive control, Aggression 3 and startCombat(player) on the hosted NPCs: in combat after at most 15 s: 13486 on hoster engine 1, 3550c on hoster engine 1, 13485 on hoster engine 1"
+      "run 1: 13485: 79 puppet samples; frenzied and nudged on engine 2 (largest move seen in the next 15 frames 150 units) at +11193 ms, Aggression 3 held in 52 of 52 later samples, worst distance to the hoster path in the 3000 ms after the nudge 4",
+      "run 1: 13486: 79 puppet samples; frenzied and nudged on engine 2 (largest move seen in the next 15 frames 150 units) at +11193 ms, Aggression 3 held in 52 of 52 later samples, worst distance to the hoster path in the 3000 ms after the nudge 7",
+      "run 1: 2 hosted NPCs in the inn, 79 samples over 30 s, 0 violations",
+      "run 1: positive control, Aggression 3 and startCombat(player) on the hosted NPCs: in combat after at most 15 s: 13485 on hoster engine 1, 13486 on hoster engine 1"
     ],
     "shots": [
       "runs/S1_4/1/S1_4-engine1.png",
       "runs/S1_4/1/S1_4-engine2.png"
     ],
-    "at": "2026-10-13T03:31:30.994Z"
+    "at": "2026-10-13T15:30:03.389Z"
   },
   "S1.3": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 20,
+    "secs": 23,
     "evidence": [
-      "run 1: game hour 8.00; RiverwoodBlacksmithWorkMarker 2c308 at 20587,-45138,-81; client after 25 ms: Alvor in world 3c at 20587,-45138,-82, 0 units from the forge, 3D loaded true, enabled true; server: 133c8 at -515,-154,240",
+      "run 1: game hour 8.00; RiverwoodBlacksmithWorkMarker 2c308 at 20587,-45138,-81; client after 17 ms: Alvor in world 3c at 20587,-45138,-82, 0 units from the forge, 3D loaded true, enabled true; server: 133c8 at -515,-154,240",
       "run 1: 5000 ms later: Alvor in world 3c at 20587,-45138,-82, 0 units from the forge, 3D loaded true, enabled true"
     ],
     "shots": [
       "runs/S1_3/1/S1_3.png"
     ],
-    "at": "2026-10-13T03:31:51.329Z"
+    "at": "2026-10-13T15:30:25.993Z"
   },
   "S2": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 116,
+    "secs": 117,
     "evidence": [
       "run 1: bot actor ff000000 in BleakFallsBarrow01; pillar states position01, position03, position01",
       "run 1: control, lever before the pillars are solved: dart traps activated 39fdd, 3720f, 2ad49, 2ad43, gate opening false",
@@ -121,39 +129,39 @@
       "run 1: claw door: rings {\"large\":\"position02\",\"medium\":\"position03\",\"small\":\"position01\"} after 2 turns each, keyhole state done, door 4e2b8 animated true, missing natives IsRunning"
     ],
     "shots": [],
-    "at": "2026-10-13T03:35:28.670Z"
+    "at": "2026-10-13T15:35:43.647Z"
   },
   "S3.1": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 24,
+    "secs": 26,
     "evidence": [
       "run 1: gate 3b9f1 (base 3e726, form type 24): 0 hook calls before any animation, 0 after a latent playAnimationAndWait on pillar aa8cb (its own hook saw [\"Open\"]), after a latent playAnimationAndWait(\"Open\", \"Opened\") on the gate, as a Papyrus script calls it: [[\"enter\",\"3b9f1\",\"Open\"],[\"leave\",\"3b9f1\",\"Open\",true]]; then 0 calls after a JS playAnimation(\"Close\") on the gate (SkyrimPlatform hides its own synchronous native calls from hooks)"
     ],
     "shots": [
       "runs/S3_1/1/S3_1.png"
     ],
-    "at": "2026-10-13T03:35:53.027Z"
+    "at": "2026-10-13T15:36:09.766Z"
   },
   "S3.2": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 18,
+    "secs": 21,
     "evidence": [
       "run 1: sweetrolls before 0; 0 events before any change; events in the 1.5 s after addItem(2) from a script call: [[\"0\",\"14\",\"64b3d\",2],[\"14\",\"0\",\"64b3d\",2]] (rows: old container, new container, base, count); sweetrolls after 0"
     ],
     "shots": [],
-    "at": "2026-10-13T03:36:11.199Z"
+    "at": "2026-10-13T15:36:30.332Z"
   },
   "S3.3": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 22,
+    "secs": 23,
     "evidence": [
       "run 1: dart traps 39fdd, 3720f, 2ad49, 2ad43 activation blocked [true,true,true,true]; 0 activate events before; the player pulls the unsolved lever aa8c3, whose script calls refActOnFailure0N.activate(self): [[\"14\",\"aa8c3\"],[\"aa8c3\",\"39fdd\"],[\"aa8c3\",\"3720f\"],[\"aa8c3\",\"2ad49\"],[\"aa8c3\",\"2ad43\"]] (rows: caster, target); dart traps with activation parents in Skyrim.esm: [], so the lever's script made these calls; activationService gets the same event and today drops casters that are not the player or a clone"
     ],
     "shots": [],
-    "at": "2026-10-13T03:36:32.816Z"
+    "at": "2026-10-13T15:36:53.476Z"
   },
   "S3.4": {
     "result": "BLOCKED",
@@ -161,17 +169,17 @@
     "secs": 5,
     "evidence": [],
     "shots": [],
-    "at": "2026-10-13T03:36:37.332Z"
+    "at": "2026-10-13T15:36:58.271Z"
   },
   "1A.1": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 3,
+    "secs": 4,
     "evidence": [
       "run 1: unit [1A.1]: exit 0; All tests passed (27 assertions in 6 test cases)"
     ],
     "shots": [],
-    "at": "2026-10-13T03:36:40.833Z"
+    "at": "2026-10-13T15:37:02.145Z"
   },
   "1A.2": {
     "result": "PASS",
@@ -181,7 +189,7 @@
       "run 1: unit [1A.2]: exit 0; All tests passed (33 assertions in 8 test cases)"
     ],
     "shots": [],
-    "at": "2026-10-13T03:36:44.422Z"
+    "at": "2026-10-13T15:37:05.860Z"
   },
   "1A.3": {
     "result": "PASS",
@@ -191,36 +199,40 @@
       "run 1: unit [1A.3]: exit 0; All tests passed (6 assertions in 3 test cases)"
     ],
     "shots": [],
-    "at": "2026-10-13T03:36:47.664Z"
+    "at": "2026-10-13T15:37:09.329Z"
   },
   "1A.4": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 3,
+    "secs": 4,
     "evidence": [
       "run 1: unit [1A.4]: exit 0; All tests passed (19 assertions in 6 test cases)"
     ],
     "shots": [],
-    "at": "2026-10-13T03:36:51.150Z"
+    "at": "2026-10-13T15:37:13.006Z"
   },
   "1A.5": {
     "result": "PASS",
-    "reason": "1/1 runs PASS",
-    "secs": 37,
+    "reason": "2/2 runs PASS",
+    "secs": 96,
     "evidence": [
       "run 1: the puppet applies the hoster's movement only when isHostedByOther, an UpdateProperty with the raw ESP id, reaches the FormView of the real actor",
-      "run 1: Alvor (13482): hoster engine 1 translates it 200 units to -311,-25,239, NPC path on the hoster 391 units, 51 puppet samples on engine 2, worst distance to the hoster path of the last 1000 ms: 0.1; after the samples, hoster {\"ai\":true,\"combat\":true,\"disabled\":false}, puppet {\"ai\":false,\"combat\":false,\"disabled\":false}"
+      "run 1: Alvor (13482): hoster engine 1 translates it 200 units to 20659,-45225,-83, NPC path on the hoster 200 units, 50 puppet samples on engine 2, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {\"ai\":true,\"combat\":false,\"disabled\":false}, puppet {\"ai\":false,\"combat\":false,\"disabled\":false}",
+      "run 2: the puppet applies the hoster's movement only when isHostedByOther, an UpdateProperty with the raw ESP id, reaches the FormView of the real actor",
+      "run 2: Alvor (13482): hoster engine 1 translates it 200 units to 20789,-44989,-81, NPC path on the hoster 200 units, 52 puppet samples on engine 2, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {\"ai\":true,\"combat\":false,\"disabled\":false}, puppet {\"ai\":false,\"combat\":false,\"disabled\":false}"
     ],
     "shots": [
       "runs/1A_5/1/S1_1-Alvor-engine1.png",
-      "runs/1A_5/1/S1_1-Alvor-engine2.png"
+      "runs/1A_5/1/S1_1-Alvor-engine2.png",
+      "runs/1A_5/2/S1_1-Alvor-engine1.png",
+      "runs/1A_5/2/S1_1-Alvor-engine2.png"
     ],
-    "at": "2026-10-13T03:37:28.132Z"
+    "at": "2026-10-13T16:17:58.083Z"
   },
   "1B.1": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 36,
+    "secs": 40,
     "evidence": [
       "run 1: with a FormView: {\"loaded\":true,\"disabled\":false,\"deleted\":false,\"health\":131,\"magicka\":68,\"name\":\"Alvor\",\"baseName\":\"Alvor\",\"clones\":[],\"hoster\":4278190080} (clones: dynamic actors 0xff000000-0xff004000 with Alvor's base or name)",
       "run 1: while the player was away (another cell), Alvor 3D loaded on the client: false",
@@ -230,48 +242,48 @@
     "shots": [
       "runs/1B_1/1/1B_1.png"
     ],
-    "at": "2026-10-13T03:38:04.157Z"
+    "at": "2026-10-13T16:10:14.373Z"
   },
   "1B.2": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 34,
+    "secs": 46,
     "evidence": [
-      "run 1: puppet on engine 1: {\"damageMult\":0,\"ai\":false,\"blocked\":false,\"dead\":false,\"health\":131}; hoster engine 2: {\"damageMult\":1,\"ai\":true,\"blocked\":false,\"dead\":false,\"health\":131}; puppet after 100000 local damage: {\"damageMult\":0,\"ai\":false,\"blocked\":false,\"dead\":false,\"health\":-871.2594604492188,\"healthAfterHit\":-99869}; server isDead false",
+      "run 1: puppet on engine 1: {\"damageMult\":0,\"ai\":false,\"blocked\":false,\"dead\":false,\"health\":131}; hoster engine 2: {\"damageMult\":1,\"ai\":true,\"blocked\":false,\"dead\":false,\"health\":131}; puppet after 100000 local damage: {\"damageMult\":0,\"ai\":false,\"blocked\":false,\"dead\":false,\"health\":131,\"healthAfterHit\":-99869}; server isDead false",
       "run 1: engine 2 leaves; engine 1 hosts the damaged puppet: true; Alvor on engine 1 now {\"damageMult\":1,\"ai\":true,\"blocked\":false,\"dead\":false,\"health\":131}; server isDead false"
     ],
     "shots": [],
-    "at": "2026-10-13T03:38:37.947Z"
+    "at": "2026-10-13T16:11:00.621Z"
   },
   "1B.3": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 42,
+    "secs": 44,
     "evidence": [
       "run 1: unit [1B.3]: exit 0; All tests passed (4 assertions in 1 test case)",
-      "run 1: actor values after engine 1's player lost 70% magicka: {\"player\":{\"health\":1,\"magicka\":0.34591996669769287,\"stamina\":1},\"orgnar\":{\"health\":1,\"magicka\":1,\"stamina\":1}}",
-      "run 1: the hosted Orgnar on engine 1 fights engine 2's player (clone ff000d4a on engine 1); engine 2's server health 1 -> 0.8329600095748901; local hits by Orgnar on engine 1: [\"ff000d4a\"]",
-      "run 1: the hosted Orgnar activates the inn door 93bcd on engine 1: server isOpen false -> toggled true",
+      "run 1: actor values after engine 1's player lost 70% magicka: {\"player\":{\"health\":1,\"magicka\":0.33000001311302185,\"stamina\":1},\"orgnar\":{\"health\":1,\"magicka\":1,\"stamina\":1}}",
+      "run 1: the hosted Orgnar on engine 1 fights engine 2's player (clone ff000d41 on engine 1); engine 2's server health 1 -> 0.8329600095748901; local hits by Orgnar on engine 1: [\"ff000d41\"]",
+      "run 1: the hosted Orgnar activates the inn door 93bdb on engine 1: server isOpen false -> toggled true",
       "run 1: after the server killed and revived Orgnar: {\"dead\":false,\"disabled\":false,\"deleted\":false,\"loaded\":true}",
       "run 1: source: KillMove blocked for all ids true; actor values not sent for hosted NPCs true"
     ],
     "shots": [
       "runs/1B_3/1/1B_3.png"
     ],
-    "at": "2026-10-13T03:39:19.874Z"
+    "at": "2026-10-13T15:44:10.720Z"
   },
   "1B.4": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 85,
+    "secs": 88,
     "evidence": [
-      "run 1: at 8:00 the client has Alvor in 3c at 20585,-45136,-84 (3D true); the server starts with 133c8 at -515,-154,240, hoster 0",
-      "run 1: claim without a FormView: server 3c at 20577,-45131,-83, 13 units from the work marker, hoster ff000000",
-      "run 1: hide: the player went two cells east of Alvor (20574,-45129,-82): server hoster 0; Alvor's cell attached true, Alvor 3D false, hidden true",
-      "run 1: retry: the server moved Alvor back to 133c8 while he was hidden; back at the forge the server has 3c at 20574,-45129,-84, 16 units from the marker, hoster ff000000; local Alvor 3D true, disabled false (18 ms after the claim)",
+      "run 1: at 8:00 the client has Alvor in 3c at 20587,-45138,-82 (3D true); the server starts with 133c8 at -515,-154,240, hoster 0",
+      "run 1: claim without a FormView: server 3c at 20587,-45138,-82, 0 units from the work marker, hoster ff000000",
+      "run 1: hide: the player went two cells east of Alvor (20587,-45138,-82): server hoster 0; Alvor's cell attached true, Alvor 3D false, hidden true",
+      "run 1: retry: the server moved Alvor back to 133c8 while he was hidden; back at the forge the server has 3c at 20587,-45138,-82, 0 units from the marker, hoster ff000000; local Alvor 3D true, disabled false (17 ms after the claim)",
       "run 1: walk-in: the driver enabled the hidden Alvor two cells away (a player who never hosted him): loaded true; server hoster held at 0 for 6 s: true",
-      "run 1: first movement: the server then streamed a stale Alvor 6037 units from the marker; 6 s later the local Alvor was 3D true, disabled false, at least 6030 units from the stale spot; back home: at least 6030 units from it; server 3c at 20594,-45041,-82, 97 units from the marker, hoster ff000000",
-      "run 1: replay, hosted movement: a quest replay starts, then the hoster takes Alvor out of his furniture and translates him 300 units (every 400 ms): 300 units from the server position at the end of the hold (20894,-45041,-109); server position held within 150 units of 20594,-45041,-82 for 2 s: true (last 20594,-45041,-82); after the replay the server follows the local position: true (20894,-45041,-151)",
+      "run 1: first movement: the server then streamed a stale Alvor 6037 units from the marker; 6 s later the local Alvor was 3D true, disabled false, at least 6031 units from the stale spot; back home: at least 6031 units from it; server 3c at 20594,-45041,-82, 97 units from the marker, hoster ff000000",
+      "run 1: replay, hosted movement: a quest replay starts, then the hoster takes Alvor out of his furniture and translates him 300 units (every 400 ms): 300 units from the server position at the end of the hold (20894,-45041,-121); server position held within 150 units of 20594,-45041,-82 for 2 s: true (last 20594,-45041,-82); after the replay the server follows the local position: true (20894,-45041,-151)",
       "run 1: release: a script disables Alvor on the hoster: server hoster 0, disabled true; hoster still 0 after 6 s: true; the real actor was never deleted: true",
       "run 1: replay, claim: a quest replay starts, then a script enables Alvor on the client: hoster held at 0 during the replay: true (last 0); after the replay the client claims him: true (hoster ff000000, server disabled false; local 3D true, disabled false)",
       "run 1: party: Alvor's alias quests on the member 105385,45486,1bc95, member quest log [105385, 0]; joined: true; leader two cells away: hoster ff000001 (member ff000001): true; leader back within 4096: hoster ff000000 (leader ff000000): true; the leader still hosts 12 s later: true (last ff000000)"
@@ -279,12 +291,12 @@
     "shots": [
       "runs/1B_4/1/1B_4_claim.png"
     ],
-    "at": "2026-10-13T03:40:45.261Z"
+    "at": "2026-10-13T16:12:28.415Z"
   },
   "1B.5": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 54,
+    "secs": 52,
     "evidence": [
       "run 1: draugr 9bcb9 (masterAmbushScript on the ref: true), hoster ff000000, engine 1 hosts it: true; Variable01 before: engine 1 0, engine 2 0",
       "run 1: puppet (engine 2): allowed forms []",
@@ -295,32 +307,61 @@
       "run 1: new hoster (engine 2): Variable01 before 0; startCombat, in combat true; {\"v1\":1,\"aggression\":2,\"combat\":true,\"ai\":true}"
     ],
     "shots": [],
-    "at": "2026-10-13T03:41:39.229Z"
+    "at": "2026-10-13T15:46:32.326Z"
   },
   "G1.1": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 230,
+    "secs": 221,
     "evidence": [
       "run 1: start log from settings.ts: [[0x2610a, 0], [0x2610a, 5], [0x4e50d, 15], [0x2610a, 30]]",
       "run 1: start: server Ralof 3c:Skyrim.esm at 19841,-79532,8451, hoster 0, 32952 units from the Riverwood marker",
-      "run 1: end: server Ralof 3c:Skyrim.esm at 17856,-47131,-143, hoster ff000000, 1410 units from the marker; server path 54248 units in 375 samples; player moved to Ralof 150 times",
-      "run 1: local Ralof: loaded true, world 3c, at 17885,-47124,-144, combat false; packages seen 956b8,d1d3d,9251e,de1aa,54219,3e08f,3e088; scenes seen ac133,27e56; MQ102B stage 35, MQ102 stage 17",
-      "run 1: walk from the first hosted sample: 358 samples, longest step 222 units (to 8808,-53468)",
-      "run 1: server positions every 10th sample: 3c@19841,-79532 3c@19841,-79532 3c@12016,-71824 3c@11765,-71701 3c@11642,-71689 3c@11221,-71479 3c@10627,-71147 3c@9295,-70635 3c@8133,-69982 3c@7677,-68624 3c@7213,-67383 3c@6192,-66519 3c@5869,-65095 3c@5646,-63667 3c@4959,-62443 3c@4261,-61522 3c@4952,-60302 3c@5464,-59065 3c@4756,-58621 3c@3332,-58816 3c@3714,-57859 3c@4864,-57021 3c@6072,-56141 3c@6865,-54972 3c@7515,-53766 3c@8936,-53438 3c@10273,-52787 3c@10795,-52455 3c@11182,-52817 3c@10680,-52746 3c@10751,-52527 3c@12036,-51825 3c@13260,-51249 3c@13873,-50065 3c@14166,-48732 3c@14621,-47468 3c@15833,-46994 3c@17265,-47121"
+      "run 1: end: server Ralof 3c:Skyrim.esm at 17908,-47117,-144, hoster ff000000, 1356 units from the marker; server path 52700 units in 359 samples; player moved to Ralof 144 times",
+      "run 1: local Ralof: loaded true, world 3c, at 17934,-47110,-145, combat false; packages seen 956b8,d1d3d,9251e,de1aa,54219,3e08f,3e088; scenes seen ac133,27e56; MQ102B stage 35, MQ102 stage 17",
+      "run 1: walk from the first hosted sample: 342 samples, longest step 197 units (to 10001,-52959)",
+      "run 1: server positions every 10th sample: 3c@19841,-79532 3c@19841,-79532 3c@12040,-71832 3c@11766,-71693 3c@11643,-71688 3c@11225,-71481 3c@10640,-71155 3c@9312,-70639 3c@8145,-69997 3c@7699,-68696 3c@7160,-67350 3c@6182,-66496 3c@5859,-65033 3c@5637,-63640 3c@4942,-62417 3c@4297,-61511 3c@4959,-60284 3c@5473,-58993 3c@4716,-58625 3c@3277,-58816 3c@3758,-57826 3c@4932,-56974 3c@6127,-56099 3c@6889,-54922 3c@7584,-53758 3c@8982,-53427 3c@10297,-52772 3c@11409,-52123 3c@11286,-51949 3c@11194,-51950 3c@12457,-51533 3c@13641,-50827 3c@14010,-49431 3c@14362,-48053 3c@15204,-46990 3c@16686,-47062"
     ],
     "shots": [
       "runs/G1_1/1/G1_1-end.png"
     ],
-    "at": "2026-10-13T03:45:29.256Z"
+    "at": "2026-10-13T15:50:13.656Z"
   },
   "G1.2": {
-    "result": "FAIL",
-    "reason": "no check script",
-    "secs": 0,
-    "evidence": [],
-    "shots": [],
-    "at": "2026-10-12T16:53:46.484Z"
+    "result": "PASS",
+    "reason": "3/3 runs PASS",
+    "secs": 168,
+    "evidence": [
+      "run 1: start: server Alvor in 133c8:Skyrim.esm at -515,-154,240, hoster 0",
+      "run 1: before the player came, the client had Alvor in 0 at 20587,-45138,-81, AI true; 2 s after the client applied its view of him (AI off), the client has him in 0 at 20587,-45138,-81",
+      "run 1: in the house on the lower floor, out of his way (set public so the teleported player is no trespasser): game hour 7.984, the check moved Alvor home for the start state; local Alvor cell 133c8 package 1cb07",
+      "run 1: end: server Alvor in 3c:Skyrim.esm at 20596,-45040,-84, 98 units from the forge marker, hoster ff000000; server cells 133c8:Skyrim.esm -> 3c:Skyrim.esm; hosters seen ff000000; player cell changes 1; local Alvor package 1cb07, game hour 7.988",
+      "run 1: Gerdur (13489) in 3c:Skyrim.esm at 18953,-43634,-138, hoster ff000000: Dialogue Menu open and in dialogue with the player: true",
+      "run 1: Alvor (13482) in 3c:Skyrim.esm at 20594,-45040,-82, hoster ff000000: Dialogue Menu open and in dialogue with the player: true",
+      "run 2: start: server Alvor in 133c8:Skyrim.esm at -515,-154,240, hoster 0",
+      "run 2: before the player came, the client had Alvor in 0 at 20587,-45138,-81, AI true; 2 s after the client applied its view of him (AI off), the client has him in 0 at 20587,-45138,-81",
+      "run 2: in the house on the lower floor, out of his way (set public so the teleported player is no trespasser): game hour 7.981, the check moved Alvor home for the start state; local Alvor cell 133c8 package 31730",
+      "run 2: end: server Alvor in 3c:Skyrim.esm at 20417,-45115,-84, 172 units from the forge marker, hoster ff000000; server cells 133c8:Skyrim.esm -> 3c:Skyrim.esm; hosters seen ff000000; player cell changes 1; local Alvor package 1cb07, game hour 7.991",
+      "run 2: Gerdur (13489) in 3c:Skyrim.esm at 18494,-45005,-121, hoster ff000000: Dialogue Menu open and in dialogue with the player: true",
+      "run 2: Alvor (13482) in 3c:Skyrim.esm at 20375,-45067,-80, hoster ff000000: Dialogue Menu open and in dialogue with the player: true",
+      "run 3: start: server Alvor in 133c8:Skyrim.esm at -515,-154,240, hoster 0",
+      "run 3: before the player came, the client had Alvor in 0 at 20587,-45138,-81, AI true; 2 s after the client applied its view of him (AI off), the client has him in 0 at 20587,-45138,-81",
+      "run 3: in the house on the lower floor, out of his way (set public so the teleported player is no trespasser): game hour 7.984, the check moved Alvor home for the start state; local Alvor cell 133c8 package 1cb07",
+      "run 3: end: server Alvor in 3c:Skyrim.esm at 20456,-45219,-84, 155 units from the forge marker, hoster ff000000; server cells 133c8:Skyrim.esm -> 3c:Skyrim.esm; hosters seen ff000000; player cell changes 1; local Alvor package 1cb07, game hour 7.987",
+      "run 3: Gerdur (13489) in 3c:Skyrim.esm at 18953,-43634,-138, hoster ff000000: Dialogue Menu open and in dialogue with the player: true",
+      "run 3: Alvor (13482) in 3c:Skyrim.esm at 20459,-45225,-83, hoster ff000000: Dialogue Menu open and in dialogue with the player: true"
+    ],
+    "shots": [
+      "runs/G1_2/1/G1_2-forge.png",
+      "runs/G1_2/1/G1_2-Gerdur.png",
+      "runs/G1_2/1/G1_2-Alvor.png",
+      "runs/G1_2/2/G1_2-forge.png",
+      "runs/G1_2/2/G1_2-Gerdur.png",
+      "runs/G1_2/2/G1_2-Alvor.png",
+      "runs/G1_2/3/G1_2-forge.png",
+      "runs/G1_2/3/G1_2-Gerdur.png",
+      "runs/G1_2/3/G1_2-Alvor.png"
+    ],
+    "at": "2026-10-13T16:20:54.639Z"
   },
   "G1.3": {
     "result": "FAIL",
@@ -545,44 +586,44 @@
   "S0c": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 28,
+    "secs": 30,
     "evidence": [
-      "run 1: second instance pid 49788 from the same folder exited after 0.9 s",
-      "run 1: engine 1 (pid 8392) still runs and answers 10 s later, player at 12156,-71991",
+      "run 1: second instance pid 64340 from the same folder exited after 0.3 s",
+      "run 1: engine 1 (pid 60884) still runs and answers 10 s later, player at 12156,-71991",
       "run 1: server online players ff000000, connect events in server.log: 1"
     ],
     "shots": [
       "runs/S0c/1/S0c-engine1.png"
     ],
-    "at": "2026-10-13T03:28:33.352Z"
+    "at": "2026-10-13T15:25:45.630Z"
   },
   "S1.6": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 62,
+    "secs": 58,
     "evidence": [
       "run 1: Hadvar on the hoster after the moves: {\"ai\":true,\"combat\":false,\"pkg\":\"4679f\",\"sit\":0,\"scene\":0,\"dialogue\":false}; puppet AI on: false",
-      "run 1: hoster engine 1, Hadvar walked 2786 units on the hoster and 2914 on the puppet; 23 samples with hoster Speed > 20 for 500 ms, puppet Speed > 20 in 23; 31 samples with hoster Speed < 1 for 500 ms, puppet Speed < 20 in 31",
-      "run 1: Speed pairs (hoster/puppet): 80/82 164/75 361/150 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 337/350 285/329 102/275 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 11/0 46/32 49/77 152/75 0/212 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0"
+      "run 1: hoster engine 1, Hadvar walked 3305 units on the hoster and 3388 on the puppet; 26 samples with hoster Speed > 20 for 500 ms, puppet Speed > 20 in 26; 28 samples with hoster Speed < 1 for 500 ms, puppet Speed < 20 in 28",
+      "run 1: Speed pairs (hoster/puppet): 80/132 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 319/361 75/254 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 9/0 41/11 44/74 147/77 361/228 231/340 143/221 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0"
     ],
     "shots": [
       "runs/S1_6/1/S1_6-puppet.png"
     ],
-    "at": "2026-10-13T05:13:48.248Z"
+    "at": "2026-10-13T16:08:50.482Z"
   },
   "S1.5": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 48,
+    "secs": 56,
     "evidence": [
       "run 1: engine 1 talks to the puppet Delphine (13485) hosted by engine 2; topic \"Je voudrais une chambre. (10 or)\", answer \"Pas de problème, elle est à vous.\"",
       "run 1: dialogue closed on engine 1",
-      "run 1: then engine 2 translates Delphine 200 units to -986,839,-1: 190 units from its start on the hoster, 51 puppet samples on engine 1, worst distance to the hoster path of the last 1000 ms: 8.9, hosters ff000001"
+      "run 1: then engine 2 translates Delphine 200 units to -986,839,-1: 190 units from its start on the hoster, 52 puppet samples on engine 1, worst distance to the hoster path of the last 1000 ms: 1.2, hosters ff000001"
     ],
     "shots": [
       "runs/S1_5/1/S1_5-topic.png",
       "runs/S1_5/1/S1_5-follow.png"
     ],
-    "at": "2026-10-13T03:32:39.528Z"
+    "at": "2026-10-13T15:31:21.871Z"
   }
 }

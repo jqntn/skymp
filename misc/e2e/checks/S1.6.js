@@ -15,13 +15,14 @@ module.exports = {
   async run(ctx) {
     const actors = [await ctx.ready(1), await ctx.ready(2)];
     const teleport = async (id) => {
-      const loc = await ctx.probe(`return mp.get(${id}, "locationalData");`);
+      const loc = await ctx.npcLocation(id);
       for (const actor of actors) await ctx.probe(`mp.set(${actor}, "locationalData", ${JSON.stringify(loc)}); return 0;`);
       for (const n of [1, 2]) {
         await ctx.waitFor(() => ctx.drv(`const a = sp.Actor.from(sp.Game.getFormEx(${id})); return !sp.Ui.isMenuOpen("Loading Menu") && !!a && a.is3DLoaded();`, n).catch(() => false), 120000, `${id.toString(16)} is loaded on engine ${n}`);
       }
     };
     await ctx.probe(`mp.set(${HADVAR}, "locationalData", { cellOrWorldDesc: "3c:Skyrim.esm", pos: ${JSON.stringify(ROAD)}, rot: [0, 0, 0] }); return 0;`);
+    for (const n of [1, 2]) await ctx.drv(`const a = sp.Actor.from(sp.Game.getFormEx(${HADVAR})); const w = sp.Game.getFormEx(0x3c); sp.TESModPlatform.moveRefrToPosition(a, sp.Cell.from(w), sp.WorldSpace.from(w), ${ROAD.join(", ")}, 0, 0, 0); return 0;`, n);
     await teleport(ALVOR);
     await teleport(HADVAR);
     const hoster = await ctx.waitFor(() => ctx.probe(`return mp.get(${HADVAR}, "hoster");`), 30000, "Hadvar gets a hoster");

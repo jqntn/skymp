@@ -11,7 +11,7 @@ module.exports = {
     const actors = [await ctx.ready(1), await ctx.ready(2)];
     const npc = `const a = sp.Actor.from(sp.Game.getFormEx(${ALVOR}));`;
     const loaded = `${npc} return !sp.Ui.isMenuOpen("Loading Menu") && !!a && a.is3DLoaded();`;
-    const loc = await ctx.probe(`return mp.get(${ALVOR}, "locationalData");`);
+    const loc = await ctx.npcLocation(ALVOR, 2);
     const away = await ctx.probe(`return mp.get(${actors[1]}, "locationalData");`);
     await ctx.probe(`mp.set(${actors[1]}, "locationalData", ${JSON.stringify(loc)}); return 0;`);
     await ctx.waitFor(() => ctx.drv(loaded, 2).catch(() => false), 120000, "Alvor is loaded on engine 2");

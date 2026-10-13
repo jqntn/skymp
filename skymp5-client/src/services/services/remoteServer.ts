@@ -58,6 +58,7 @@ import {
   remoteIdToLocalId,
 } from '../../view/worldViewMisc';
 import { TimeService } from './timeService';
+import { teleportingHosts } from '../../view/hostAttempts';
 import { logTrace, logError } from '../../logging';
 
 import { SpellCastMessage } from '../messages/spellCastMessage';
@@ -244,9 +245,14 @@ export class RemoteServer extends ClientListener {
 
   private onTeleportMessage(event: ConnectionMessage<TeleportMessage> | ConnectionMessage<TeleportMessage2>): void {
     const msg = event.message;
+    const id = ("idx" in msg && typeof msg.idx === "number") ? this.getIdManager().getId(msg.idx) : this.getMyActorIndex();
+    const localRefrId = getViewFromStorage()?.getFormViews().getNthFormView(id)?.getLocalRefrId() || 0;
+    const heldHost = id !== this.getMyActorIndex() && localRefrId > 0 && localRefrId < 0xff000000 ? localRefrId + 0x100000000 : 0;
+    if (heldHost) {
+      teleportingHosts.add(heldHost);
+    }
     once('update', () => {
-      const id = ("idx" in msg && typeof msg.idx === "number") ? this.getIdManager().getId(msg.idx) : this.getMyActorIndex();
-      const refr = id === this.getMyActorIndex() ? Game.getPlayer() : getObjectReference(id);
+      const refr = id === this.getMyActorIndex() ? Game.getPlayer() : ObjectReference.from(Game.getFormEx(localRefrId));
       logTrace(this,
         `Teleporting id`, id, `refrId`, refr?.getFormID().toString(16), `...`,
         msg.pos,
@@ -269,6 +275,7 @@ export class RemoteServer extends ClientListener {
           msg.rot[1],
           msg.rot[2],
         );
+        teleportingHosts.delete(heldHost);
       };
       const actor = Actor.from(refr);
       if (actor /*&& actor.getFormID() === 0x14*/) {

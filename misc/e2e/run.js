@@ -334,6 +334,11 @@ const makeCtx = (id, dir) => {
       }),
     clientLog: (engine = 1) => drivers.lines[engine] || [],
     character: (engine = 1, at = HELGEN_EXIT) => ctx.probe(`return mp.createActor(0, ${JSON.stringify(at.pos)}, ${at.angleZ}, ${at.worldOrCell}, ${profileId(engine)});`),
+    npcLocation: async (id, engine = 1) => {
+      const l = await ctx.drv(`const a = sp.Actor.from(sp.Game.getFormEx(${id})); const f = a && (a.getWorldSpace() || a.getParentCell()); if (!f) return null;
+        const fid = f.getFormID(); return { cellOrWorldDesc: (fid & 0xffffff).toString(16) + ":" + sp.Game.getModName(fid >>> 24), pos: [a.getPositionX(), a.getPositionY(), a.getPositionZ()], rot: [0, 0, a.getAngleZ()] };`, engine);
+      return l || ctx.probe(`return mp.get(${id}, "locationalData");`);
+    },
     shot: (name, engine = 1) => {
       const file = path.join(dir, `${name}.png`);
       const r = spawnSync("powershell", ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", path.join(__dirname, "desktop.ps1"), "-desktop", desktopOf(engine), "-procId", String(ctx.gamePids[engine]), "-out", file], { encoding: "utf8" });

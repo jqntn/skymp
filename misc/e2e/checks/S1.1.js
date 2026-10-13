@@ -35,7 +35,7 @@ module.exports = {
     const calm = `const p = sp.Game.getPlayer(); for (let i = 0; i < 300; i++) { const r = sp.Game.findRandomActor(p.getPositionX(), p.getPositionY(), p.getPositionZ(), 4096); if (r && r.getFormID() !== 0x14 && r.isAIEnabled()) { r.setActorValue("Aggression", 0); r.stopCombat(); } } return 0;`;
 
     for (const [name, id] of ctx.npcs || NPCS) {
-      const loc = await ctx.probe(`return mp.get(${id}, "locationalData");`);
+      const loc = await ctx.npcLocation(id);
       for (const actor of actors) await ctx.probe(`mp.set(${actor}, "locationalData", ${JSON.stringify(loc)}); return 0;`);
       for (const n of [1, 2]) {
         await ctx.waitFor(() => ctx.drv(npcLoaded(id), n).catch(() => false), 120000, `${name} is loaded on engine ${n}`);
@@ -47,6 +47,7 @@ module.exports = {
       const p = 3 - h;
       await Promise.all([ctx.drv(calm, 1), ctx.drv(calm, 2)]);
       await ctx.sleep(1000);
+      await ctx.waitFor(async () => { const [hp, pp] = await Promise.all([ctx.drv(npcPos(id), h), ctx.drv(npcPos(id), p)]); return !!hp && !!pp && dist(hp, pp) <= TOLERANCE; }, 15000, `${name}: the puppet on engine ${p} is at the hoster position before the move`);
 
       const before = await ctx.drv(npcPos(id), h);
       const target = await ctx.drv(`const a = sp.Actor.from(sp.Game.getFormEx(${id})); const c = a.getParentCell(); let door = null;

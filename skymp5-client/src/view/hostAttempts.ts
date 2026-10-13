@@ -15,3 +15,5 @@ export const nextHostAttempt = (): number | undefined => {
 };
 
 export const lastTryHost: Record<number, number> = {};
+
+export const teleportingHosts = new Set<number>();
