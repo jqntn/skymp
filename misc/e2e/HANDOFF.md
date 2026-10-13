@@ -27,7 +27,8 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 - `fix(coop): send hits and activations of hosted NPCs and keep revived NPCs alive (1B.3)`: client accepts hosted ESP aggressors and casters, blocks KillMove for all ids, sends no actor values for hosted NPCs, drives puppet AI from the actor's real state; server ignores a hoster's death for 3 s after a respawn (RespawnedWithin, [1B.3] unit test); 1B.3 check gives engine 2 an appearance so engine 1 renders it.
 - `feat(coop): host NPCs from the local engine and yield quest actors to the party leader (1B.4)`: real-actor claims with a location, release of lost hosts, hide and retry on HostStop, first movement skip, replay gate, party rule with the native getReferenceAliasQuests, server OpenContainer only to the activator's own user; 1B.4 check; S1.1, S1.4, S1.6 check edits.
 - `feat(coop): run actor script events only on the hoster (1B.5)`: SP allowed form set with setter and getter natives, SendEvent hook allows listed ids, client sets the hosted ESP ids without dragons; 1B.5 check (ambush draugr and boss in Bleak Falls Barrow).
-- `fix(coop): start new characters at the cave exit with Ralof outside and let Alduin fly (G1.1)`: see below.
+- `fix(coop): start new characters at the cave exit with Ralof outside and let Alduin fly (G1.1)`: start log with MQ102B 5 and MQ102 15, world cleaner keeps the AI of the server's banned races, G1.1 check (details in the G1.1 log line).
+- `test(e2e): make Hadvar flee on the Riverwood road in the puppet animation check (S1.6)`: see the Status bullet on S1.6.
 
 ## What the last commit holds (G1.1)
 
@@ -55,16 +56,17 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 ## Status
 
 - Regression run 2026-10-13 03:23-03:45 UTC with the G1.1 change: L1, S0, S0b, S0c, S1.1-S1.5, S2, S3.1-S3.3, 1A.1-1A.5, 1B.1-1B.5, G1.1 PASS. S3.4 BLOCKED until 2A.1.
-- S1.6 FAIL 3 runs in a row since 03:33 UTC: Hadvar walks in place on the hoster (Speed 78 for 6 s, 76-91 units, pkg 4679f), and the puppet engine's screenshot shows a wooden wall. A/B with the world cleaner change reverted fails the same, so it is not the G1.1 change (the server change only touches the start log, which S1.6 does not use). It passed at 23:55, 01:08 and 01:30 UTC with the same code. The failed run's logs are in the scratchpad (s16-fail-run).
+- S1.6 (check edit, committed): the old moves (600 units from Hadvar by the Riverwood mill) put the hoster player inside a building and in the river, and Hadvar's package MQ101HadvarHoldPosition (always valid in a test game) fights keepOffsetFromActor (standing still or walking in place, about 25% of runs). Now Hadvar starts at (17000,-47100,-105) on the road west of Riverwood, the hoster player alternates between fixed stops (17600,-47120,-120) and (16400,-47060,-30), the walk command is a flee (Confidence 0, startCombat(player); stopCombat and setDontMove(true) stop him), and the move loop (up to 10 legs) ends only when the moving and standing counts and a hoster path over 300 units are reached. Asserts unchanged. Flee: 8 of 8 PASS (3 official runs). Red proof (puppet Speed frozen at 0): FAIL, 0 of 88 animated. Review AGREE WITH NOTES: in about a third of runs Hadvar mostly runs in place (path 350-394 units), so the walked > 300 guard (unchanged from HEAD) is weak; the red proof covers only the moving half; Confidence 0 stays on the hoster (fresh world each run).
+- G1.2 check written (misc/e2e/checks/G1.2.js, uncommitted, not yet run): player in Alvor's house before 8:00 (gameHour 7.975, game time follows real time), follows him (server teleport on a cell change, local teleport over 600 units), PASS part 1 when the server Alvor is in Tamriel within 500 units of the forge work marker (20587,-45138) for 5 s; part 2: Gerdur and Alvor each open the Dialogue Menu (S1.2 approach spots and activate).
 - No game, server or runner is running between passes.
 
 ## Next steps
 
-1. Regression first: S1.6 (Hadvar walks in place on the Riverwood road; find where Hadvar and the players are when the walk starts and what blocks him).
-2. Gate 1: G1.2, G1.3 (2 engines), G1.4, G1.5. Write each check red first; the fix for a gate is the phase 1 steps, so a FAIL means a missing or broken step.
-3. Then 2A (S3.4 comes back with 2A.1), 2B (2B.3 also tests that a hoster does not allow a dragon's script events), G2, P. P8 stays red until reached.
-4. Watch:
+1. Gate 1: G1.2 (run the written check red first), G1.3 (2 engines), G1.4, G1.5. Write each check red first; the fix for a gate is the phase 1 steps, so a FAIL means a missing or broken step.
+2. Then 2A (S3.4 comes back with 2A.1), 2B (2B.3 also tests that a hoster does not allow a dragon's script events), G2, P. P8 stays red until reached.
+3. Watch:
    - S1.2 had a flaky period (LESSONS). The 1B.4 claim after a replay failed once (23:20).
+   - S1.6: Hadvar sometimes runs in place even when fleeing (path about 350 units); if S1.6 flakes in --final, an escort-based walk (Ralof with the start log, as in G1.1) is the next option. Between 03:33 and 04:12 UTC NPCs walked in place everywhere (cause unknown).
    - Review gaps of 1B.4: the member's 10 s wait is not observed, a non-quest actor near the leader, release when unloaded or gone, claims of dead actors or from another cell. Add them when a step touches that code.
    - The Helgen intro battle runs forever once players host it (S1.1 and S1.6 calm it). G1.1 did not meet it (Ralof is hosted at the cave exit).
    - G1.1: every login replays the whole quest log, so MQ102B stage 0 moves Ralof into the keep and MQ102 stage 15 moves him to the exit again on each client (and enables Alduin, who now flies away on his own). The server position wins only through the FormView's first movement (see the first-movement lesson). Each client also has its own Alduin. G1.1 ran once per build; road combat (wolves) is untested.

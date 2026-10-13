@@ -1,11 +1,11 @@
 # Scoreboard
 
 
-First non-PASS in plan order: S1.6
+First non-PASS in plan order: S3.4
 
 | id | result | secs | at | detail |
 |---|---|---|---|---|
-| L1 | PASS | 95 | 2026-10-13 03:52 |  |
+| L1 | PASS | 97 | 2026-10-13 05:10 |  |
 | S0 | PASS | 25 | 2026-10-13 03:25 | 1/1 runs PASS |
 | S0b | PASS | 142 | 2026-10-13 03:28 | 1/1 runs PASS |
 | S0c | PASS | 28 | 2026-10-13 03:28 | 1/1 runs PASS |
@@ -14,7 +14,7 @@ First non-PASS in plan order: S1.6
 | S1.4 | PASS | 62 | 2026-10-13 03:31 | 1/1 runs PASS |
 | S1.3 | PASS | 20 | 2026-10-13 03:31 | 1/1 runs PASS |
 | S1.5 | PASS | 48 | 2026-10-13 03:32 | 1/1 runs PASS |
-| S1.6 | FAIL | 60 | 2026-10-13 03:50 | run 1/3: Hadvar walked only 76 units on the hoster |
+| S1.6 | PASS | 62 | 2026-10-13 05:13 | 1/1 runs PASS |
 | S2 | PASS | 116 | 2026-10-13 03:35 | 1/1 runs PASS |
 | S3.1 | PASS | 24 | 2026-10-13 03:35 | 1/1 runs PASS |
 | S3.2 | PASS | 18 | 2026-10-13 03:36 | 1/1 runs PASS |
@@ -63,7 +63,7 @@ First non-PASS in plan order: S1.6
 ## Evidence
 
 ### L1
-- build: ok in 40 s (l1-build.log)
+- build: ok in 42 s (l1-build.log)
 - ts: ok in 1 s (l1-ts.log)
 - ctest: ok in 54 s (l1-ctest.log)
 ### S0
@@ -122,8 +122,8 @@ First non-PASS in plan order: S1.6
 - ![S1.5](runs/S1_5/1/S1_5-follow.png)
 ### S1.6
 - run 1: Hadvar on the hoster after the moves: {"ai":true,"combat":false,"pkg":"4679f","sit":0,"scene":0,"dialogue":false}; puppet AI on: false
-- run 1: hoster engine 2, Hadvar walked 76 units on the hoster and 68 on the puppet; 39 samples with hoster Speed > 20 for 500 ms, puppet Speed > 20 in 39; 16 samples with hoster Speed < 1 for 500 ms, puppet Speed < 20 in 16
-- run 1: Speed pairs (hoster/puppet): 79/104 75/81 78/82 78/82 78/82 78/82 78/82 78/82 78/82 78/82 78/82 78/82 78/82 78/82 78/82 78/82 78/82 78/82 78/82 78/82 54/82 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 78/83 78/83 78/83 78/83 78/83 78/83 78/83 78/83 78/83 78/83 78/83 78/83 78/83 78/83 78/83 78/83 78/83 78/83 78/83 57/83 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0
+- run 1: hoster engine 1, Hadvar walked 2786 units on the hoster and 2914 on the puppet; 23 samples with hoster Speed > 20 for 500 ms, puppet Speed > 20 in 23; 31 samples with hoster Speed < 1 for 500 ms, puppet Speed < 20 in 31
+- run 1: Speed pairs (hoster/puppet): 80/82 164/75 361/150 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 337/350 285/329 102/275 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 11/0 46/32 49/77 152/75 0/212 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0
 - ![S1.6](runs/S1_6/1/S1_6-puppet.png)
 ### S2
 - run 1: bot actor ff000000 in BleakFallsBarrow01; pillar states position01, position03, position01
