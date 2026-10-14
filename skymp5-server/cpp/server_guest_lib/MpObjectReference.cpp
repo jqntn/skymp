@@ -516,6 +516,11 @@ void MpObjectReference::Disable()
   EditChangeForm(
     [&](MpChangeFormREFR& changeForm) { changeForm.isDisabled = true; });
 
+  if (IsEspmForm()) {
+    SendMessageToActorListeners(
+      CreatePropertyMessage_(this, "isDisabled", "true"), true);
+  }
+
   if (!IsEspmForm() || AsActor()) {
     RemoveFromGridAndUnsubscribeAll();
   }
@@ -532,6 +537,11 @@ void MpObjectReference::Enable()
 
   if (!IsEspmForm() || AsActor()) {
     ForceSubscriptionsUpdate();
+  }
+
+  if (IsEspmForm()) {
+    SendMessageToActorListeners(
+      CreatePropertyMessage_(this, "isDisabled", "false"), true);
   }
 }
 

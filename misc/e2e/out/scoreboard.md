@@ -5,7 +5,7 @@ First non-PASS in plan order: G1.7
 
 | id | result | secs | at | detail |
 |---|---|---|---|---|
-| L1 | PASS | 128 | 2026-10-14 08:37 |  |
+| L1 | PASS | 130 | 2026-10-14 09:28 |  |
 | S0 | PASS | 30 | 2026-10-13 15:22 | 1/1 runs PASS |
 | S0b | PASS | 161 | 2026-10-13 15:25 | 1/1 runs PASS |
 | S0c | PASS | 30 | 2026-10-13 15:25 | 1/1 runs PASS |
@@ -28,10 +28,10 @@ First non-PASS in plan order: G1.7
 | 1B.1 | PASS | 39 | 2026-10-14 07:45 | 1/1 runs PASS |
 | 1B.2 | PASS | 44 | 2026-10-14 07:46 | 1/1 runs PASS |
 | 1B.3 | PASS | 75 | 2026-10-14 07:47 | 1/1 runs PASS |
-| 1B.4 | PASS | 179 | 2026-10-14 08:20 | 2/2 runs PASS |
+| 1B.4 | PASS | 90 | 2026-10-14 09:08 | 1/1 runs PASS |
 | 1B.5 | PASS | 50 | 2026-10-14 08:11 | 1/1 runs PASS |
 | G1.1 | PASS | 224 | 2026-10-14 08:15 | 1/1 runs PASS |
-| G1.2 | PASS | 168 | 2026-10-13 16:20 | 3/3 runs PASS |
+| G1.2 | PASS | 45 | 2026-10-14 09:09 | 1/1 runs PASS |
 | G1.3 | PASS | 103 | 2026-10-14 07:20 | 1/1 runs PASS |
 | G1.4 | PASS | 166 | 2026-10-14 07:50 | 1/1 runs PASS |
 | G1.5 | PASS | 119 | 2026-10-14 08:17 | 1/1 runs PASS |
@@ -39,7 +39,7 @@ First non-PASS in plan order: G1.7
 | G1.7 | FAIL | 201 | 2026-10-14 05:10 | run 1/3: Sven: 5 activations of the crosshair NPC opened no dialogue on engine 1 (sit state on engine 2 0, on engine 1 0; NPC {"ai":false,"sit":0,"target":0,"pkg":"ea072","x":20629,"y":-46000,"events":[]}) |
 | G1.8 | PASS | 327 | 2026-10-14 06:39 | 3/3 runs PASS |
 | 2A.1 | PASS | 179 | 2026-10-14 07:44 | 3/3 runs PASS |
-| 2A.2 | FAIL | 0 | 2026-10-12 16:53 | no check script |
+| 2A.2 | PASS | 140 | 2026-10-14 09:31 | 3/3 runs PASS |
 | 2A.3 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | 2A.4 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | 2A.5 | FAIL | 0 | 2026-10-12 16:53 | no check script |
@@ -67,9 +67,9 @@ First non-PASS in plan order: G1.7
 ## Evidence
 
 ### L1
-- build: ok in 71 s (l1-build.log)
-- ts: ok in 0 s (l1-ts.log)
-- ctest: ok in 56 s (l1-ctest.log)
+- build: ok in 72 s (l1-build.log)
+- ts: ok in 1 s (l1-ts.log)
+- ctest: ok in 58 s (l1-ctest.log)
 ### S0
 - run 1: actor ff000000, RaceMenu open: false
 - run 1: client moved 365 units from 12156,-71991,6010, server moved 365 units from 12156,-71991,6010
@@ -199,28 +199,17 @@ First non-PASS in plan order: G1.7
 - run 1: source: KillMove blocked for all ids true; actor values not sent for hosted NPCs true
 - ![1B.3](runs/1B_3/1/1B_3.png)
 ### 1B.4
-- run 1: at 8:00 the client has Alvor in 3c at 20580,-45125,-82 (3D true); the server starts with 133c8 at -515,-154,240, hoster 0
-- run 1: claim without a FormView: server 3c at 20580,-45125,-83, 15 units from the work marker, hoster ff000000
-- run 1: hide: the player went two cells east of Alvor (20580,-45125,-82): server hoster 0; Alvor's cell attached true, Alvor 3D false, hidden true
-- run 1: retry: the server moved Alvor back to 133c8 while he was hidden; back at the forge the server has 3c at 20376,-45067,-80, 223 units from the marker, hoster ff000000; local Alvor 3D true, disabled false (34 ms after the claim)
+- run 1: at 8:00 the client has Alvor in 3c at 20594,-45120,-82 (3D true); the server starts with 133c8 at -515,-154,240, hoster 0
+- run 1: claim without a FormView: server 3c at 20594,-45120,-83, 19 units from the work marker, hoster ff000000
+- run 1: hide: the player went two cells east of Alvor (20594,-45120,-82): server hoster 0; Alvor's cell attached true, Alvor 3D false, hidden true
+- run 1: retry: the server moved Alvor back to 133c8 while he was hidden; back at the forge the server has 3c at 20375,-45067,-80, 223 units from the marker, hoster ff000000; local Alvor 3D true, disabled false (17 ms after the claim)
 - run 1: walk-in: the driver enabled the hidden Alvor two cells away (a player who never hosted him): loaded true; server hoster held at 0 for 6 s: true
-- run 1: first movement: the server then streamed a stale Alvor 6037 units from the marker; 6 s later the local Alvor was 3D true, disabled false, at least 5852 units from the stale spot; back home: at least 5852 units from it; server 3c at 20772,-45188,-81, 192 units from the marker, hoster ff000000
-- run 1: replay, hosted movement: a quest replay starts, then the hoster takes Alvor out of his furniture and translates him 300 units (every 400 ms): 271 units from the server position at the end of the hold (21042,-45205,-84); server position held within 150 units of 20772,-45188,-81 for 2 s: true (last 20772,-45188,-81); after the replay the server follows the local position: true (20965,-45247,-84)
+- run 1: first movement: the server then streamed a stale Alvor 6037 units from the marker; 6 s later the local Alvor was 3D true, disabled false, at least 6030 units from the stale spot; back home: at least 6030 units from it; server 3c at 20594,-45041,-83, 97 units from the marker, hoster ff000000
+- run 1: replay, hosted movement: a quest replay starts, then the hoster takes Alvor out of his furniture and translates him 300 units (every 400 ms): 300 units from the server position at the end of the hold (20894,-45041,-121); server position held within 150 units of 20594,-45041,-83 for 2 s: true (last 20594,-45041,-83); after the replay the server follows the local position: true (20894,-45041,-151)
 - run 1: release: a script disables Alvor on the hoster: server hoster 0, disabled true; hoster still 0 after 6 s: true; the real actor was never deleted: true
 - run 1: replay, claim: a quest replay starts, then a script enables Alvor on the client: hoster held at 0 during the replay: true (last 0); after the replay the client claims him: true (hoster ff000000, server disabled false; local 3D true, disabled false)
 - run 1: party: Alvor's alias quests on the member 105385,45486,1bc95, member quest log [105385, 0]; joined: true; leader two cells away: hoster ff000001 (member ff000001): true; leader back within 4096: hoster ff000000 (leader ff000000): true; the leader still hosts 12 s later: true (last ff000000)
-- run 2: at 8:00 the client has Alvor in 3c at 20587,-45138,-82 (3D true); the server starts with 133c8 at -515,-154,240, hoster 0
-- run 2: claim without a FormView: server 3c at 20587,-45138,-82, 0 units from the work marker, hoster ff000000
-- run 2: hide: the player went two cells east of Alvor (20587,-45138,-82): server hoster 0; Alvor's cell attached true, Alvor 3D false, hidden true
-- run 2: retry: the server moved Alvor back to 133c8 while he was hidden; back at the forge the server has 3c at 20587,-45138,-82, 0 units from the marker, hoster ff000000; local Alvor 3D true, disabled false (16 ms after the claim)
-- run 2: walk-in: the driver enabled the hidden Alvor two cells away (a player who never hosted him): loaded true; server hoster held at 0 for 6 s: true
-- run 2: first movement: the server then streamed a stale Alvor 6037 units from the marker; 6 s later the local Alvor was 3D true, disabled false, at least 5852 units from the stale spot; back home: at least 5852 units from it; server 3c at 20772,-45188,-84, 192 units from the marker, hoster ff000000
-- run 2: replay, hosted movement: a quest replay starts, then the hoster takes Alvor out of his furniture and translates him 300 units (every 400 ms): 300 units from the server position at the end of the hold (21072,-45188,-84); server position held within 150 units of 20772,-45188,-84 for 2 s: true (last 20772,-45188,-84); after the replay the server follows the local position: true (21072,-45188,-84)
-- run 2: release: a script disables Alvor on the hoster: server hoster 0, disabled true; hoster still 0 after 6 s: true; the real actor was never deleted: true
-- run 2: replay, claim: a quest replay starts, then a script enables Alvor on the client: hoster held at 0 during the replay: true (last 0); after the replay the client claims him: true (hoster ff000000, server disabled false; local 3D true, disabled false)
-- run 2: party: Alvor's alias quests on the member 105385,45486,1bc95, member quest log [105385, 0]; joined: true; leader two cells away: hoster ff000001 (member ff000001): true; leader back within 4096: hoster ff000000 (leader ff000000): true; the leader still hosts 12 s later: true (last ff000000)
 - ![1B.4](runs/1B_4/1/1B_4_claim.png)
-- ![1B.4](runs/1B_4/2/1B_4_claim.png)
 ### 1B.5
 - run 1: draugr 9bcb9 (masterAmbushScript on the ref: true), hoster ff000000, engine 1 hosts it: true; Variable01 before: engine 1 0, engine 2 0
 - run 1: puppet (engine 2): allowed forms []
@@ -240,31 +229,13 @@ First non-PASS in plan order: G1.7
 ### G1.2
 - run 1: start: server Alvor in 133c8:Skyrim.esm at -515,-154,240, hoster 0
 - run 1: before the player came, the client had Alvor in 0 at 20587,-45138,-81, AI true; 2 s after the client applied its view of him (AI off), the client has him in 0 at 20587,-45138,-81
-- run 1: in the house on the lower floor, out of his way (set public so the teleported player is no trespasser): game hour 7.984, the check moved Alvor home for the start state; local Alvor cell 133c8 package 1cb07
-- run 1: end: server Alvor in 3c:Skyrim.esm at 20596,-45040,-84, 98 units from the forge marker, hoster ff000000; server cells 133c8:Skyrim.esm -> 3c:Skyrim.esm; hosters seen ff000000; player cell changes 1; local Alvor package 1cb07, game hour 7.988
-- run 1: Gerdur (13489) in 3c:Skyrim.esm at 18953,-43634,-138, hoster ff000000: Dialogue Menu open and in dialogue with the player: true
-- run 1: Alvor (13482) in 3c:Skyrim.esm at 20594,-45040,-82, hoster ff000000: Dialogue Menu open and in dialogue with the player: true
-- run 2: start: server Alvor in 133c8:Skyrim.esm at -515,-154,240, hoster 0
-- run 2: before the player came, the client had Alvor in 0 at 20587,-45138,-81, AI true; 2 s after the client applied its view of him (AI off), the client has him in 0 at 20587,-45138,-81
-- run 2: in the house on the lower floor, out of his way (set public so the teleported player is no trespasser): game hour 7.981, the check moved Alvor home for the start state; local Alvor cell 133c8 package 31730
-- run 2: end: server Alvor in 3c:Skyrim.esm at 20417,-45115,-84, 172 units from the forge marker, hoster ff000000; server cells 133c8:Skyrim.esm -> 3c:Skyrim.esm; hosters seen ff000000; player cell changes 1; local Alvor package 1cb07, game hour 7.991
-- run 2: Gerdur (13489) in 3c:Skyrim.esm at 18494,-45005,-121, hoster ff000000: Dialogue Menu open and in dialogue with the player: true
-- run 2: Alvor (13482) in 3c:Skyrim.esm at 20375,-45067,-80, hoster ff000000: Dialogue Menu open and in dialogue with the player: true
-- run 3: start: server Alvor in 133c8:Skyrim.esm at -515,-154,240, hoster 0
-- run 3: before the player came, the client had Alvor in 0 at 20587,-45138,-81, AI true; 2 s after the client applied its view of him (AI off), the client has him in 0 at 20587,-45138,-81
-- run 3: in the house on the lower floor, out of his way (set public so the teleported player is no trespasser): game hour 7.984, the check moved Alvor home for the start state; local Alvor cell 133c8 package 1cb07
-- run 3: end: server Alvor in 3c:Skyrim.esm at 20456,-45219,-84, 155 units from the forge marker, hoster ff000000; server cells 133c8:Skyrim.esm -> 3c:Skyrim.esm; hosters seen ff000000; player cell changes 1; local Alvor package 1cb07, game hour 7.987
-- run 3: Gerdur (13489) in 3c:Skyrim.esm at 18953,-43634,-138, hoster ff000000: Dialogue Menu open and in dialogue with the player: true
-- run 3: Alvor (13482) in 3c:Skyrim.esm at 20459,-45225,-83, hoster ff000000: Dialogue Menu open and in dialogue with the player: true
+- run 1: in the house on the lower floor, out of his way (set public so the teleported player is no trespasser): game hour 7.986, the check moved Alvor home for the start state; local Alvor cell 133c8 package 1cb07
+- run 1: end: server Alvor in 3c:Skyrim.esm at 20594,-45041,-82, 97 units from the forge marker, hoster ff000000; server cells 133c8:Skyrim.esm -> 3c:Skyrim.esm; hosters seen ff000000; player cell changes 1; local Alvor package 1cb07, game hour 7.989
+- run 1: Gerdur (13489) in 3c:Skyrim.esm at 18952,-43634,-138, hoster ff000000: Dialogue Menu open and in dialogue with the player: true
+- run 1: Alvor (13482) in 3c:Skyrim.esm at 20594,-45041,-82, hoster ff000000: Dialogue Menu open and in dialogue with the player: true
 - ![G1.2](runs/G1_2/1/G1_2-forge.png)
 - ![G1.2](runs/G1_2/1/G1_2-Gerdur.png)
 - ![G1.2](runs/G1_2/1/G1_2-Alvor.png)
-- ![G1.2](runs/G1_2/2/G1_2-forge.png)
-- ![G1.2](runs/G1_2/2/G1_2-Gerdur.png)
-- ![G1.2](runs/G1_2/2/G1_2-Alvor.png)
-- ![G1.2](runs/G1_2/3/G1_2-forge.png)
-- ![G1.2](runs/G1_2/3/G1_2-Gerdur.png)
-- ![G1.2](runs/G1_2/3/G1_2-Alvor.png)
 ### G1.3
 - run 1: Gerdur (13489) on engine 2 (puppet): greeting "Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
 - run 1: Gerdur on engine 2 (puppet): the dialogue closed: true
@@ -400,6 +371,37 @@ First non-PASS in plan order: G1.7
 - ![2A.1](runs/2A_1/2/2A_1-engine2.png)
 - ![2A.1](runs/2A_1/3/2A_1-open.png)
 - ![2A.1](runs/2A_1/3/2A_1-engine2.png)
+### 2A.2
+- run 1: barrel 20570 before: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}; NPC 38258 hosted by engine 1 (ff000000), engine 2 shows a puppet; before: {"loaded":true,"disabled":false} / {"loaded":true,"disabled":false}
+- run 1: barrel 20570: server isDisabled true; within 5 s of the server disable: engine 1 {"loaded":false,"disabled":true}, engine 2 {"loaded":false,"disabled":true}
+- run 1: barrel 20570: server isDisabled false; within 5 s of the server enable: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}
+- run 1: NPC 38258 on the server before the disable: {"hoster":4278190080,"listeners":[4278190080,4278190081],"at":["1a26f:Skyrim.esm",20334,-6649,-3232]}
+- run 1: NPC 38258: server isDisabled true; within 5 s of the server disable: engine 1 {"loaded":false,"disabled":true}, engine 2 {"loaded":false,"disabled":true}
+- run 1: NPC 38258: server isDisabled false; within 5 s of the server enable: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}
+- run 1: NPC 38258 on the server after the enable: {"hoster":0,"listeners":[4278190080,4278190081],"at":["1a26f:Skyrim.esm",20334,-6649,-3232]}
+- run 1: NPC 38258 hoster within 30 s of the enable (not asserted): ff000000
+- run 1: barrel 20570 disabled while engine 1's player is away; players the server streams the barrel to at the disable: ["ff000001"]
+- run 1: barrel 20570 disabled on the server while engine 1's player was away: engine 1 {"loaded":false,"disabled":true} after the return
+- run 2: barrel 20570 before: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}; NPC 1a67c hosted by engine 1 (ff000000), engine 2 shows a puppet; before: {"loaded":true,"disabled":false} / {"loaded":true,"disabled":false}
+- run 2: barrel 20570: server isDisabled true; within 5 s of the server disable: engine 1 {"loaded":false,"disabled":true}, engine 2 {"loaded":false,"disabled":true}
+- run 2: barrel 20570: server isDisabled false; within 5 s of the server enable: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}
+- run 2: NPC 1a67c on the server before the disable: {"hoster":4278190080,"listeners":[4278190080,4278190081],"at":["1a26f:Skyrim.esm",20669,-7728,-3636]}
+- run 2: NPC 1a67c: server isDisabled true; within 5 s of the server disable: engine 1 {"loaded":false,"disabled":true}, engine 2 {"loaded":false,"disabled":true}
+- run 2: NPC 1a67c: server isDisabled false; within 5 s of the server enable: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}
+- run 2: NPC 1a67c on the server after the enable: {"hoster":0,"listeners":[4278190080,4278190081],"at":["1a26f:Skyrim.esm",20669,-7728,-3636]}
+- run 2: NPC 1a67c hoster within 30 s of the enable (not asserted): ff000000
+- run 2: barrel 20570 disabled while engine 1's player is away; players the server streams the barrel to at the disable: ["ff000001"]
+- run 2: barrel 20570 disabled on the server while engine 1's player was away: engine 1 {"loaded":false,"disabled":true} after the return
+- run 3: barrel 20570 before: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}; NPC 2c90f hosted by engine 1 (ff000000), engine 2 shows a puppet; before: {"loaded":true,"disabled":false} / {"loaded":true,"disabled":false}
+- run 3: barrel 20570: server isDisabled true; within 5 s of the server disable: engine 1 {"loaded":false,"disabled":true}, engine 2 {"loaded":false,"disabled":true}
+- run 3: barrel 20570: server isDisabled false; within 5 s of the server enable: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}
+- run 3: NPC 2c90f on the server before the disable: {"hoster":4278190080,"listeners":[4278190080,4278190081],"at":["1a26f:Skyrim.esm",20900,-6870,-3600]}
+- run 3: NPC 2c90f: server isDisabled true; within 5 s of the server disable: engine 1 {"loaded":false,"disabled":true}, engine 2 {"loaded":false,"disabled":true}
+- run 3: NPC 2c90f: server isDisabled false; within 5 s of the server enable: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}
+- run 3: NPC 2c90f on the server after the enable: {"hoster":0,"listeners":[4278190080,4278190081],"at":["1a26f:Skyrim.esm",20900,-6870,-3600]}
+- run 3: NPC 2c90f hoster within 30 s of the enable (not asserted): ff000001
+- run 3: barrel 20570 disabled while engine 1's player is away; players the server streams the barrel to at the disable: ["ff000001"]
+- run 3: barrel 20570 disabled on the server while engine 1's player was away: engine 1 {"loaded":false,"disabled":true} after the return
 ### P8
 - run 1: 115 client log lines, 2 [Exception] lines
 - run 1: exception: [Exception] failed to get key 'data': failed to call custom Serialize for type struct Equipment: failed to get key 'inv': failed to call cus.

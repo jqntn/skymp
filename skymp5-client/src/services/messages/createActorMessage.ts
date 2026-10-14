@@ -45,7 +45,7 @@ export interface CreateActorMessageAdditionalProps {
     isHarvested?: boolean;
     setNodeTextureSet?: SetNodeTextureSetEntry[];
     setNodeScale?: SetNodeScaleEntry[];
-    disabled?: boolean;
+    isDisabled?: boolean;
     lastAnimation?: string;
     displayName?: string;
     isHostedByOther?: boolean;

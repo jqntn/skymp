@@ -316,7 +316,7 @@ export class RemoteServer extends ClientListener {
 
             ModelApplyUtils.applyModelNodeTextureSet(refr, msg.props.setNodeTextureSet);
 
-            ModelApplyUtils.applyModelIsDisabled(refr, !!msg.props['disabled']);
+            ModelApplyUtils.applyModelIsDisabled(refr, !!msg.props.isDisabled);
 
             // TODO: move to a separate module
             const animation = msg.props.lastAnimation;
@@ -769,11 +769,20 @@ export class RemoteServer extends ClientListener {
           ModelApplyUtils.applyModelIsOpen(refr, !!msgData);
         } else if (msg.propName === 'isHarvested') {
           ModelApplyUtils.applyModelIsHarvested(refr, !!msgData);
-        } else if (msg.propName === 'disabled') {
+        } else if (msg.propName === 'isDisabled') {
           ModelApplyUtils.applyModelIsDisabled(refr, !!msgData);
         }
       });
       return;
+    }
+    if (msg.propName === 'isDisabled' && msg.refrId && msg.refrId < 0xff000000) {
+      const refrId = msg.refrId;
+      once('update', () => {
+        const refr = ObjectReference.from(Game.getFormEx(refrId));
+        if (refr) {
+          ModelApplyUtils.applyModelIsDisabled(refr, !!msgData);
+        }
+      });
     }
     (form as Record<string, unknown>)[msg.propName] = msgData;
   }

@@ -787,3 +787,32 @@ TEST_CASE("A player opens a dead ESP NPC, takes an item and closes it, "
   guard.SetIsDead(false);
   DisconnectClaimer(partOne);
 }
+
+TEST_CASE("Disabling and enabling an ESP NPC or ref tells the listeners",
+          "[NpcHost][espm][2A.2]")
+{
+  auto& partOne = GetNpcHostPartOne();
+  auto& guard = partOne.worldState.GetFormAt<MpActor>(kCrimeFactionGuard);
+  auto& barrel = partOne.worldState.GetFormAt<MpObjectReference>(0x20570);
+  for (MpObjectReference* refr :
+       { static_cast<MpObjectReference*>(&guard), &barrel }) {
+    ConnectClaimer(partOne, *refr, CellOf(partOne, *refr));
+    auto sent = [&](const char* value) {
+      return std::any_of(
+        partOne.Messages().begin(), partOne.Messages().end(), [&](auto& m) {
+          return m.j["t"] == MsgType::UpdateProperty &&
+            m.j["propName"] == "isDisabled" &&
+            m.j["idx"] == refr->GetIdx() && m.j["dataDump"] == value;
+        });
+    };
+    partOne.Messages().clear();
+    refr->Disable();
+    REQUIRE(refr->IsDisabled());
+    REQUIRE(sent("true"));
+    partOne.Messages().clear();
+    refr->Enable();
+    REQUIRE(!refr->IsDisabled());
+    REQUIRE(sent("false"));
+    DisconnectClaimer(partOne);
+  }
+}
