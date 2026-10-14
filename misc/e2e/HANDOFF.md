@@ -84,7 +84,7 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 
 ## Next steps
 
-0. Retro 1 (2026-10-14): harness tasks done; check-the-checks done (log line 13:15). To do before 2A.4: rewrite the weak checks 1A.5 (must exercise the isHostedByOther UpdateProperty path: the puppet engine must have the NPC's form before the claim), S1.2 (find what still breaks dialogue in HEAD, or retire the check's fix-specific part) and S1.3 (no ACCEPTED escape on the regressions it targets).
+0. Retro 1 (2026-10-14): done (log lines 12:30, 13:15, 13:40). S1.3 lost its ACCEPTED escape (tell the user: their 2026-10-12 decision accepted a FAIL that no longer happens).
    - 2A.3 PASS (committed). Red patches for the check-the-checks batch are in the scratchpad (redpatches/, index.md) and the batch script redbatch.sh (turns PUBLISH_CLIENT_DIST off during red builds, back on at the end); results in redbatch.txt. S1.3 needs a rewrite: it returns ACCEPTED on the regressions it targets.
 1. Phase 2A: 2A.4 (start-game quests' create-in items, see the step 4 finding; leader-only take), 2A.5 (script item gains and losses); each needs its check (the plan has none yet for 2A.2-2A.5 except through G2), then G1.9. G1.7 waits for the user's hand check (or a harness that can press keys: a visible run with focus is the untried option).
 2. Then 2B (2B.3 also tests that a hoster does not allow a dragon's script events), G2, P. P8 stays red until reached.

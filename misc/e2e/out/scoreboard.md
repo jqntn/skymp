@@ -5,14 +5,14 @@ First non-PASS in plan order: G1.7
 
 | id | result | secs | at | detail |
 |---|---|---|---|---|
-| L1 | PASS | 89 | 2026-10-14 11:11 |  |
+| L1 | PASS | 67 | 2026-10-14 11:33 |  |
 | S0 | PASS | 30 | 2026-10-13 15:22 | 1/1 runs PASS |
 | S0b | PASS | 161 | 2026-10-13 15:25 | 1/1 runs PASS |
 | S0c | PASS | 30 | 2026-10-13 15:25 | 1/1 runs PASS |
 | S1.1 | PASS | 162 | 2026-10-13 16:16 | 2/2 runs PASS |
 | S1.2 | PASS | 52 | 2026-10-13 16:30 | 1/1 runs PASS |
 | S1.4 | PASS | 69 | 2026-10-13 15:30 | 1/1 runs PASS |
-| S1.3 | PASS | 23 | 2026-10-13 15:30 | 1/1 runs PASS |
+| S1.3 | PASS | 28 | 2026-10-14 11:13 | 1/1 runs PASS |
 | S1.5 | PASS | 56 | 2026-10-13 15:31 | 1/1 runs PASS |
 | S1.6 | PASS | 58 | 2026-10-13 16:08 | 1/1 runs PASS |
 | S2 | PASS | 117 | 2026-10-13 15:35 | 1/1 runs PASS |
@@ -67,9 +67,9 @@ First non-PASS in plan order: G1.7
 ## Evidence
 
 ### L1
-- build: ok in 30 s (l1-build.log)
-- ts: ok in 1 s (l1-ts.log)
-- ctest: ok in 58 s (l1-ctest.log)
+- build: ok in 66 s (l1-build.log)
+- ts: ok in 0 s (l1-ts.log)
+- ctest: ok in 0 s (skipped: the unit and server binaries and the integration tests are those of the last green ctest)
 ### S0
 - run 1: actor ff000000, RaceMenu open: false
 - run 1: client moved 365 units from 12156,-71991,6010, server moved 365 units from 12156,-71991,6010
@@ -123,8 +123,8 @@ First non-PASS in plan order: G1.7
 - ![S1.4](runs/S1_4/1/S1_4-engine1.png)
 - ![S1.4](runs/S1_4/1/S1_4-engine2.png)
 ### S1.3
-- run 1: game hour 8.00; RiverwoodBlacksmithWorkMarker 2c308 at 20587,-45138,-81; client after 17 ms: Alvor in world 3c at 20587,-45138,-82, 0 units from the forge, 3D loaded true, enabled true; server: 133c8 at -515,-154,240
-- run 1: 5000 ms later: Alvor in world 3c at 20587,-45138,-82, 0 units from the forge, 3D loaded true, enabled true
+- run 1: game hour 8.00; RiverwoodBlacksmithWorkMarker 2c308 at 20587,-45138,-81; client after 16 ms: Alvor in world 3c at 20584,-45137,-82, 3 units from the forge, 3D loaded true, enabled true; server: 133c8 at -515,-154,240
+- run 1: 5000 ms later: Alvor in world 3c at 20584,-45132,-82, 7 units from the forge, 3D loaded true, enabled true
 - ![S1.3](runs/S1_3/1/S1_3.png)
 ### S1.5
 - run 1: engine 1 talks to the puppet Delphine (13485) hosted by engine 2; topic "Je voudrais une chambre. (10 or)", answer "Pas de problème, elle est à vous."

@@ -17,13 +17,13 @@
     "result": "PASS",
     "reason": "",
     "evidence": [
-      "build: ok in 30 s (l1-build.log)",
-      "ts: ok in 1 s (l1-ts.log)",
-      "ctest: ok in 58 s (l1-ctest.log)"
+      "build: ok in 66 s (l1-build.log)",
+      "ts: ok in 0 s (l1-ts.log)",
+      "ctest: ok in 0 s (skipped: the unit and server binaries and the integration tests are those of the last green ctest)"
     ],
-    "secs": 89,
+    "secs": 67,
     "shots": [],
-    "at": "2026-10-14T11:11:14.147Z"
+    "at": "2026-10-14T11:33:59.861Z"
   },
   "S0b": {
     "result": "PASS",
@@ -106,15 +106,21 @@
   "S1.3": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 23,
+    "secs": 28,
     "evidence": [
-      "run 1: game hour 8.00; RiverwoodBlacksmithWorkMarker 2c308 at 20587,-45138,-81; client after 17 ms: Alvor in world 3c at 20587,-45138,-82, 0 units from the forge, 3D loaded true, enabled true; server: 133c8 at -515,-154,240",
-      "run 1: 5000 ms later: Alvor in world 3c at 20587,-45138,-82, 0 units from the forge, 3D loaded true, enabled true"
+      "run 1: game hour 8.00; RiverwoodBlacksmithWorkMarker 2c308 at 20587,-45138,-81; client after 16 ms: Alvor in world 3c at 20584,-45137,-82, 3 units from the forge, 3D loaded true, enabled true; server: 133c8 at -515,-154,240",
+      "run 1: 5000 ms later: Alvor in world 3c at 20584,-45132,-82, 7 units from the forge, 3D loaded true, enabled true"
     ],
     "shots": [
       "runs/S1_3/1/S1_3.png"
     ],
-    "at": "2026-10-13T15:30:25.993Z"
+    "rtt": {
+      "1": {
+        "median": 34,
+        "calls": 5
+      }
+    },
+    "at": "2026-10-14T11:13:47.384Z"
   },
   "S2": {
     "result": "PASS",

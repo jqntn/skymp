@@ -1,4 +1,6 @@
-const NPCS = [["Orgnar", 0x13486], ["Delphine", 0x13485]];
+const NPCS = [["Orgnar", 0x13486, true], ["Delphine", 0x13485, false]];
+const M = "Dialogue Menu";
+const R = "_root.DialogueMenu_mc";
 
 module.exports = {
   engines: 2,
@@ -10,8 +12,22 @@ module.exports = {
   async run(ctx) {
     const actors = [await ctx.ready(1), await ctx.ready(2)];
     const npc = (id) => `const a = sp.Actor.from(sp.Game.getFormEx(${id}));`;
+    const ui = (t) => `sp.Ui.getString("${M}", "${R}.${t}")`;
+    const talk = async (n, name) => {
+      const topic = await ctx.waitFor(() => ctx.drv(`return ${ui("TopicList.entryList.0.text")};`, n), 15000, `the topic list is shown on engine ${n}`).catch(() => "");
+      const subtitle = async () => (await ctx.drv(`return ${ui("SubtitleText.text")};`, n)).trim();
+      const greeting = await ctx.waitFor(subtitle, 10000, `${name} greets the player on engine ${n}`).catch(() => "");
+      await ctx.waitFor(async () => !(await subtitle()), 20000, `the greeting ends on engine ${n}`).catch(() => {});
+      let answer = "";
+      for (let click = 0; click < 3 && !answer && topic; click++) {
+        await ctx.drv(`sp.Ui.setInt("${M}", "${R}.TopicList.selectedIndex", 0); sp.Ui.invokeBool("${M}", "${R}.onSelectionClick", true); return 0;`, n);
+        answer = await ctx.waitFor(async () => { const s = await subtitle(); return s && s !== greeting ? s : ""; }, 8000, `${name} answers on engine ${n}`).catch(() => "");
+      }
+      await ctx.waitFor(async () => { await ctx.drv(`sp.Ui.invokeBool("${M}", "${R}.onCancelPress", true); return 0;`, n); await ctx.sleep(1500); return ctx.drv(`return !sp.Ui.isMenuOpen("${M}");`, n); }, 20000, `the dialogue closes on engine ${n}`).catch(() => {});
+      return { topic, greeting, answer };
+    };
 
-    for (const [k, [name, id]] of NPCS.entries()) {
+    for (const [k, [name, id, sit]] of NPCS.entries()) {
       const loc = await ctx.probe(`return mp.get(${id}, "locationalData");`);
       for (const actor of actors) await ctx.probe(`mp.set(${actor}, "locationalData", ${JSON.stringify(loc)}); return 0;`);
       for (const n of [1, 2]) {
@@ -21,6 +37,13 @@ module.exports = {
       const h = actors.indexOf(hoster) + 1;
       ctx.assert.ok(h > 0, `${name} hoster ${hoster.toString(16)} is not a player engine`);
       await ctx.sleep(3000);
+      if (sit) {
+        const seat = await ctx.drv(`${npc(id)} const c = a.getParentCell(); let best = null; for (let i = 0, n = c.getNumRefs(40); i < n; i++) { const r = c.getNthRef(i, 40); if (r && (!best || a.getDistance(r) < a.getDistance(best))) best = r; } if (!best || a.getDistance(best) > 400) return 0; best.activate(a, true); return best.getFormID();`, h);
+        const seated = !!seat && await ctx.waitFor(() => Promise.all([1, 2].map((n) => ctx.drv(`${npc(id)} return a.getSitState();`, n))).then((s) => s.every((x) => x === 3)), 20000, `${name} sits on both engines`).catch(() => false);
+        const states = await Promise.all([1, 2].map((n) => ctx.drv(`${npc(id)} return a.getSitState();`, n)));
+        ctx.evidence.push(`${name}: the hoster engine ${h} makes him use furniture ${seat.toString(16)}; sit state engine 1 ${states[0]}, engine 2 ${states[1]}`);
+        ctx.assert.ok(seated, `${name} does not sit on both engines, so the seated case is not tested (sit states ${states})`);
+      }
 
       for (const n of k % 2 ? [h, 3 - h] : [3 - h, h]) {
         const role = n === h ? "hoster" : "puppet";
@@ -50,6 +73,9 @@ module.exports = {
         }
         ctx.evidence.push(`${name} (${id.toString(16)}) on engine ${n} (${role}), approach spot ${spot * 45} deg from its facing, ${attempts} activation(s): Dialogue Menu open and in dialogue with the player: ${!!ok}`);
         ctx.assert.ok(ok, `${name}: no dialogue on engine ${n} (${role})`);
+        const t = await talk(n, name);
+        ctx.evidence.push(`${name} on engine ${n} (${role}): greeting "${t.greeting}", topic "${t.topic}", answer "${t.answer}"`);
+        ctx.assert.ok(t.answer, `${name} did not answer the topic "${t.topic}" on engine ${n} (${role})`);
       }
     }
   },
