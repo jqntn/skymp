@@ -12,6 +12,7 @@ export interface FormModel extends CreateActorMessageAdditionalProps, CreateActo
   numMovementChanges?: number;
   numAppearanceChanges?: number;
   isMyClone?: boolean;
+  animationQueue?: Animation[];
 }
 
 export interface WorldModel {

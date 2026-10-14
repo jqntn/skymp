@@ -653,3 +653,28 @@ TEST_CASE("A hoster's stale death right after a server respawn is ignored",
 
   ReleaseAlvor(partOne, alvor, cell, start);
 }
+
+TEST_CASE("A hoster's animation is the last animation of the NPC",
+          "[NpcHost][espm][G1.6]")
+{
+  auto& partOne = GetNpcHostPartOne();
+  auto& alvor = partOne.worldState.GetFormAt<MpActor>(kAlvor);
+  const auto cell = CellOf(partOne, alvor);
+  const auto start = alvor.GetPos();
+  HostAlvor(partOne, alvor);
+
+  DoMessage(partOne, 0,
+            nlohmann::json{ { "t", MsgType::UpdateAnimation },
+                            { "idx", alvor.GetIdx() },
+                            { "data",
+                              { { "animEventName", "IdleChairFrontEnter" },
+                                { "numChanges", 3 } } } });
+
+  auto anim = alvor.GetLastAnimEvent();
+  REQUIRE(anim.has_value());
+  REQUIRE(anim->animEventName == "IdleChairFrontEnter");
+  REQUIRE(anim->numChanges == 3);
+
+  alvor.SetLastAnimEvent(std::nullopt);
+  ReleaseAlvor(partOne, alvor, cell, start);
+}

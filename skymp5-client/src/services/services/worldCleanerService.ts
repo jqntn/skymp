@@ -43,6 +43,7 @@ export class WorldCleanerService extends ClientListener {
   }
 
   private onUpdate() {
+    this.sp.updateAnimations();
     this.processOneActor();
   }
 

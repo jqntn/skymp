@@ -7,7 +7,7 @@ import { getMovement } from "../../sync/movementGet";
 // TODO: refactor this out
 import * as worldViewMisc from "../../view/worldViewMisc";
 
-import { Animation, AnimationSource } from "../../sync/animation";
+import { Animation, getAnimationSource } from "../../sync/animation";
 import { Actor, EquipEvent, FormType } from "skyrimPlatform";
 import { getAppearance } from "../../sync/appearance";
 import { ActorValues, getActorValues } from "../../sync/actorvalues";
@@ -42,9 +42,20 @@ export class SendInputsService extends ClientListener {
     }
 
     private onHostStart(remoteId: number) {
-        if (this.hiddenHosts.delete(remoteId)) {
-            this.getInputOwner(remoteId)?.enableNoWait(false);
-        }
+        this.startedHosts.add(remoteId);
+    }
+
+    private applyStartedHosts() {
+        this.startedHosts.forEach((remoteId) => {
+            const owner = this.getInputOwner(remoteId);
+            if (this.hiddenHosts.delete(remoteId)) {
+                owner?.enableNoWait(false);
+            }
+            if (owner && remoteId >= espActorIdOffset) {
+                getAnimationSource(owner, true).restart(owner.getSitState() === 0);
+            }
+        });
+        this.startedHosts.clear();
     }
 
     private onHostStop(remoteId: number) {
@@ -55,6 +66,7 @@ export class SendInputsService extends ClientListener {
 
     private onUpdate() {
         if (!this.singlePlayerService.isSinglePlayer) {
+            this.applyStartedHosts();
             this.sendInputs();
             this.updatePapyrusEventsAllowedForms();
 
@@ -244,31 +256,34 @@ export class SendInputsService extends ClientListener {
         // Extermly important that it's a local id since AnimationSource depends on it
         const refrIdStr = owner.getFormID().toString(16);
 
-        let animSource = this.playerAnimSource.get(refrIdStr);
-        if (!animSource) {
-            animSource = new AnimationSource(owner);
-            this.playerAnimSource.set(refrIdStr, animSource);
+        const animSource = getAnimationSource(owner, !!_refrId);
+        if (_refrId) {
+            const sitState = owner.getSitState();
+            if (sitState === 0 && this.lastSitState.get(refrIdStr)) {
+                animSource.addStand();
+            }
+            this.lastSitState.set(refrIdStr, sitState);
         }
-        const anim = animSource.getAnimation();
-
-        const lastAnimationSent = this.lastAnimationSent.get(refrIdStr);
-        if (
-            !lastAnimationSent ||
-            anim.numChanges !== lastAnimationSent.numChanges
-        ) {
-            // Drink potion anim from this mod https://www.nexusmods.com/skyrimspecialedition/mods/97660
-            if (anim.animEventName !== '' && !anim.animEventName.startsWith("DrinkPotion_")) {
-                this.lastAnimationSent.set(refrIdStr, anim);
-                this.updateActorValuesAfterAnimation(anim.animEventName);
-                const message: MessageWithRefrId<UpdateAnimationMessage> = {
-                    t: MsgType.UpdateAnimation,
-                    data: anim,
-                    _refrId
-                };
-                this.controller.emitter.emit("sendMessageWithRefrId", {
-                    message,
-                    reliability: "unreliable"
-                });
+        for (const anim of _refrId ? animSource.drain() : [animSource.getAnimation()]) {
+            const lastAnimationSent = this.lastAnimationSent.get(refrIdStr);
+            if (
+                !lastAnimationSent ||
+                anim.numChanges !== lastAnimationSent.numChanges
+            ) {
+                // Drink potion anim from this mod https://www.nexusmods.com/skyrimspecialedition/mods/97660
+                if (anim.animEventName !== '' && !anim.animEventName.startsWith("DrinkPotion_")) {
+                    this.lastAnimationSent.set(refrIdStr, anim);
+                    this.updateActorValuesAfterAnimation(anim.animEventName);
+                    const message: MessageWithRefrId<UpdateAnimationMessage> = {
+                        t: MsgType.UpdateAnimation,
+                        data: anim,
+                        _refrId
+                    };
+                    this.controller.emitter.emit("sendMessageWithRefrId", {
+                        message,
+                        reliability: _refrId ? "reliable" : "unreliable"
+                    });
+                }
             }
         }
     }
@@ -452,8 +467,8 @@ export class SendInputsService extends ClientListener {
     }
 
     private lastSendMovementMoment = new Map<string, number>();
-    private playerAnimSource = new Map<string, AnimationSource>(); // TODO: make service
     private lastAnimationSent = new Map<string, Animation>();
+    private lastSitState = new Map<string, number>();
     private actorValuesNeedUpdate = false;
     private isRaceSexMenuShown = false;
     private equipmentChanged = false;
@@ -464,6 +479,7 @@ export class SendInputsService extends ClientListener {
     private lostHostSince = new Map<number, number>();
     private yieldedAt = new Map<number, number>();
     private hiddenHosts = new Map<number, number>();
+    private startedHosts = new Set<number>();
     private stoppedHosts = new Map<number, number>();
     private papyrusEventsAllowedKey = "";
 }

@@ -1,5 +1,5 @@
-import { Actor, ActorBase, createText, destroyText, Form, FormType, Game, Keyword, NetImmerse, ObjectReference, once, printConsole, setTextPos, setTextSize, setTextString, storage, TESModPlatform, Utility, worldPointToScreenPoint } from "skyrimPlatform";
-import { setDefaultAnimsDisabled, applyAnimation } from "../sync/animation";
+import { Actor, ActorBase, createText, Debug, destroyText, Form, FormType, Game, isAnimationGraphReady, Keyword, NetImmerse, ObjectReference, once, printConsole, setTextPos, setTextSize, setTextString, storage, TESModPlatform, Utility, worldPointToScreenPoint } from "skyrimPlatform";
+import { setDefaultAnimsDisabled, applyAnimation, standUp, isFurnitureIdle } from "../sync/animation";
 import { Appearance, applyAppearance } from "../sync/appearance";
 import { isBadMenuShown, applyEquipment } from "../sync/equipment";
 import { RespawnNeededError } from "../lib/errors";
@@ -342,6 +342,8 @@ export class FormView {
     const lethalHit = this.puppetLethalHit;
     const serverDead = this.serverDead;
     const healthPercentage = this.serverHealthPercentage;
+    const pendingEnable = this.enableAt !== 0;
+    this.enableAt = 0;
     this.puppetLethalHit = false;
     this.realActor = false;
     this.puppetMode = undefined;
@@ -350,6 +352,9 @@ export class FormView {
         const ac = Actor.from(Game.getFormEx(refrId));
         ac?.clearKeepOffsetFromActor();
         ac?.enableAI(false);
+        if (pendingEnable) {
+          ac?.enableNoWait(false);
+        }
         if (ac && wasPuppet) {
           endPuppetHold(ac, damageMult, lethalHit, serverDead, healthPercentage);
         }
@@ -374,6 +379,7 @@ export class FormView {
 
   private realActor = false;
   private hostedHere = false;
+  private enableAt = 0;
   private puppetMode?: boolean;
   private savedDamageMult = 1;
   private puppetLethalHit = false;
@@ -545,9 +551,18 @@ export class FormView {
     const ac = Actor.from(refr);
     if (this.realActor && ac) {
       const wantAI = this.hostedHere || talksToPlayer;
+      if (this.hostedHere && this.wasHostedByOther && !ac.isAIEnabled() && !ac.isOnMount() && ac.getSitState() !== 0) {
+        ac.disableNoWait(false);
+        this.enableAt = Date.now() + 300;
+      }
+      if (this.enableAt && Date.now() >= this.enableAt) {
+        this.enableAt = 0;
+        ac.enableNoWait(false);
+      }
       if (wantAI !== ac.isAIEnabled()) {
         ac.enableAI(wantAI);
       }
+      this.wasHostedByOther = !this.hostedHere && (this.wasHostedByOther || !!model.isHostedByOther);
       if (!wantAI && ac.isInCombat()) {
         ac.stopCombat();
       }
@@ -577,12 +592,34 @@ export class FormView {
       }
     }
 
-    if (refr.is3DLoaded()) {
-      if (model.animation && !this.hostedHere) {
-        applyAnimation(refr, model.animation, this.animState);
+    const animReady = refr.is3DLoaded() && (!this.realActor || isAnimationGraphReady(refr.getFormID()));
+    if (animReady && Date.now() >= this.animState.applyAfter) {
+      const seatedPuppet = this.realActor && !this.hostedHere && !!model.isHostedByOther && !!ac && !ac.isDead() && !ac.isOnMount() && ac.getSitState() !== 0;
+      if (seatedPuppet && ac && this.animState.useAnimOverrides && !this.animState.spawnStood && !isFurnitureIdle(model.animation?.animEventName)) {
+        this.animState.spawnStood = true;
+        standUp(ac);
+        this.animState.applyAfter = Date.now() + 1000;
+      } else {
+        const queued = model.animationQueue?.splice(0) ?? [];
+        const lastNumChanges = this.animState.lastNumChanges;
+        if (model.animation && !this.hostedHere) {
+          for (const anim of queued.length ? queued : [model.animation]) {
+            applyAnimation(refr, anim, this.animState);
+          }
+        }
+        if (this.animState.useAnimOverrides && this.animState.overriddenAnimEventName) {
+          this.animState.followUpAnimEventName = this.animState.overriddenAnimEventName;
+          this.animState.overriddenAnimEventName = undefined;
+          this.animState.applyAfter = Date.now() + 1000;
+        } else if (this.animState.followUpAnimEventName) {
+          if (this.animState.lastNumChanges === lastNumChanges && !this.hostedHere) {
+            Debug.sendAnimationEvent(refr, this.animState.followUpAnimEventName);
+          }
+          this.animState.followUpAnimEventName = undefined;
+        }
+        // Use them only once, for spawning actors with correct animations
+        this.animState.useAnimOverrides = false;
       }
-      // Use them only once, for spawning actors with correct animations
-      this.animState.useAnimOverrides = false;
     }
 
 
@@ -747,7 +784,7 @@ export class FormView {
   };
 
   private getDefaultAnimState() {
-    return { lastNumChanges: 0, useAnimOverrides: true };
+    return { lastNumChanges: 0, useAnimOverrides: true, spawnStood: false, applyAfter: 0, followUpAnimEventName: undefined as string | undefined, overriddenAnimEventName: undefined as string | undefined };
   };
 
   private tryHostIfNeed(ac: Actor, remoteId: number) {

@@ -5,7 +5,7 @@ First non-PASS in plan order: S3.4
 
 | id | result | secs | at | detail |
 |---|---|---|---|---|
-| L1 | PASS | 89 | 2026-10-13 20:24 |  |
+| L1 | PASS | 130 | 2026-10-14 01:47 |  |
 | S0 | PASS | 30 | 2026-10-13 15:22 | 1/1 runs PASS |
 | S0b | PASS | 161 | 2026-10-13 15:25 | 1/1 runs PASS |
 | S0c | PASS | 30 | 2026-10-13 15:25 | 1/1 runs PASS |
@@ -35,7 +35,7 @@ First non-PASS in plan order: S3.4
 | G1.3 | PASS | 265 | 2026-10-13 17:00 | 3/3 runs PASS |
 | G1.4 | PASS | 424 | 2026-10-13 17:31 | 3/3 runs PASS |
 | G1.5 | PASS | 370 | 2026-10-13 20:30 | 3/3 runs PASS |
-| G1.6 | FAIL | 0 | - | not run |
+| G1.6 | PASS | 353 | 2026-10-14 01:53 | 3/3 runs PASS |
 | G1.7 | FAIL | 0 | - | not run |
 | G1.8 | FAIL | 0 | - | not run |
 | 2A.1 | FAIL | 0 | 2026-10-12 16:53 | no check script |
@@ -67,9 +67,9 @@ First non-PASS in plan order: S3.4
 ## Evidence
 
 ### L1
-- build: ok in 27 s (l1-build.log)
+- build: ok in 72 s (l1-build.log)
 - ts: ok in 1 s (l1-ts.log)
-- ctest: ok in 61 s (l1-ctest.log)
+- ctest: ok in 56 s (l1-ctest.log)
 ### S0
 - run 1: actor ff000000, RaceMenu open: false
 - run 1: client moved 365 units from 12156,-71991,6010, server moved 365 units from 12156,-71991,6010
@@ -328,6 +328,43 @@ First non-PASS in plan order: S3.4
 - ![G1.5](runs/G1_5/3/G1_5-guards.png)
 - ![G1.5](runs/G1_5/3/G1_5-dragonsreach.png)
 - ![G1.5](runs/G1_5/3/G1_5-mq103.png)
+### G1.6
+- run 1: engine 2 hosts: Faendal ff000001, Alvor ff000001, Hilde ff000001
+- run 1: Faendal, hoster engine 2 (server ff000001): hoster motion 4.6, drop 23.0, head 24.3, hips 62.4; puppet engine 1: motion 51.8, drop 26.9, head 21.7, hips 63.6
+- run 1: Alvor, hoster engine 2 (server ff000001): hoster motion 5.0, drop 35.5, head 52.6, hips 38.0; puppet engine 1: motion 4.7, drop 35.5, head 52.7, hips 38.0
+- run 1: Hilde, hoster engine 2 (server ff000001): hoster motion 0.7, drop 33.7, head 49.7, hips 68.5; puppet engine 1: motion 2.8, drop 26.7, head 44.9, hips 68.5
+- run 1: 2 NPC(s) moved on the hoster engine 2, so the motion test ran for them; still on engine 1: none
+- run 1: engine 1 hosts: Faendal ff000000, Alvor ff000000, Hilde ff000000
+- run 1: Faendal, hoster engine 1 (server ff000000): hoster motion 0.2, drop 36.1, head 49.7, hips 69.0; puppet engine 2: motion 0.0, drop 34.8, head 50.4, hips 67.5
+- run 1: Alvor, hoster engine 1 (server ff000000): hoster motion 1.2, drop 19.4, head 43.8, hips 44.6; puppet engine 2: motion 1.3, drop 35.4, head 51.6, hips 46.0
+- run 1: Hilde, hoster engine 1 (server ff000000): hoster motion 2.6, drop 37.2, head 51.4, hips 37.0; puppet engine 2: motion 2.2, drop 37.6, head 51.9, hips 37.0
+- run 1: 0 NPC(s) moved on the hoster engine 1, so the motion test ran for them; still on engine 2: none
+- run 2: engine 2 hosts: Faendal ff000001, Alvor ff000001, Hilde ff000001
+- run 2: Faendal, hoster engine 2 (server ff000001): hoster motion 3.1, drop 22.9, head 24.0, hips 62.3; puppet engine 1: motion 51.8, drop 26.8, head 21.6, hips 63.6
+- run 2: Alvor, hoster engine 2 (server ff000001): hoster motion 0.7, drop 34.4, head 50.1, hips 44.6; puppet engine 1: motion 1.1, drop 35.3, head 51.5, hips 45.9
+- run 2: Hilde, hoster engine 2 (server ff000001): hoster motion 31.9, drop 1.9, head 48.6, hips 37.0; puppet engine 1: motion 4.9, drop 34.4, head 51.2, hips 37.0
+- run 2: 2 NPC(s) moved on the hoster engine 2, so the motion test ran for them; still on engine 1: none
+- run 2: engine 1 hosts: Faendal ff000000, Alvor ff000000, Hilde ff000000
+- run 2: Faendal, hoster engine 1 (server ff000000): hoster motion 0.2, drop 35.1, head 50.5, hips 67.1; puppet engine 2: motion 0.0, drop 35.5, head 50.0, hips 67.0
+- run 2: Alvor, hoster engine 1 (server ff000000): hoster motion 3.3, drop 35.4, head 52.7, hips 38.1; puppet engine 2: motion 6.7, drop 6.5, head 49.5, hips 38.0
+- run 2: Hilde, hoster engine 1 (server ff000000): hoster motion 0.0, drop 33.7, head 51.4, hips 68.9; puppet engine 2: motion 3.8, drop 37.7, head 51.9, hips 69.0
+- run 2: 1 NPC(s) moved on the hoster engine 1, so the motion test ran for them; still on engine 2: none
+- run 3: engine 2 hosts: Faendal ff000001, Alvor ff000001, Hilde ff000001
+- run 3: Faendal, hoster engine 2 (server ff000001): hoster motion 1.3, drop 35.5, head 49.0, hips 65.7; puppet engine 1: motion 17.3, drop 35.5, head 50.5, hips 66.4
+- run 3: Alvor, hoster engine 2 (server ff000001): hoster motion 0.7, drop 34.4, head 50.1, hips 44.6; puppet engine 1: motion 0.8, drop 35.4, head 51.5, hips 45.9
+- run 3: Hilde, hoster engine 2 (server ff000001): hoster motion 5.4, drop 33.8, head 51.4, hips 39.0; puppet engine 1: motion 3.1, drop 15.5, head 49.1, hips 39.0
+- run 3: 1 NPC(s) moved on the hoster engine 2, so the motion test ran for them; still on engine 1: none
+- run 3: engine 1 hosts: Faendal ff000000, Alvor ff000000, Hilde ff000000
+- run 3: Faendal, hoster engine 1 (server ff000000): hoster motion 0.2, drop 35.5, head 50.5, hips 66.9; puppet engine 2: motion 1.4, drop 35.8, head 50.4, hips 67.7
+- run 3: Alvor, hoster engine 1 (server ff000000): hoster motion 22.1, drop 20.3, head 40.7, hips 67.2; puppet engine 2: motion 2.2, drop 35.3, head 52.8, hips 69.2
+- run 3: Hilde, hoster engine 1 (server ff000000): hoster motion 0.0, drop 9.6, head 51.9, hips 68.9; puppet engine 2: motion 1.2, drop 8.4, head 52.0, hips 68.8
+- run 3: 1 NPC(s) moved on the hoster engine 1, so the motion test ran for them; still on engine 2: none
+- ![G1.6](runs/G1_6/1/G1_6-puppets-engine1.png)
+- ![G1.6](runs/G1_6/1/G1_6-puppets-engine2.png)
+- ![G1.6](runs/G1_6/2/G1_6-puppets-engine1.png)
+- ![G1.6](runs/G1_6/2/G1_6-puppets-engine2.png)
+- ![G1.6](runs/G1_6/3/G1_6-puppets-engine1.png)
+- ![G1.6](runs/G1_6/3/G1_6-puppets-engine2.png)
 ### P8
 - run 1: 115 client log lines, 2 [Exception] lines
 - run 1: exception: [Exception] failed to get key 'data': failed to call custom Serialize for type struct Equipment: failed to get key 'inv': failed to call cus.

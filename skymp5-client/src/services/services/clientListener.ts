@@ -21,6 +21,8 @@ declare module "skyrimPlatform" {
     function getTextRefrScreenOffset(textId: number): number[];
     function getReferenceAliasQuests(refrFormId: number): number[];
     function setPapyrusEventsAllowedForms(formIds: number[]): void;
+    function updateAnimations(): void;
+    function isAnimationGraphReady(formId: number): boolean;
 }
 
 export type Sp = Omit<typeof sp, "on" | "once">;

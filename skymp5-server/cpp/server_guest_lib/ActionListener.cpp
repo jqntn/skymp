@@ -242,19 +242,20 @@ void ActionListener::OnUpdateAnimation(const RawMessageData& rawMsgData,
     return;
   }
 
-  auto targetActor = SendToNeighbours(msg.idx, rawMsgData);
+  auto targetActor =
+    SendToNeighbours(msg.idx, rawMsgData, msg.idx != myActor->GetIdx());
 
   if (!targetActor) {
     return;
   }
 
-  // Only process animation system and set last anim event for player's actor
+  targetActor->SetLastAnimEvent(msg.data);
+
   if (targetActor != myActor) {
     return;
   }
 
   partOne.animationSystem.Process(targetActor, msg.data);
-  targetActor->SetLastAnimEvent(msg.data);
 }
 
 void ActionListener::OnUpdateAppearance(const RawMessageData& rawMsgData,

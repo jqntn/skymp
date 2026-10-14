@@ -27,9 +27,21 @@ export interface Animation {
 export interface AnimationApplyState {
   lastNumChanges: number;
   useAnimOverrides: boolean;
+  overriddenAnimEventName?: string;
 }
 
 const allowedIdles = new Array<[number, string]>();
+const lastAnimEvents = new Map<number, string>();
+
+export const standAnimEventName = "SkympStand";
+
+export const isFurnitureIdle = (animEventName: string | undefined): boolean =>
+  !!animEventName && (animOverridesLowerCase[animEventName.toLowerCase()] !== undefined
+    || (/^idle.*(enter|start|instant)/i.test(animEventName) && !/exit/i.test(animEventName)));
+
+export const standUp = (ac: Actor): void => {
+  Debug.sendAnimationEvent(ac, "IdleForceDefaultState");
+};
 const refsWithDefaultAnimsDisabled = new Set<number>();
 const allowedAnims = new Set<string>();
 
@@ -132,13 +144,16 @@ export const applyAnimation = (
   if (state.useAnimOverrides) {
     const animOverride = animOverridesLowerCase[anim.animEventName.toLowerCase()];
     if (animOverride !== undefined) {
-      anim.animEventName = animOverride;
+      if (!actorSitAnimsLowerCase.includes(anim.animEventName.toLowerCase())) {
+        state.overriddenAnimEventName = anim.animEventName;
+      }
+      anim = { ...anim, animEventName: animOverride };
     }
   }
 
   const animEventNameLowerCase = anim.animEventName.toLowerCase();
 
-  if (isIdle(anim.animEventName)) {
+  if (isIdle(anim.animEventName) && refr.getFormID() >= 0xff000000) {
     allowedIdles.push([refr.getFormID(), anim.animEventName]);
   }
 
@@ -154,6 +169,13 @@ export const applyAnimation = (
   if (anim.animEventName === "SkympFakeUnequip") {
     if (ac) {
       applyWeapDrawn(ac, false);
+    }
+    return;
+  }
+
+  if (anim.animEventName === standAnimEventName) {
+    if (ac && !ac.isDead() && ac.getSitState() !== 0) {
+      standUp(ac);
     }
     return;
   }
@@ -210,7 +232,7 @@ export const setDefaultAnimsDisabled = (
 };
 
 export class AnimationSource {
-  constructor(refr: ObjectReference) {
+  constructor(refr: ObjectReference, private keepQueue = false) {
     this.refrId = refr.getFormID();
     hooks.sendAnimationEvent.add({
       enter: () => { },
@@ -229,6 +251,21 @@ export class AnimationSource {
         this.onSendAnimationEvent(ctx.animEventName);
       },
     });
+    if (keepQueue) {
+      this.restart();
+    }
+  }
+
+  restart(standing = false): void {
+    this.queue.length = 0;
+    const last = standing ? standAnimEventName : lastAnimEvents.get(this.refrId);
+    if (last !== undefined) {
+      this.onSendAnimationEvent(last);
+    }
+  }
+
+  addStand(): void {
+    this.onSendAnimationEvent(standAnimEventName);
   }
 
   filterMovement(mov: Movement): Movement {
@@ -282,7 +319,19 @@ export class AnimationSource {
 
     this.numChanges++;
     this.animEventName = animEventName;
+    if (this.keepQueue) {
+      this.queue.push({ numChanges: this.numChanges, animEventName });
+      if (this.queue.length > maxQueuedAnims) {
+        this.queue.shift();
+      }
+    }
   }
+
+  drain(): Animation[] {
+    return this.queue.splice(0);
+  }
+
+  private queue = new Array<Animation>();
 
   private refrId = 0;
   private numChanges = 0;
@@ -292,6 +341,19 @@ export class AnimationSource {
   private weapDrawnBlocker = 0;
   private sneakBlocker: boolean | null = null;
 }
+
+const maxQueuedAnims = 32;
+
+const animationSources = new Map<number, AnimationSource>();
+
+export const getAnimationSource = (refr: ObjectReference, keepQueue: boolean): AnimationSource => {
+  let source = animationSources.get(refr.getFormID());
+  if (!source) {
+    source = new AnimationSource(refr, keepQueue);
+    animationSources.set(refr.getFormID(), source);
+  }
+  return source;
+};
 
 const ignoredAnims = new Set<string>([
   "moveStart",
@@ -334,6 +396,10 @@ export const setupHooks = (): void => {
         i === -1 ? (ctx.animEventName = "") : allowedIdles.splice(i, 1);
       }
     },
-    leave: () => { },
+    leave: (ctx) => {
+      if (ctx.selfId < 0xff000000 && ctx.animationSucceeded && !ignoredAnims.has(ctx.animEventName)) {
+        lastAnimEvents.set(ctx.selfId, ctx.animEventName);
+      }
+    },
   });
 };

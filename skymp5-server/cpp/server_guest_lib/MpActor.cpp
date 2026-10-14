@@ -1448,6 +1448,7 @@ void MpActor::Respawn(bool shouldTeleport)
   }
   pImpl->isRespawning = false;
   pImpl->lastRespawn = std::chrono::steady_clock::now();
+  SetLastAnimEvent(std::nullopt);
 
   RespawnEvent respawnEvent(this, shouldTeleport);
   respawnEvent.Fire(GetParent());

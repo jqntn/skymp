@@ -1,4 +1,5 @@
 #include "DevApi.h"
+#include "CallNativeApi.h"
 #include "FileUtils.h"
 #include "InvalidArgumentException.h"
 #include "NullPointerException.h"
@@ -7,6 +8,8 @@
 #include "Validators.h"
 
 DevApi::NativeExportsMap DevApi::nativeExportsMap;
+
+extern CallNativeApi::NativeCallRequirements g_nativeCallRequirements;
 
 namespace {
 bool CreateDirectoryRecursive(const std::string& dirName, std::error_code& err)
@@ -217,6 +220,42 @@ Napi::Value DevApi::GetPapyrusEventsAllowedForms(
     result.Set(result.Length(), Napi::Number::New(info.Env(), formId));
   }
   return result;
+}
+
+Napi::Value DevApi::UpdateAnimations(const Napi::CallbackInfo& info)
+{
+  g_nativeCallRequirements.gameThrQ->AddTask([](Viet::Void) {
+    auto processLists = RE::ProcessLists::GetSingleton();
+    if (!processLists) {
+      return;
+    }
+    float delta = RE::GetSecondsSinceLastFrame();
+    processLists->ForAllActors([delta](RE::Actor* actor) {
+      if (actor && !actor->IsPlayerRef() && actor->Is3DLoaded() &&
+          !actor->IsAIEnabled()) {
+        actor->UpdateAnimation(delta);
+      }
+      return RE::BSContainer::ForEachResult::kContinue;
+    });
+  });
+  return info.Env().Undefined();
+}
+
+Napi::Value DevApi::IsAnimationGraphReady(const Napi::CallbackInfo& info)
+{
+  auto formId = NapiHelper::ExtractUInt32(info[0], "formId");
+  auto actor = RE::TESForm::LookupByID<RE::Actor>(formId);
+  RE::BSTSmartPointer<RE::BSAnimationGraphManager> manager;
+  if (!actor || !actor->GetAnimationGraphManager(manager) || !manager) {
+    return Napi::Boolean::New(info.Env(), false);
+  }
+  RE::BSSpinLockGuard guard{ manager->GetRuntimeData().updateLock };
+  auto active = manager->GetRuntimeData().activeGraph;
+  auto graph = active < manager->graphs.size() ? manager->graphs[active].get()
+                                               : nullptr;
+  return Napi::Boolean::New(info.Env(),
+                            graph && graph->behaviorGraph &&
+                              graph->behaviorGraph->rootGenerator.get());
 }
 
 namespace {

@@ -496,7 +496,7 @@ const main = async () => {
       log(`L1: ${results.L1.result} ${results.L1.reason}`);
       if (results.L1.result !== "PASS") stopped = "level 1 FAIL";
     }
-    if (opts.adhoc) {
+    if (opts.adhoc && !stopped) {
       prepareServer();
       const r = await runCheck("adhoc", opts, { n: 0 });
       log(`adhoc: ${r.result} ${r.reason}`);

@@ -402,6 +402,9 @@ export class RemoteServer extends ClientListener {
 
     if (msg.animation) {
       form.animation = msg.animation;
+      if (msg.refrId && msg.refrId >= 0x100000000) {
+        form.animationQueue = [msg.animation];
+      }
     }
 
     if (msg.props) {
@@ -687,6 +690,12 @@ export class RemoteServer extends ClientListener {
     }
 
     form.animation = msg.data;
+    if (form.refrId && form.refrId >= 0x100000000) {
+      (form.animationQueue ||= []).push(msg.data);
+      if (form.animationQueue.length > 32) {
+        form.animationQueue.shift();
+      }
+    }
   }
 
   private onUpdateAppearanceMessage(event: ConnectionMessage<UpdateAppearanceMessage>): void {

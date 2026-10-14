@@ -24,6 +24,10 @@ Napi::Value SetPapyrusEventsAllowedForms(const Napi::CallbackInfo& info);
 
 Napi::Value GetPapyrusEventsAllowedForms(const Napi::CallbackInfo& info);
 
+Napi::Value UpdateAnimations(const Napi::CallbackInfo& info);
+
+Napi::Value IsAnimationGraphReady(const Napi::CallbackInfo& info);
+
 void DisableCtrlPrtScnHotkey();
 
 using NativeExportsMap =
@@ -85,5 +89,11 @@ inline void Register(Napi::Env env, Napi::Object& exports,
               Napi::Function::New(env,
                                   NapiHelper::WrapCppExceptions(
                                     GetPapyrusEventsAllowedForms)));
+  exports.Set("updateAnimations",
+              Napi::Function::New(
+                env, NapiHelper::WrapCppExceptions(UpdateAnimations)));
+  exports.Set("isAnimationGraphReady",
+              Napi::Function::New(
+                env, NapiHelper::WrapCppExceptions(IsAnimationGraphReady)));
 }
 }
