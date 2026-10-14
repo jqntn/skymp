@@ -142,3 +142,9 @@ Facts about the engine, the server, and the harness. Add one after each ENV, eac
 - A relayed idle (`MotionDrivenIdle`, the dialogue idles) leaves a puppet in an animation-driven state (graph `bAnimationDriven` true), and `moveStart` fails there. Send `IdleForceDefaultState` first. The SP `sendAnimationEvent` hook reports `animationSucceeded` in `leave`, which shows such refusals (S1.6).
 - Run S1.6 and G1.6 after any change to puppet animation code, natives included (the G1.6 update native broke S1.6, and S1.6 was not run after G1.6).
 - Killing `steamwebhelper.exe` alone frees its leak (38 GB to 0.8 GB on 2026-10-14); Steam restarts it, and the runs continue.
+- The client's `sendAnimationEvent` hook does not see the server's `PlayAnimation` on ESP refs; it sees only `Debug.sendAnimationEvent`. To see a door or gate move on a client, read a node height with `NetImmerse.getNodeWorldPositionZ` (2B.2: the gate's `RuinsGate01`, the claw door's `DoorBase`).
+- The server's Papyrus VM logs a missing native method and runs on. A part revert that removes a native can still pass the e2e check; back such a part with a unit test (2B.2: `DisableLinkChain`).
+- The server loads only some record types with a cell (NPC_, FURN, ACTI, items, DOOR, CONT, FLOR, TREE). STAT and MSTT refs (collision markers, FX) now load when a script looks them up (2B.2).
+- Vanilla `Quest.SetStage` is a Papyrus wrapper, not a native; SkyrimPlatform has no `SetStage`, so a server snippet must call `SetCurrentStageID`.
+- SP `isAnimationGraphReady` is for actors only; it is false for other refs.
+- `run.js --runs N` stops a check at its first FAIL, so "2 PASS" from `--runs 2` means no FAIL in two runs, and one FAIL ends the batch.

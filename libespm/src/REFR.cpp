@@ -33,6 +33,8 @@ REFR::Data REFR::GetData(
         [[likely]] if (dataSize == 8) {
           result.linkedRefKeywordId = *reinterpret_cast<const uint32_t*>(data);
           result.linkedRefId = *reinterpret_cast<const uint32_t*>(data + 4);
+          result.keywordLinkedRefs.push_back(
+            { result.linkedRefKeywordId, result.linkedRefId });
         } else if (dataSize == 4) {
           result.linkedRefId = *reinterpret_cast<const uint32_t*>(data);
         }

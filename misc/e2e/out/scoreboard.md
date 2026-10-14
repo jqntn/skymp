@@ -1,51 +1,51 @@
 # Scoreboard
 
 
-First non-PASS in plan order: G1.7
+First non-PASS in plan order: G1.6
 
 | id | result | secs | at | detail |
 |---|---|---|---|---|
-| L1 | PASS | 70 | 2026-10-14 15:45 |  |
-| S0 | PASS | 25 | 2026-10-14 13:16 | 1/1 runs PASS |
+| L1 | PASS | 135 | 2026-10-14 21:50 |  |
+| S0 | PASS | 26 | 2026-10-14 17:25 | 1/1 runs PASS |
 | S0b | PASS | 161 | 2026-10-13 15:25 | 1/1 runs PASS |
 | S0c | PASS | 30 | 2026-10-13 15:25 | 1/1 runs PASS |
-| S1.1 | PASS | 162 | 2026-10-13 16:16 | 2/2 runs PASS |
-| S1.2 | PASS | 52 | 2026-10-13 16:30 | 1/1 runs PASS |
-| S1.4 | PASS | 69 | 2026-10-13 15:30 | 1/1 runs PASS |
-| S1.3 | PASS | 28 | 2026-10-14 11:13 | 1/1 runs PASS |
-| S1.5 | PASS | 56 | 2026-10-13 15:31 | 1/1 runs PASS |
-| S1.6 | PASS | 58 | 2026-10-13 16:08 | 1/1 runs PASS |
-| S2 | PASS | 122 | 2026-10-14 15:53 | 1/1 runs PASS |
-| S3.1 | PASS | 26 | 2026-10-13 15:36 | 1/1 runs PASS |
-| S3.2 | PASS | 25 | 2026-10-14 14:07 | 1/1 runs PASS |
-| S3.3 | PASS | 22 | 2026-10-14 15:53 | 1/1 runs PASS |
-| S3.4 | PASS | 46 | 2026-10-14 14:17 | 1/1 runs PASS |
-| 1A.1 | PASS | 4 | 2026-10-13 15:37 | 1/1 runs PASS |
-| 1A.2 | PASS | 4 | 2026-10-13 15:37 | 1/1 runs PASS |
-| 1A.3 | PASS | 3 | 2026-10-13 15:37 | 1/1 runs PASS |
-| 1A.4 | PASS | 4 | 2026-10-13 15:37 | 1/1 runs PASS |
-| 1A.5 | PASS | 96 | 2026-10-13 16:17 | 2/2 runs PASS |
-| 1B.1 | PASS | 39 | 2026-10-14 07:45 | 1/1 runs PASS |
-| 1B.2 | PASS | 44 | 2026-10-14 07:46 | 1/1 runs PASS |
-| 1B.3 | PASS | 75 | 2026-10-14 07:47 | 1/1 runs PASS |
-| 1B.4 | PASS | 92 | 2026-10-14 14:50 | 1/1 runs PASS |
-| 1B.5 | PASS | 81 | 2026-10-14 15:54 | 1/1 runs PASS |
-| G1.1 | PASS | 224 | 2026-10-14 08:15 | 1/1 runs PASS |
-| G1.2 | PASS | 46 | 2026-10-14 09:53 | 1/1 runs PASS |
-| G1.3 | PASS | 103 | 2026-10-14 07:20 | 1/1 runs PASS |
-| G1.4 | PASS | 158 | 2026-10-14 12:58 | 1/1 runs PASS |
-| G1.5 | PASS | 119 | 2026-10-14 08:17 | 1/1 runs PASS |
-| G1.6 | PASS | 120 | 2026-10-14 07:52 | 1/1 runs PASS |
+| S1.1 | PASS | 77 | 2026-10-14 17:26 | 1/1 runs PASS |
+| S1.2 | PASS | 78 | 2026-10-14 17:28 | 1/1 runs PASS |
+| S1.4 | PASS | 69 | 2026-10-14 17:29 | 1/1 runs PASS |
+| S1.3 | PASS | 21 | 2026-10-14 17:29 | 1/1 runs PASS |
+| S1.5 | PASS | 55 | 2026-10-14 17:30 | 1/1 runs PASS |
+| S1.6 | PASS | 160 | 2026-10-14 21:30 | 3/3 runs PASS |
+| S2 | PASS | 117 | 2026-10-14 17:33 | 1/1 runs PASS |
+| S3.1 | PASS | 25 | 2026-10-14 17:34 | 1/1 runs PASS |
+| S3.2 | PASS | 49 | 2026-10-14 17:34 | 1/1 runs PASS |
+| S3.3 | PASS | 53 | 2026-10-14 17:35 | 1/1 runs PASS |
+| S3.4 | PASS | 38 | 2026-10-14 17:36 | 1/1 runs PASS |
+| 1A.1 | PASS | 3 | 2026-10-14 17:36 | 1/1 runs PASS |
+| 1A.2 | PASS | 3 | 2026-10-14 17:36 | 1/1 runs PASS |
+| 1A.3 | PASS | 3 | 2026-10-14 17:36 | 1/1 runs PASS |
+| 1A.4 | PASS | 3 | 2026-10-14 17:36 | 1/1 runs PASS |
+| 1A.5 | PASS | 60 | 2026-10-14 17:37 | 1/1 runs PASS |
+| 1B.1 | PASS | 39 | 2026-10-14 17:38 | 1/1 runs PASS |
+| 1B.2 | PASS | 76 | 2026-10-14 17:39 | 1/1 runs PASS |
+| 1B.3 | PASS | 44 | 2026-10-14 17:40 | 1/1 runs PASS |
+| 1B.4 | PASS | 115 | 2026-10-14 17:42 | 1/1 runs PASS |
+| 1B.5 | PASS | 49 | 2026-10-14 17:43 | 1/1 runs PASS |
+| G1.1 | PASS | 253 | 2026-10-14 17:47 | 1/1 runs PASS |
+| G1.2 | PASS | 46 | 2026-10-14 17:47 | 1/1 runs PASS |
+| G1.3 | PASS | 115 | 2026-10-14 17:49 | 1/1 runs PASS |
+| G1.4 | PASS | 128 | 2026-10-14 17:52 | 1/1 runs PASS |
+| G1.5 | PASS | 150 | 2026-10-14 17:54 | 1/1 runs PASS |
+| G1.6 | FAIL | 230 | 2026-10-14 20:58 | run 2/3: Alvor on engine 2 does not hold the hoster's posture: hips 71.1 vs 44.6 |
 | G1.7 | FAIL | 201 | 2026-10-14 05:10 | run 1/3: Sven: 5 activations of the crosshair NPC opened no dialogue on engine 1 (sit state on engine 2 0, on engine 1 0; NPC {"ai":false,"sit":0,"target":0,"pkg":"ea072","x":20629,"y":-46000,"events":[]}) |
-| G1.8 | PASS | 327 | 2026-10-14 06:39 | 3/3 runs PASS |
-| 2A.1 | PASS | 87 | 2026-10-14 14:08 | 1/1 runs PASS |
-| 2A.2 | PASS | 140 | 2026-10-14 09:31 | 3/3 runs PASS |
-| 2A.3 | PASS | 65 | 2026-10-14 14:20 | 1/1 runs PASS |
-| 2A.4 | PASS | 96 | 2026-10-14 14:52 | 1/1 runs PASS |
-| 2A.5 | PASS | 108 | 2026-10-14 14:53 | 1/1 runs PASS |
-| G1.9 | PASS | 216 | 2026-10-14 15:24 | 3/3 runs PASS |
-| 2B.1 | PASS | 141 | 2026-10-14 15:50 | 3/3 runs PASS |
-| 2B.2 | FAIL | 0 | 2026-10-12 16:53 | no check script |
+| G1.8 | PASS | 99 | 2026-10-14 17:58 | 1/1 runs PASS |
+| 2A.1 | PASS | 55 | 2026-10-14 17:59 | 1/1 runs PASS |
+| 2A.2 | PASS | 95 | 2026-10-14 18:08 | 2/2 runs PASS |
+| 2A.3 | PASS | 64 | 2026-10-14 18:00 | 1/1 runs PASS |
+| 2A.4 | PASS | 65 | 2026-10-14 18:02 | 1/1 runs PASS |
+| 2A.5 | PASS | 78 | 2026-10-14 18:03 | 1/1 runs PASS |
+| G1.9 | PASS | 88 | 2026-10-14 18:04 | 1/1 runs PASS |
+| 2B.1 | PASS | 35 | 2026-10-14 18:05 | 1/1 runs PASS |
+| 2B.2 | PASS | 148 | 2026-10-14 21:54 | 1/1 runs PASS |
 | 2B.3 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | 2B.4 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | 2B.5 | FAIL | 0 | 2026-10-12 16:53 | no check script |
@@ -67,9 +67,9 @@ First non-PASS in plan order: G1.7
 ## Evidence
 
 ### L1
-- build: ok in 69 s (l1-build.log)
+- build: ok in 74 s (l1-build.log)
 - ts: ok in 1 s (l1-ts.log)
-- ctest: ok in 0 s (skipped: the unit and server binaries and the integration tests are those of the last green ctest)
+- ctest: ok in 60 s (l1-ctest.log)
 ### S0
 - run 1: actor ff000000, RaceMenu open: false
 - run 1: client moved 365 units from 12156,-71991,6010, server moved 365 units from 12156,-71991,6010
@@ -88,62 +88,72 @@ First non-PASS in plan order: G1.7
 - run 1: server online players ff000000, connect events in server.log: 1
 - ![S0c](runs/S0c/1/S0c-engine1.png)
 ### S1.1
-- run 1: Alvor (13482): hoster engine 1 translates it 200 units to 20789,-44989,-81, NPC path on the hoster 200 units, 52 puppet samples on engine 2, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
-- run 1: Gerdur (13489): hoster engine 1 translates it 200 units to 504,-383,2, NPC path on the hoster 200 units, 53 puppet samples on engine 2, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
+- run 1: Alvor (13482): hoster engine 1 translates it 200 units to 20806,-45045,-84, NPC path on the hoster 200 units, 51 puppet samples on engine 2, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
+- run 1: Gerdur (13489): hoster engine 1 translates it 200 units to 504,-383,2, NPC path on the hoster 200 units, 50 puppet samples on engine 2, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
 - run 1: Hadvar (2bfa2): hoster engine 2 translates it 200 units to 22928,-95299,13930, NPC path on the hoster 200 units, 51 puppet samples on engine 1, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
-- run 2: Alvor (13482): hoster engine 1 translates it 200 units to 20659,-45225,-83, NPC path on the hoster 200 units, 52 puppet samples on engine 2, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
-- run 2: Gerdur (13489): hoster engine 1 translates it 200 units to 170,-539,2, NPC path on the hoster 200 units, 50 puppet samples on engine 2, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
-- run 2: Hadvar (2bfa2): hoster engine 2 translates it 200 units to 22928,-95299,13930, NPC path on the hoster 200 units, 51 puppet samples on engine 1, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
 - ![S1.1](runs/S1_1/1/S1_1-Alvor-engine1.png)
 - ![S1.1](runs/S1_1/1/S1_1-Alvor-engine2.png)
 - ![S1.1](runs/S1_1/1/S1_1-Gerdur-engine1.png)
 - ![S1.1](runs/S1_1/1/S1_1-Gerdur-engine2.png)
 - ![S1.1](runs/S1_1/1/S1_1-Hadvar-engine2.png)
 - ![S1.1](runs/S1_1/1/S1_1-Hadvar-engine1.png)
-- ![S1.1](runs/S1_1/2/S1_1-Alvor-engine1.png)
-- ![S1.1](runs/S1_1/2/S1_1-Alvor-engine2.png)
-- ![S1.1](runs/S1_1/2/S1_1-Gerdur-engine1.png)
-- ![S1.1](runs/S1_1/2/S1_1-Gerdur-engine2.png)
-- ![S1.1](runs/S1_1/2/S1_1-Hadvar-engine2.png)
-- ![S1.1](runs/S1_1/2/S1_1-Hadvar-engine1.png)
 ### S1.2
+- run 1: Orgnar: the hoster engine 1 makes him use furniture 6deb4; sit state engine 1 3, engine 2 3
 - run 1: Orgnar (13486) on engine 2 (puppet), approach spot 0 deg from its facing, 1 activation(s): Dialogue Menu open and in dialogue with the player: true
+- run 1: Orgnar on engine 2 (puppet): greeting "Nous avons des chambres et de la nourriture. De quoi boire, aussi. Je cuisine. Y a pas grand-chose d'autre à dire.", topic "Puis-je utiliser le laboratoire alchimique ?", answer "Du moment que vous nettoyez. Vous savez comment vous en servir ? Mélangez quelques ingrédients et regardez ce qu'il se produit."
 - run 1: Orgnar (13486) on engine 1 (hoster), approach spot 90 deg from its facing, 1 activation(s): Dialogue Menu open and in dialogue with the player: true
-- run 1: Delphine (13485) on engine 1 (hoster), approach spot 0 deg from its facing, 1 activation(s): Dialogue Menu open and in dialogue with the player: true
-- run 1: Delphine (13485) on engine 2 (puppet), approach spot 180 deg from its facing, 1 activation(s): Dialogue Menu open and in dialogue with the player: true
+- run 1: Orgnar on engine 1 (hoster): greeting "S'il vous faut une chambre, parlez à Delphine.", topic "Puis-je utiliser le laboratoire alchimique ?", answer "Du moment que vous nettoyez. Vous savez comment vous en servir ? Mélangez quelques ingrédients et regardez ce qu'il se produit."
+- run 1: Delphine (13485) on engine 1 (hoster), approach spot 135 deg from its facing, 1 activation(s): Dialogue Menu open and in dialogue with the player: true
+- run 1: Delphine on engine 1 (hoster): greeting "C'est mon auberge. Il est normal que je note le passage des étrangers.", topic "Je voudrais une chambre. (10 or)", answer "Pas de problème, elle est à vous."
+- run 1: Delphine (13485) on engine 2 (puppet), approach spot 315 deg from its facing, 1 activation(s): Dialogue Menu open and in dialogue with the player: true
+- run 1: Delphine on engine 2 (puppet): greeting "C'est vous qui fouinez...", topic "Je voudrais une chambre. (10 or)", answer "Pas de problème, elle est à vous."
 - ![S1.2](runs/S1_2/1/S1_2-Orgnar-engine2-puppet.png)
 - ![S1.2](runs/S1_2/1/S1_2-Orgnar-engine1-hoster.png)
 - ![S1.2](runs/S1_2/1/S1_2-Delphine-engine1-hoster.png)
 - ![S1.2](runs/S1_2/1/S1_2-Delphine-engine2-puppet.png)
 ### S1.4
-- run 1: 13485: 79 puppet samples; frenzied and nudged on engine 2 (largest move seen in the next 15 frames 150 units) at +11193 ms, Aggression 3 held in 52 of 52 later samples, worst distance to the hoster path in the 3000 ms after the nudge 4
-- run 1: 13486: 79 puppet samples; frenzied and nudged on engine 2 (largest move seen in the next 15 frames 150 units) at +11193 ms, Aggression 3 held in 52 of 52 later samples, worst distance to the hoster path in the 3000 ms after the nudge 7
-- run 1: 2 hosted NPCs in the inn, 79 samples over 30 s, 0 violations
-- run 1: positive control, Aggression 3 and startCombat(player) on the hosted NPCs: in combat after at most 15 s: 13485 on hoster engine 1, 13486 on hoster engine 1
+- run 1: 13486: 78 puppet samples; frenzied and nudged on engine 2 (largest move seen in the next 15 frames 150 units) at +11338 ms, Aggression 3 held in 51 of 51 later samples, worst distance to the hoster path in the 3000 ms after the nudge 7
+- run 1: 13485: 78 puppet samples; frenzied and nudged on engine 2 (largest move seen in the next 15 frames 150 units) at +11338 ms, Aggression 3 held in 51 of 51 later samples, worst distance to the hoster path in the 3000 ms after the nudge 7
+- run 1: 2 hosted NPCs in the inn, 78 samples over 30 s, 0 violations
+- run 1: positive control, Aggression 3 and startCombat(player) on the hosted NPCs: in combat after at most 15 s: 13486 on hoster engine 1, 13485 on hoster engine 1
 - ![S1.4](runs/S1_4/1/S1_4-engine1.png)
 - ![S1.4](runs/S1_4/1/S1_4-engine2.png)
 ### S1.3
-- run 1: game hour 8.00; RiverwoodBlacksmithWorkMarker 2c308 at 20587,-45138,-81; client after 16 ms: Alvor in world 3c at 20584,-45137,-82, 3 units from the forge, 3D loaded true, enabled true; server: 133c8 at -515,-154,240
+- run 1: game hour 8.00; RiverwoodBlacksmithWorkMarker 2c308 at 20587,-45138,-81; client after 24 ms: Alvor in world 3c at 20586,-45138,-82, 1 units from the forge, 3D loaded true, enabled true; server: 133c8 at -515,-154,240
 - run 1: 5000 ms later: Alvor in world 3c at 20584,-45132,-82, 7 units from the forge, 3D loaded true, enabled true
 - ![S1.3](runs/S1_3/1/S1_3.png)
 ### S1.5
 - run 1: engine 1 talks to the puppet Delphine (13485) hosted by engine 2; topic "Je voudrais une chambre. (10 or)", answer "Pas de problème, elle est à vous."
 - run 1: dialogue closed on engine 1
-- run 1: then engine 2 translates Delphine 200 units to -986,839,-1: 190 units from its start on the hoster, 52 puppet samples on engine 1, worst distance to the hoster path of the last 1000 ms: 1.2, hosters ff000001
+- run 1: then engine 2 translates Delphine 200 units to -986,839,-1: 191 units from its start on the hoster, 51 puppet samples on engine 1, worst distance to the hoster path of the last 1000 ms: 1.5, hosters ff000001
 - ![S1.5](runs/S1_5/1/S1_5-topic.png)
 - ![S1.5](runs/S1_5/1/S1_5-follow.png)
 ### S1.6
 - run 1: Hadvar on the hoster after the moves: {"ai":true,"combat":false,"pkg":"4679f","sit":0,"scene":0,"dialogue":false}; puppet AI on: false
-- run 1: hoster engine 1, Hadvar walked 3305 units on the hoster and 3388 on the puppet; 26 samples with hoster Speed > 20 for 500 ms, puppet Speed > 20 in 26; 28 samples with hoster Speed < 1 for 500 ms, puppet Speed < 20 in 28
-- run 1: Speed pairs (hoster/puppet): 80/132 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 319/361 75/254 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 9/0 41/11 44/74 147/77 361/228 231/340 143/221 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0
+- run 1: hoster engine 1, Hadvar walked 2179 units on the hoster and 2180 on the puppet; 26 samples with hoster Speed > 20 for 500 ms, puppet Speed > 20 in 25; 26 samples with hoster Speed < 1 for 500 ms, puppet Speed < 20 in 26
+- run 1: foot swing (mean change of the left foot minus the right foot along the heading between consecutive samples) per moving stretch: 26 samples: hoster 71.0, puppet 70.0; per standing stretch: 26 samples: hoster 1.5, puppet 1.5
+- run 1: foot stride pairs (hoster/puppet): 0/-1 -2/13 -2/13 -5/15 -5/40 -2/-32 -2/-24 20/20 -40/-4 48/-28 -72/32 69/-69 -69/66 54/-76 -38/67 7/-49 19/10 -57/18 60/-43 -77/49 62/-77 -45/70 31/30 -23/-33 -11/-1 43/42 -8/-29 -24/-14 36/44 3/-22 0/42 3/13 15/38 10/-43 45/38 44/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 16/43 11/13 12/13
+- run 1: Speed pairs (hoster/puppet): 0/0 0/0 8/0 49/22 47/77 40/77 314/217 349/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 349/361 24/0 80/70 80/91 80/91 80/91 80/91 80/91 80/91 80/91 0/0 0/0 160/244 0/81 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0
+- run 2: Hadvar on the hoster after the moves: {"ai":true,"combat":false,"pkg":"4679f","sit":0,"scene":0,"dialogue":false}; puppet AI on: false
+- run 2: hoster engine 1, Hadvar walked 2194 units on the hoster and 2188 on the puppet; 16 samples with hoster Speed > 20 for 500 ms, puppet Speed > 20 in 16; 10 samples with hoster Speed < 1 for 500 ms, puppet Speed < 20 in 10
+- run 2: foot swing (mean change of the left foot minus the right foot along the heading between consecutive samples) per moving stretch: 16 samples: hoster 83.8, puppet 91.5; per standing stretch: 10 samples: hoster 7.1, puppet 3.3
+- run 2: foot stride pairs (hoster/puppet): 0/0 -2/13 -10/16 -33/60 39/-71 -33/59 59/-44 -76/15 62/10 -52/-45 26/49 1/-76 -47/64 53/-45 -75/-7 54/21 -36/-61 -4/70 -9/-74 17/41 41/43 25/13 23/13 39/13 40/13 41/13 40/13 32/13 20/13 12/13
+- run 2: Speed pairs (hoster/puppet): 0/0 0/0 307/73 361/361 301/349 337/304 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/349 335/361 80/209 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0
+- run 3: Hadvar on the hoster after the moves: {"ai":true,"combat":false,"pkg":"4679f","sit":0,"scene":0,"dialogue":false}; puppet AI on: false
+- run 3: hoster engine 1, Hadvar walked 2178 units on the hoster and 2177 on the puppet; 28 samples with hoster Speed > 20 for 500 ms, puppet Speed > 20 in 28; 25 samples with hoster Speed < 1 for 500 ms, puppet Speed < 20 in 25
+- run 3: foot swing (mean change of the left foot minus the right foot along the heading between consecutive samples) per moving stretch: 26 samples: hoster 59.3, puppet 66.9; per standing stretch: 25 samples: hoster 1.7, puppet 1.8
+- run 3: foot stride pairs (hoster/puppet): 0/0 -2/-2 -2/14 2/14 2/-22 2/-16 -2/-13 -2/-44 -35/39 -1/-26 19/-17 -67/37 72/-73 -62/64 26/-44 -8/15 -28/12 46/-40 -76/64 62/-76 -52/55 45/-61 -47/62 16/-8 15/42 43/-11 -8/-29 -20/42 37/-5 2/-33 0/11 0/13 31/17 -33/-34 -6/22 40/32 40/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 21/43 10/43 12/13
+- run 3: Speed pairs (hoster/puppet): 0/0 0/0 5/0 55/0 55/81 55/79 55/79 217/201 345/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 325/349 201/337 85/276 35/86 80/21 80/91 80/91 80/91 80/91 80/91 0/0 119/0 320/219 160/306 0/69 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0
 - ![S1.6](runs/S1_6/1/S1_6-puppet.png)
+- ![S1.6](runs/S1_6/2/S1_6-puppet.png)
+- ![S1.6](runs/S1_6/3/S1_6-puppet.png)
 ### S2
 - run 1: bot actor ff000000 in BleakFallsBarrow01; pillar states position01, position03, position01
 - run 1: control, lever before the pillars are solved: dart traps activated 39fdd, 3720f, 2ad49, 2ad43, gate opening false
 - run 1: pillars after 2 and 2 and 1 turns: position03, position02, position02; the lever counted 1 -> 2 -> 3 solved pillars
-- run 1: lever after the solve: gate 3b9f1 script logged Opened true, dart traps none, missing natives DisableLinkChain
+- run 1: lever after the solve: gate 3b9f1 script logged Opened true, dart traps none, missing natives none
 - run 1: control, keyhole before the rings are solved: keyhole state mainState, door animated false
-- run 1: claw door: rings {"large":"position02","medium":"position03","small":"position01"} after 2 turns each, keyhole state done, door 4e2b8 animated true, missing natives IsRunning
+- run 1: claw door: rings {"large":"position02","medium":"position03","small":"position01"} after 2 turns each, keyhole state done, door 4e2b8 animated true, missing natives none
 ### S3.1
 - run 1: gate 3b9f1 (base 3e726, form type 24): 0 hook calls before any animation, 0 after a latent playAnimationAndWait on pillar aa8cb (its own hook saw ["Open"]), after a latent playAnimationAndWait("Open", "Opened") on the gate, as a Papyrus script calls it: [["enter","3b9f1","Open"],["leave","3b9f1","Open",true]]; then 0 calls after a JS playAnimation("Close") on the gate (SkyrimPlatform hides its own synchronous native calls from hooks)
 - ![S3.1](runs/S3_1/1/S3_1.png)
@@ -167,12 +177,11 @@ First non-PASS in plan order: G1.7
 ### 1A.5
 - run 1: the puppet applies the hoster's movement only when isHostedByOther, an UpdateProperty with the raw ESP id, reaches the FormView of the real actor
 - run 1: Alvor (13482): hoster engine 1 translates it 200 units to 20659,-45225,-83, NPC path on the hoster 200 units, 50 puppet samples on engine 2, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
-- run 2: the puppet applies the hoster's movement only when isHostedByOther, an UpdateProperty with the raw ESP id, reaches the FormView of the real actor
-- run 2: Alvor (13482): hoster engine 1 translates it 200 units to 20789,-44989,-81, NPC path on the hoster 200 units, 52 puppet samples on engine 2, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
+- run 1: Gerdur (13489): hoster engine 1 translates it 200 units to 504,-383,2, NPC path on the hoster 200 units, 51 puppet samples on engine 2, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
 - ![1A.5](runs/1A_5/1/S1_1-Alvor-engine1.png)
 - ![1A.5](runs/1A_5/1/S1_1-Alvor-engine2.png)
-- ![1A.5](runs/1A_5/2/S1_1-Alvor-engine1.png)
-- ![1A.5](runs/1A_5/2/S1_1-Alvor-engine2.png)
+- ![1A.5](runs/1A_5/1/S1_1-Gerdur-engine1.png)
+- ![1A.5](runs/1A_5/1/S1_1-Gerdur-engine2.png)
 ### 1B.1
 - run 1: with a FormView: {"loaded":true,"disabled":false,"deleted":false,"health":131,"magicka":68,"name":"Alvor","baseName":"Alvor","clones":[],"hoster":4278190080} (clones: dynamic actors 0xff000000-0xff004000 with Alvor's base or name)
 - run 1: while the player was away (another cell), Alvor 3D loaded on the client: false
@@ -184,20 +193,20 @@ First non-PASS in plan order: G1.7
 - run 1: engine 2 leaves; engine 1 hosts the damaged puppet: true; Alvor on engine 1 now {"damageMult":1,"ai":true,"blocked":false,"dead":false,"health":131}; server isDead false
 ### 1B.3
 - run 1: unit [1B.3]: exit 0; All tests passed (4 assertions in 1 test case)
-- run 1: actor values after engine 1's player lost 70% magicka: {"player":{"health":1,"magicka":0.34592491388320923,"stamina":1},"orgnar":{"health":1,"magicka":1,"stamina":1}}
-- run 1: the hosted Orgnar on engine 1 fights engine 2's player (clone ff000d41 on engine 1); engine 2's server health 1 -> 0.8329600095748901; local hits by Orgnar on engine 1: ["ff000d41"]
-- run 1: the hosted Orgnar activates the inn door e3a7b on engine 1: server isOpen false -> toggled true
+- run 1: actor values after engine 1's player lost 70% magicka: {"player":{"health":1,"magicka":0.34593483805656433,"stamina":1},"orgnar":{"health":1,"magicka":1,"stamina":1}}
+- run 1: the hosted Orgnar on engine 1 fights engine 2's player (clone ff000d30 on engine 1); engine 2's server health 1 -> 0.8329600095748901; local hits by Orgnar on engine 1: ["ff000d30"]
+- run 1: the hosted Orgnar activates the inn door e3a7a on engine 1: server isOpen false -> toggled true
 - run 1: after the server killed and revived Orgnar: {"dead":false,"disabled":false,"deleted":false,"loaded":true}
 - run 1: source: KillMove blocked for all ids true; actor values not sent for hosted NPCs true
 - ![1B.3](runs/1B_3/1/1B_3.png)
 ### 1B.4
-- run 1: at 8:00 the client has Alvor in 3c at 20580,-45125,-82 (3D true); before the engines start, the server has Alvor in 133c8 at -515,-154,240, hoster 0
-- run 1: claim without a FormView: server 3c at 20580,-45125,-83, 15 units from the work marker, hoster ff000000
-- run 1: hide: the player went two cells east of Alvor (20580,-45125,-82): server hoster 0; Alvor's cell attached true, Alvor 3D false, hidden true
-- run 1: retry: the server moved Alvor back to 133c8 while he was hidden; back at the forge the server has 3c at 20325,-45134,-84, 261 units from the marker, hoster ff000000; local Alvor 3D true, disabled false (23 ms after the claim)
+- run 1: at 8:00 the client has Alvor in 3c at 20583,-45132,-83 (3D true); before the engines start, the server has Alvor in 133c8 at -515,-154,240, hoster 0
+- run 1: claim without a FormView: server 3c at 20583,-45132,-83, 7 units from the work marker, hoster ff000000
+- run 1: hide: the player went two cells east of Alvor (20583,-45132,-82): server hoster 0; Alvor's cell attached true, Alvor 3D false, hidden true
+- run 1: retry: the server moved Alvor back to 133c8 while he was hidden; back at the forge the server has 3c at 20318,-45150,-84, 269 units from the marker, hoster ff000000; local Alvor 3D true, disabled false (25 ms after the claim)
 - run 1: walk-in: the driver enabled the hidden Alvor two cells away (a player who never hosted him): loaded true; server hoster held at 0 for 6 s: true
-- run 1: first movement: the server then streamed a stale Alvor 6037 units from the marker; 6 s later the local Alvor was 3D true, disabled false, at least 5852 units from the stale spot; back home: at least 5852 units from it; server 3c at 20772,-45188,-81, 192 units from the marker, hoster ff000000
-- run 1: replay, hosted movement: a quest replay starts, then the hoster takes Alvor out of his furniture and translates him 300 units (every 400 ms): 269 units from the server position at the end of the hold (21041,-45206,-84); server position held within 150 units of 20772,-45188,-81 for 2 s: true (last 20772,-45188,-81); after the replay the server follows the local position: true (21008,-45224,-84)
+- run 1: first movement: the server then streamed a stale Alvor 6037 units from the marker; 6 s later the local Alvor was 3D true, disabled false, at least 5852 units from the stale spot; back home: at least 5852 units from it; server 3c at 20772,-45188,-84, 192 units from the marker, hoster ff000000
+- run 1: replay, hosted movement: a quest replay starts, then the hoster takes Alvor out of his furniture and translates him 300 units (every 400 ms): 300 units from the server position at the end of the hold (21072,-45188,-84); server position held within 150 units of 20772,-45188,-84 for 2 s: true (last 20772,-45188,-84); after the replay the server follows the local position: true (21072,-45188,-84)
 - run 1: release: a script disables Alvor on the hoster: server hoster 0, disabled true; hoster still 0 after 6 s: true; the real actor was never deleted: true
 - run 1: replay, claim: a quest replay starts, then a script enables Alvor on the client: hoster held at 0 during the replay: true (last 0); after the replay the client claims him: true (hoster ff000000, server disabled false; local 3D true, disabled false)
 - run 1: party: Alvor's alias quests on the member 105385,45486,1bc95, member quest log [105385, 0]; joined: true; leader two cells away: hoster ff000001 (member ff000001): true; leader back within 4096: hoster ff000000 (leader ff000000): true; the leader still hosts 12 s later: true (last ff000000)
@@ -213,30 +222,30 @@ First non-PASS in plan order: G1.7
 ### G1.1
 - run 1: start log from settings.ts: [[0x2610a, 0], [0x2610a, 5], [0x4e50d, 15], [0x2610a, 30]]
 - run 1: start: server Ralof 3c:Skyrim.esm at 19841,-79532,8451, hoster 0, 32952 units from the Riverwood marker
-- run 1: end: server Ralof 3c:Skyrim.esm at 17869,-47128,-144, hoster ff000000, 1397 units from the marker; server path 52012 units in 366 samples; player moved to Ralof 148 times
-- run 1: local Ralof: loaded true, world 3c, at 17906,-47118,-144, combat false; packages seen 956b8,d1d3d,9251e,de1aa,54219,3e08f,3e088; scenes seen ac133,27e56; MQ102B stage 35, MQ102 stage 17
-- run 1: walk from the first hosted sample: 349 samples, longest step 207 units (to 10123,-52886)
-- run 1: server positions every 10th sample: 3c@19841,-79532 3c@19841,-79532 3c@12044,-71831 3c@11764,-71728 3c@11567,-71656 3c@11159,-71445 3c@10618,-71143 3c@9328,-70642 3c@8153,-70008 3c@7698,-68695 3c@7185,-67366 3c@6174,-66481 3c@5856,-65012 3c@5626,-63605 3c@4920,-62383 3c@4330,-61497 3c@4984,-60234 3c@5475,-58977 3c@4768,-58620 3c@3308,-58816 3c@3732,-57846 3c@4923,-56980 3c@6138,-56092 3c@6908,-54877 3c@7639,-53747 3c@9058,-53408 3c@10294,-52838 3c@10295,-52884 3c@10302,-52882 3c@10752,-52513 3c@11899,-51892 3c@13148,-51298 3c@13815,-50283 3c@14126,-48905 3c@14553,-47601 3c@15704,-46985 3c@17157,-47105
+- run 1: end: server Ralof 3c:Skyrim.esm at 17825,-47138,-143, hoster ff000000, 1441 units from the marker; server path 52907 units in 359 samples; player moved to Ralof 142 times
+- run 1: local Ralof: loaded true, world 3c, at 17856,-47131,-143, combat false; packages seen 956b8,ad243,d1d3d,9251e,de1aa,54219,3e08f,3e088; scenes seen ac133,27e56; MQ102B stage 35, MQ102 stage 17
+- run 1: walk from the first hosted sample: 336 samples, longest step 214 units (to 16947,-47083)
+- run 1: server positions every 10th sample: 3c@19841,-79532 3c@19841,-79532 3c@19841,-79532 3c@11768,-71777 3c@11526,-71652 3c@11120,-71428 3c@10415,-71031 3c@9070,-70587 3c@8025,-69805 3c@7608,-68387 3c@6936,-67217 3c@6055,-66194 3c@5801,-64684 3c@5482,-63295 3c@4734,-62047 3c@4512,-61204 3c@5157,-59874 3c@5467,-58666 3c@4241,-58674 3c@3098,-58487 3c@4176,-57519 3c@5348,-56678 3c@6531,-55730 3c@7129,-54404 3c@8174,-53619 3c@9569,-53265 3c@9919,-53038 3c@9699,-53008 3c@9911,-53024 3c@11150,-52247 3c@12473,-51625 3c@13613,-50895 3c@14003,-49466 3c@14358,-48098 3c@15135,-47000 3c@16639,-47058
 - ![G1.1](runs/G1_1/1/G1_1-end.png)
 ### G1.2
 - run 1: start: server Alvor in 133c8:Skyrim.esm at -515,-154,240, hoster 0
 - run 1: before the player came, the client had Alvor in 0 at 20587,-45138,-81, AI true; 2 s after the client applied its view of him (AI off), the client has him in 0 at 20587,-45138,-81
-- run 1: in the house on the lower floor, out of his way (set public so the teleported player is no trespasser): game hour 7.991, the check moved Alvor home for the start state; local Alvor cell 133c8 package 1cb07
-- run 1: end: server Alvor in 3c:Skyrim.esm at 20375,-45067,-80, 223 units from the forge marker, hoster ff000000; server cells 133c8:Skyrim.esm -> 3c:Skyrim.esm; hosters seen ff000000; player cell changes 1; local Alvor package 1cb07, game hour 7.995
-- run 1: Gerdur (13489) in 3c:Skyrim.esm at 18495,-45006,-120, hoster ff000000: Dialogue Menu open and in dialogue with the player: true
-- run 1: Alvor (13482) in 3c:Skyrim.esm at 20375,-45067,-80, hoster ff000000: Dialogue Menu open and in dialogue with the player: true
+- run 1: in the house on the lower floor, out of his way (set public so the teleported player is no trespasser): game hour 7.984, the check moved Alvor home for the start state; local Alvor cell 133c8 package 1cb07
+- run 1: end: server Alvor in 3c:Skyrim.esm at 20594,-45041,-82, 97 units from the forge marker, hoster ff000000; server cells 133c8:Skyrim.esm -> 3c:Skyrim.esm; hosters seen ff000000; player cell changes 1; local Alvor package 1cb07, game hour 7.988
+- run 1: Gerdur (13489) in 3c:Skyrim.esm at 18959,-43645,-137, hoster ff000000: Dialogue Menu open and in dialogue with the player: true
+- run 1: Alvor (13482) in 3c:Skyrim.esm at 20594,-45041,-82, hoster ff000000: Dialogue Menu open and in dialogue with the player: true
 - ![G1.2](runs/G1_2/1/G1_2-forge.png)
 - ![G1.2](runs/G1_2/1/G1_2-Gerdur.png)
 - ![G1.2](runs/G1_2/1/G1_2-Alvor.png)
 ### G1.3
 - run 1: Gerdur (13489) on engine 2 (puppet): greeting "Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
 - run 1: Gerdur on engine 2 (puppet): the dialogue closed: true
-- run 1: Gerdur (13489) on engine 1 (hoster): greeting "Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
+- run 1: Gerdur (13489) on engine 1 (hoster): greeting "D'après Lucan, du Marché de Rivebois, des voleurs se seraient introduits dans sa boutique. Ils n'ont quasiment rien pris, c'est étrange.", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
 - run 1: Gerdur on engine 1 (hoster): the dialogue closed: true
 - run 1: Gerdur: hoster ff000000 (engine 1) before the talks, ff000000 after
 - run 1: Alvor (13482) on engine 2 (puppet): greeting "C'est pas tous les jours qu'on a des visites à Rivebois.", topic "Vous avez besoin d'aide à la forge ?", answer "Tiens, oui. Et si vous me fabriquiez une dague de fer ? Voici tout ce qu'il vous faut. Allez-y."
 - run 1: Alvor on engine 2 (puppet): the dialogue closed: true
-- run 1: Alvor (13482) on engine 1 (hoster): greeting "C'est pas tous les jours qu'on a des visites à Rivebois.", topic "Vous avez besoin d'aide à la forge ?", answer "Tiens, oui. Et si vous me fabriquiez une dague de fer ? Voici tout ce qu'il vous faut. Allez-y."
+- run 1: Alvor (13482) on engine 1 (hoster): greeting "Dites-moi ce qu'il vous faut. Par Ysmir, si c'est simple et solide, je peux le forger.", topic "Vous avez besoin d'aide à la forge ?", answer "Tiens, oui. Et si vous me fabriquiez une dague de fer ? Voici tout ce qu'il vous faut. Allez-y."
 - run 1: Alvor on engine 1 (hoster): the dialogue closed: true
 - run 1: Alvor: hoster ff000000 (engine 1) before the talks, ff000000 after
 - ![G1.3](runs/G1_3/1/G1_3-Gerdur-engine2-puppet.png)
@@ -251,7 +260,7 @@ First non-PASS in plan order: G1.7
 - ![G1.4](runs/G1_4/1/G1_4-restart.png)
 ### G1.5
 - run 1: start log: settings.ts and MQ102 stage 30: [[155914,0],[155914,5],[320781,15],[155914,30],[320781,30]]
-- run 1: Whiterun guards near the porch: 37070 (client loaded true, disabled false, dead false; server 1a26f:Skyrim.esm, dead false, disabled false, hoster ff000000); 37058 (client loaded true, disabled false, dead false; server 1a26f:Skyrim.esm, dead false, disabled false, hoster ff000000)
+- run 1: Whiterun guards near the porch: 37058 (client loaded true, disabled false, dead false; server 1a26f:Skyrim.esm, dead false, disabled false, hoster ff000000); 37070 (client loaded true, disabled false, dead false; server 1a26f:Skyrim.esm, dead false, disabled false, hoster ff000000)
 - run 1: Balgruuf 1a677: client loaded true, disabled false, dead false; server 165a3:Skyrim.esm, dead false, disabled false, hoster ff000000
 - run 1: Farengar 1a67e: client loaded true, disabled false, dead false; server 165a3:Skyrim.esm, dead false, disabled false, hoster ff000000
 - run 1: dialogue: 5 topics picked ("J'ai des nouvelles d'Helgen. C'est à propos de l'attaque de dragon.", "Oui. J'avais une vue imprenable pendant que les Impériaux essayaient de me trancher la tête.", "Le dragon a détruit Helgen. Quand je l'ai perdu de vue, il se dirigeait par ici.", "Les Impériaux allaient exécuter Ulfric Sombrage quand le dragon a attaqué.", "Le dragon a détruit Helgen. Quand je l'ai perdu de vue, il se dirigeait par ici."); client MQ102/MQ103 stages 75/5 at the start, then 75/5 -> 110/5 -> 150/8 -> 160/10; Balgruuf says "Prenez ceci, en gage de mon estime pour vous."
@@ -261,17 +270,29 @@ First non-PASS in plan order: G1.7
 - ![G1.5](runs/G1_5/1/G1_5-mq103.png)
 ### G1.6
 - run 1: engine 2 hosts: Faendal ff000001, Alvor ff000001, Hilde ff000001
-- run 1: Faendal, hoster engine 2 (server ff000001): hoster motion 3.1, drop 26.2, head 17.2, hips 60.2; puppet engine 1: motion 64.6, drop 32.8, head 43.7, hips 66.1
-- run 1: Alvor, hoster engine 2 (server ff000001): hoster motion 1.1, drop 34.3, head 50.0, hips 44.6; puppet engine 1: motion 0.6, drop 34.3, head 50.0, hips 44.6
-- run 1: Hilde, hoster engine 2 (server ff000001): hoster motion 4.6, drop 33.8, head 51.4, hips 38.9; puppet engine 1: motion 11.8, drop 15.5, head 48.1, hips 39.0
-- run 1: 2 NPC(s) moved on the hoster engine 2, so the motion test ran for them; still on engine 1: none
+- run 1: Faendal, hoster engine 2 (server ff000001): hoster motion 3.1, drop 32.0, head 43.4, hips 65.5; puppet engine 1: motion 35.8, drop 34.9, head 50.2, hips 66.7
+- run 1: Alvor, hoster engine 2 (server ff000001): hoster motion 4.8, drop 35.5, head 52.6, hips 38.0; puppet engine 1: motion 4.5, drop 34.7, head 51.4, hips 37.1
+- run 1: Hilde, hoster engine 2 (server ff000001): hoster motion 40.7, drop 1.5, head 48.9, hips 37.0; puppet engine 1: motion 3.9, drop 34.4, head 51.2, hips 37.0
+- run 1: 3 NPC(s) moved on the hoster engine 2, so the motion test ran for them; still on engine 1: none
 - run 1: engine 1 hosts: Faendal ff000000, Alvor ff000000, Hilde ff000000
-- run 1: Faendal, hoster engine 1 (server ff000000): hoster motion 0.3, drop 33.7, head 50.2, hips 66.6; puppet engine 2: motion 1.5, drop 29.1, head 49.9, hips 66.7
-- run 1: Alvor, hoster engine 1 (server ff000000): hoster motion 1.1, drop 16.8, head 43.5, hips 67.3; puppet engine 2: motion 1.0, drop 31.2, head 44.7, hips 67.3
-- run 1: Hilde, hoster engine 1 (server ff000000): hoster motion 0.0, drop 34.5, head 51.9, hips 67.6; puppet engine 2: motion 5.8, drop 37.6, head 51.9, hips 69.0
-- run 1: 0 NPC(s) moved on the hoster engine 1, so the motion test ran for them; still on engine 2: none
+- run 1: Faendal, hoster engine 1 (server ff000000): hoster motion 6.9, drop 35.1, head 50.2, hips 66.7; puppet engine 2: motion 35.3, drop 34.7, head 48.0, hips 67.1
+- run 1: Alvor, hoster engine 1 (server ff000000): hoster motion 4.4, drop 34.5, head 51.2, hips 37.0; puppet engine 2: motion 3.8, drop 35.4, head 52.6, hips 38.0
+- run 1: Hilde, hoster engine 1 (server ff000000): hoster motion 0.1, drop 33.9, head 51.4, hips 39.0; puppet engine 2: motion 0.1, drop 29.6, head 49.0, hips 39.0
+- run 1: 2 NPC(s) moved on the hoster engine 1, so the motion test ran for them; still on engine 2: none
+- run 2: engine 2 hosts: Faendal ff000001, Alvor ff000001, Hilde ff000001
+- run 2: Faendal, hoster engine 2 (server ff000001): hoster motion 1.4, drop 33.1, head 46.0, hips 65.3; puppet engine 1: motion 22.5, drop 33.8, head 50.3, hips 66.1
+- run 2: Alvor, hoster engine 2 (server ff000001): hoster motion 0.6, drop 34.3, head 50.0, hips 44.6; puppet engine 1: motion 1.2, drop 34.3, head 50.0, hips 44.6
+- run 2: Hilde, hoster engine 2 (server ff000001): hoster motion 0.0, drop 33.7, head 49.7, hips 68.5; puppet engine 1: motion 3.2, drop 37.7, head 51.9, hips 69.0
+- run 2: 0 NPC(s) moved on the hoster engine 2, so the motion test ran for them; still on engine 1: none
+- run 2: engine 1 hosts: Faendal ff000000, Alvor ff000000, Hilde ff000000
+- run 2: Faendal, hoster engine 1 (server ff000000): hoster motion 3.9, drop 26.3, head 49.2, hips 66.1; puppet engine 2: motion 4.4, drop 23.6, head 31.9, hips 62.1
+- run 2: Alvor, hoster engine 1 (server ff000000): hoster motion 1.8, drop 19.4, head 43.8, hips 44.6; puppet engine 2: motion 0.0, drop 35.1, head 52.9, hips 71.1
+- run 2: Hilde, hoster engine 1 (server ff000000): hoster motion 0.0, drop 37.2, head 51.8, hips 68.7; puppet engine 2: motion 3.9, drop 37.7, head 51.9, hips 69.0
+- run 2: 1 NPC(s) moved on the hoster engine 1, so the motion test ran for them; still on engine 2: none
 - ![G1.6](runs/G1_6/1/G1_6-puppets-engine1.png)
 - ![G1.6](runs/G1_6/1/G1_6-puppets-engine2.png)
+- ![G1.6](runs/G1_6/2/G1_6-puppets-engine1.png)
+- ![G1.6](runs/G1_6/2/G1_6-puppets-engine2.png)
 ### G1.7
 - run 1: Gerdur: hosted by engine 2 with its AI off on engine 1, press 5 opened the dialogue (sit state 0 on engine 2, 0 on engine 1)
 - run 1: Gerdur (13489) hosted by engine 2, player activation on engine 1: greeting "Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
@@ -284,107 +305,63 @@ First non-PASS in plan order: G1.7
 - ![G1.7](runs/G1_7/1/G1_7-Alvor.png)
 ### G1.8
 - run 1: subtitle settings (dialogue, general): engine 1 true,false, engine 2 true,false
-- run 1: Gerdur hosted by engine 2 talks to engine 2's player: greeting "Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
+- run 1: Gerdur hosted by engine 2 talks to engine 2's player: greeting "D'après Lucan, du Marché de Rivebois, des voleurs se seraient introduits dans sa boutique. Ils n'ont quasiment rien pris, c'est étrange.", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
 - run 1: topic: engine 2 said 5 lines, engine 1 played 5; engine 1 subtitles []; engine 2 subtitles 3
-- run 1: topic: Gerdur DialogueRiverwood_Revised__000453FF_1.wav on engine 1 after 93 ms
-- run 1: topic: Gerdur DialogueRiverwood_Revised__000453FF_1.wav on engine 1 after 99 ms
-- run 1: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 98 ms
-- run 1: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 134 ms
-- run 1: topic: Gerdur DialogueGe_DialogueGeneric_00087935_1.wav on engine 1 after 99 ms
+- run 1: topic: Gerdur MS13__00039642_1.wav on engine 1 after 78 ms
+- run 1: topic: Gerdur MS13__00039642_1.wav on engine 1 after 85 ms
+- run 1: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 86 ms
+- run 1: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 120 ms
+- run 1: topic: Gerdur DialogueGe_DialogueGeneric_00014105_1.wav on engine 1 after 75 ms
 - run 1: scene: DialogueRiverwoodIntroScene stage 10 on engine 2
-- run 1: scene: engine 2 said 5 lines, engine 1 played 6; engine 1 subtitles []; engine 2 subtitles 5
-- run 1: scene: Sven DialogueRi__000954C6_1.wav on engine 1 after 66 ms
-- run 1: scene: Hilde DialogueRi__000954C8_1.wav on engine 1 after 99 ms
-- run 1: scene: Sven DialogueRi__000954D3_1.wav on engine 1 after 95 ms
-- run 1: scene: Sven DialogueRi__000BB963_1.wav on engine 1 after 108 ms
-- run 1: scene: Hilde DialogueRi__000D39A1_1.wav on engine 1 after 107 ms
-- run 1: scene: engine 1 also played Hilde DialogueRi__000954CC_1.wav, 342 ms into the part, with no line of engine 2 to match
-- run 2: subtitle settings (dialogue, general): engine 1 true,false, engine 2 true,false
-- run 2: Gerdur hosted by engine 2 talks to engine 2's player: greeting "D'après Lucan, du Marché de Rivebois, des voleurs se seraient introduits dans sa boutique. Ils n'ont quasiment rien pris, c'est étrange.", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
-- run 2: topic: engine 2 said 5 lines, engine 1 played 5; engine 1 subtitles []; engine 2 subtitles 3
-- run 2: topic: Gerdur MS13__00039642_1.wav on engine 1 after 92 ms
-- run 2: topic: Gerdur MS13__00039642_1.wav on engine 1 after 112 ms
-- run 2: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 111 ms
-- run 2: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 112 ms
-- run 2: topic: Gerdur DialogueGe_DialogueGeneric_000854CC_1.wav on engine 1 after 98 ms
-- run 2: scene: DialogueRiverwoodIntroScene stage 10 on engine 2
-- run 2: scene: engine 2 said 5 lines, engine 1 played 6; engine 1 subtitles []; engine 2 subtitles 5
-- run 2: scene: Sven DialogueRi__000954C6_1.wav on engine 1 after 63 ms
-- run 2: scene: Hilde DialogueRi__000954C8_1.wav on engine 1 after 76 ms
-- run 2: scene: Sven DialogueRi__000954D3_1.wav on engine 1 after 112 ms
-- run 2: scene: Sven DialogueRi__000BB963_1.wav on engine 1 after 114 ms
-- run 2: scene: Hilde DialogueRi__000D39A1_1.wav on engine 1 after 103 ms
-- run 2: scene: engine 1 also played Hilde DialogueRi__000954CC_1.wav, 350 ms into the part, with no line of engine 2 to match
-- run 3: subtitle settings (dialogue, general): engine 1 true,false, engine 2 true,false
-- run 3: Gerdur hosted by engine 2 talks to engine 2's player: greeting "D'après Lucan, du Marché de Rivebois, des voleurs se seraient introduits dans sa boutique. Ils n'ont quasiment rien pris, c'est étrange.", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
-- run 3: topic: engine 2 said 7 lines, engine 1 played 7; engine 1 subtitles []; engine 2 subtitles 4
-- run 3: topic: Gerdur MS13__00039642_1.wav on engine 1 after 69 ms
-- run 3: topic: Gerdur MS13__00039642_1.wav on engine 1 after 89 ms
-- run 3: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 122 ms
-- run 3: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 89 ms
-- run 3: topic: Gerdur DialogueGe_DialogueGeneric_000854CE_1.wav on engine 1 after 111 ms
-- run 3: topic: Gerdur DialogueRiverwood_Revised__00045400_1.wav on engine 1 after 90 ms
-- run 3: topic: Gerdur DialogueRiverwood_Revised__00045400_1.wav on engine 1 after 89 ms
-- run 3: scene: DialogueRiverwoodIntroScene stage 10 on engine 2
-- run 3: scene: engine 2 said 7 lines, engine 1 played 8; engine 1 subtitles []; engine 2 subtitles 6
-- run 3: scene: Sven DialogueRi__000954C6_1.wav on engine 1 after 63 ms
-- run 3: scene: Hilde DialogueRi__000954C8_1.wav on engine 1 after 92 ms
-- run 3: scene: Sven DialogueRi__000954D3_1.wav on engine 1 after 98 ms
-- run 3: scene: Sven DialogueRi__000BB963_1.wav on engine 1 after 94 ms
-- run 3: scene: Hilde DialogueRi__000D39A1_1.wav on engine 1 after 86 ms
-- run 3: scene: Sven FreeformRiverwood01__0005C832_1.wav on engine 1 after 94 ms
-- run 3: scene: Sven FreeformRiverwood01__0005C832_1.wav on engine 1 after 98 ms
-- run 3: scene: engine 1 also played Hilde DialogueRi__000954CC_1.wav, 331 ms into the part, with no line of engine 2 to match
+- run 1: scene: engine 2 said 7 lines, engine 1 played 8; engine 1 subtitles []; engine 2 subtitles 6
+- run 1: scene: Sven DialogueRi__000954C6_1.wav on engine 1 after 68 ms
+- run 1: scene: Hilde DialogueRi__000954C8_1.wav on engine 1 after 105 ms
+- run 1: scene: Sven DialogueRi__000954D3_1.wav on engine 1 after 101 ms
+- run 1: scene: Sven DialogueRi__000BB963_1.wav on engine 1 after 101 ms
+- run 1: scene: Hilde DialogueRi__000D39A1_1.wav on engine 1 after 101 ms
+- run 1: scene: Sven FreeformRiverwood01__0005C832_1.wav on engine 1 after 102 ms
+- run 1: scene: Sven FreeformRiverwood01__0005C832_1.wav on engine 1 after 103 ms
+- run 1: scene: engine 1 also played Hilde DialogueRi__000954CC_1.wav, 403 ms into the part, with no line of engine 2 to match
 ### 2A.1
 - run 1: bandit 1ebf6 in 3c:Skyrim.esm, hoster ff000001 (engine 1's player ff000000, engine 2's ff000001), server dead false
-- run 1: after engine 2 killed it: hoster ff000001, server inventory ["f x25","1398a x1","1398e x1","6f398 x1","10594d x1"]
-- run 1: engine 2 corpse inventory ["f or x25","1398a Marteau d'acier x1","1398e Dague orque x1","6f398 Chaussures de fourrure x1","10594d Armure de fourrure x1"]
+- run 1: after engine 2 killed it: hoster ff000001, server inventory ["12eb7 x1","1b3a2 x1","3133c x1","6f398 x1","6f39b x1","721e8 x1"]
+- run 1: engine 2 corpse inventory ["6f398 Chaussures de fourrure x1","12eb7 Épée de fer x1","1b3a2 Armure cloutée x1","3133c Vin x1","6f39b Gantelets de fourrure x1","721e8 Boeuf cuit x1"]
 - run 1: engine 1 opens the corpse: true
-- run 1: engine 1 corpse shows 1398a Marteau d'acier x1; hoster at the take ff000001
+- run 1: engine 1 corpse shows 12eb7 Épée de fer x1; hoster at the take ff000001
 - run 1: engine 2 opens the corpse: true
-- run 1: item 1398a Marteau d'acier: corpse on the server 1 -> 0 (0 after engine 2 reopened it), on engine 2 1 -> 0 (0 with its loot menu open after the take); engine 1's player on the server 0 -> 1 (1 after the reopen), on engine 1 0 -> 1
+- run 1: item 12eb7 Épée de fer: corpse on the server 1 -> 0 (0 after engine 2 reopened it), on engine 2 1 -> 0 (0 with its loot menu open after the take); engine 1's player on the server 1 -> 2 (2 after the reopen), on engine 1 1 -> 2
 - ![2A.1](runs/2A_1/1/2A_1-open.png)
 - ![2A.1](runs/2A_1/1/2A_1-engine2.png)
 ### 2A.2
-- run 1: barrel 20570 before: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}; NPC 38258 hosted by engine 1 (ff000000), engine 2 shows a puppet; before: {"loaded":true,"disabled":false} / {"loaded":true,"disabled":false}
+- run 1: barrel 20570 before: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}; NPC cdd73 hosted by engine 1 (ff000000), engine 2 shows a puppet; before: {"loaded":true,"disabled":false} / {"loaded":true,"disabled":false}
 - run 1: barrel 20570: server isDisabled true; within 5 s of the server disable: engine 1 {"loaded":false,"disabled":true}, engine 2 {"loaded":false,"disabled":true}
 - run 1: barrel 20570: server isDisabled false; within 5 s of the server enable: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}
-- run 1: NPC 38258 on the server before the disable: {"hoster":4278190080,"listeners":[4278190080,4278190081],"at":["1a26f:Skyrim.esm",20334,-6649,-3232]}
-- run 1: NPC 38258: server isDisabled true; within 5 s of the server disable: engine 1 {"loaded":false,"disabled":true}, engine 2 {"loaded":false,"disabled":true}
-- run 1: NPC 38258: server isDisabled false; within 5 s of the server enable: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}
-- run 1: NPC 38258 on the server after the enable: {"hoster":0,"listeners":[4278190080,4278190081],"at":["1a26f:Skyrim.esm",20334,-6649,-3232]}
-- run 1: NPC 38258 hoster within 30 s of the enable (not asserted): ff000000
+- run 1: NPC cdd73 on the server before the disable: {"hoster":4278190080,"listeners":[4278190080,4278190081],"at":["1a26f:Skyrim.esm",23483,-8305,-3381]}
+- run 1: NPC cdd73: server isDisabled true; within 5 s of the server disable: engine 1 {"loaded":false,"disabled":true}, engine 2 {"loaded":false,"disabled":true}
+- run 1: NPC cdd73: server isDisabled false; within 5 s of the server enable: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}
+- run 1: NPC cdd73 on the server after the enable: {"hoster":0,"listeners":[4278190080,4278190081],"at":["1a26f:Skyrim.esm",23483,-8305,-3381]}
+- run 1: NPC cdd73 hoster within 30 s of the enable (not asserted): ff000001
 - run 1: barrel 20570 disabled while engine 1's player is away; players the server streams the barrel to at the disable: ["ff000001"]
 - run 1: barrel 20570 disabled on the server while engine 1's player was away: engine 1 {"loaded":false,"disabled":true} after the return
-- run 2: barrel 20570 before: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}; NPC 1a67c hosted by engine 1 (ff000000), engine 2 shows a puppet; before: {"loaded":true,"disabled":false} / {"loaded":true,"disabled":false}
+- run 2: barrel 20570 before: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}; NPC 1a676 hosted by engine 1 (ff000000), engine 2 shows a puppet; before: {"loaded":true,"disabled":false} / {"loaded":true,"disabled":false}
 - run 2: barrel 20570: server isDisabled true; within 5 s of the server disable: engine 1 {"loaded":false,"disabled":true}, engine 2 {"loaded":false,"disabled":true}
 - run 2: barrel 20570: server isDisabled false; within 5 s of the server enable: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}
-- run 2: NPC 1a67c on the server before the disable: {"hoster":4278190080,"listeners":[4278190080,4278190081],"at":["1a26f:Skyrim.esm",20669,-7728,-3636]}
-- run 2: NPC 1a67c: server isDisabled true; within 5 s of the server disable: engine 1 {"loaded":false,"disabled":true}, engine 2 {"loaded":false,"disabled":true}
-- run 2: NPC 1a67c: server isDisabled false; within 5 s of the server enable: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}
-- run 2: NPC 1a67c on the server after the enable: {"hoster":0,"listeners":[4278190080,4278190081],"at":["1a26f:Skyrim.esm",20669,-7728,-3636]}
-- run 2: NPC 1a67c hoster within 30 s of the enable (not asserted): ff000000
+- run 2: NPC 1a676 on the server before the disable: {"hoster":4278190080,"listeners":[4278190080,4278190081],"at":["1a26f:Skyrim.esm",23505,-7785,-3464]}
+- run 2: NPC 1a676: server isDisabled true; within 5 s of the server disable: engine 1 {"loaded":false,"disabled":true}, engine 2 {"loaded":false,"disabled":true}
+- run 2: NPC 1a676: server isDisabled false; within 5 s of the server enable: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}
+- run 2: NPC 1a676 on the server after the enable: {"hoster":0,"listeners":[4278190080,4278190081],"at":["1a26f:Skyrim.esm",23505,-7785,-3464]}
+- run 2: NPC 1a676 hoster within 30 s of the enable (not asserted): ff000000
 - run 2: barrel 20570 disabled while engine 1's player is away; players the server streams the barrel to at the disable: ["ff000001"]
 - run 2: barrel 20570 disabled on the server while engine 1's player was away: engine 1 {"loaded":false,"disabled":true} after the return
-- run 3: barrel 20570 before: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}; NPC 2c90f hosted by engine 1 (ff000000), engine 2 shows a puppet; before: {"loaded":true,"disabled":false} / {"loaded":true,"disabled":false}
-- run 3: barrel 20570: server isDisabled true; within 5 s of the server disable: engine 1 {"loaded":false,"disabled":true}, engine 2 {"loaded":false,"disabled":true}
-- run 3: barrel 20570: server isDisabled false; within 5 s of the server enable: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}
-- run 3: NPC 2c90f on the server before the disable: {"hoster":4278190080,"listeners":[4278190080,4278190081],"at":["1a26f:Skyrim.esm",20900,-6870,-3600]}
-- run 3: NPC 2c90f: server isDisabled true; within 5 s of the server disable: engine 1 {"loaded":false,"disabled":true}, engine 2 {"loaded":false,"disabled":true}
-- run 3: NPC 2c90f: server isDisabled false; within 5 s of the server enable: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}
-- run 3: NPC 2c90f on the server after the enable: {"hoster":0,"listeners":[4278190080,4278190081],"at":["1a26f:Skyrim.esm",20900,-6870,-3600]}
-- run 3: NPC 2c90f hoster within 30 s of the enable (not asserted): ff000001
-- run 3: barrel 20570 disabled while engine 1's player is away; players the server streams the barrel to at the disable: ["ff000001"]
-- run 3: barrel 20570 disabled on the server while engine 1's player was away: engine 1 {"loaded":false,"disabled":true} after the return
 ### 2A.3
-- run 1: FreeformRiften20 stage 10; satchel 85d54 holds 1 note on the client, 1 on the server; note alias ref ff000d8b (alias quests ["85d40"], in the satchel's inventory true, in the player's false)
-- run 1: satchel open true: the loot menu showed 1 note, alias ref with the menu open ff000d8b (alias quests ["85d40"], in the satchel's inventory true, in the player's false); after the take the player holds 1; alias ref ff000d8b (alias quests ["85d40"], in the satchel's inventory false, in the player's true); server: satchel 0, player 1
+- run 1: FreeformRiften20 stage 10; satchel 85d54 holds 1 note on the client, 1 on the server; note alias ref ff000d92 (alias quests ["85d40"], in the satchel's inventory true, in the player's false)
+- run 1: satchel open true: the loot menu showed 1 note, alias ref with the menu open ff000d92 (alias quests ["85d40"], in the satchel's inventory true, in the player's false); after the take the player holds 1; alias ref ff000d92 (alias quests ["85d40"], in the satchel's inventory false, in the player's true); server: satchel 0, player 1
 - ![2A.3](runs/2A_3/1/2A_3-open.png)
 ### 2A.4
 - run 1: A: FreeformIvarstead02 on engine 1 at login {"running":true,"stage":10}; the server has 1 necklace in the satchel d9b78 (created true)
 - run 1: A: at login FreeformRiften20 runs on engine 1 false, its note in Sarthis's satchel on the server 0; MS13 runs true, its claw in Arvel on the server 1
 - run 1: A: stage 30, alias ref ff000cf5 (alias quests ["d9b64"], in the holder true, in the player false); with the menu open ff000cf5 (alias quests ["d9b64"], in the holder true, in the player false); taken true; after: alias ref ff000cf5 (alias quests ["d9b64"], in the holder false, in the player true), stage 40, server satchel 0, player 1; engine 1 satchel 0, player 1
-- run 1: B: party joined; Arvel hosted by ff000000, killed on engine 1; the server corpse holds 1 claw, engine 2's corpse 1, engine 2's player on the server 0
+- run 1: B: party joined; Arvel hosted by ff000001, killed on engine 2; the server corpse holds 1 claw, engine 2's corpse 1, engine 2's player on the server 0
 - run 1: B: engine 2 (member) opens the corpse true, takes the claw locally true; then the server corpse 1, engine 2's player on the server 0, locally 0, engine 2's corpse 1
 - run 1: B: engine 1 (leader) opens the corpse true, takes true; then the server corpse 0, engine 1's player on the server 1, locally 1; MS13 stage on engine 1 40; claw alias ref ff000d51 (alias quests ["39645"], in the holder false, in the player true)
 ### 2A.5
@@ -403,35 +380,19 @@ First non-PASS in plan order: G1.7
 - run 1: member at (-1400, 600) from the leader, leader heading 200, member heading 0: engine 1 (heading 200.0, camera 200.0) expects 93.2, shows 93.2 ({"visible":true,"markers":[{"actor":4278190081,"left":75.9,"width":40.578125}],"cardinals":[{"text":"N","left":94.4},{"text":"E","left":19.4},{"text":"S","left":44.4},{"text":"W","left":69.4}]}); engine 2 (heading 0.0, camera 0.0) expects 113.2, shows 113.0 ({"visible":true,"markers":[{"actor":4278190080,"left":81.4,"width":40.578125}],"cardinals":[{"text":"N","left":50},{"text":"E","left":75},{"text":"S","left":0},{"text":"W","left":25}]})
 - run 1: member at (9000, 7000) from the leader, leader heading 300, member heading 110: engine 1 (heading 300.0, camera 300.0) expects 112.1, shows 112.0 ({"visible":true,"markers":[{"actor":4278190081,"left":81.1,"width":40.578125}],"cardinals":[{"text":"N","left":66.7},{"text":"E","left":91.7},{"text":"S","left":16.7},{"text":"W","left":41.7}]}); engine 2 (heading 110.0, camera 110.0) expects 122.1, shows 122.0 ({"visible":true,"markers":[{"actor":4278190080,"left":83.9,"width":40.578125}],"cardinals":[{"text":"N","left":19.4},{"text":"E","left":44.4},{"text":"S","left":69.4},{"text":"W","left":94.4}]})
 - run 1: after engine 2 leaves the party: engine 1 markers []; engine 2 markers []
-- run 2: bot players ff000002, ff000003 formed their own party near engine 1
-- run 2: before the party: engine 1 web UI visible true, markers []; engine 2 visible true, markers []
-- run 2: member at (0, 1500) from the leader, leader heading 0, member heading 45: engine 1 (heading 0.0, camera 0.0) expects 0.0, shows 0.0 ({"visible":true,"markers":[{"actor":4278190081,"left":50,"width":40.578125}],"cardinals":[{"text":"N","left":50},{"text":"E","left":75},{"text":"S","left":0},{"text":"W","left":25}]}); engine 2 (heading 45.0, camera 45.0) expects 135.0, shows 135.0 ({"visible":true,"markers":[{"actor":4278190080,"left":87.5,"width":40.578125}],"cardinals":[{"text":"N","left":37.5},{"text":"E","left":62.5},{"text":"S","left":87.5},{"text":"W","left":12.5}]})
-- run 2: member at (1500, 0) from the leader, leader heading 0, member heading 270: engine 1 (heading 0.0, camera 0.0) expects 90.0, shows 90.0 ({"visible":true,"markers":[{"actor":4278190081,"left":75,"width":40.578125}],"cardinals":[{"text":"N","left":50},{"text":"E","left":75},{"text":"S","left":0},{"text":"W","left":25}]}); engine 2 (heading 270.0, camera 270.0) expects 0.0, shows 0.0 ({"visible":true,"markers":[{"actor":4278190080,"left":50,"width":40.578125}],"cardinals":[{"text":"N","left":75},{"text":"E","left":100},{"text":"S","left":25},{"text":"W","left":50}]})
-- run 2: member at (-1000, -1200) from the leader, leader heading 90, member heading 160: engine 1 (heading 90.0, camera 90.0) expects 129.8, shows 130.0 ({"visible":true,"markers":[{"actor":4278190081,"left":86.1,"width":40.578125}],"cardinals":[{"text":"N","left":25},{"text":"E","left":50},{"text":"S","left":75},{"text":"W","left":100}]}); engine 2 (heading 160.0, camera 160.0) expects -120.2, shows -120.2 ({"visible":true,"markers":[{"actor":4278190080,"left":16.6,"width":40.578125}],"cardinals":[{"text":"N","left":5.6},{"text":"E","left":30.6},{"text":"S","left":55.6},{"text":"W","left":80.6}]})
-- run 2: member at (-1400, 600) from the leader, leader heading 200, member heading 0: engine 1 (heading 200.0, camera 200.0) expects 93.2, shows 93.2 ({"visible":true,"markers":[{"actor":4278190081,"left":75.9,"width":40.578125}],"cardinals":[{"text":"N","left":94.4},{"text":"E","left":19.4},{"text":"S","left":44.4},{"text":"W","left":69.4}]}); engine 2 (heading 0.0, camera 0.0) expects 113.2, shows 113.0 ({"visible":true,"markers":[{"actor":4278190080,"left":81.4,"width":40.578125}],"cardinals":[{"text":"N","left":50},{"text":"E","left":75},{"text":"S","left":0},{"text":"W","left":25}]})
-- run 2: member at (9000, 7000) from the leader, leader heading 300, member heading 110: engine 1 (heading 300.0, camera 300.0) expects 112.1, shows 112.0 ({"visible":true,"markers":[{"actor":4278190081,"left":81.1,"width":40.578125}],"cardinals":[{"text":"N","left":66.7},{"text":"E","left":91.7},{"text":"S","left":16.7},{"text":"W","left":41.7}]}); engine 2 (heading 110.0, camera 110.0) expects 122.1, shows 122.0 ({"visible":true,"markers":[{"actor":4278190080,"left":83.9,"width":40.578125}],"cardinals":[{"text":"N","left":19.4},{"text":"E","left":44.4},{"text":"S","left":69.4},{"text":"W","left":94.4}]})
-- run 2: after engine 2 leaves the party: engine 1 markers []; engine 2 markers []
-- run 3: bot players ff000002, ff000003 formed their own party near engine 1
-- run 3: before the party: engine 1 web UI visible true, markers []; engine 2 visible true, markers []
-- run 3: member at (0, 1500) from the leader, leader heading 0, member heading 45: engine 1 (heading 0.0, camera 0.0) expects 0.0, shows 0.0 ({"visible":true,"markers":[{"actor":4278190081,"left":50,"width":40.578125}],"cardinals":[{"text":"N","left":50},{"text":"E","left":75},{"text":"S","left":0},{"text":"W","left":25}]}); engine 2 (heading 45.0, camera 45.0) expects 135.0, shows 135.0 ({"visible":true,"markers":[{"actor":4278190080,"left":87.5,"width":40.578125}],"cardinals":[{"text":"N","left":37.5},{"text":"E","left":62.5},{"text":"S","left":87.5},{"text":"W","left":12.5}]})
-- run 3: member at (1500, 0) from the leader, leader heading 0, member heading 270: engine 1 (heading 0.0, camera 0.0) expects 90.0, shows 90.0 ({"visible":true,"markers":[{"actor":4278190081,"left":75,"width":40.578125}],"cardinals":[{"text":"N","left":50},{"text":"E","left":75},{"text":"S","left":0},{"text":"W","left":25}]}); engine 2 (heading 270.0, camera 270.0) expects 0.0, shows 0.0 ({"visible":true,"markers":[{"actor":4278190080,"left":50,"width":40.578125}],"cardinals":[{"text":"N","left":75},{"text":"E","left":100},{"text":"S","left":25},{"text":"W","left":50}]})
-- run 3: member at (-1000, -1200) from the leader, leader heading 90, member heading 160: engine 1 (heading 90.0, camera 90.0) expects 129.8, shows 130.0 ({"visible":true,"markers":[{"actor":4278190081,"left":86.1,"width":40.578125}],"cardinals":[{"text":"N","left":25},{"text":"E","left":50},{"text":"S","left":75},{"text":"W","left":100}]}); engine 2 (heading 160.0, camera 160.0) expects -120.2, shows -120.2 ({"visible":true,"markers":[{"actor":4278190080,"left":16.6,"width":40.578125}],"cardinals":[{"text":"N","left":5.6},{"text":"E","left":30.6},{"text":"S","left":55.6},{"text":"W","left":80.6}]})
-- run 3: member at (-1400, 600) from the leader, leader heading 200, member heading 0: engine 1 (heading 200.0, camera 200.0) expects 93.2, shows 93.2 ({"visible":true,"markers":[{"actor":4278190081,"left":75.9,"width":40.578125}],"cardinals":[{"text":"N","left":94.4},{"text":"E","left":19.4},{"text":"S","left":44.4},{"text":"W","left":69.4}]}); engine 2 (heading 0.0, camera 0.0) expects 113.2, shows 113.0 ({"visible":true,"markers":[{"actor":4278190080,"left":81.4,"width":40.578125}],"cardinals":[{"text":"N","left":50},{"text":"E","left":75},{"text":"S","left":0},{"text":"W","left":25}]})
-- run 3: member at (9000, 7000) from the leader, leader heading 300, member heading 110: engine 1 (heading 300.0, camera 300.0) expects 112.1, shows 112.0 ({"visible":true,"markers":[{"actor":4278190081,"left":81.1,"width":40.578125}],"cardinals":[{"text":"N","left":66.7},{"text":"E","left":91.7},{"text":"S","left":16.7},{"text":"W","left":41.7}]}); engine 2 (heading 110.0, camera 110.0) expects 122.1, shows 122.0 ({"visible":true,"markers":[{"actor":4278190080,"left":83.9,"width":40.578125}],"cardinals":[{"text":"N","left":19.4},{"text":"E","left":44.4},{"text":"S","left":69.4},{"text":"W","left":94.4}]})
-- run 3: after engine 2 leaves the party: engine 1 markers []; engine 2 markers []
 - ![G1.9](runs/G1_9/1/compass-engine1.png)
-- ![G1.9](runs/G1_9/2/compass-engine1.png)
-- ![G1.9](runs/G1_9/3/compass-engine1.png)
 ### 2B.1
 - run 1: party joined; before the wall: engine 1 shout global 0, MS13 stage 0, 3.4028234663852886e+38 units from the wall's look target, line of sight false, heading 286; engine 2 shout global 0, MS13 stage 0, 3.4028234663852886e+38 units from the wall's look target, line of sight false, heading 286
-- run 1: at the wall: engine 1 (leader) shout global 1, MS13 stage 60, 274 units from the wall's look target, line of sight true, heading 315, learned after 2.4 s; engine 2 (member) shout global 1, MS13 stage 60, 274 units from the wall's look target, line of sight true, heading 0, learned after 3.0 s
-- run 2: party joined; before the wall: engine 1 shout global 0, MS13 stage 0, 3.4028234663852886e+38 units from the wall's look target, line of sight false, heading 286; engine 2 shout global 0, MS13 stage 0, 3.4028234663852886e+38 units from the wall's look target, line of sight false, heading 286
-- run 2: at the wall: engine 1 (leader) shout global 1, MS13 stage 60, 274 units from the wall's look target, line of sight true, heading 315, learned after 2.5 s; engine 2 (member) shout global 1, MS13 stage 60, 274 units from the wall's look target, line of sight true, heading 0, learned after 3.0 s
-- run 3: party joined; before the wall: engine 1 shout global 0, MS13 stage 0, 3.4028234663852886e+38 units from the wall's look target, line of sight false, heading 286; engine 2 shout global 0, MS13 stage 0, 3.4028234663852886e+38 units from the wall's look target, line of sight false, heading 286
-- run 3: at the wall: engine 1 (leader) shout global 1, MS13 stage 60, 274 units from the wall's look target, line of sight true, heading 315, learned after 2.5 s; engine 2 (member) shout global 1, MS13 stage 60, 274 units from the wall's look target, line of sight true, heading 0, learned after 3.1 s
+- run 1: at the wall: engine 1 (leader) shout global 1, MS13 stage 60, 274 units from the wall's look target, line of sight true, heading 315, learned after 2.5 s; engine 2 (member) shout global 1, MS13 stage 60, 274 units from the wall's look target, line of sight true, heading 0, learned after 3.1 s
 - ![2B.1](runs/2B_1/1/wordwall-engine2.png)
-- ![2B.1](runs/2B_1/2/wordwall-engine2.png)
-- ![2B.1](runs/2B_1/3/wordwall-engine2.png)
+### 2B.2
+- run 1: A: party joined in Bleak Falls Barrow; server script states: pillars position01, position03, position01, gate waiting; gate node RuinsGate01 height on engine 1 -768, on engine 2 -768
+- run 1: A: control, engine 2 pulled the lever before the pillars were solved: lever activations in the server log 1, lever server state Waiting, gate server state waiting, gate animation events on engine 1 [], on engine 2 [], gate height -768, -768
+- run 1: A: before the second pull (19 s after the control pull): lever server state Waiting, gate animation events on engine 1 [], on engine 2 [], gate height -768, -768
+- run 1: A: engine 2 (member) turned the pillars 1, 2, 3, then 1, 2: server pillar states position03, position02, position02; engine 2 pulled the lever: gate server state busy, gate animation events on engine 1 ["Open"], on engine 2 ["Open"]; gate height on engine 1 -768 -> -583, on engine 2 -768 -> -579
+- run 1: A: gate server state after the opening: waiting
+- run 1: B: engine 1 (leader, with the claw) turned each ring twice: server ring states {"large":"position02","medium":"position03","small":"position01"}; engine 1 used the keyhole: keyhole server state done, door node DoorBase height on engine 1 -171 -> -230, on engine 2 -171 -> -231; MS13 stage on engine 1 50, on engine 2 50
+- ![2B.2](runs/2B_2/1/clawdoor-engine2.png)
 ### P8
 - run 1: 115 client log lines, 2 [Exception] lines
 - run 1: exception: [Exception] failed to get key 'data': failed to call custom Serialize for type struct Equipment: failed to get key 'inv': failed to call cus.

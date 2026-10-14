@@ -209,6 +209,8 @@ public:
     return "private.indexed.";
   }
 
+  void EnsureScriptsInited();
+
   void SendPapyrusEvent(const char* eventName,
                         const VarValue* arguments = nullptr,
                         size_t argumentsCount = 0) override;

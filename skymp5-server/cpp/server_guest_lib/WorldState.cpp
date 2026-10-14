@@ -319,7 +319,7 @@ const std::shared_ptr<MpForm>& WorldState::LookupFormById(
   auto it = forms.find(formId);
   if (it == forms.end()) {
     if (formId < 0xff000000) {
-      if (LoadForm(formId, optionalOutTrace)) {
+      if (LoadForm(formId, optionalOutTrace, true)) {
         it = forms.find(formId);
         if (it != forms.end()) {
           if (optionalOutTrace) {
@@ -368,7 +368,8 @@ const std::shared_ptr<MpForm>& WorldState::LookupFormByIdNoLoad(
 bool WorldState::AttachEspmRecord(const espm::CombineBrowser& br,
                                   const espm::RecordHeader* record,
                                   const espm::IdMapping& mapping,
-                                  std::stringstream* optionalOutTrace)
+                                  std::stringstream* optionalOutTrace,
+                                  bool onDemand)
 {
   auto& cache = GetEspmCache();
   // this place is a hotpath.
@@ -398,9 +399,10 @@ bool WorldState::AttachEspmRecord(const espm::CombineBrowser& br,
     reinterpret_cast<const espm::FLOR*>(base.rec)->GetData(cache).resultItem;
   bool isTree = t == "TREE" &&
     reinterpret_cast<const espm::TREE*>(base.rec)->GetData(cache).resultItem;
+  bool isMarker = onDemand && (t == "STAT" || t == "MSTT");
 
   if (!isNpc && !isFurniture && !isActivator && !espm::utils::IsItem(t) &&
-      !isDoor && !isContainer && !isFlor && !isTree) {
+      !isDoor && !isContainer && !isFlor && !isTree && !isMarker) {
     if (optionalOutTrace) {
       *optionalOutTrace << fmt::format(
         "AttachEspmRecord - the server skips base type {} \n", t.ToString());
@@ -625,7 +627,8 @@ bool WorldState::AttachEspmRecord(const espm::CombineBrowser& br,
   return true;
 }
 
-bool WorldState::LoadForm(uint32_t formId, std::stringstream* optionalOutTrace)
+bool WorldState::LoadForm(uint32_t formId, std::stringstream* optionalOutTrace,
+                          bool onDemand)
 {
   ANTIGO_CONTEXT_INIT(ctx);
   ctx.AddUnsigned(formId);
@@ -641,7 +644,7 @@ bool WorldState::LoadForm(uint32_t formId, std::stringstream* optionalOutTrace)
   auto mapping = br.GetCombMapping(lookupRes.fileIdx);
 
   bool attached =
-    AttachEspmRecord(br, lookupRes.rec, *mapping, optionalOutTrace);
+    AttachEspmRecord(br, lookupRes.rec, *mapping, optionalOutTrace, onDemand);
   if (optionalOutTrace) {
     *optionalOutTrace << "AttachEspmRecord " << (attached ? "true" : "false")
                       << std::endl;

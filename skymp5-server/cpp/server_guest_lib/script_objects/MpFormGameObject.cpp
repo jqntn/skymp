@@ -63,6 +63,9 @@ MpFormGameObject::ListActivePexInstances() const
   if (!form) {
     return kEmptyScriptsArray;
   }
+  if (auto refr = dynamic_cast<MpObjectReference*>(form)) {
+    refr->EnsureScriptsInited();
+  }
   return form->ListActivePexInstances();
 }
 

@@ -1333,11 +1333,16 @@ void MpObjectReference::SendPapyrusEvent(const char* eventName,
                                          const VarValue* arguments,
                                          size_t argumentsCount)
 {
-  if (!pImpl->scriptsInited) {
-    InitScripts();
-    pImpl->scriptsInited = true;
-  }
+  EnsureScriptsInited();
   return MpForm::SendPapyrusEvent(eventName, arguments, argumentsCount);
+}
+
+void MpObjectReference::EnsureScriptsInited()
+{
+  if (!pImpl->scriptsInited) {
+    pImpl->scriptsInited = true;
+    InitScripts();
+  }
 }
 
 void MpObjectReference::Init(WorldState* parent, uint32_t formId,

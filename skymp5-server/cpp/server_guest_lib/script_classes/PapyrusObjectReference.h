@@ -54,6 +54,10 @@ public:
   VarValue Is3DLoaded(VarValue self, const std::vector<VarValue>& arguments);
 
   VarValue GetLinkedRef(VarValue self, const std::vector<VarValue>& arguments);
+  VarValue DisableLinkChain(VarValue self,
+                            const std::vector<VarValue>& arguments);
+  VarValue EnableLinkChain(VarValue self,
+                           const std::vector<VarValue>& arguments);
 
   VarValue GetNthLinkedRef(VarValue self,
                            const std::vector<VarValue>& arguments);

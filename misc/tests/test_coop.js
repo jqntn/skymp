@@ -14,7 +14,10 @@ const sent = [];
 const originalSendCustomPacket = mp.sendCustomPacket.bind(mp);
 Object.defineProperty(mp, "sendCustomPacket", {
   value: (userId, json) => {
-    sent.push({ userId, content: JSON.parse(json) });
+    const content = JSON.parse(json);
+    if (content.customPacketType !== "partyPositions") {
+      sent.push({ userId, content });
+    }
     return originalSendCustomPacket(userId, json);
   },
 });

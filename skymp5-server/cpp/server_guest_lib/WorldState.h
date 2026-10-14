@@ -266,10 +266,12 @@ private:
   bool AttachEspmRecord(const espm::CombineBrowser& br,
                         const espm::RecordHeader* record,
                         const espm::IdMapping& mapping,
-                        std::stringstream* optionalOutTrace = nullptr);
+                        std::stringstream* optionalOutTrace = nullptr,
+                        bool onDemand = false);
 
   bool LoadForm(uint32_t formId,
-                std::stringstream* optionalOutTrace = nullptr);
+                std::stringstream* optionalOutTrace = nullptr,
+                bool onDemand = false);
   void TickSaveStorage(const std::chrono::system_clock::time_point& now);
   void TickTimers(const std::chrono::system_clock::time_point& now);
   [[nodiscard]] bool NpcSourceFilesOverriden() const noexcept;

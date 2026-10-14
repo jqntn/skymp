@@ -30,9 +30,30 @@ VarValue PapyrusQuest::GetCurrentStageID(
   return VarValue(0);
 }
 
+VarValue PapyrusQuest::IsRunning(VarValue self,
+                                 const std::vector<VarValue>& arguments)
+{
+  return ExecuteSpSnippetAndGetPromise(
+    GetName(), "IsRunning", compatibilityPolicy, self, arguments, true,
+    SpSnippetMode::kReturnResult, VarValue(false));
+}
+
+VarValue PapyrusQuest::SetStage(VarValue self,
+                                const std::vector<VarValue>& arguments)
+{
+  return ExecuteSpSnippetAndGetPromise(
+    GetName(), "SetCurrentStageID", compatibilityPolicy, self, arguments,
+    true,
+    SpSnippetMode::kReturnResult, VarValue(false));
+}
+
 void PapyrusQuest::Register(
   VirtualMachine& vm, std::shared_ptr<IPapyrusCompatibilityPolicy> policy)
 {
+  compatibilityPolicy = policy;
+
   AddMethod(vm, "GetStage", &PapyrusQuest::GetStage);
   AddMethod(vm, "GetCurrentStageID", &PapyrusQuest::GetCurrentStageID);
+  AddMethod(vm, "IsRunning", &PapyrusQuest::IsRunning);
+  AddMethod(vm, "SetStage", &PapyrusQuest::SetStage);
 }

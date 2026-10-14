@@ -114,6 +114,7 @@ public:
     std::vector<ActivationParentInfo> activationParents;
     uint32_t linkedRefKeywordId = 0;
     uint32_t linkedRefId = 0;
+    std::vector<std::pair<uint32_t, uint32_t>> keywordLinkedRefs;
     uint32_t ownerFaction = 0;
 
     // FULL: in-game name of the map marker.

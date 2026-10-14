@@ -11,6 +11,8 @@ class ScriptStorageFactory
 {
 public:
   static std::shared_ptr<IScriptStorage> Create(nlohmann::json serverSettings);
+  static std::vector<std::string> GetArchivePaths(
+    const nlohmann::json& serverSettings);
 
 private:
   static std::string ResolveArchivePath(const std::string& pathFromConfigStr,

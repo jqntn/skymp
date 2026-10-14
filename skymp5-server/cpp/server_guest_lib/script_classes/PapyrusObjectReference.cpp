@@ -12,6 +12,7 @@
 #include <TimeUtils.h>
 #include <algorithm>
 #include <cstring>
+#include <set>
 
 namespace {
 constexpr uint32_t kPlayerCharacterLevel = 1;
@@ -747,35 +748,80 @@ VarValue PapyrusObjectReference::Is3DLoaded(VarValue,
 }
 
 namespace LinkedRefUtils {
-static VarValue GetLinkedRef(VarValue self)
+static VarValue GetLinkedRef(VarValue self, uint32_t keywordId = 0)
 {
   if (auto selfRefr = GetFormPtr<MpObjectReference>(self)) {
     auto lookupRes = selfRefr->GetParent()->GetEspm().GetBrowser().LookupById(
       selfRefr->GetFormId());
     auto data =
       espm::GetData<espm::REFR>(selfRefr->GetFormId(), selfRefr->GetParent());
-    if (data.linkedRefId) {
+    uint32_t linkedRefId = keywordId ? 0 : data.linkedRefId;
+    for (auto& [keyword, ref] : data.keywordLinkedRefs) {
+      if (keywordId && lookupRes.ToGlobalId(keyword) == keywordId) {
+        linkedRefId = ref;
+      }
+    }
+    if (linkedRefId) {
       auto& linkedRef = selfRefr->GetParent()->GetFormAt<MpObjectReference>(
-        lookupRes.ToGlobalId(data.linkedRefId));
+        lookupRes.ToGlobalId(linkedRefId));
       return VarValue(std::make_shared<MpFormGameObject>(&linkedRef));
     }
   }
 
   return VarValue::None();
 }
+
+static uint32_t GetKeywordId(const std::vector<VarValue>& arguments)
+{
+  if (arguments.empty() || arguments[0] == VarValue::None()) {
+    return 0;
+  }
+  auto& keyword = GetRecordPtr(arguments[0]);
+  return keyword.rec ? keyword.ToGlobalId(keyword.rec->GetId()) : 0;
+}
+
+static std::vector<VarValue> GetLinkChain(VarValue self, uint32_t keywordId)
+{
+  std::vector<VarValue> chain;
+  std::set<uint32_t> visited;
+  for (auto cursor = GetLinkedRef(self, keywordId);
+       cursor != VarValue::None();
+       cursor = GetLinkedRef(cursor, keywordId)) {
+    auto refr = GetFormPtr<MpObjectReference>(cursor);
+    if (!refr || !visited.insert(refr->GetFormId()).second) {
+      break;
+    }
+    chain.push_back(cursor);
+  }
+  return chain;
+}
 }
 
 VarValue PapyrusObjectReference::GetLinkedRef(
   VarValue self, const std::vector<VarValue>& arguments)
 {
-  // TODO: implement keyword argument
-  // https://ck.uesp.net/wiki/GetLinkedRef_-_ObjectReference
-  if (arguments.size() > 0 && arguments[0] != VarValue::None()) {
-    spdlog::warn(
-      "GetLinkedRef doesn't support Keyword argument at this moment");
-  }
+  return LinkedRefUtils::GetLinkedRef(
+    self, LinkedRefUtils::GetKeywordId(arguments));
+}
 
-  return LinkedRefUtils::GetLinkedRef(self);
+VarValue PapyrusObjectReference::DisableLinkChain(
+  VarValue self, const std::vector<VarValue>& arguments)
+{
+  for (auto& ref : LinkedRefUtils::GetLinkChain(
+         self, LinkedRefUtils::GetKeywordId(arguments))) {
+    Disable(ref, {});
+  }
+  return VarValue::None();
+}
+
+VarValue PapyrusObjectReference::EnableLinkChain(
+  VarValue self, const std::vector<VarValue>& arguments)
+{
+  for (auto& ref : LinkedRefUtils::GetLinkChain(
+         self, LinkedRefUtils::GetKeywordId(arguments))) {
+    Enable(ref, {});
+  }
+  return VarValue::None();
 }
 
 VarValue PapyrusObjectReference::GetNthLinkedRef(
@@ -948,6 +994,8 @@ void PapyrusObjectReference::Register(
   AddMethod(vm, "SetOpen", &PapyrusObjectReference::SetOpen);
   AddMethod(vm, "Is3DLoaded", &PapyrusObjectReference::Is3DLoaded);
   AddMethod(vm, "GetLinkedRef", &PapyrusObjectReference::GetLinkedRef);
+  AddMethod(vm, "DisableLinkChain", &PapyrusObjectReference::DisableLinkChain);
+  AddMethod(vm, "EnableLinkChain", &PapyrusObjectReference::EnableLinkChain);
   AddMethod(vm, "GetNthLinkedRef", &PapyrusObjectReference::GetNthLinkedRef);
   AddMethod(vm, "GetParentCell", &PapyrusObjectReference::GetParentCell);
   AddMethod(vm, "GetOpenState", &PapyrusObjectReference::GetOpenState);

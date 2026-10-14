@@ -12,6 +12,10 @@ public:
   VarValue GetCurrentStageID(VarValue self,
                              const std::vector<VarValue>& arguments);
 
+  VarValue IsRunning(VarValue self, const std::vector<VarValue>& arguments);
+
+  VarValue SetStage(VarValue self, const std::vector<VarValue>& arguments);
+
   void Register(VirtualMachine& vm,
                 std::shared_ptr<IPapyrusCompatibilityPolicy> policy) override;
 };
