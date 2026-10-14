@@ -1,6 +1,8 @@
 import {
   getExtraContainerChanges,
   getContainer,
+  getInventoryReferences,
+  getReferenceAliasQuests,
   BaseExtraList,
   ExtraHealth,
   ObjectReference,
@@ -327,7 +329,10 @@ const resetBase = (refr: ObjectReference): void => {
     basesReset().add(baseId);
     TESModPlatform.resetContainer(base);
 
-    refr.removeAllItems(null, false, true);
+    const holdsAliasRefs = getInventoryReferences(refr.getFormID()).some((e) => getReferenceAliasQuests(e.ref).length > 0);
+    if (!holdsAliasRefs) {
+      refr.removeAllItems(null, false, true);
+    }
   }
 };
 

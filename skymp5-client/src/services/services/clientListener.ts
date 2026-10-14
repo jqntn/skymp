@@ -20,6 +20,7 @@ declare module "skyrimPlatform" {
     function getTextRefrOffset(textId: number): number[];
     function getTextRefrScreenOffset(textId: number): number[];
     function getReferenceAliasQuests(refrFormId: number): number[];
+    function getInventoryReferences(refrFormId: number): { ref: number, baseId: number }[];
     function setPapyrusEventsAllowedForms(formIds: number[]): void;
     function updateAnimations(): void;
     function isAnimationGraphReady(formId: number): boolean;

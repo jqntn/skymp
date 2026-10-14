@@ -5,7 +5,7 @@ First non-PASS in plan order: G1.7
 
 | id | result | secs | at | detail |
 |---|---|---|---|---|
-| L1 | PASS | 29 | 2026-10-14 09:59 |  |
+| L1 | PASS | 70 | 2026-10-14 10:18 |  |
 | S0 | PASS | 30 | 2026-10-13 15:22 | 1/1 runs PASS |
 | S0b | PASS | 161 | 2026-10-13 15:25 | 1/1 runs PASS |
 | S0c | PASS | 30 | 2026-10-13 15:25 | 1/1 runs PASS |
@@ -17,9 +17,9 @@ First non-PASS in plan order: G1.7
 | S1.6 | PASS | 58 | 2026-10-13 16:08 | 1/1 runs PASS |
 | S2 | PASS | 117 | 2026-10-13 15:35 | 1/1 runs PASS |
 | S3.1 | PASS | 26 | 2026-10-13 15:36 | 1/1 runs PASS |
-| S3.2 | PASS | 24 | 2026-10-14 07:45 | 1/1 runs PASS |
+| S3.2 | PASS | 24 | 2026-10-14 10:23 | 1/1 runs PASS |
 | S3.3 | PASS | 20 | 2026-10-14 07:12 | 1/1 runs PASS |
-| S3.4 | PASS | 151 | 2026-10-14 08:39 | 3/3 runs PASS |
+| S3.4 | PASS | 38 | 2026-10-14 10:23 | 1/1 runs PASS |
 | 1A.1 | PASS | 4 | 2026-10-13 15:37 | 1/1 runs PASS |
 | 1A.2 | PASS | 4 | 2026-10-13 15:37 | 1/1 runs PASS |
 | 1A.3 | PASS | 3 | 2026-10-13 15:37 | 1/1 runs PASS |
@@ -38,9 +38,9 @@ First non-PASS in plan order: G1.7
 | G1.6 | PASS | 120 | 2026-10-14 07:52 | 1/1 runs PASS |
 | G1.7 | FAIL | 201 | 2026-10-14 05:10 | run 1/3: Sven: 5 activations of the crosshair NPC opened no dialogue on engine 1 (sit state on engine 2 0, on engine 1 0; NPC {"ai":false,"sit":0,"target":0,"pkg":"ea072","x":20629,"y":-46000,"events":[]}) |
 | G1.8 | PASS | 327 | 2026-10-14 06:39 | 3/3 runs PASS |
-| 2A.1 | PASS | 179 | 2026-10-14 07:44 | 3/3 runs PASS |
+| 2A.1 | PASS | 55 | 2026-10-14 10:24 | 1/1 runs PASS |
 | 2A.2 | PASS | 140 | 2026-10-14 09:31 | 3/3 runs PASS |
-| 2A.3 | FAIL | 55 | 2026-10-14 09:43 | run 1/1: the server did not create the necklace in the satchel; the loot menu shows 0 necklace in the satchel; with the menu open (the server's satchel inventory applied), the alias ref is ff000cf5 (alias quests ["d9b64"], in the satchel's inventory false, in the player's false), before ff000cf5; the player holds 0 necklace; the necklace alias ref after the take is ff000cf5 (alias quests ["d9b64"], in the satchel's inventory false, in the player's false), before ff000cf5; the quest stage is 10 after the take (before 10); the necklace script did not advance it; the server has 0 necklace in the satchel and 0 in the player |
+| 2A.3 | PASS | 40 | 2026-10-14 10:25 | 1/1 runs PASS |
 | 2A.4 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | 2A.5 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | G1.9 | FAIL | 0 | - | not run |
@@ -67,7 +67,7 @@ First non-PASS in plan order: G1.7
 ## Evidence
 
 ### L1
-- build: ok in 28 s (l1-build.log)
+- build: ok in 69 s (l1-build.log)
 - ts: ok in 1 s (l1-ts.log)
 - ctest: ok in 0 s (skipped: the unit and server binaries and the integration tests are those of the last green ctest)
 ### S0
@@ -155,15 +155,7 @@ First non-PASS in plan order: G1.7
 - run 1: MS13 stage 10; Arvel 39655 in 371de:Skyrim.esm holds 1 Golden Claw on the client, 1 on the server; GoldenClaw alias ref ff000d51 (alias quests ["39645"], deleted true, in Arvel's inventory true, in the player's false)
 - run 1: Arvel dead: the client corpse holds 1 claw, the server 1; GoldenClaw alias ref ff000d51 (alias quests ["39645"], deleted true, in Arvel's inventory true, in the player's false); MS13 stage 10
 - run 1: after the loot: the loot menu showed 1 claw (open true); the player holds 1; GoldenClaw alias ref ff000d51 (alias quests ["39645"], deleted true, in Arvel's inventory false, in the player's true); MS13 stage 10 -> 40; server: Arvel 0, player 1
-- run 2: MS13 stage 10; Arvel 39655 in 371de:Skyrim.esm holds 1 Golden Claw on the client, 1 on the server; GoldenClaw alias ref ff000d51 (alias quests ["39645"], deleted true, in Arvel's inventory true, in the player's false)
-- run 2: Arvel dead: the client corpse holds 1 claw, the server 1; GoldenClaw alias ref ff000d51 (alias quests ["39645"], deleted true, in Arvel's inventory true, in the player's false); MS13 stage 10
-- run 2: after the loot: the loot menu showed 1 claw (open true); the player holds 1; GoldenClaw alias ref ff000d51 (alias quests ["39645"], deleted true, in Arvel's inventory false, in the player's true); MS13 stage 10 -> 40; server: Arvel 0, player 1
-- run 3: MS13 stage 10; Arvel 39655 in 371de:Skyrim.esm holds 1 Golden Claw on the client, 1 on the server; GoldenClaw alias ref ff000d51 (alias quests ["39645"], deleted true, in Arvel's inventory true, in the player's false)
-- run 3: Arvel dead: the client corpse holds 1 claw, the server 1; GoldenClaw alias ref ff000d51 (alias quests ["39645"], deleted true, in Arvel's inventory true, in the player's false); MS13 stage 10
-- run 3: after the loot: the loot menu showed 1 claw (open true); the player holds 1; GoldenClaw alias ref ff000d51 (alias quests ["39645"], deleted true, in Arvel's inventory false, in the player's true); MS13 stage 10 -> 40; server: Arvel 0, player 1
 - ![S3.4](runs/S3_4/1/S3_4-open.png)
-- ![S3.4](runs/S3_4/2/S3_4-open.png)
-- ![S3.4](runs/S3_4/3/S3_4-open.png)
 ### 1A.1
 - run 1: unit [1A.1]: exit 0; All tests passed (27 assertions in 6 test cases)
 ### 1A.2
@@ -345,32 +337,14 @@ First non-PASS in plan order: G1.7
 - run 3: scene: engine 1 also played Hilde DialogueRi__000954CC_1.wav, 331 ms into the part, with no line of engine 2 to match
 ### 2A.1
 - run 1: bandit 1ebf6 in 3c:Skyrim.esm, hoster ff000001 (engine 1's player ff000000, engine 2's ff000001), server dead false
-- run 1: after engine 2 killed it: hoster ff000001, server inventory ["1359d x1","13910 x1","13911 x1"]
-- run 1: engine 2 corpse inventory ["13911 Armure en peau x1","1359d Espadon de fer x1","13910 Bottes en peau x1"]
+- run 1: after engine 2 killed it: hoster ff000001, server inventory ["a x1","f x32","12eb6 x1","13910 x1","13911 x1","13988 x1"]
+- run 1: engine 2 corpse inventory ["f or x32","a Crochet x1","12eb6 Bouclier de fer x1","13910 Bottes en peau x1","13911 Armure en peau x1","13988 Masse d'acier x1"]
 - run 1: engine 1 opens the corpse: true
-- run 1: engine 1 corpse shows 1359d Espadon de fer x1; hoster at the take ff000001
+- run 1: engine 1 corpse shows a Crochet x1; hoster at the take ff000001
 - run 1: engine 2 opens the corpse: true
-- run 1: item 1359d Espadon de fer: corpse on the server 1 -> 0 (0 after engine 2 reopened it), on engine 2 1 -> 0 (0 with its loot menu open after the take); engine 1's player on the server 0 -> 1 (1 after the reopen), on engine 1 0 -> 1
-- run 2: bandit 1ebf6 in 3c:Skyrim.esm, hoster ff000001 (engine 1's player ff000000, engine 2's ff000001), server dead false
-- run 2: after engine 2 killed it: hoster ff000001, server inventory ["a x1","f x28","12eb6 x1","13989 x1","166ff x1","6f398 x1","10594b x1"]
-- run 2: engine 2 corpse inventory ["a Crochet x1","12eb6 Bouclier de fer x1","13989 Épée d'acier x1","166ff Couronne de cuivre ornée d'un onyx x1","6f398 Chaussures de fourrure x1","10594b Armure de fourrure x1","f or x28"]
-- run 2: engine 1 opens the corpse: true
-- run 2: engine 1 corpse shows a Crochet x1; hoster at the take ff000001
-- run 2: engine 2 opens the corpse: true
-- run 2: item a Crochet: corpse on the server 1 -> 0 (0 after engine 2 reopened it), on engine 2 1 -> 0 (0 with its loot menu open after the take); engine 1's player on the server 10 -> 11 (11 after the reopen), on engine 1 10 -> 11
-- run 3: bandit 1ebf6 in 3c:Skyrim.esm, hoster ff000001 (engine 1's player ff000000, engine 2's ff000001), server dead false
-- run 3: after engine 2 killed it: hoster ff000001, server inventory ["f x2","13987 x1","6f398 x1","10594d x1"]
-- run 3: engine 2 corpse inventory ["f or x2","10594d Armure de fourrure x1","6f398 Chaussures de fourrure x1","13987 Espadon d'acier x1"]
-- run 3: engine 1 opens the corpse: true
-- run 3: engine 1 corpse shows 13987 Espadon d'acier x1; hoster at the take ff000001
-- run 3: engine 2 opens the corpse: true
-- run 3: item 13987 Espadon d'acier: corpse on the server 1 -> 0 (0 after engine 2 reopened it), on engine 2 1 -> 0 (0 with its loot menu open after the take); engine 1's player on the server 0 -> 1 (1 after the reopen), on engine 1 0 -> 1
+- run 1: item a Crochet: corpse on the server 1 -> 0 (0 after engine 2 reopened it), on engine 2 1 -> 0 (0 with its loot menu open after the take); engine 1's player on the server 10 -> 11 (11 after the reopen), on engine 1 10 -> 11
 - ![2A.1](runs/2A_1/1/2A_1-open.png)
 - ![2A.1](runs/2A_1/1/2A_1-engine2.png)
-- ![2A.1](runs/2A_1/2/2A_1-open.png)
-- ![2A.1](runs/2A_1/2/2A_1-engine2.png)
-- ![2A.1](runs/2A_1/3/2A_1-open.png)
-- ![2A.1](runs/2A_1/3/2A_1-engine2.png)
 ### 2A.2
 - run 1: barrel 20570 before: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}; NPC 38258 hosted by engine 1 (ff000000), engine 2 shows a puppet; before: {"loaded":true,"disabled":false} / {"loaded":true,"disabled":false}
 - run 1: barrel 20570: server isDisabled true; within 5 s of the server disable: engine 1 {"loaded":false,"disabled":true}, engine 2 {"loaded":false,"disabled":true}
@@ -403,8 +377,8 @@ First non-PASS in plan order: G1.7
 - run 3: barrel 20570 disabled while engine 1's player is away; players the server streams the barrel to at the disable: ["ff000001"]
 - run 3: barrel 20570 disabled on the server while engine 1's player was away: engine 1 {"loaded":false,"disabled":true} after the return
 ### 2A.3
-- run 1: FreeformIvarstead02 stage 10; satchel d9b78 holds 1 necklace on the client, 0 on the server; necklace alias ref ff000cf5 (alias quests ["d9b64"], in the satchel's inventory true, in the player's false)
-- run 1: satchel open true: the loot menu showed 0 necklace, alias ref with the menu open ff000cf5 (alias quests ["d9b64"], in the satchel's inventory false, in the player's false); after the take the player holds 0; alias ref ff000cf5 (alias quests ["d9b64"], in the satchel's inventory false, in the player's false); stage 10 -> 10; server: satchel 0, player 0
+- run 1: FreeformRiften20 stage 10; satchel 85d54 holds 1 note on the client, 1 on the server; note alias ref ff000d8c (alias quests ["85d40"], in the satchel's inventory true, in the player's false)
+- run 1: satchel open true: the loot menu showed 1 note, alias ref with the menu open ff000d8c (alias quests ["85d40"], in the satchel's inventory true, in the player's false); after the take the player holds 1; alias ref ff000d8c (alias quests ["85d40"], in the satchel's inventory false, in the player's true); server: satchel 0, player 1
 - ![2A.3](runs/2A_3/1/2A_3-open.png)
 ### P8
 - run 1: 115 client log lines, 2 [Exception] lines

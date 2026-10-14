@@ -38,6 +38,8 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 - `fix(coop): let players loot corpses that another player hosts (2A.1)`: see the 2A.1 Status bullet and the 2A.1 findings in PLAN.
 - `fix(coop): play hosted NPC voice lines on the other clients (G1.8)`: SP hook on the actor speak function (Offsets `SpeakSound`, AE 37542, SE 36541 unverified) sends the SP event `speakSound` for played voice files; natives `speakSound(formId, file)` (no subtitle) and `getSubtitles()`; the client relays lines of hosted NPCs as `SkympSpeak:<file>` on the NPC animation queue and plays them on puppets; the server does not keep them as the last animation; G1.8 check.
 - `fix(coop): show server disables of ESP refs and NPCs on the clients (2A.2)`: see the 2A.2 Status bullet and the 2A.2 findings in PLAN.
+- `test(e2e): log every attempt, check the host before launch and cut slow waits (retro 1)`: see the retro 1 log line.
+- `fix(coop): keep quest alias items when the client first applies a container inventory (2A.3)`: see the 2A.3 findings in PLAN.
 
 ## What the last commit holds (G1.2)
 
@@ -82,9 +84,9 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 
 ## Next steps
 
-0. Retro 1 (2026-10-14, see the log line): harness tasks done. Still to do before 2A.3: red runs on the current check version (LOOP "check the checks"). Red on the current version is recorded for 2A.1, 2A.2, G1.5 and the door part of 1B.3. Red only on an older version: S0b, S0c, S1.1, 1A.5, G1.4, S1.4, S1.6, S1.2, S1.5, G1.3, S3.4, 1B.1, 1B.2, 1B.4, 1B.5, G1.1, G1.2, G1.6, G1.8. No red: S1.3, 1A.1, 1A.2, 1A.3, 1A.4 (S0, S2, S3.1-S3.3 have no product fix). The revert targets are the fix commits named in the retro (`git log --oneline`). Run S1.6 3 times on the current version.
-   - 2A.3 state: check misc/e2e/checks/2A.3.js written (FreeformIvarstead02, Reyda's necklace created in the unlocked satchel d9b78 near Ivarstead; the Dragonstone is created in the Bleak Falls boss draugr 9bcd6, a corpse, so it never meets resetBase). First run FAIL, but for another reason: the client never reported FFI02 stage 10 (no `Coop: quest d9b64` line on the server), so the server did not create the necklace and the open showed 0. Find why the stage report is missing before the resetBase red.
-1. Phase 2A: 2A.3 (resetBase keeps quest items), 2A.4 (rest: leader-only take), 2A.5 (script item gains and losses); each needs its check (the plan has none yet for 2A.2-2A.5 except through G2), then G1.9. G1.7 waits for the user's hand check (or a harness that can press keys: a visible run with focus is the untried option).
+0. Retro 1 (2026-10-14, see the log line): harness tasks done. Still to do: red runs on the current check version (LOOP "check the checks"). Red on the current version is recorded for 2A.1, 2A.2, G1.5 and the door part of 1B.3. Red only on an older version: S0b, S0c, S1.1, 1A.5, G1.4, S1.4, S1.6, S1.2, S1.5, G1.3, S3.4, 1B.1, 1B.2, 1B.4, 1B.5, G1.1, G1.2, G1.6, G1.8. No red: S1.3, 1A.1, 1A.2, 1A.3, 1A.4 (S0, S2, S3.1-S3.3 have no product fix). The revert targets are the fix commits named in the retro (`git log --oneline`). Run S1.6 3 times on the current version.
+   - 2A.3 PASS (committed). Red patches for the check-the-checks batch are in the scratchpad (redpatches/, index.md) and the batch script redbatch.sh (turns PUBLISH_CLIENT_DIST off during red builds, back on at the end); results in redbatch.txt. S1.3 needs a rewrite: it returns ACCEPTED on the regressions it targets.
+1. Phase 2A: 2A.4 (start-game quests' create-in items, see the step 4 finding; leader-only take), 2A.5 (script item gains and losses); each needs its check (the plan has none yet for 2A.2-2A.5 except through G2), then G1.9. G1.7 waits for the user's hand check (or a harness that can press keys: a visible run with focus is the untried option).
 2. Then 2B (2B.3 also tests that a hoster does not allow a dragon's script events), G2, P. P8 stays red until reached.
 3. Watch:
    - S1.2 had a flaky period (LESSONS). The 1B.4 claim after a replay failed once (23:20).
