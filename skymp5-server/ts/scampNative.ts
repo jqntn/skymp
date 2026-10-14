@@ -57,6 +57,7 @@ export interface ScampServer {
   get(formId: number, propertyName: string): unknown;
   set(formId: number, propertyName: string, value: unknown): void;
   getDescFromId(formId: number): string;
+  callPapyrusFunction(callType: "method" | "global", className: string, functionName: string, self: unknown, args: unknown[]): unknown;
   lookupEspmRecordById(globalRecordId: number): EspmLookupResult;
 
   executeJavaScriptOnChakra(src: string): void;

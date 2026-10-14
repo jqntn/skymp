@@ -24,6 +24,7 @@ declare module "skyrimPlatform" {
     function updateAnimations(): void;
     function isAnimationGraphReady(formId: number): boolean;
     function speakSound(formId: number, voiceFile: string): void;
+    function getQuestAliasReference(questFormId: number, aliasId: number): number;
     interface SpeakSoundEvent {
         actorId: number;
         voiceFile: string;

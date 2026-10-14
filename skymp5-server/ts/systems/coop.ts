@@ -1,8 +1,10 @@
 import { Content, Log, System, SystemContext } from "./system";
 import { Parties, Party } from "./party";
 import { QuestLogEntry, STOP, applyStage, applyStop, lastStage, outOfSyncQuests, parseQuestLog } from "./questLog";
+import { CreatedItem, QuestItems, acceptsHolder, parseQuestItems } from "./questItems";
 
 export const QUEST_LOG_PROPERTY = "private.questLog";
+export const COOP_CREATED_PROPERTY = "private.coopCreated";
 
 const MAX_QUEST_LOG_ENTRIES = 20000;
 const NEARBY_DISTANCE = 8192;
@@ -11,11 +13,13 @@ const INVALID_USER_ID = 65535;
 const QUEST_FLAG_ALLOW_REPEATED_STAGES = 0x8;
 const QUEST_FLAG_RUN_ONCE = 0x100;
 const QUEST_TYPE_NONE = 0;
+const ALIAS_FILL_TTL_MS = 60000;
 
 interface QuestInfo {
   stages: Set<number>;
   runOnce: boolean;
   repeatStages: boolean;
+  items: QuestItems;
 }
 
 type Handler = (ctx: SystemContext, actor: number, content: Content, userId: number) => void;
@@ -64,6 +68,7 @@ export class Coop implements System {
     questLogRequest: (ctx, actor, _content, userId) => this.sendQuestLog(ctx, actor, userId),
     questStage: (ctx, actor, content) => this.onQuestStage(ctx, actor, content.quest, content.stage),
     questStop: (ctx, actor, content) => this.onQuestStop(ctx, actor, content.quest, content.completed === true),
+    aliasFill: (ctx, actor, content) => this.onAliasFill(ctx, actor, content.quest, content.refs),
   };
 
   private invite(ctx: SystemContext, inviter: number, target: unknown): void {
@@ -208,6 +213,74 @@ export class Coop implements System {
     if (changed.length) {
       this.log(`Coop: quest ${hex(quest)} stage ${stage} from ${hex(reporter)}, logged for ${changed.map(hex)}`);
     }
+    if (changed.includes(reporter) && info.items.created.length) {
+      this.requestQuestItems(ctx, reporter, quest as number, info);
+    }
+  }
+
+  private requestQuestItems(ctx: SystemContext, reporter: number, quest: number, info: QuestInfo): void {
+    const aliases = new Set<number>();
+    for (const created of info.items.created) {
+      const forced = info.items.holders.get(created.holderAlias)?.ref;
+      if (forced !== undefined) {
+        this.grantQuestItem(ctx, forced, quest, created);
+      } else {
+        aliases.add(created.holderAlias);
+      }
+    }
+    if (aliases.size) {
+      this.aliasFillRequests.set(`${reporter}:${quest}`, Date.now());
+      this.send(ctx, reporter, { customPacketType: "aliasFillRequest", quest, aliases: [...aliases] });
+    }
+  }
+
+  private onAliasFill(ctx: SystemContext, reporter: number, quest: unknown, refs: unknown): void {
+    const key = `${reporter}:${quest}`;
+    const requestedAt = this.aliasFillRequests.get(key);
+    this.aliasFillRequests.delete(key);
+    if (requestedAt === undefined || Date.now() - requestedAt > ALIAS_FILL_TTL_MS || !isFormId(quest) || !Array.isArray(refs)) {
+      return;
+    }
+    const info = this.questInfo(ctx, quest);
+    if (!info) {
+      return;
+    }
+    for (const pair of refs) {
+      if (!Array.isArray(pair)) {
+        continue;
+      }
+      const [alias, ref] = pair;
+      const holder = info.items.holders.get(alias);
+      let record;
+      try {
+        record = isFormId(ref) ? ctx.svr.lookupEspmRecordById(ref).record : undefined;
+      } catch {
+        record = undefined;
+      }
+      if (!acceptsHolder(holder, ref, record)) {
+        this.log(`Coop: alias ${alias} of quest ${hex(quest)} from ${hex(reporter)} rejected (${ref})`);
+        continue;
+      }
+      for (const created of info.items.created.filter((c) => c.holderAlias === alias)) {
+        this.grantQuestItem(ctx, ref as number, quest, created);
+      }
+    }
+  }
+
+  private grantQuestItem(ctx: SystemContext, holder: number, quest: number, created: CreatedItem): void {
+    try {
+      const done = ctx.svr.get(holder, COOP_CREATED_PROPERTY);
+      const granted = Array.isArray(done) ? (done as unknown[]) : [];
+      if (granted.some((g) => Array.isArray(g) && g[0] === quest && g[1] === created.alias)) {
+        return;
+      }
+      const item = ctx.svr.callPapyrusFunction("global", "Game", "GetFormEx", null, [created.item]);
+      ctx.svr.callPapyrusFunction("method", "ObjectReference", "AddItem", { type: "form", desc: ctx.svr.getDescFromId(holder) }, [item, 1, true]);
+      ctx.svr.set(holder, COOP_CREATED_PROPERTY, [...granted, [quest, created.alias]]);
+      this.log(`Coop: quest ${hex(quest)} alias ${created.alias} created ${hex(created.item)} in ${hex(holder)}`);
+    } catch (e) {
+      this.log(`Coop: quest ${hex(quest)} alias ${created.alias} could not create ${hex(created.item)} in ${hex(holder)}`, e);
+    }
   }
 
   private onQuestStop(ctx: SystemContext, reporter: number, quest: unknown, completed: boolean): void {
@@ -267,6 +340,7 @@ export class Coop implements System {
           stages: new Set(),
           runOnce: !!(flags & QUEST_FLAG_RUN_ONCE),
           repeatStages: !!(flags & QUEST_FLAG_ALLOW_REPEATED_STAGES),
+          items: parseQuestItems(record.fields),
         };
         for (const field of record.fields) {
           if (field.type === "INDX" && field.data.byteLength >= 2) {
@@ -343,4 +417,5 @@ export class Coop implements System {
   private lastQuestLogRequest = new Map<number, number>();
   private questLogs = new Map<number, QuestLogEntry[]>();
   private questInfos = new Map<number, QuestInfo | null>();
+  private aliasFillRequests = new Map<string, number>();
 }

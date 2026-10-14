@@ -234,11 +234,27 @@ export class CoopService extends ClientListener {
         }
         break;
       }
+      case "aliasFillRequest": {
+        const quest = content["quest"];
+        const aliases = content["aliases"];
+        if (typeof quest === "number" && Array.isArray(aliases)) {
+          this.controller.once("update", () => this.sendAliasFill(quest, aliases.filter((a): a is number => typeof a === "number")));
+        }
+        break;
+      }
       case "partyNotice":
         if (typeof content["text"] === "string") {
           this.notify(content["text"]);
         }
         break;
+    }
+  }
+
+  private sendAliasFill(quest: number, aliases: number[]) {
+    try {
+      this.send({ customPacketType: "aliasFill", quest, refs: aliases.map((alias) => [alias, this.sp.getQuestAliasReference(quest, alias)]) });
+    } catch (e) {
+      logError(this, "aliasFillRequest failed for quest", quest.toString(16), e);
     }
   }
 

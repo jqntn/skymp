@@ -22,6 +22,8 @@ export declare function getPapyrusEventsAllowedForms(): number[]
 export declare function updateAnimations(): void
 export declare function isAnimationGraphReady(formId: number): boolean
 export declare function speakSound(formId: number, voiceFile: string): void
+export declare function getQuestAliasReference(questFormId: number, aliasId: number): number
+export declare function getInventoryReferences(refrFormId: number): { ref: number, baseId: number }[]
 export declare function getSubtitles(): { speakerId: number, text: string }[]
 export declare function sendIpcMessage(targetSystemName: string, message: ArrayBuffer): void
 export declare function encodeUtf8(text: string): ArrayBuffer

@@ -17,13 +17,13 @@
     "result": "PASS",
     "reason": "",
     "evidence": [
-      "build: ok in 69 s (l1-build.log)",
-      "ts: ok in 1 s (l1-ts.log)",
-      "ctest: ok in 58 s (l1-ctest.log)"
+      "build: ok in 71 s (l1-build.log)",
+      "ts: ok in 0 s (l1-ts.log)",
+      "ctest: ok in 56 s (l1-ctest.log)"
     ],
     "secs": 128,
     "shots": [],
-    "at": "2026-10-14T07:41:11.844Z"
+    "at": "2026-10-14T08:37:24.467Z"
   },
   "S0b": {
     "result": "PASS",
@@ -164,12 +164,26 @@
     "at": "2026-10-14T07:12:17.232Z"
   },
   "S3.4": {
-    "result": "BLOCKED",
-    "reason": "run 1/1: needs phase 2A step 1: an alias item ref meets resetBase only when the client applies a corpse or container inventory. The Golden Claw (MS13 alias 11) and the Dragonstone (MQ103 alias 18) are created in actors (Arvel, the boss draugr), the server opens a corpse inventory only after the corpse branch of 2A.1, and a server mp.set of a container inventory does not reach the client. Rewrite this check with the Golden Claw on Arvel's corpse once 2A.1 is in",
-    "secs": 5,
-    "evidence": [],
-    "shots": [],
-    "at": "2026-10-13T15:36:58.271Z"
+    "result": "PASS",
+    "reason": "3/3 runs PASS",
+    "secs": 151,
+    "evidence": [
+      "run 1: MS13 stage 10; Arvel 39655 in 371de:Skyrim.esm holds 1 Golden Claw on the client, 1 on the server; GoldenClaw alias ref ff000d51 (alias quests [\"39645\"], deleted true, in Arvel's inventory true, in the player's false)",
+      "run 1: Arvel dead: the client corpse holds 1 claw, the server 1; GoldenClaw alias ref ff000d51 (alias quests [\"39645\"], deleted true, in Arvel's inventory true, in the player's false); MS13 stage 10",
+      "run 1: after the loot: the loot menu showed 1 claw (open true); the player holds 1; GoldenClaw alias ref ff000d51 (alias quests [\"39645\"], deleted true, in Arvel's inventory false, in the player's true); MS13 stage 10 -> 40; server: Arvel 0, player 1",
+      "run 2: MS13 stage 10; Arvel 39655 in 371de:Skyrim.esm holds 1 Golden Claw on the client, 1 on the server; GoldenClaw alias ref ff000d51 (alias quests [\"39645\"], deleted true, in Arvel's inventory true, in the player's false)",
+      "run 2: Arvel dead: the client corpse holds 1 claw, the server 1; GoldenClaw alias ref ff000d51 (alias quests [\"39645\"], deleted true, in Arvel's inventory true, in the player's false); MS13 stage 10",
+      "run 2: after the loot: the loot menu showed 1 claw (open true); the player holds 1; GoldenClaw alias ref ff000d51 (alias quests [\"39645\"], deleted true, in Arvel's inventory false, in the player's true); MS13 stage 10 -> 40; server: Arvel 0, player 1",
+      "run 3: MS13 stage 10; Arvel 39655 in 371de:Skyrim.esm holds 1 Golden Claw on the client, 1 on the server; GoldenClaw alias ref ff000d51 (alias quests [\"39645\"], deleted true, in Arvel's inventory true, in the player's false)",
+      "run 3: Arvel dead: the client corpse holds 1 claw, the server 1; GoldenClaw alias ref ff000d51 (alias quests [\"39645\"], deleted true, in Arvel's inventory true, in the player's false); MS13 stage 10",
+      "run 3: after the loot: the loot menu showed 1 claw (open true); the player holds 1; GoldenClaw alias ref ff000d51 (alias quests [\"39645\"], deleted true, in Arvel's inventory false, in the player's true); MS13 stage 10 -> 40; server: Arvel 0, player 1"
+    ],
+    "shots": [
+      "runs/S3_4/1/S3_4-open.png",
+      "runs/S3_4/2/S3_4-open.png",
+      "runs/S3_4/3/S3_4-open.png"
+    ],
+    "at": "2026-10-14T08:39:55.666Z"
   },
   "1A.1": {
     "result": "PASS",
@@ -274,29 +288,40 @@
   },
   "1B.4": {
     "result": "PASS",
-    "reason": "1/1 runs PASS",
-    "secs": 88,
+    "reason": "2/2 runs PASS",
+    "secs": 179,
     "evidence": [
-      "run 1: at 8:00 the client has Alvor in 3c at 20587,-45138,-82 (3D true); the server starts with 133c8 at -515,-154,240, hoster 0",
-      "run 1: claim without a FormView: server 3c at 20587,-45138,-82, 0 units from the work marker, hoster ff000000",
-      "run 1: hide: the player went two cells east of Alvor (20587,-45138,-82): server hoster 0; Alvor's cell attached true, Alvor 3D false, hidden true",
-      "run 1: retry: the server moved Alvor back to 133c8 while he was hidden; back at the forge the server has 3c at 20587,-45138,-82, 0 units from the marker, hoster ff000000; local Alvor 3D true, disabled false (17 ms after the claim)",
+      "run 1: at 8:00 the client has Alvor in 3c at 20580,-45125,-82 (3D true); the server starts with 133c8 at -515,-154,240, hoster 0",
+      "run 1: claim without a FormView: server 3c at 20580,-45125,-83, 15 units from the work marker, hoster ff000000",
+      "run 1: hide: the player went two cells east of Alvor (20580,-45125,-82): server hoster 0; Alvor's cell attached true, Alvor 3D false, hidden true",
+      "run 1: retry: the server moved Alvor back to 133c8 while he was hidden; back at the forge the server has 3c at 20376,-45067,-80, 223 units from the marker, hoster ff000000; local Alvor 3D true, disabled false (34 ms after the claim)",
       "run 1: walk-in: the driver enabled the hidden Alvor two cells away (a player who never hosted him): loaded true; server hoster held at 0 for 6 s: true",
-      "run 1: first movement: the server then streamed a stale Alvor 6037 units from the marker; 6 s later the local Alvor was 3D true, disabled false, at least 6031 units from the stale spot; back home: at least 6031 units from it; server 3c at 20594,-45041,-82, 97 units from the marker, hoster ff000000",
-      "run 1: replay, hosted movement: a quest replay starts, then the hoster takes Alvor out of his furniture and translates him 300 units (every 400 ms): 300 units from the server position at the end of the hold (20894,-45041,-121); server position held within 150 units of 20594,-45041,-82 for 2 s: true (last 20594,-45041,-82); after the replay the server follows the local position: true (20894,-45041,-151)",
+      "run 1: first movement: the server then streamed a stale Alvor 6037 units from the marker; 6 s later the local Alvor was 3D true, disabled false, at least 5852 units from the stale spot; back home: at least 5852 units from it; server 3c at 20772,-45188,-81, 192 units from the marker, hoster ff000000",
+      "run 1: replay, hosted movement: a quest replay starts, then the hoster takes Alvor out of his furniture and translates him 300 units (every 400 ms): 271 units from the server position at the end of the hold (21042,-45205,-84); server position held within 150 units of 20772,-45188,-81 for 2 s: true (last 20772,-45188,-81); after the replay the server follows the local position: true (20965,-45247,-84)",
       "run 1: release: a script disables Alvor on the hoster: server hoster 0, disabled true; hoster still 0 after 6 s: true; the real actor was never deleted: true",
       "run 1: replay, claim: a quest replay starts, then a script enables Alvor on the client: hoster held at 0 during the replay: true (last 0); after the replay the client claims him: true (hoster ff000000, server disabled false; local 3D true, disabled false)",
-      "run 1: party: Alvor's alias quests on the member 105385,45486,1bc95, member quest log [105385, 0]; joined: true; leader two cells away: hoster ff000001 (member ff000001): true; leader back within 4096: hoster ff000000 (leader ff000000): true; the leader still hosts 12 s later: true (last ff000000)"
+      "run 1: party: Alvor's alias quests on the member 105385,45486,1bc95, member quest log [105385, 0]; joined: true; leader two cells away: hoster ff000001 (member ff000001): true; leader back within 4096: hoster ff000000 (leader ff000000): true; the leader still hosts 12 s later: true (last ff000000)",
+      "run 2: at 8:00 the client has Alvor in 3c at 20587,-45138,-82 (3D true); the server starts with 133c8 at -515,-154,240, hoster 0",
+      "run 2: claim without a FormView: server 3c at 20587,-45138,-82, 0 units from the work marker, hoster ff000000",
+      "run 2: hide: the player went two cells east of Alvor (20587,-45138,-82): server hoster 0; Alvor's cell attached true, Alvor 3D false, hidden true",
+      "run 2: retry: the server moved Alvor back to 133c8 while he was hidden; back at the forge the server has 3c at 20587,-45138,-82, 0 units from the marker, hoster ff000000; local Alvor 3D true, disabled false (16 ms after the claim)",
+      "run 2: walk-in: the driver enabled the hidden Alvor two cells away (a player who never hosted him): loaded true; server hoster held at 0 for 6 s: true",
+      "run 2: first movement: the server then streamed a stale Alvor 6037 units from the marker; 6 s later the local Alvor was 3D true, disabled false, at least 5852 units from the stale spot; back home: at least 5852 units from it; server 3c at 20772,-45188,-84, 192 units from the marker, hoster ff000000",
+      "run 2: replay, hosted movement: a quest replay starts, then the hoster takes Alvor out of his furniture and translates him 300 units (every 400 ms): 300 units from the server position at the end of the hold (21072,-45188,-84); server position held within 150 units of 20772,-45188,-84 for 2 s: true (last 20772,-45188,-84); after the replay the server follows the local position: true (21072,-45188,-84)",
+      "run 2: release: a script disables Alvor on the hoster: server hoster 0, disabled true; hoster still 0 after 6 s: true; the real actor was never deleted: true",
+      "run 2: replay, claim: a quest replay starts, then a script enables Alvor on the client: hoster held at 0 during the replay: true (last 0); after the replay the client claims him: true (hoster ff000000, server disabled false; local 3D true, disabled false)",
+      "run 2: party: Alvor's alias quests on the member 105385,45486,1bc95, member quest log [105385, 0]; joined: true; leader two cells away: hoster ff000001 (member ff000001): true; leader back within 4096: hoster ff000000 (leader ff000000): true; the leader still hosts 12 s later: true (last ff000000)"
     ],
     "shots": [
-      "runs/1B_4/1/1B_4_claim.png"
+      "runs/1B_4/1/1B_4_claim.png",
+      "runs/1B_4/2/1B_4_claim.png"
     ],
-    "at": "2026-10-13T16:12:28.415Z"
+    "at": "2026-10-14T08:20:35.596Z"
   },
   "1B.5": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 52,
+    "secs": 50,
     "evidence": [
       "run 1: draugr 9bcb9 (masterAmbushScript on the ref: true), hoster ff000000, engine 1 hosts it: true; Variable01 before: engine 1 0, engine 2 0",
       "run 1: puppet (engine 2): allowed forms []",
@@ -307,24 +332,24 @@
       "run 1: new hoster (engine 2): Variable01 before 0; startCombat, in combat true; {\"v1\":1,\"aggression\":2,\"combat\":true,\"ai\":true}"
     ],
     "shots": [],
-    "at": "2026-10-13T15:46:32.326Z"
+    "at": "2026-10-14T08:11:42.191Z"
   },
   "G1.1": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 221,
+    "secs": 224,
     "evidence": [
       "run 1: start log from settings.ts: [[0x2610a, 0], [0x2610a, 5], [0x4e50d, 15], [0x2610a, 30]]",
       "run 1: start: server Ralof 3c:Skyrim.esm at 19841,-79532,8451, hoster 0, 32952 units from the Riverwood marker",
-      "run 1: end: server Ralof 3c:Skyrim.esm at 17908,-47117,-144, hoster ff000000, 1356 units from the marker; server path 52700 units in 359 samples; player moved to Ralof 144 times",
-      "run 1: local Ralof: loaded true, world 3c, at 17934,-47110,-145, combat false; packages seen 956b8,d1d3d,9251e,de1aa,54219,3e08f,3e088; scenes seen ac133,27e56; MQ102B stage 35, MQ102 stage 17",
-      "run 1: walk from the first hosted sample: 342 samples, longest step 197 units (to 10001,-52959)",
-      "run 1: server positions every 10th sample: 3c@19841,-79532 3c@19841,-79532 3c@12040,-71832 3c@11766,-71693 3c@11643,-71688 3c@11225,-71481 3c@10640,-71155 3c@9312,-70639 3c@8145,-69997 3c@7699,-68696 3c@7160,-67350 3c@6182,-66496 3c@5859,-65033 3c@5637,-63640 3c@4942,-62417 3c@4297,-61511 3c@4959,-60284 3c@5473,-58993 3c@4716,-58625 3c@3277,-58816 3c@3758,-57826 3c@4932,-56974 3c@6127,-56099 3c@6889,-54922 3c@7584,-53758 3c@8982,-53427 3c@10297,-52772 3c@11409,-52123 3c@11286,-51949 3c@11194,-51950 3c@12457,-51533 3c@13641,-50827 3c@14010,-49431 3c@14362,-48053 3c@15204,-46990 3c@16686,-47062"
+      "run 1: end: server Ralof 3c:Skyrim.esm at 17869,-47128,-144, hoster ff000000, 1397 units from the marker; server path 52012 units in 366 samples; player moved to Ralof 148 times",
+      "run 1: local Ralof: loaded true, world 3c, at 17906,-47118,-144, combat false; packages seen 956b8,d1d3d,9251e,de1aa,54219,3e08f,3e088; scenes seen ac133,27e56; MQ102B stage 35, MQ102 stage 17",
+      "run 1: walk from the first hosted sample: 349 samples, longest step 207 units (to 10123,-52886)",
+      "run 1: server positions every 10th sample: 3c@19841,-79532 3c@19841,-79532 3c@12044,-71831 3c@11764,-71728 3c@11567,-71656 3c@11159,-71445 3c@10618,-71143 3c@9328,-70642 3c@8153,-70008 3c@7698,-68695 3c@7185,-67366 3c@6174,-66481 3c@5856,-65012 3c@5626,-63605 3c@4920,-62383 3c@4330,-61497 3c@4984,-60234 3c@5475,-58977 3c@4768,-58620 3c@3308,-58816 3c@3732,-57846 3c@4923,-56980 3c@6138,-56092 3c@6908,-54877 3c@7639,-53747 3c@9058,-53408 3c@10294,-52838 3c@10295,-52884 3c@10302,-52882 3c@10752,-52513 3c@11899,-51892 3c@13148,-51298 3c@13815,-50283 3c@14126,-48905 3c@14553,-47601 3c@15704,-46985 3c@17157,-47105"
     ],
     "shots": [
       "runs/G1_1/1/G1_1-end.png"
     ],
-    "at": "2026-10-13T15:50:13.656Z"
+    "at": "2026-10-14T08:15:26.588Z"
   },
   "G1.2": {
     "result": "PASS",
@@ -404,40 +429,22 @@
   },
   "G1.5": {
     "result": "PASS",
-    "reason": "3/3 runs PASS",
-    "secs": 370,
+    "reason": "1/1 runs PASS",
+    "secs": 119,
     "evidence": [
       "run 1: start log: settings.ts and MQ102 stage 30: [[155914,0],[155914,5],[320781,15],[155914,30],[320781,30]]",
-      "run 1: Whiterun guards near the porch: 37058 (client loaded true, disabled false, dead false; server 1a26f:Skyrim.esm, dead false, disabled false, hoster ff000000); 37070 (client loaded true, disabled false, dead false; server 1a26f:Skyrim.esm, dead false, disabled false, hoster ff000000)",
+      "run 1: Whiterun guards near the porch: 37070 (client loaded true, disabled false, dead false; server 1a26f:Skyrim.esm, dead false, disabled false, hoster ff000000); 37058 (client loaded true, disabled false, dead false; server 1a26f:Skyrim.esm, dead false, disabled false, hoster ff000000)",
       "run 1: Balgruuf 1a677: client loaded true, disabled false, dead false; server 165a3:Skyrim.esm, dead false, disabled false, hoster ff000000",
       "run 1: Farengar 1a67e: client loaded true, disabled false, dead false; server 165a3:Skyrim.esm, dead false, disabled false, hoster ff000000",
       "run 1: dialogue: 5 topics picked (\"J'ai des nouvelles d'Helgen. C'est à propos de l'attaque de dragon.\", \"Oui. J'avais une vue imprenable pendant que les Impériaux essayaient de me trancher la tête.\", \"Le dragon a détruit Helgen. Quand je l'ai perdu de vue, il se dirigeait par ici.\", \"Les Impériaux allaient exécuter Ulfric Sombrage quand le dragon a attaqué.\", \"Le dragon a détruit Helgen. Quand je l'ai perdu de vue, il se dirigeait par ici.\"); client MQ102/MQ103 stages 75/5 at the start, then 75/5 -> 110/5 -> 150/8 -> 160/10; Balgruuf says \"Prenez ceci, en gage de mon estime pour vous.\"",
-      "run 1: server log of MQ102 (4e50d) and MQ103 (d0800): [[\"4e50d\",15],[\"4e50d\",30],[\"4e50d\",75],[\"4e50d\",110],[\"4e50d\",50],[\"4e50d\",150],[\"d0800\",8],[\"4e50d\",23],[\"4e50d\",160],[\"d0800\",10]]",
-      "run 2: start log: settings.ts and MQ102 stage 30: [[155914,0],[155914,5],[320781,15],[155914,30],[320781,30]]",
-      "run 2: Whiterun guards near the porch: 37058 (client loaded true, disabled false, dead false; server 1a26f:Skyrim.esm, dead false, disabled false, hoster ff000000); 37070 (client loaded true, disabled false, dead false; server 1a26f:Skyrim.esm, dead false, disabled false, hoster ff000000)",
-      "run 2: Balgruuf 1a677: client loaded true, disabled false, dead false; server 165a3:Skyrim.esm, dead false, disabled false, hoster ff000000",
-      "run 2: Farengar 1a67e: client loaded true, disabled false, dead false; server 165a3:Skyrim.esm, dead false, disabled false, hoster ff000000",
-      "run 2: dialogue: 5 topics picked (\"J'ai des nouvelles d'Helgen. C'est à propos de l'attaque de dragon.\", \"Oui. J'avais une vue imprenable pendant que les Impériaux essayaient de me trancher la tête.\", \"Le dragon a détruit Helgen. Quand je l'ai perdu de vue, il se dirigeait par ici.\", \"Les Impériaux allaient exécuter Ulfric Sombrage quand le dragon a attaqué.\", \"Le dragon a détruit Helgen. Quand je l'ai perdu de vue, il se dirigeait par ici.\"); client MQ102/MQ103 stages 75/5 at the start, then 75/5 -> 110/5 -> 150/8 -> 160/10; Balgruuf says \"Prenez ceci, en gage de mon estime pour vous.\"",
-      "run 2: server log of MQ102 (4e50d) and MQ103 (d0800): [[\"4e50d\",15],[\"4e50d\",30],[\"4e50d\",75],[\"4e50d\",110],[\"4e50d\",50],[\"4e50d\",150],[\"d0800\",8],[\"4e50d\",23],[\"4e50d\",160],[\"d0800\",10]]",
-      "run 3: start log: settings.ts and MQ102 stage 30: [[155914,0],[155914,5],[320781,15],[155914,30],[320781,30]]",
-      "run 3: Whiterun guards near the porch: 37057 (client loaded true, disabled false, dead false; server 1a26f:Skyrim.esm, dead false, disabled false, hoster ff000000); 37058 (client loaded true, disabled false, dead false; server 1a26f:Skyrim.esm, dead false, disabled false, hoster ff000000); 37070 (client loaded true, disabled false, dead false; server 1a26f:Skyrim.esm, dead false, disabled false, hoster ff000000)",
-      "run 3: Balgruuf 1a677: client loaded true, disabled false, dead false; server 165a3:Skyrim.esm, dead false, disabled false, hoster ff000000",
-      "run 3: Farengar 1a67e: client loaded true, disabled false, dead false; server 165a3:Skyrim.esm, dead false, disabled false, hoster ff000000",
-      "run 3: dialogue: 5 topics picked (\"J'ai des nouvelles d'Helgen. C'est à propos de l'attaque de dragon.\", \"Oui. J'avais une vue imprenable pendant que les Impériaux essayaient de me trancher la tête.\", \"Le dragon a détruit Helgen. Quand je l'ai perdu de vue, il se dirigeait par ici.\", \"Les Impériaux allaient exécuter Ulfric Sombrage quand le dragon a attaqué.\", \"Le dragon a détruit Helgen. Quand je l'ai perdu de vue, il se dirigeait par ici.\"); client MQ102/MQ103 stages 75/5 at the start, then 75/5 -> 110/5 -> 150/8 -> 160/10; Balgruuf says \"Prenez ceci, en gage de mon estime pour vous.\"",
-      "run 3: server log of MQ102 (4e50d) and MQ103 (d0800): [[\"4e50d\",15],[\"4e50d\",30],[\"4e50d\",75],[\"4e50d\",110],[\"4e50d\",50],[\"4e50d\",150],[\"d0800\",8],[\"4e50d\",23],[\"4e50d\",160],[\"d0800\",10]]"
+      "run 1: server log of MQ102 (4e50d) and MQ103 (d0800): [[\"4e50d\",15],[\"4e50d\",30],[\"4e50d\",75],[\"4e50d\",110],[\"4e50d\",50],[\"4e50d\",150],[\"d0800\",8],[\"4e50d\",23],[\"4e50d\",160],[\"d0800\",10]]"
     ],
     "shots": [
       "runs/G1_5/1/G1_5-guards.png",
       "runs/G1_5/1/G1_5-dragonsreach.png",
-      "runs/G1_5/1/G1_5-mq103.png",
-      "runs/G1_5/2/G1_5-guards.png",
-      "runs/G1_5/2/G1_5-dragonsreach.png",
-      "runs/G1_5/2/G1_5-mq103.png",
-      "runs/G1_5/3/G1_5-guards.png",
-      "runs/G1_5/3/G1_5-dragonsreach.png",
-      "runs/G1_5/3/G1_5-mq103.png"
+      "runs/G1_5/1/G1_5-mq103.png"
     ],
-    "at": "2026-10-13T20:30:38.126Z"
+    "at": "2026-10-14T08:17:25.386Z"
   },
   "2A.1": {
     "result": "PASS",
