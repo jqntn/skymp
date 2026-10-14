@@ -10,6 +10,10 @@ export class ModelApplyUtils {
     applyInventory(refr, inventory, false, true);
   }
 
+  static applyModelCorpseInventory(actor: Actor, inventory: Inventory) {
+    applyInventory(actor, inventory, false, true, false);
+  }
+
   static applyModelIsOpen(refr: ObjectReference, isOpen: boolean) {
     refr.setOpen(isOpen);
 

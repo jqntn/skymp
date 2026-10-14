@@ -819,6 +819,9 @@ void MpObjectReference::SetInventory(const Inventory& inv)
 
 void MpObjectReference::AddItem(uint32_t baseId, uint32_t count)
 {
+  if (auto worldState = GetParent(); worldState && worldState->HasEspm()) {
+    EnsureBaseContainerAdded(worldState->GetEspm());
+  }
   EditChangeForm([&](MpChangeFormREFR& changeForm) {
     changeForm.baseContainerAdded = true;
     changeForm.inv.AddItem(baseId, count);
@@ -849,6 +852,9 @@ void MpObjectReference::AddItem(uint32_t baseId, uint32_t count)
 void MpObjectReference::AddItems(const std::vector<Inventory::Entry>& entries)
 {
   if (entries.size() > 0) {
+    if (auto worldState = GetParent(); worldState && worldState->HasEspm()) {
+      EnsureBaseContainerAdded(worldState->GetEspm());
+    }
     EditChangeForm([&](MpChangeFormREFR& changeForm) {
       changeForm.baseContainerAdded = true;
       changeForm.inv.AddItems(entries);
@@ -1518,7 +1524,7 @@ void MpObjectReference::ProcessActivateNormal(
     } else {
       SetOpen(!IsOpen());
     }
-  } else if (t == espm::CONT::kType && actorActivator) {
+  } else if ((t == espm::CONT::kType || IsCorpse()) && actorActivator) {
     EnsureBaseContainerAdded(loader);
 
     constexpr float kOccupationReach = 512.f;
@@ -1528,7 +1534,9 @@ void MpObjectReference::ProcessActivateNormal(
         this->occupant->RemoveEventSink(this->occupantDestroySink);
         this->occupant->RemoveEventSink(this->occupantDisableSink);
       }
-      SetOpen(true);
+      if (t == espm::CONT::kType) {
+        SetOpen(true);
+      }
       actorActivator->GetActorToSendTo().SendToUser(
         CreatePropertyMessage_(this, "inventory",
                                GetInventory().ToJson().dump()),
@@ -1595,9 +1603,11 @@ bool MpObjectReference::ProcessActivateSecond(
 
   auto t = base.rec->GetType();
 
-  if (t == espm::CONT::kType && actorActivator) {
+  if ((t == espm::CONT::kType || IsCorpse()) && actorActivator) {
     if (this->occupant == &activationSource) {
-      SetOpen(false);
+      if (t == espm::CONT::kType) {
+        SetOpen(false);
+      }
       this->occupant->RemoveEventSink(this->occupantDestroySink);
       this->occupant = nullptr;
       return true;
@@ -1868,6 +1878,12 @@ void MpObjectReference::SendInventoryUpdate()
     SetInventoryMessage message;
     message.inventory = actor->GetInventory();
     actor->SendToUserDeferred(message, true, kChannelSetInventory, true);
+    if (IsCorpse()) {
+      SendMessageToActorListeners(
+        CreatePropertyMessage_(this, "inventory",
+                               GetInventory().ToJson().dump()),
+        true);
+    }
   }
 }
 
@@ -1953,6 +1969,12 @@ void MpObjectReference::AddContainerObject(
   }
 }
 
+bool MpObjectReference::IsCorpse() const
+{
+  auto actor = AsActor();
+  return actor && actor->IsDead() && IsEspmForm();
+}
+
 void MpObjectReference::EnsureBaseContainerAdded(espm::Loader& espm)
 {
   if (ChangeForm().baseContainerAdded) {
@@ -2000,13 +2022,10 @@ void MpObjectReference::EnsureBaseContainerAdded(espm::Loader& espm)
   for (auto& p : itemsToAdd) {
     entries.push_back({ p.first, p.second });
   }
+  EditChangeForm([&](MpChangeFormREFR& changeForm) {
+    changeForm.baseContainerAdded = true;
+  });
   AddItems(entries);
-
-  if (!ChangeForm().baseContainerAdded) {
-    EditChangeForm([&](MpChangeFormREFR& changeForm) {
-      changeForm.baseContainerAdded = true;
-    });
-  }
 }
 
 void MpObjectReference::CheckInteractionAbility(MpObjectReference& refr)

@@ -222,6 +222,8 @@ protected:
                                    bool reliable) const;
 
 private:
+  bool IsCorpse() const;
+
   void AddContainerObject(const espm::CONT::ContainerObject& containerObject,
                           std::map<uint32_t, uint32_t>* itemsToAdd);
   void InitScripts();

@@ -1026,6 +1026,10 @@ void MpActor::SendAndSetDeathState(bool isDead, bool shouldTeleport)
       isDead ? 0.f : GetStaminaRespawnPercentage();
   });
 
+  if (isDead && IsEspmForm()) {
+    SendInventoryUpdate();
+  }
+
   if (shouldTeleport) {
     SetCellOrWorldObsolete(position.cellOrWorldDesc);
     SetPos(position.pos);

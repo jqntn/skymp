@@ -678,3 +678,112 @@ TEST_CASE("A hoster's animation is the last animation of the NPC",
   alvor.SetLastAnimEvent(std::nullopt);
   ReleaseAlvor(partOne, alvor, cell, start);
 }
+
+TEST_CASE("An add to an unopened ESP container keeps its base loot",
+          "[NpcHost][espm][2A.1]")
+{
+  auto& partOne = GetNpcHostPartOne();
+  constexpr uint32_t kBarrelFish01 = 0x10cd5b;
+  constexpr uint32_t kRef = 0xff0a2a01;
+  partOne.worldState.AddForm(
+    std::make_unique<MpObjectReference>(
+      LocationalData(), FormCallbacks::DoNothing(), kBarrelFish01, "CONT"),
+    kRef);
+  auto& barrel = partOne.worldState.GetFormAt<MpObjectReference>(kRef);
+  barrel.SetChanceNoneOverride(0);
+  REQUIRE(barrel.GetInventory().IsEmpty());
+
+  barrel.AddItem(0x12eb7, 1);
+
+  REQUIRE(barrel.GetInventory().GetItemCount(0x12eb7) == 1);
+  const auto total = barrel.GetInventory().GetTotalItemCount();
+  REQUIRE(total > 1);
+
+  barrel.AddItem(0x12eb7, 1);
+  REQUIRE(barrel.GetInventory().GetTotalItemCount() == total + 1);
+
+  partOne.worldState.DestroyForm(kRef);
+}
+
+TEST_CASE("A player opens a dead ESP NPC, takes an item and closes it, "
+          "but cannot open a dead player",
+          "[NpcHost][espm][2A.1]")
+{
+  auto& partOne = GetNpcHostPartOne();
+  auto& guard = partOne.worldState.GetFormAt<MpActor>(kCrimeFactionGuard);
+  ConnectClaimer(partOne, guard, CellOf(partOne, guard));
+  auto& player = partOne.worldState.GetFormAt<MpActor>(kClaimer);
+  player.RemoveAllItems();
+  auto activate = [&](bool second) {
+    DoMessage(partOne, 0,
+              nlohmann::json{ { "t", MsgType::Activate },
+                              { "data",
+                                { { "caster", 0x14 },
+                                  { "target", kCrimeFactionGuard },
+                                  { "isSecondActivation", second } } } });
+  };
+  auto opened = [&] {
+    return std::any_of(
+      partOne.Messages().begin(), partOne.Messages().end(), [](auto& m) {
+        return m.j["t"] == MsgType::OpenContainer &&
+          m.j["target"] == kCrimeFactionGuard;
+      });
+  };
+  auto inventorySent = [&] {
+    return std::any_of(
+      partOne.Messages().begin(), partOne.Messages().end(), [&](auto& m) {
+        return m.j["t"] == MsgType::UpdateProperty &&
+          m.j["propName"] == "inventory" && m.j["idx"] == guard.GetIdx();
+      });
+  };
+  REQUIRE(!guard.GetInventory().IsEmpty());
+  const auto item = guard.GetInventory().entries.front().baseId;
+  const auto count = guard.GetInventory().GetItemCount(item);
+
+  partOne.Messages().clear();
+  activate(false);
+  REQUIRE(!opened());
+
+  partOne.Messages().clear();
+  guard.Kill();
+  REQUIRE(inventorySent());
+  partOne.Messages().clear();
+  activate(false);
+  REQUIRE(opened());
+
+  partOne.Messages().clear();
+  DoMessage(partOne, 0,
+            nlohmann::json{ { "t", MsgType::TakeItem },
+                            { "baseId", item },
+                            { "count", 1 },
+                            { "target", kCrimeFactionGuard } });
+  REQUIRE(player.GetInventory().GetItemCount(item) == 1);
+  REQUIRE(guard.GetInventory().GetItemCount(item) == count - 1);
+  REQUIRE(inventorySent());
+
+  activate(true);
+  REQUIRE_THROWS_WITH(
+    guard.TakeItem(player, { item, 1 }),
+    Catch::Matchers::ContainsSubstring("doesn't occupy"));
+
+  partOne.CreateActor(kOtherPlayer, guard.GetPos(), 0,
+                      CellOf(partOne, guard));
+  auto& other = partOne.worldState.GetFormAt<MpActor>(kOtherPlayer);
+  other.AddItem(item, 1);
+  other.Kill();
+  partOne.Messages().clear();
+  DoMessage(partOne, 0,
+            nlohmann::json{ { "t", MsgType::Activate },
+                            { "data",
+                              { { "caster", 0x14 },
+                                { "target", kOtherPlayer },
+                                { "isSecondActivation", false } } } });
+  REQUIRE(std::none_of(
+    partOne.Messages().begin(), partOne.Messages().end(),
+    [](auto& m) { return m.j["t"] == MsgType::OpenContainer; }));
+  partOne.DestroyActor(kOtherPlayer);
+
+  guard.AddItem(item, 1);
+  guard.SetIsDead(false);
+  DisconnectClaimer(partOne);
+}

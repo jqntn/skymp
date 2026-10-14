@@ -187,7 +187,12 @@ export class RemoteServer extends ClientListener {
         return;
       }
 
-      refr.activate(Game.getPlayer(), true);
+      const corpse = Actor.from(refr);
+      if (corpse && corpse.isDead() && !corpse.isAIEnabled()) {
+        corpse.openInventory(true);
+      } else {
+        refr.activate(Game.getPlayer(), true);
+      }
 
       const baseObject = refr.getBaseObject();
       const baseType = baseObject?.getType();
@@ -196,6 +201,10 @@ export class RemoteServer extends ClientListener {
       let factName = "";
       let delaySeconds = -1.0;
       if (baseType === FormType.Container) {
+        functionChecker = () => Ui.isMenuOpen("ContainerMenu");
+        factName = "'ContainerMenu open'";
+        delaySeconds = 0.0;
+      } else if (corpse?.isDead()) {
         functionChecker = () => Ui.isMenuOpen("ContainerMenu");
         factName = "'ContainerMenu open'";
         delaySeconds = 0.0;
@@ -215,10 +224,10 @@ export class RemoteServer extends ClientListener {
 
       (async () => {
         logTrace(this, "onOpenContainerMesage - waiting for", factName, "to be true");
-        while (!functionChecker()) await Utility.wait(0.1);
+        while (!functionChecker()) await Utility.waitMenuMode(0.1);
 
         logTrace(this, "onOpenContainerMesage - waiting for", factName, "to be false");
-        while (functionChecker()) await Utility.wait(0.1);
+        while (functionChecker()) await Utility.waitMenuMode(0.1);
 
         logTrace(this, "onOpenContainerMesage - menu closed", factName);
 

@@ -5,7 +5,7 @@ First non-PASS in plan order: S3.4
 
 | id | result | secs | at | detail |
 |---|---|---|---|---|
-| L1 | PASS | 127 | 2026-10-14 06:26 |  |
+| L1 | PASS | 128 | 2026-10-14 07:41 |  |
 | S0 | PASS | 30 | 2026-10-13 15:22 | 1/1 runs PASS |
 | S0b | PASS | 161 | 2026-10-13 15:25 | 1/1 runs PASS |
 | S0c | PASS | 30 | 2026-10-13 15:25 | 1/1 runs PASS |
@@ -17,28 +17,28 @@ First non-PASS in plan order: S3.4
 | S1.6 | PASS | 58 | 2026-10-13 16:08 | 1/1 runs PASS |
 | S2 | PASS | 117 | 2026-10-13 15:35 | 1/1 runs PASS |
 | S3.1 | PASS | 26 | 2026-10-13 15:36 | 1/1 runs PASS |
-| S3.2 | PASS | 21 | 2026-10-13 15:36 | 1/1 runs PASS |
-| S3.3 | PASS | 23 | 2026-10-13 15:36 | 1/1 runs PASS |
+| S3.2 | PASS | 24 | 2026-10-14 07:45 | 1/1 runs PASS |
+| S3.3 | PASS | 20 | 2026-10-14 07:12 | 1/1 runs PASS |
 | S3.4 | BLOCKED | 5 | 2026-10-13 15:36 | run 1/1: needs phase 2A step 1: an alias item ref meets resetBase only when the client applies a corpse or container inventory. The Golden Claw (MS13 alias 11) and the Dragonstone (MQ103 alias 18) are created in actors (Arvel, the boss draugr), the server opens a corpse inventory only after the corpse branch of 2A.1, and a server mp.set of a container inventory does not reach the client. Rewrite this check with the Golden Claw on Arvel's corpse once 2A.1 is in |
 | 1A.1 | PASS | 4 | 2026-10-13 15:37 | 1/1 runs PASS |
 | 1A.2 | PASS | 4 | 2026-10-13 15:37 | 1/1 runs PASS |
 | 1A.3 | PASS | 3 | 2026-10-13 15:37 | 1/1 runs PASS |
 | 1A.4 | PASS | 4 | 2026-10-13 15:37 | 1/1 runs PASS |
 | 1A.5 | PASS | 96 | 2026-10-13 16:17 | 2/2 runs PASS |
-| 1B.1 | PASS | 40 | 2026-10-13 16:10 | 1/1 runs PASS |
-| 1B.2 | PASS | 46 | 2026-10-13 16:11 | 1/1 runs PASS |
-| 1B.3 | PASS | 44 | 2026-10-13 15:44 | 1/1 runs PASS |
+| 1B.1 | PASS | 39 | 2026-10-14 07:45 | 1/1 runs PASS |
+| 1B.2 | PASS | 44 | 2026-10-14 07:46 | 1/1 runs PASS |
+| 1B.3 | PASS | 75 | 2026-10-14 07:47 | 1/1 runs PASS |
 | 1B.4 | PASS | 88 | 2026-10-13 16:12 | 1/1 runs PASS |
 | 1B.5 | PASS | 52 | 2026-10-13 15:46 | 1/1 runs PASS |
 | G1.1 | PASS | 221 | 2026-10-13 15:50 | 1/1 runs PASS |
 | G1.2 | PASS | 168 | 2026-10-13 16:20 | 3/3 runs PASS |
-| G1.3 | PASS | 265 | 2026-10-13 17:00 | 3/3 runs PASS |
-| G1.4 | PASS | 424 | 2026-10-13 17:31 | 3/3 runs PASS |
+| G1.3 | PASS | 103 | 2026-10-14 07:20 | 1/1 runs PASS |
+| G1.4 | PASS | 166 | 2026-10-14 07:50 | 1/1 runs PASS |
 | G1.5 | PASS | 370 | 2026-10-13 20:30 | 3/3 runs PASS |
-| G1.6 | PASS | 353 | 2026-10-14 01:53 | 3/3 runs PASS |
+| G1.6 | PASS | 120 | 2026-10-14 07:52 | 1/1 runs PASS |
 | G1.7 | FAIL | 201 | 2026-10-14 05:10 | run 1/3: Sven: 5 activations of the crosshair NPC opened no dialogue on engine 1 (sit state on engine 2 0, on engine 1 0; NPC {"ai":false,"sit":0,"target":0,"pkg":"ea072","x":20629,"y":-46000,"events":[]}) |
 | G1.8 | PASS | 327 | 2026-10-14 06:39 | 3/3 runs PASS |
-| 2A.1 | FAIL | 0 | 2026-10-12 16:53 | no check script |
+| 2A.1 | PASS | 179 | 2026-10-14 07:44 | 3/3 runs PASS |
 | 2A.2 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | 2A.3 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | 2A.4 | FAIL | 0 | 2026-10-12 16:53 | no check script |
@@ -68,8 +68,8 @@ First non-PASS in plan order: S3.4
 
 ### L1
 - build: ok in 69 s (l1-build.log)
-- ts: ok in 0 s (l1-ts.log)
-- ctest: ok in 57 s (l1-ctest.log)
+- ts: ok in 1 s (l1-ts.log)
+- ctest: ok in 58 s (l1-ctest.log)
 ### S0
 - run 1: actor ff000000, RaceMenu open: false
 - run 1: client moved 365 units from 12156,-71991,6010, server moved 365 units from 12156,-71991,6010
@@ -179,9 +179,9 @@ First non-PASS in plan order: S3.4
 - run 1: engine 2 leaves; engine 1 hosts the damaged puppet: true; Alvor on engine 1 now {"damageMult":1,"ai":true,"blocked":false,"dead":false,"health":131}; server isDead false
 ### 1B.3
 - run 1: unit [1B.3]: exit 0; All tests passed (4 assertions in 1 test case)
-- run 1: actor values after engine 1's player lost 70% magicka: {"player":{"health":1,"magicka":0.33000001311302185,"stamina":1},"orgnar":{"health":1,"magicka":1,"stamina":1}}
+- run 1: actor values after engine 1's player lost 70% magicka: {"player":{"health":1,"magicka":0.34592491388320923,"stamina":1},"orgnar":{"health":1,"magicka":1,"stamina":1}}
 - run 1: the hosted Orgnar on engine 1 fights engine 2's player (clone ff000d41 on engine 1); engine 2's server health 1 -> 0.8329600095748901; local hits by Orgnar on engine 1: ["ff000d41"]
-- run 1: the hosted Orgnar activates the inn door 93bdb on engine 1: server isOpen false -> toggled true
+- run 1: the hosted Orgnar activates the inn door e3a7b on engine 1: server isOpen false -> toggled true
 - run 1: after the server killed and revived Orgnar: {"dead":false,"disabled":false,"deleted":false,"loaded":true}
 - run 1: source: KillMove blocked for all ids true; actor values not sent for hosted NPCs true
 - ![1B.3](runs/1B_3/1/1B_3.png)
@@ -252,54 +252,16 @@ First non-PASS in plan order: S3.4
 - run 1: Alvor (13482) on engine 1 (hoster): greeting "C'est pas tous les jours qu'on a des visites à Rivebois.", topic "Vous avez besoin d'aide à la forge ?", answer "Tiens, oui. Et si vous me fabriquiez une dague de fer ? Voici tout ce qu'il vous faut. Allez-y."
 - run 1: Alvor on engine 1 (hoster): the dialogue closed: true
 - run 1: Alvor: hoster ff000000 (engine 1) before the talks, ff000000 after
-- run 2: Gerdur (13489) on engine 2 (puppet): greeting "Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
-- run 2: Gerdur on engine 2 (puppet): the dialogue closed: true
-- run 2: Gerdur (13489) on engine 1 (hoster): greeting "Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
-- run 2: Gerdur on engine 1 (hoster): the dialogue closed: true
-- run 2: Gerdur: hoster ff000000 (engine 1) before the talks, ff000000 after
-- run 2: Alvor (13482) on engine 1 (puppet): greeting "C'est pas tous les jours qu'on a des visites à Rivebois.", topic "Vous avez besoin d'aide à la forge ?", answer "Tiens, oui. Et si vous me fabriquiez une dague de fer ? Voici tout ce qu'il vous faut. Allez-y."
-- run 2: Alvor on engine 1 (puppet): the dialogue closed: true
-- run 2: Alvor (13482) on engine 2 (hoster): greeting "Dites-moi ce qu'il vous faut. Par Ysmir, si c'est simple et solide, je peux le forger.", topic "Vous avez besoin d'aide à la forge ?", answer "Tiens, oui. Et si vous me fabriquiez une dague de fer ? Voici tout ce qu'il vous faut. Allez-y."
-- run 2: Alvor on engine 2 (hoster): the dialogue closed: true
-- run 2: Alvor: hoster ff000001 (engine 2) before the talks, ff000001 after
-- run 3: Gerdur (13489) on engine 2 (puppet): greeting "Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
-- run 3: Gerdur on engine 2 (puppet): the dialogue closed: true
-- run 3: Gerdur (13489) on engine 1 (hoster): greeting "D'après Lucan, du Marché de Rivebois, des voleurs se seraient introduits dans sa boutique. Ils n'ont quasiment rien pris, c'est étrange.", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
-- run 3: Gerdur on engine 1 (hoster): the dialogue closed: true
-- run 3: Gerdur: hoster ff000000 (engine 1) before the talks, ff000000 after
-- run 3: Alvor (13482) on engine 1 (puppet): greeting "C'est pas tous les jours qu'on a des visites à Rivebois.", topic "Vous avez besoin d'aide à la forge ?", answer "Tiens, oui. Et si vous me fabriquiez une dague de fer ? Voici tout ce qu'il vous faut. Allez-y."
-- run 3: Alvor on engine 1 (puppet): the dialogue closed: true
-- run 3: Alvor (13482) on engine 2 (hoster): greeting "C'est pas tous les jours qu'on a des visites à Rivebois.", topic "Vous avez besoin d'aide à la forge ?", answer "Tiens, oui. Et si vous me fabriquiez une dague de fer ? Voici tout ce qu'il vous faut. Allez-y."
-- run 3: Alvor on engine 2 (hoster): the dialogue closed: true
-- run 3: Alvor: hoster ff000001 (engine 2) before the talks, ff000001 after
 - ![G1.3](runs/G1_3/1/G1_3-Gerdur-engine2-puppet.png)
 - ![G1.3](runs/G1_3/1/G1_3-Gerdur-engine1-hoster.png)
 - ![G1.3](runs/G1_3/1/G1_3-Alvor-engine2-puppet.png)
 - ![G1.3](runs/G1_3/1/G1_3-Alvor-engine1-hoster.png)
-- ![G1.3](runs/G1_3/2/G1_3-Gerdur-engine2-puppet.png)
-- ![G1.3](runs/G1_3/2/G1_3-Gerdur-engine1-hoster.png)
-- ![G1.3](runs/G1_3/2/G1_3-Alvor-engine1-puppet.png)
-- ![G1.3](runs/G1_3/2/G1_3-Alvor-engine2-hoster.png)
-- ![G1.3](runs/G1_3/3/G1_3-Gerdur-engine2-puppet.png)
-- ![G1.3](runs/G1_3/3/G1_3-Gerdur-engine1-hoster.png)
-- ![G1.3](runs/G1_3/3/G1_3-Alvor-engine1-puppet.png)
-- ![G1.3](runs/G1_3/3/G1_3-Alvor-engine2-hoster.png)
 ### G1.4
 - run 1: bandit 1ebf6 (base b623a NPC_ LvlBanditMeleeAnyAggro1024) in 3c:Skyrim.esm at 7358,-41431,3578; hosted by the player ff000000, server dead false
 - run 1: 40 s after the kill: server dead true, client dead true, disabled false
 - run 1: after a server kill and restart: server dead true at once, true 10 s after the client came back (user 1); client dead true, disabled false
-- run 2: bandit 1ebf6 (base b623a NPC_ LvlBanditMeleeAnyAggro1024) in 3c:Skyrim.esm at 7358,-41431,3578; hosted by the player ff000000, server dead false
-- run 2: 40 s after the kill: server dead true, client dead true, disabled false
-- run 2: after a server kill and restart: server dead true at once, true 10 s after the client came back (user 1); client dead true, disabled false
-- run 3: bandit 1ebf6 (base b623a NPC_ LvlBanditMeleeAnyAggro1024) in 3c:Skyrim.esm at 7358,-41431,3578; hosted by the player ff000000, server dead false
-- run 3: 40 s after the kill: server dead true, client dead true, disabled false
-- run 3: after a server kill and restart: server dead true at once, true 10 s after the client came back (user 1); client dead true, disabled false
 - ![G1.4](runs/G1_4/1/G1_4-dead.png)
 - ![G1.4](runs/G1_4/1/G1_4-restart.png)
-- ![G1.4](runs/G1_4/2/G1_4-dead.png)
-- ![G1.4](runs/G1_4/2/G1_4-restart.png)
-- ![G1.4](runs/G1_4/3/G1_4-dead.png)
-- ![G1.4](runs/G1_4/3/G1_4-restart.png)
 ### G1.5
 - run 1: start log: settings.ts and MQ102 stage 30: [[155914,0],[155914,5],[320781,15],[155914,30],[320781,30]]
 - run 1: Whiterun guards near the porch: 37058 (client loaded true, disabled false, dead false; server 1a26f:Skyrim.esm, dead false, disabled false, hoster ff000000); 37070 (client loaded true, disabled false, dead false; server 1a26f:Skyrim.esm, dead false, disabled false, hoster ff000000)
@@ -330,41 +292,17 @@ First non-PASS in plan order: S3.4
 - ![G1.5](runs/G1_5/3/G1_5-mq103.png)
 ### G1.6
 - run 1: engine 2 hosts: Faendal ff000001, Alvor ff000001, Hilde ff000001
-- run 1: Faendal, hoster engine 2 (server ff000001): hoster motion 4.6, drop 23.0, head 24.3, hips 62.4; puppet engine 1: motion 51.8, drop 26.9, head 21.7, hips 63.6
-- run 1: Alvor, hoster engine 2 (server ff000001): hoster motion 5.0, drop 35.5, head 52.6, hips 38.0; puppet engine 1: motion 4.7, drop 35.5, head 52.7, hips 38.0
-- run 1: Hilde, hoster engine 2 (server ff000001): hoster motion 0.7, drop 33.7, head 49.7, hips 68.5; puppet engine 1: motion 2.8, drop 26.7, head 44.9, hips 68.5
+- run 1: Faendal, hoster engine 2 (server ff000001): hoster motion 3.1, drop 26.2, head 17.2, hips 60.2; puppet engine 1: motion 64.6, drop 32.8, head 43.7, hips 66.1
+- run 1: Alvor, hoster engine 2 (server ff000001): hoster motion 1.1, drop 34.3, head 50.0, hips 44.6; puppet engine 1: motion 0.6, drop 34.3, head 50.0, hips 44.6
+- run 1: Hilde, hoster engine 2 (server ff000001): hoster motion 4.6, drop 33.8, head 51.4, hips 38.9; puppet engine 1: motion 11.8, drop 15.5, head 48.1, hips 39.0
 - run 1: 2 NPC(s) moved on the hoster engine 2, so the motion test ran for them; still on engine 1: none
 - run 1: engine 1 hosts: Faendal ff000000, Alvor ff000000, Hilde ff000000
-- run 1: Faendal, hoster engine 1 (server ff000000): hoster motion 0.2, drop 36.1, head 49.7, hips 69.0; puppet engine 2: motion 0.0, drop 34.8, head 50.4, hips 67.5
-- run 1: Alvor, hoster engine 1 (server ff000000): hoster motion 1.2, drop 19.4, head 43.8, hips 44.6; puppet engine 2: motion 1.3, drop 35.4, head 51.6, hips 46.0
-- run 1: Hilde, hoster engine 1 (server ff000000): hoster motion 2.6, drop 37.2, head 51.4, hips 37.0; puppet engine 2: motion 2.2, drop 37.6, head 51.9, hips 37.0
+- run 1: Faendal, hoster engine 1 (server ff000000): hoster motion 0.3, drop 33.7, head 50.2, hips 66.6; puppet engine 2: motion 1.5, drop 29.1, head 49.9, hips 66.7
+- run 1: Alvor, hoster engine 1 (server ff000000): hoster motion 1.1, drop 16.8, head 43.5, hips 67.3; puppet engine 2: motion 1.0, drop 31.2, head 44.7, hips 67.3
+- run 1: Hilde, hoster engine 1 (server ff000000): hoster motion 0.0, drop 34.5, head 51.9, hips 67.6; puppet engine 2: motion 5.8, drop 37.6, head 51.9, hips 69.0
 - run 1: 0 NPC(s) moved on the hoster engine 1, so the motion test ran for them; still on engine 2: none
-- run 2: engine 2 hosts: Faendal ff000001, Alvor ff000001, Hilde ff000001
-- run 2: Faendal, hoster engine 2 (server ff000001): hoster motion 3.1, drop 22.9, head 24.0, hips 62.3; puppet engine 1: motion 51.8, drop 26.8, head 21.6, hips 63.6
-- run 2: Alvor, hoster engine 2 (server ff000001): hoster motion 0.7, drop 34.4, head 50.1, hips 44.6; puppet engine 1: motion 1.1, drop 35.3, head 51.5, hips 45.9
-- run 2: Hilde, hoster engine 2 (server ff000001): hoster motion 31.9, drop 1.9, head 48.6, hips 37.0; puppet engine 1: motion 4.9, drop 34.4, head 51.2, hips 37.0
-- run 2: 2 NPC(s) moved on the hoster engine 2, so the motion test ran for them; still on engine 1: none
-- run 2: engine 1 hosts: Faendal ff000000, Alvor ff000000, Hilde ff000000
-- run 2: Faendal, hoster engine 1 (server ff000000): hoster motion 0.2, drop 35.1, head 50.5, hips 67.1; puppet engine 2: motion 0.0, drop 35.5, head 50.0, hips 67.0
-- run 2: Alvor, hoster engine 1 (server ff000000): hoster motion 3.3, drop 35.4, head 52.7, hips 38.1; puppet engine 2: motion 6.7, drop 6.5, head 49.5, hips 38.0
-- run 2: Hilde, hoster engine 1 (server ff000000): hoster motion 0.0, drop 33.7, head 51.4, hips 68.9; puppet engine 2: motion 3.8, drop 37.7, head 51.9, hips 69.0
-- run 2: 1 NPC(s) moved on the hoster engine 1, so the motion test ran for them; still on engine 2: none
-- run 3: engine 2 hosts: Faendal ff000001, Alvor ff000001, Hilde ff000001
-- run 3: Faendal, hoster engine 2 (server ff000001): hoster motion 1.3, drop 35.5, head 49.0, hips 65.7; puppet engine 1: motion 17.3, drop 35.5, head 50.5, hips 66.4
-- run 3: Alvor, hoster engine 2 (server ff000001): hoster motion 0.7, drop 34.4, head 50.1, hips 44.6; puppet engine 1: motion 0.8, drop 35.4, head 51.5, hips 45.9
-- run 3: Hilde, hoster engine 2 (server ff000001): hoster motion 5.4, drop 33.8, head 51.4, hips 39.0; puppet engine 1: motion 3.1, drop 15.5, head 49.1, hips 39.0
-- run 3: 1 NPC(s) moved on the hoster engine 2, so the motion test ran for them; still on engine 1: none
-- run 3: engine 1 hosts: Faendal ff000000, Alvor ff000000, Hilde ff000000
-- run 3: Faendal, hoster engine 1 (server ff000000): hoster motion 0.2, drop 35.5, head 50.5, hips 66.9; puppet engine 2: motion 1.4, drop 35.8, head 50.4, hips 67.7
-- run 3: Alvor, hoster engine 1 (server ff000000): hoster motion 22.1, drop 20.3, head 40.7, hips 67.2; puppet engine 2: motion 2.2, drop 35.3, head 52.8, hips 69.2
-- run 3: Hilde, hoster engine 1 (server ff000000): hoster motion 0.0, drop 9.6, head 51.9, hips 68.9; puppet engine 2: motion 1.2, drop 8.4, head 52.0, hips 68.8
-- run 3: 1 NPC(s) moved on the hoster engine 1, so the motion test ran for them; still on engine 2: none
 - ![G1.6](runs/G1_6/1/G1_6-puppets-engine1.png)
 - ![G1.6](runs/G1_6/1/G1_6-puppets-engine2.png)
-- ![G1.6](runs/G1_6/2/G1_6-puppets-engine1.png)
-- ![G1.6](runs/G1_6/2/G1_6-puppets-engine2.png)
-- ![G1.6](runs/G1_6/3/G1_6-puppets-engine1.png)
-- ![G1.6](runs/G1_6/3/G1_6-puppets-engine2.png)
 ### G1.7
 - run 1: Gerdur: hosted by engine 2 with its AI off on engine 1, press 5 opened the dialogue (sit state 0 on engine 2, 0 on engine 1)
 - run 1: Gerdur (13489) hosted by engine 2, player activation on engine 1: greeting "Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
@@ -428,6 +366,34 @@ First non-PASS in plan order: S3.4
 - run 3: scene: Sven FreeformRiverwood01__0005C832_1.wav on engine 1 after 94 ms
 - run 3: scene: Sven FreeformRiverwood01__0005C832_1.wav on engine 1 after 98 ms
 - run 3: scene: engine 1 also played Hilde DialogueRi__000954CC_1.wav, 331 ms into the part, with no line of engine 2 to match
+### 2A.1
+- run 1: bandit 1ebf6 in 3c:Skyrim.esm, hoster ff000001 (engine 1's player ff000000, engine 2's ff000001), server dead false
+- run 1: after engine 2 killed it: hoster ff000001, server inventory ["1359d x1","13910 x1","13911 x1"]
+- run 1: engine 2 corpse inventory ["13911 Armure en peau x1","1359d Espadon de fer x1","13910 Bottes en peau x1"]
+- run 1: engine 1 opens the corpse: true
+- run 1: engine 1 corpse shows 1359d Espadon de fer x1; hoster at the take ff000001
+- run 1: engine 2 opens the corpse: true
+- run 1: item 1359d Espadon de fer: corpse on the server 1 -> 0 (0 after engine 2 reopened it), on engine 2 1 -> 0 (0 with its loot menu open after the take); engine 1's player on the server 0 -> 1 (1 after the reopen), on engine 1 0 -> 1
+- run 2: bandit 1ebf6 in 3c:Skyrim.esm, hoster ff000001 (engine 1's player ff000000, engine 2's ff000001), server dead false
+- run 2: after engine 2 killed it: hoster ff000001, server inventory ["a x1","f x28","12eb6 x1","13989 x1","166ff x1","6f398 x1","10594b x1"]
+- run 2: engine 2 corpse inventory ["a Crochet x1","12eb6 Bouclier de fer x1","13989 Épée d'acier x1","166ff Couronne de cuivre ornée d'un onyx x1","6f398 Chaussures de fourrure x1","10594b Armure de fourrure x1","f or x28"]
+- run 2: engine 1 opens the corpse: true
+- run 2: engine 1 corpse shows a Crochet x1; hoster at the take ff000001
+- run 2: engine 2 opens the corpse: true
+- run 2: item a Crochet: corpse on the server 1 -> 0 (0 after engine 2 reopened it), on engine 2 1 -> 0 (0 with its loot menu open after the take); engine 1's player on the server 10 -> 11 (11 after the reopen), on engine 1 10 -> 11
+- run 3: bandit 1ebf6 in 3c:Skyrim.esm, hoster ff000001 (engine 1's player ff000000, engine 2's ff000001), server dead false
+- run 3: after engine 2 killed it: hoster ff000001, server inventory ["f x2","13987 x1","6f398 x1","10594d x1"]
+- run 3: engine 2 corpse inventory ["f or x2","10594d Armure de fourrure x1","6f398 Chaussures de fourrure x1","13987 Espadon d'acier x1"]
+- run 3: engine 1 opens the corpse: true
+- run 3: engine 1 corpse shows 13987 Espadon d'acier x1; hoster at the take ff000001
+- run 3: engine 2 opens the corpse: true
+- run 3: item 13987 Espadon d'acier: corpse on the server 1 -> 0 (0 after engine 2 reopened it), on engine 2 1 -> 0 (0 with its loot menu open after the take); engine 1's player on the server 0 -> 1 (1 after the reopen), on engine 1 0 -> 1
+- ![2A.1](runs/2A_1/1/2A_1-open.png)
+- ![2A.1](runs/2A_1/1/2A_1-engine2.png)
+- ![2A.1](runs/2A_1/2/2A_1-open.png)
+- ![2A.1](runs/2A_1/2/2A_1-engine2.png)
+- ![2A.1](runs/2A_1/3/2A_1-open.png)
+- ![2A.1](runs/2A_1/3/2A_1-engine2.png)
 ### P8
 - run 1: 115 client log lines, 2 [Exception] lines
 - run 1: exception: [Exception] failed to get key 'data': failed to call custom Serialize for type struct Equipment: failed to get key 'inv': failed to call cus.

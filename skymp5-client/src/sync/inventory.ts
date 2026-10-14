@@ -335,9 +335,12 @@ export const applyInventory = (
   refr: ObjectReference,
   newInventory: Inventory,
   enableCrashProtection: boolean,
-  ignoreWorn = false
+  ignoreWorn = false,
+  resetBaseContainer = true
 ): boolean => {
-  resetBase(refr);
+  if (resetBaseContainer) {
+    resetBase(refr);
+  }
   const diff = getDiff(newInventory, getInventory(refr), ignoreWorn).entries;
 
   let res = true;

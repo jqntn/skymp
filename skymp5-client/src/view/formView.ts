@@ -11,6 +11,7 @@ import { PlayerCharacterDataHolder } from "./playerCharacterDataHolder";
 import { getMovement } from "../sync/movementGet";
 import { lastTryHost, tryHost } from "./hostAttempts";
 import { ModelApplyUtils } from "./modelApplyUtils";
+import { Inventory } from "../sync/inventory";
 import { localIdToRemoteId } from "./worldViewMisc";
 import { SpApiInteractor } from "../services/spApiInteractor";
 import { WorldCleanerService } from "../services/services/worldCleanerService";
@@ -346,6 +347,8 @@ export class FormView {
     this.enableAt = 0;
     this.puppetLethalHit = false;
     this.realActor = false;
+    this.corpseBlocked = false;
+    this.corpseInventory = undefined;
     this.puppetMode = undefined;
     once("update", () => {
       if (realActor) {
@@ -378,6 +381,8 @@ export class FormView {
   }
 
   private realActor = false;
+  private corpseBlocked = false;
+  private corpseInventory?: Inventory;
   private hostedHere = false;
   private enableAt = 0;
   private puppetMode?: boolean;
@@ -568,6 +573,15 @@ export class FormView {
       }
       const puppet = !this.hostedHere;
       this.serverDead = !!model.isDead;
+      const corpse = (this.serverDead || !!model.movement?.isDead) && ac.isDead();
+      if (corpse !== this.corpseBlocked) {
+        ac.blockActivation(corpse);
+        this.corpseBlocked = corpse;
+      }
+      if (corpse && model.inventory && model.inventory !== this.corpseInventory) {
+        this.corpseInventory = model.inventory;
+        ModelApplyUtils.applyModelCorpseInventory(ac, model.inventory);
+      }
       this.serverHealthPercentage = model.movement?.healthPercentage;
       if (this.puppetMode && !this.serverDead && ac.getActorValue("health") <= 0) {
         this.puppetLethalHit = true;
