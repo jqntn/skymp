@@ -5,7 +5,7 @@ First non-PASS in plan order: G1.7
 
 | id | result | secs | at | detail |
 |---|---|---|---|---|
-| L1 | PASS | 130 | 2026-10-14 09:28 |  |
+| L1 | PASS | 29 | 2026-10-14 09:59 |  |
 | S0 | PASS | 30 | 2026-10-13 15:22 | 1/1 runs PASS |
 | S0b | PASS | 161 | 2026-10-13 15:25 | 1/1 runs PASS |
 | S0c | PASS | 30 | 2026-10-13 15:25 | 1/1 runs PASS |
@@ -28,19 +28,19 @@ First non-PASS in plan order: G1.7
 | 1B.1 | PASS | 39 | 2026-10-14 07:45 | 1/1 runs PASS |
 | 1B.2 | PASS | 44 | 2026-10-14 07:46 | 1/1 runs PASS |
 | 1B.3 | PASS | 75 | 2026-10-14 07:47 | 1/1 runs PASS |
-| 1B.4 | PASS | 90 | 2026-10-14 09:08 | 1/1 runs PASS |
+| 1B.4 | PASS | 97 | 2026-10-14 09:52 | 1/1 runs PASS |
 | 1B.5 | PASS | 50 | 2026-10-14 08:11 | 1/1 runs PASS |
 | G1.1 | PASS | 224 | 2026-10-14 08:15 | 1/1 runs PASS |
-| G1.2 | PASS | 45 | 2026-10-14 09:09 | 1/1 runs PASS |
+| G1.2 | PASS | 46 | 2026-10-14 09:53 | 1/1 runs PASS |
 | G1.3 | PASS | 103 | 2026-10-14 07:20 | 1/1 runs PASS |
-| G1.4 | PASS | 166 | 2026-10-14 07:50 | 1/1 runs PASS |
+| G1.4 | PASS | 157 | 2026-10-14 09:56 | 1/1 runs PASS |
 | G1.5 | PASS | 119 | 2026-10-14 08:17 | 1/1 runs PASS |
 | G1.6 | PASS | 120 | 2026-10-14 07:52 | 1/1 runs PASS |
 | G1.7 | FAIL | 201 | 2026-10-14 05:10 | run 1/3: Sven: 5 activations of the crosshair NPC opened no dialogue on engine 1 (sit state on engine 2 0, on engine 1 0; NPC {"ai":false,"sit":0,"target":0,"pkg":"ea072","x":20629,"y":-46000,"events":[]}) |
 | G1.8 | PASS | 327 | 2026-10-14 06:39 | 3/3 runs PASS |
 | 2A.1 | PASS | 179 | 2026-10-14 07:44 | 3/3 runs PASS |
 | 2A.2 | PASS | 140 | 2026-10-14 09:31 | 3/3 runs PASS |
-| 2A.3 | FAIL | 0 | 2026-10-12 16:53 | no check script |
+| 2A.3 | FAIL | 55 | 2026-10-14 09:43 | run 1/1: the server did not create the necklace in the satchel; the loot menu shows 0 necklace in the satchel; with the menu open (the server's satchel inventory applied), the alias ref is ff000cf5 (alias quests ["d9b64"], in the satchel's inventory false, in the player's false), before ff000cf5; the player holds 0 necklace; the necklace alias ref after the take is ff000cf5 (alias quests ["d9b64"], in the satchel's inventory false, in the player's false), before ff000cf5; the quest stage is 10 after the take (before 10); the necklace script did not advance it; the server has 0 necklace in the satchel and 0 in the player |
 | 2A.4 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | 2A.5 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | G1.9 | FAIL | 0 | - | not run |
@@ -67,9 +67,9 @@ First non-PASS in plan order: G1.7
 ## Evidence
 
 ### L1
-- build: ok in 72 s (l1-build.log)
+- build: ok in 28 s (l1-build.log)
 - ts: ok in 1 s (l1-ts.log)
-- ctest: ok in 58 s (l1-ctest.log)
+- ctest: ok in 0 s (skipped: the unit and server binaries and the integration tests are those of the last green ctest)
 ### S0
 - run 1: actor ff000000, RaceMenu open: false
 - run 1: client moved 365 units from 12156,-71991,6010, server moved 365 units from 12156,-71991,6010
@@ -199,13 +199,13 @@ First non-PASS in plan order: G1.7
 - run 1: source: KillMove blocked for all ids true; actor values not sent for hosted NPCs true
 - ![1B.3](runs/1B_3/1/1B_3.png)
 ### 1B.4
-- run 1: at 8:00 the client has Alvor in 3c at 20594,-45120,-82 (3D true); the server starts with 133c8 at -515,-154,240, hoster 0
-- run 1: claim without a FormView: server 3c at 20594,-45120,-83, 19 units from the work marker, hoster ff000000
-- run 1: hide: the player went two cells east of Alvor (20594,-45120,-82): server hoster 0; Alvor's cell attached true, Alvor 3D false, hidden true
-- run 1: retry: the server moved Alvor back to 133c8 while he was hidden; back at the forge the server has 3c at 20375,-45067,-80, 223 units from the marker, hoster ff000000; local Alvor 3D true, disabled false (17 ms after the claim)
+- run 1: at 8:00 the client has Alvor in 3c at 20632,-45126,-84 (3D true); before the engines start, the server has Alvor in 133c8 at -515,-154,240, hoster 0
+- run 1: claim without a FormView: server 3c at 20628,-45126,-84, 43 units from the work marker, hoster ff000000
+- run 1: hide: the player went two cells east of Alvor (20659,-45136,-84): server hoster 0; Alvor's cell attached true, Alvor 3D false, hidden true
+- run 1: retry: the server moved Alvor back to 133c8 while he was hidden; back at the forge the server has 3c at 20375,-45067,-80, 223 units from the marker, hoster ff000000; local Alvor 3D true, disabled false (33 ms after the claim)
 - run 1: walk-in: the driver enabled the hidden Alvor two cells away (a player who never hosted him): loaded true; server hoster held at 0 for 6 s: true
-- run 1: first movement: the server then streamed a stale Alvor 6037 units from the marker; 6 s later the local Alvor was 3D true, disabled false, at least 6030 units from the stale spot; back home: at least 6030 units from it; server 3c at 20594,-45041,-83, 97 units from the marker, hoster ff000000
-- run 1: replay, hosted movement: a quest replay starts, then the hoster takes Alvor out of his furniture and translates him 300 units (every 400 ms): 300 units from the server position at the end of the hold (20894,-45041,-121); server position held within 150 units of 20594,-45041,-83 for 2 s: true (last 20594,-45041,-83); after the replay the server follows the local position: true (20894,-45041,-151)
+- run 1: first movement: the server then streamed a stale Alvor 6037 units from the marker; 6 s later the local Alvor was 3D true, disabled false, at least 6031 units from the stale spot; back home: at least 6031 units from it; server 3c at 20594,-45041,-83, 97 units from the marker, hoster ff000000
+- run 1: replay, hosted movement: a quest replay starts, then the hoster takes Alvor out of his furniture and translates him 300 units (every 400 ms): 300 units from the server position at the end of the hold (20894,-45041,-124); server position held within 150 units of 20594,-45041,-83 for 2 s: true (last 20594,-45041,-83); after the replay the server follows the local position: true (20895,-45040,-151)
 - run 1: release: a script disables Alvor on the hoster: server hoster 0, disabled true; hoster still 0 after 6 s: true; the real actor was never deleted: true
 - run 1: replay, claim: a quest replay starts, then a script enables Alvor on the client: hoster held at 0 during the replay: true (last 0); after the replay the client claims him: true (hoster ff000000, server disabled false; local 3D true, disabled false)
 - run 1: party: Alvor's alias quests on the member 105385,45486,1bc95, member quest log [105385, 0]; joined: true; leader two cells away: hoster ff000001 (member ff000001): true; leader back within 4096: hoster ff000000 (leader ff000000): true; the leader still hosts 12 s later: true (last ff000000)
@@ -229,10 +229,10 @@ First non-PASS in plan order: G1.7
 ### G1.2
 - run 1: start: server Alvor in 133c8:Skyrim.esm at -515,-154,240, hoster 0
 - run 1: before the player came, the client had Alvor in 0 at 20587,-45138,-81, AI true; 2 s after the client applied its view of him (AI off), the client has him in 0 at 20587,-45138,-81
-- run 1: in the house on the lower floor, out of his way (set public so the teleported player is no trespasser): game hour 7.986, the check moved Alvor home for the start state; local Alvor cell 133c8 package 1cb07
-- run 1: end: server Alvor in 3c:Skyrim.esm at 20594,-45041,-82, 97 units from the forge marker, hoster ff000000; server cells 133c8:Skyrim.esm -> 3c:Skyrim.esm; hosters seen ff000000; player cell changes 1; local Alvor package 1cb07, game hour 7.989
-- run 1: Gerdur (13489) in 3c:Skyrim.esm at 18952,-43634,-138, hoster ff000000: Dialogue Menu open and in dialogue with the player: true
-- run 1: Alvor (13482) in 3c:Skyrim.esm at 20594,-45041,-82, hoster ff000000: Dialogue Menu open and in dialogue with the player: true
+- run 1: in the house on the lower floor, out of his way (set public so the teleported player is no trespasser): game hour 7.991, the check moved Alvor home for the start state; local Alvor cell 133c8 package 1cb07
+- run 1: end: server Alvor in 3c:Skyrim.esm at 20375,-45067,-80, 223 units from the forge marker, hoster ff000000; server cells 133c8:Skyrim.esm -> 3c:Skyrim.esm; hosters seen ff000000; player cell changes 1; local Alvor package 1cb07, game hour 7.995
+- run 1: Gerdur (13489) in 3c:Skyrim.esm at 18495,-45006,-120, hoster ff000000: Dialogue Menu open and in dialogue with the player: true
+- run 1: Alvor (13482) in 3c:Skyrim.esm at 20375,-45067,-80, hoster ff000000: Dialogue Menu open and in dialogue with the player: true
 - ![G1.2](runs/G1_2/1/G1_2-forge.png)
 - ![G1.2](runs/G1_2/1/G1_2-Gerdur.png)
 - ![G1.2](runs/G1_2/1/G1_2-Alvor.png)
@@ -253,7 +253,7 @@ First non-PASS in plan order: G1.7
 - ![G1.3](runs/G1_3/1/G1_3-Alvor-engine1-hoster.png)
 ### G1.4
 - run 1: bandit 1ebf6 (base b623a NPC_ LvlBanditMeleeAnyAggro1024) in 3c:Skyrim.esm at 7358,-41431,3578; hosted by the player ff000000, server dead false
-- run 1: 40 s after the kill: server dead true, client dead true, disabled false
+- run 1: 31 s after the kill: server dead true, client dead true, disabled false
 - run 1: after a server kill and restart: server dead true at once, true 10 s after the client came back (user 1); client dead true, disabled false
 - ![G1.4](runs/G1_4/1/G1_4-dead.png)
 - ![G1.4](runs/G1_4/1/G1_4-restart.png)
@@ -402,6 +402,10 @@ First non-PASS in plan order: G1.7
 - run 3: NPC 2c90f hoster within 30 s of the enable (not asserted): ff000001
 - run 3: barrel 20570 disabled while engine 1's player is away; players the server streams the barrel to at the disable: ["ff000001"]
 - run 3: barrel 20570 disabled on the server while engine 1's player was away: engine 1 {"loaded":false,"disabled":true} after the return
+### 2A.3
+- run 1: FreeformIvarstead02 stage 10; satchel d9b78 holds 1 necklace on the client, 0 on the server; necklace alias ref ff000cf5 (alias quests ["d9b64"], in the satchel's inventory true, in the player's false)
+- run 1: satchel open true: the loot menu showed 0 necklace, alias ref with the menu open ff000cf5 (alias quests ["d9b64"], in the satchel's inventory false, in the player's false); after the take the player holds 0; alias ref ff000cf5 (alias quests ["d9b64"], in the satchel's inventory false, in the player's false); stage 10 -> 10; server: satchel 0, player 0
+- ![2A.3](runs/2A_3/1/2A_3-open.png)
 ### P8
 - run 1: 115 client log lines, 2 [Exception] lines
 - run 1: exception: [Exception] failed to get key 'data': failed to call custom Serialize for type struct Equipment: failed to get key 'inv': failed to call cus.

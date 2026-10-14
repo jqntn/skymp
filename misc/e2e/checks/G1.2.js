@@ -66,7 +66,7 @@ module.exports = {
       }
       heldSince = heldSince || Date.now();
       return Date.now() - heldSince >= HOLD_MS;
-    }, 8 * 60000, "Alvor at the forge").catch(() => false);
+    }, 3 * 60000, "Alvor at the forge").catch(() => false);
     const after = await local(ALVOR).catch((e) => ({ err: String(e) }));
     ctx.evidence.push(`end: server Alvor in ${s.cell} at ${round(s.pos)}, ${Math.round(fromForge(s))} units from the forge marker, hoster ${hex(s.hoster)}; server cells ${cells.join(" -> ")}; hosters seen ${[...hosters].join(",") || "none"}; player cell changes ${teleports}; local Alvor package ${hex(after.pkg || 0)}, game hour ${after.hour ? after.hour.toFixed(3) : "?"}`);
     ctx.shot("G1_2-forge");

@@ -14,6 +14,7 @@ module.exports = {
     await ctx.character(1, { pos: SPAWN, angleZ: 270, worldOrCell: 0x3c });
     const member = await ctx.character(2);
     await ctx.probe(`mp.set(${member}, "private.questLog", [[${TUTORIAL_BLACKSMITHING}, 0]]); return 0;`);
+    ctx.alvorStart = await ctx.probe(`return { cell: mp.getActorCellOrWorld(${ALVOR}), pos: mp.getActorPos(${ALVOR}), hoster: mp.get(${ALVOR}, "hoster"), disabled: mp.get(${ALVOR}, "isDisabled") };`);
   },
   async run(ctx) {
     const actor = await ctx.ready(1);
@@ -34,9 +35,9 @@ module.exports = {
     const send = (n, content) => ctx.drv(`sp.mpClientPlugin.send(JSON.stringify({ t: 1, contentJsonDump: ${JSON.stringify(JSON.stringify(content))} }), true); return 0;`, n);
     const hold = async (ms, test) => { const end = Date.now() + ms; let s; do { s = await server(); if (!test(s)) return { ok: false, s }; await ctx.sleep(500); } while (Date.now() < end); return { ok: true, s }; };
 
-    const first = await server();
+    const first = ctx.alvorStart;
     const local = await ctx.drv(`${npc} const w = a.getWorldSpace(); return { world: w ? w.getFormID() : 0, pos: [a.getPositionX(), a.getPositionY(), a.getPositionZ()], loaded: a.is3DLoaded() };`);
-    ctx.evidence.push(`at 8:00 the client has Alvor in ${hex(local.world)} at ${round(local.pos)} (3D ${local.loaded}); the server starts with ${hex(first.cell)} at ${round(first.pos)}, hoster ${hex(first.hoster)}`);
+    ctx.evidence.push(`at 8:00 the client has Alvor in ${hex(local.world)} at ${round(local.pos)} (3D ${local.loaded}); before the engines start, the server has Alvor in ${hex(first.cell)} at ${round(first.pos)}, hoster ${hex(first.hoster)}`);
 
     let s = first;
     const claimed = await ctx.waitFor(async () => { s = await server(); return atForge(s) && s.hoster === actor; }, 20000, "the server takes Alvor's position from the client").catch(() => false);

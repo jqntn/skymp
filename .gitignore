@@ -16,3 +16,4 @@ misc/e2e/out/*
 !misc/e2e/out/scoreboard.md
 !misc/e2e/out/results.json
 !misc/e2e/out/history.jsonl
+!misc/e2e/out/attempts.jsonl

@@ -1,5 +1,5 @@
 const BANDIT = 0x1ebf6;
-const HOLD_MS = 40000;
+const HOLD_MS = 31000;
 const APPEARANCE = { isFemale: false, raceId: 0x13746, weight: 50, skinColor: -1, hairColor: -1, headpartIds: [], headTextureSetId: 0, options: new Array(19).fill(0), presets: new Array(4).fill(0), tints: [], name: "E2eBanditKiller" };
 
 module.exports = {

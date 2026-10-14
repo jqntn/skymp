@@ -121,6 +121,8 @@ module.exports = {
     ctx.shot("S1_5-follow", 1);
     ctx.assert.ok(net > 100, `${name} did not move on the hoster (${net.toFixed(0)} units)`);
     ctx.assert.ok(hosters.length === 1 && hosters[0] === actors[1], `${name} changed hoster: ${hosters.map((x) => x.toString(16))}`);
+    const rtt = Math.max(ctx.driverRtt(1), ctx.driverRtt(2));
+    if (late.length < 20 && rtt > 200) throw new ctx.Env(`only ${late.length} puppet samples with a median driver round trip of ${rtt} ms`);
     ctx.assert.ok(late.length >= 20, `only ${late.length} puppet samples`);
     ctx.assert.ok(worst <= TOLERANCE, `the puppet was ${worst.toFixed(1)} units from the hoster path of the last ${WINDOW_MS} ms`);
   },

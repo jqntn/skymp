@@ -113,6 +113,18 @@ const waitNoForeignSkyrim = async () => {
   }
 };
 
+const memGB = (image) => {
+  const r = spawnSync("tasklist", ["/FO", "CSV", "/NH", "/FI", `IMAGENAME eq ${image}`], { encoding: "latin1" });
+  return r.stdout.split(/\r?\n/).filter((l) => l.toLowerCase().startsWith(`"${image.toLowerCase()}"`)).reduce((s, l) => s + Number(l.split('","')[4].replace(/\D/g, "")), 0) / 2 ** 20;
+};
+
+const hostProblem = (engines) => {
+  if (!procs("steam.exe").length) return Object.assign(new Env("Steam is not running: each game launch would hang on steam://run"), { stop: true });
+  const free = os.freemem() / 2 ** 30;
+  if (free < 3 * engines + 2) return new Env(`only ${free.toFixed(1)} GB of RAM free for ${engines} engines (steamwebhelper uses ${memGB("steamwebhelper.exe").toFixed(1)} GB)`);
+  return null;
+};
+
 const gameVersion = () =>
   spawnSync("powershell", ["-NoProfile", "-Command", `(Get-Item '${path.join(GAME, "SkyrimSE.exe")}').VersionInfo.FileVersion`], { encoding: "utf8" }).stdout.trim();
 
@@ -124,16 +136,28 @@ const sh = (name, cmd, args, cwd) => {
   return { name, ok: r.status === 0, secs: Math.round((Date.now() - t) / 1000), file: path.relative(OUT, file) };
 };
 
+const CTEST_STAMP = path.join(OUT, "ctest-stamp.json");
+const dirFiles = (d) => { try { return fs.readdirSync(d).map((f) => path.join(d, f)); } catch { return []; } };
+const ctestStamp = () => JSON.stringify([path.join(BUILD, "unit", "Release", "unit.exe"), path.join(DIST, "scam_native.node"), path.join(BUILD, "server-settings-base.json"), ...dirFiles(path.join(DIST, "dist_back")), ...dirFiles(path.join(REPO, "misc", "tests"))]
+  .map((f) => { try { return [f, require("crypto").createHash("sha1").update(fs.readFileSync(f)).digest("hex")]; } catch { return [f]; } }));
+
 const level1 = async () => {
   await waitNoForeignSkyrim();
   const steps = [sh("build", "cmake", ["--build", ".", "--config", "Release"], BUILD)];
   if (steps[0].ok) {
     steps.push(sh("ts", "yarn", ["test"], path.join(REPO, "skymp5-server")));
-    for (const p of ["world", "server-settings.json", "gamemode.js"]) backup(path.join(DIST, p));
-    try {
-      steps.push(sh("ctest", "ctest", ["-C", "Release", "--output-on-failure"], BUILD));
-    } finally {
-      restore();
+    const stamp = ctestStamp();
+    if (readJson(CTEST_STAMP, null) === stamp) {
+      steps.push({ name: "ctest", ok: true, secs: 0, file: "skipped: the unit and server binaries and the integration tests are those of the last green ctest" });
+    } else {
+      for (const p of ["world", "server-settings.json", "gamemode.js"]) backup(path.join(DIST, p));
+      try {
+        const r = sh("ctest", "ctest", ["-C", "Release", "--output-on-failure"], BUILD);
+        steps.push(r);
+        if (r.ok) writeJson(CTEST_STAMP, stamp);
+      } finally {
+        restore();
+      }
     }
   }
   const failed = steps.filter((s) => !s.ok);
@@ -283,7 +307,8 @@ const lowCostMode = () => {
 
 const makeCtx = (id, dir) => {
   const ctx = {
-    id, dir, gamePids: {}, evidence: [], shots: [], Env, Blocked, Accepted,
+    id, dir, gamePids: {}, evidence: [], shots: [], rtt: {}, Env, Blocked, Accepted,
+    driverRtt: (engine = 1) => { const a = [...(ctx.rtt[engine] || [])].sort((x, y) => x - y); return a.length ? a[a.length >> 1] : 0; },
     assert: require("assert"),
     sleep,
     profileId,
@@ -328,7 +353,8 @@ const makeCtx = (id, dir) => {
           drivers.pending.delete(cmdId);
           reject(new Env(`engine ${engine} driver did not answer in ${ms / 1000} s (${site})`));
         }, ms);
-        drivers.pending.set(cmdId, { resolve: (v) => (clearTimeout(timer), resolve(v)), reject: (e) => (clearTimeout(timer), reject(e)) });
+        const sent = Date.now();
+        drivers.pending.set(cmdId, { resolve: (v) => (clearTimeout(timer), (ctx.rtt[engine] ||= []).push(Date.now() - sent), resolve(v)), reject: (e) => (clearTimeout(timer), reject(e)) });
         (drivers.queue[engine] ||= []).push({ id: cmdId, code });
         flush(engine);
       }),
@@ -384,6 +410,8 @@ const runOnce = async (id, check, n, attempt) => {
     if (engines) {
       await waitNoForeignSkyrim();
       if (gameVersion() !== SKYRIM_VERSION) throw Object.assign(new Env(`SkyrimSE.exe is not ${SKYRIM_VERSION}: Steam updated the game`), { stop: true });
+      const problem = hostProblem(engines);
+      if (problem) throw problem;
       lowCostMode();
     }
     ctx.restartServer = async () => {
@@ -409,7 +437,14 @@ const runOnce = async (id, check, n, attempt) => {
     await sleep(2000);
     restore();
   }
-  return { result, reason, secs: Math.round((Date.now() - t) / 1000), evidence: ctx.evidence, shots: ctx.shots };
+  const rtt = Object.fromEntries(Object.keys(ctx.rtt).map((e) => [e, { median: ctx.driverRtt(Number(e)), calls: ctx.rtt[e].length }]));
+  return { result, reason, secs: Math.round((Date.now() - t) / 1000), evidence: ctx.evidence, shots: ctx.shots, rtt };
+};
+
+const buildStamp = () => {
+  const git = (...a) => (spawnSync("git", a, { cwd: REPO, encoding: "utf8" }).stdout || "").trim();
+  const mtime = (f) => { try { return fs.statSync(f).mtime.toISOString(); } catch { return null; } };
+  return { head: git("rev-parse", "--short", "HEAD"), dirty: git("status", "--porcelain", "--untracked-files=no") !== "", client: mtime(path.join(GAME, "Data", "Platform", "Plugins", "skymp5-client.js")), server: mtime(path.join(DIST, "scam_native.node")) };
 };
 
 const runCheck = async (id, opts, envStreak) => {
@@ -419,12 +454,15 @@ const runCheck = async (id, opts, envStreak) => {
   const check = require(file);
   const runs = opts.runs || (opts.final && check.engines ? 3 : 1);
   const results = [];
+  const build = buildStamp();
+  const checkName = id === "adhoc" ? `adhoc:${path.basename(file)}` : id;
   for (let n = 1; n <= runs; n++) {
     let r;
     for (let attempt = 0; attempt < 3; attempt++) {
       log(`${id} run ${n}/${runs}${attempt ? ` retry ${attempt}` : ""}`);
       r = await runOnce(id, check, n, attempt);
       log(`${id} run ${n}: ${r.result} ${r.reason}`);
+      fs.appendFileSync(path.join(OUT, "attempts.jsonl"), `${JSON.stringify({ id: checkName, run: n, attempt, result: r.result, reason: r.reason, secs: r.secs, evidence: r.evidence, rtt: r.rtt, freeGB: +(os.freemem() / 2 ** 30).toFixed(1), build, at: new Date().toISOString() })}\n`);
       envStreak.n = r.result === "ENV" ? envStreak.n + 1 : 0;
       if (r.result !== "ENV" || envStreak.n >= 3) break;
     }

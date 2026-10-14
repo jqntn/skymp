@@ -43,7 +43,7 @@ module.exports = {
       follows += await follow().catch(() => 0);
       samples.push({ t: Date.now(), server: s.pos.map(Math.round), cell: s.cell, hoster: s.hoster, local: l });
       return s.cell.startsWith("3c:") && fromMarker(s.pos) < REACH;
-    }, 10 * 60000, "Ralof reaches Riverwood").catch(() => false);
+    }, 6 * 60000, "Ralof reaches Riverwood").catch(() => false);
     const path = samples.reduce((d, x, i) => i ? d + Math.hypot(x.server[0] - samples[i - 1].server[0], x.server[1] - samples[i - 1].server[1]) : 0, 0);
     const walk = samples.slice(Math.max(0, samples.findIndex((x) => x.hoster)));
     const step = (x, i) => i ? Math.hypot(x.server[0] - walk[i - 1].server[0], x.server[1] - walk[i - 1].server[1]) : 0;

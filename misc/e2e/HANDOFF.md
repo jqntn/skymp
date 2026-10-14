@@ -60,7 +60,7 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 - Each check runs once per pass. --final runs the driver checks 3 times in a row for the goal.
 - The loop keeps this handoff file and the plan in git.
 - S1.6 holds for 0.5 s (the loop had proposed 1 s).
-- The loop's memory is in git, to resume on another PC: PLAN, LOOP (project-neutral method template), HANDOFF, LESSONS, out/log.md, out/scoreboard.md, out/results.json, out/history.jsonl. Screenshots, run folders and out/backup/ stay local.
+- The loop's memory is in git, to resume on another PC: PLAN, LOOP (project-neutral method template), HANDOFF, LESSONS, out/log.md, out/scoreboard.md, out/results.json, out/history.jsonl, out/attempts.jsonl (every attempt with a build stamp, since retro 1). Screenshots, run folders and out/backup/ stay local.
 - The loop pushes each commit to `fork` (jqntn/skymp) and the wiki commits to the wiki remote.
 - User decision 2026-10-13 (evening): the loop picks measures and check details itself and does not ask; the user wants the bugs fixed. The G1.5 guard reading stays (the user did not test it).
 
@@ -82,6 +82,8 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 
 ## Next steps
 
+0. Retro 1 (2026-10-14, see the log line): harness tasks done. Still to do before 2A.3: red runs on the current check version (LOOP "check the checks"). Red on the current version is recorded for 2A.1, 2A.2, G1.5 and the door part of 1B.3. Red only on an older version: S0b, S0c, S1.1, 1A.5, G1.4, S1.4, S1.6, S1.2, S1.5, G1.3, S3.4, 1B.1, 1B.2, 1B.4, 1B.5, G1.1, G1.2, G1.6, G1.8. No red: S1.3, 1A.1, 1A.2, 1A.3, 1A.4 (S0, S2, S3.1-S3.3 have no product fix). The revert targets are the fix commits named in the retro (`git log --oneline`). Run S1.6 3 times on the current version.
+   - 2A.3 state: check misc/e2e/checks/2A.3.js written (FreeformIvarstead02, Reyda's necklace created in the unlocked satchel d9b78 near Ivarstead; the Dragonstone is created in the Bleak Falls boss draugr 9bcd6, a corpse, so it never meets resetBase). First run FAIL, but for another reason: the client never reported FFI02 stage 10 (no `Coop: quest d9b64` line on the server), so the server did not create the necklace and the open showed 0. Find why the stage report is missing before the resetBase red.
 1. Phase 2A: 2A.3 (resetBase keeps quest items), 2A.4 (rest: leader-only take), 2A.5 (script item gains and losses); each needs its check (the plan has none yet for 2A.2-2A.5 except through G2), then G1.9. G1.7 waits for the user's hand check (or a harness that can press keys: a visible run with focus is the untried option).
 2. Then 2B (2B.3 also tests that a hoster does not allow a dragon's script events), G2, P. P8 stays red until reached.
 3. Watch:

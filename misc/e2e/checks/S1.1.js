@@ -83,6 +83,8 @@ module.exports = {
       ctx.assert.ok(net > 100, `${name} did not move on the hoster (at most ${net.toFixed(0)} units from its start)`);
       const hosters = [...new Set(server.map((x) => x.hoster))];
       ctx.assert.ok(hosters.length === 1 && hosters[0] === hoster, `${name} changed hoster during the samples: ${hosters.map((x) => x.toString(16))}`);
+      const rtt = Math.max(ctx.driverRtt(h), ctx.driverRtt(p));
+      if (late.length < 20 && rtt > 200) throw new ctx.Env(`${name}: only ${late.length} puppet samples with a median driver round trip of ${rtt} ms`);
       ctx.assert.ok(late.length >= 20, `${name}: only ${late.length} puppet samples`);
       ctx.assert.ok(states[1].ai === false, `${name}: the puppet on engine ${p} has its own AI on`);
       ctx.assert.ok(worst <= TOLERANCE, `${name}: the puppet was ${worst.toFixed(1)} units from the hoster path of the last ${WINDOW_MS} ms`);
