@@ -23,13 +23,13 @@
     "result": "PASS",
     "reason": "",
     "evidence": [
-      "build: ok in 68 s (l1-build.log)",
-      "ts: ok in 0 s (l1-ts.log)",
+      "build: ok in 69 s (l1-build.log)",
+      "ts: ok in 1 s (l1-ts.log)",
       "ctest: ok in 0 s (skipped: the unit and server binaries and the integration tests are those of the last green ctest)"
     ],
-    "secs": 69,
+    "secs": 70,
     "shots": [],
-    "at": "2026-10-14T15:11:31.187Z"
+    "at": "2026-10-14T15:45:21.104Z"
   },
   "S0b": {
     "result": "PASS",
@@ -131,7 +131,7 @@
   "S2": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 117,
+    "secs": 122,
     "evidence": [
       "run 1: bot actor ff000000 in BleakFallsBarrow01; pillar states position01, position03, position01",
       "run 1: control, lever before the pillars are solved: dart traps activated 39fdd, 3720f, 2ad49, 2ad43, gate opening false",
@@ -141,7 +141,8 @@
       "run 1: claw door: rings {\"large\":\"position02\",\"medium\":\"position03\",\"small\":\"position01\"} after 2 turns each, keyhole state done, door 4e2b8 animated true, missing natives IsRunning"
     ],
     "shots": [],
-    "at": "2026-10-13T15:35:43.647Z"
+    "rtt": {},
+    "at": "2026-10-14T15:53:14.985Z"
   },
   "S3.1": {
     "result": "PASS",
@@ -174,12 +175,18 @@
   "S3.3": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 20,
+    "secs": 22,
     "evidence": [
       "run 1: dart traps 39fdd, 3720f, 2ad49, 2ad43 activation blocked [true,true,true,true]; 0 activate events before; the player pulls the unsolved lever aa8c3, whose script calls refActOnFailure0N.activate(self): [[\"14\",\"aa8c3\"],[\"aa8c3\",\"39fdd\"],[\"aa8c3\",\"3720f\"],[\"aa8c3\",\"2ad49\"],[\"aa8c3\",\"2ad43\"]] (rows: caster, target); dart traps with activation parents in Skyrim.esm: [], so the lever's script made these calls; activationService gets the same event and today drops casters that are not the player or a clone"
     ],
     "shots": [],
-    "at": "2026-10-14T07:12:17.232Z"
+    "rtt": {
+      "1": {
+        "median": 64,
+        "calls": 7
+      }
+    },
+    "at": "2026-10-14T15:53:37.150Z"
   },
   "S3.4": {
     "result": "PASS",
@@ -336,7 +343,7 @@
   "1B.5": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 50,
+    "secs": 81,
     "evidence": [
       "run 1: draugr 9bcb9 (masterAmbushScript on the ref: true), hoster ff000000, engine 1 hosts it: true; Variable01 before: engine 1 0, engine 2 0",
       "run 1: puppet (engine 2): allowed forms []",
@@ -347,7 +354,17 @@
       "run 1: new hoster (engine 2): Variable01 before 0; startCombat, in combat true; {\"v1\":1,\"aggression\":2,\"combat\":true,\"ai\":true}"
     ],
     "shots": [],
-    "at": "2026-10-14T08:11:42.191Z"
+    "rtt": {
+      "1": {
+        "median": 48,
+        "calls": 27
+      },
+      "2": {
+        "median": 63,
+        "calls": 34
+      }
+    },
+    "at": "2026-10-14T15:54:57.807Z"
   },
   "G1.1": {
     "result": "PASS",
@@ -593,12 +610,33 @@
     "at": "2026-10-14T14:53:49.683Z"
   },
   "2B.1": {
-    "result": "FAIL",
-    "reason": "no check script",
-    "secs": 0,
-    "evidence": [],
-    "shots": [],
-    "at": "2026-10-12T16:53:46.490Z"
+    "result": "PASS",
+    "reason": "3/3 runs PASS",
+    "secs": 141,
+    "evidence": [
+      "run 1: party joined; before the wall: engine 1 shout global 0, MS13 stage 0, 3.4028234663852886e+38 units from the wall's look target, line of sight false, heading 286; engine 2 shout global 0, MS13 stage 0, 3.4028234663852886e+38 units from the wall's look target, line of sight false, heading 286",
+      "run 1: at the wall: engine 1 (leader) shout global 1, MS13 stage 60, 274 units from the wall's look target, line of sight true, heading 315, learned after 2.4 s; engine 2 (member) shout global 1, MS13 stage 60, 274 units from the wall's look target, line of sight true, heading 0, learned after 3.0 s",
+      "run 2: party joined; before the wall: engine 1 shout global 0, MS13 stage 0, 3.4028234663852886e+38 units from the wall's look target, line of sight false, heading 286; engine 2 shout global 0, MS13 stage 0, 3.4028234663852886e+38 units from the wall's look target, line of sight false, heading 286",
+      "run 2: at the wall: engine 1 (leader) shout global 1, MS13 stage 60, 274 units from the wall's look target, line of sight true, heading 315, learned after 2.5 s; engine 2 (member) shout global 1, MS13 stage 60, 274 units from the wall's look target, line of sight true, heading 0, learned after 3.0 s",
+      "run 3: party joined; before the wall: engine 1 shout global 0, MS13 stage 0, 3.4028234663852886e+38 units from the wall's look target, line of sight false, heading 286; engine 2 shout global 0, MS13 stage 0, 3.4028234663852886e+38 units from the wall's look target, line of sight false, heading 286",
+      "run 3: at the wall: engine 1 (leader) shout global 1, MS13 stage 60, 274 units from the wall's look target, line of sight true, heading 315, learned after 2.5 s; engine 2 (member) shout global 1, MS13 stage 60, 274 units from the wall's look target, line of sight true, heading 0, learned after 3.1 s"
+    ],
+    "shots": [
+      "runs/2B_1/1/wordwall-engine2.png",
+      "runs/2B_1/2/wordwall-engine2.png",
+      "runs/2B_1/3/wordwall-engine2.png"
+    ],
+    "rtt": {
+      "1": {
+        "median": 41,
+        "calls": 13
+      },
+      "2": {
+        "median": 65,
+        "calls": 16
+      }
+    },
+    "at": "2026-10-14T15:50:14.438Z"
   },
   "2B.2": {
     "result": "FAIL",

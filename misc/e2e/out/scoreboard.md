@@ -5,7 +5,7 @@ First non-PASS in plan order: G1.7
 
 | id | result | secs | at | detail |
 |---|---|---|---|---|
-| L1 | PASS | 69 | 2026-10-14 15:11 |  |
+| L1 | PASS | 70 | 2026-10-14 15:45 |  |
 | S0 | PASS | 25 | 2026-10-14 13:16 | 1/1 runs PASS |
 | S0b | PASS | 161 | 2026-10-13 15:25 | 1/1 runs PASS |
 | S0c | PASS | 30 | 2026-10-13 15:25 | 1/1 runs PASS |
@@ -15,10 +15,10 @@ First non-PASS in plan order: G1.7
 | S1.3 | PASS | 28 | 2026-10-14 11:13 | 1/1 runs PASS |
 | S1.5 | PASS | 56 | 2026-10-13 15:31 | 1/1 runs PASS |
 | S1.6 | PASS | 58 | 2026-10-13 16:08 | 1/1 runs PASS |
-| S2 | PASS | 117 | 2026-10-13 15:35 | 1/1 runs PASS |
+| S2 | PASS | 122 | 2026-10-14 15:53 | 1/1 runs PASS |
 | S3.1 | PASS | 26 | 2026-10-13 15:36 | 1/1 runs PASS |
 | S3.2 | PASS | 25 | 2026-10-14 14:07 | 1/1 runs PASS |
-| S3.3 | PASS | 20 | 2026-10-14 07:12 | 1/1 runs PASS |
+| S3.3 | PASS | 22 | 2026-10-14 15:53 | 1/1 runs PASS |
 | S3.4 | PASS | 46 | 2026-10-14 14:17 | 1/1 runs PASS |
 | 1A.1 | PASS | 4 | 2026-10-13 15:37 | 1/1 runs PASS |
 | 1A.2 | PASS | 4 | 2026-10-13 15:37 | 1/1 runs PASS |
@@ -29,7 +29,7 @@ First non-PASS in plan order: G1.7
 | 1B.2 | PASS | 44 | 2026-10-14 07:46 | 1/1 runs PASS |
 | 1B.3 | PASS | 75 | 2026-10-14 07:47 | 1/1 runs PASS |
 | 1B.4 | PASS | 92 | 2026-10-14 14:50 | 1/1 runs PASS |
-| 1B.5 | PASS | 50 | 2026-10-14 08:11 | 1/1 runs PASS |
+| 1B.5 | PASS | 81 | 2026-10-14 15:54 | 1/1 runs PASS |
 | G1.1 | PASS | 224 | 2026-10-14 08:15 | 1/1 runs PASS |
 | G1.2 | PASS | 46 | 2026-10-14 09:53 | 1/1 runs PASS |
 | G1.3 | PASS | 103 | 2026-10-14 07:20 | 1/1 runs PASS |
@@ -44,7 +44,7 @@ First non-PASS in plan order: G1.7
 | 2A.4 | PASS | 96 | 2026-10-14 14:52 | 1/1 runs PASS |
 | 2A.5 | PASS | 108 | 2026-10-14 14:53 | 1/1 runs PASS |
 | G1.9 | PASS | 216 | 2026-10-14 15:24 | 3/3 runs PASS |
-| 2B.1 | FAIL | 0 | 2026-10-12 16:53 | no check script |
+| 2B.1 | PASS | 141 | 2026-10-14 15:50 | 3/3 runs PASS |
 | 2B.2 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | 2B.3 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | 2B.4 | FAIL | 0 | 2026-10-12 16:53 | no check script |
@@ -67,8 +67,8 @@ First non-PASS in plan order: G1.7
 ## Evidence
 
 ### L1
-- build: ok in 68 s (l1-build.log)
-- ts: ok in 0 s (l1-ts.log)
+- build: ok in 69 s (l1-build.log)
+- ts: ok in 1 s (l1-ts.log)
 - ctest: ok in 0 s (skipped: the unit and server binaries and the integration tests are those of the last green ctest)
 ### S0
 - run 1: actor ff000000, RaceMenu open: false
@@ -422,6 +422,16 @@ First non-PASS in plan order: G1.7
 - ![G1.9](runs/G1_9/1/compass-engine1.png)
 - ![G1.9](runs/G1_9/2/compass-engine1.png)
 - ![G1.9](runs/G1_9/3/compass-engine1.png)
+### 2B.1
+- run 1: party joined; before the wall: engine 1 shout global 0, MS13 stage 0, 3.4028234663852886e+38 units from the wall's look target, line of sight false, heading 286; engine 2 shout global 0, MS13 stage 0, 3.4028234663852886e+38 units from the wall's look target, line of sight false, heading 286
+- run 1: at the wall: engine 1 (leader) shout global 1, MS13 stage 60, 274 units from the wall's look target, line of sight true, heading 315, learned after 2.4 s; engine 2 (member) shout global 1, MS13 stage 60, 274 units from the wall's look target, line of sight true, heading 0, learned after 3.0 s
+- run 2: party joined; before the wall: engine 1 shout global 0, MS13 stage 0, 3.4028234663852886e+38 units from the wall's look target, line of sight false, heading 286; engine 2 shout global 0, MS13 stage 0, 3.4028234663852886e+38 units from the wall's look target, line of sight false, heading 286
+- run 2: at the wall: engine 1 (leader) shout global 1, MS13 stage 60, 274 units from the wall's look target, line of sight true, heading 315, learned after 2.5 s; engine 2 (member) shout global 1, MS13 stage 60, 274 units from the wall's look target, line of sight true, heading 0, learned after 3.0 s
+- run 3: party joined; before the wall: engine 1 shout global 0, MS13 stage 0, 3.4028234663852886e+38 units from the wall's look target, line of sight false, heading 286; engine 2 shout global 0, MS13 stage 0, 3.4028234663852886e+38 units from the wall's look target, line of sight false, heading 286
+- run 3: at the wall: engine 1 (leader) shout global 1, MS13 stage 60, 274 units from the wall's look target, line of sight true, heading 315, learned after 2.5 s; engine 2 (member) shout global 1, MS13 stage 60, 274 units from the wall's look target, line of sight true, heading 0, learned after 3.1 s
+- ![2B.1](runs/2B_1/1/wordwall-engine2.png)
+- ![2B.1](runs/2B_1/2/wordwall-engine2.png)
+- ![2B.1](runs/2B_1/3/wordwall-engine2.png)
 ### P8
 - run 1: 115 client log lines, 2 [Exception] lines
 - run 1: exception: [Exception] failed to get key 'data': failed to call custom Serialize for type struct Equipment: failed to get key 'inv': failed to call cus.

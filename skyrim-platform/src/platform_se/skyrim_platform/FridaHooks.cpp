@@ -14,6 +14,13 @@
  * Send Event hook
  */
 
+bool IsWordWallScript(std::string name)
+{
+  std::transform(name.begin(), name.end(), name.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
+  return name.find("wordwall") != std::string::npos;
+}
+
 // (VMHandle handle, const BSFixedString& eventName, IFunctionArguments* args)
 void OnSendEventEnter(GumInvocationContext* ic)
 {
@@ -54,7 +61,8 @@ void OnSendEventEnter(GumInvocationContext* ic)
       TESModPlatform::IsPapyrusEventsAllowedForm(selfId)) {
     blockEvents = false;
   }
-  if (blockEvents && strcmp(*eventName, "OnUpdate") != 0 && vm) {
+  if (blockEvents && vm) {
+    auto isUpdate = strcmp(*eventName, "OnUpdate") == 0;
     vm->attachedScriptsLock.Lock();
     auto it = vm->attachedScripts.find(handle);
 
@@ -65,6 +73,14 @@ void OnSendEventEnter(GumInvocationContext* ic)
         auto script = scripts[i].get();
         auto info = script->GetTypeInfo();
         auto name = info->GetName();
+
+        if (IsWordWallScript(name)) {
+          blockEvents = false;
+          break;
+        }
+        if (isUpdate) {
+          continue;
+        }
 
         const char* skyui_name = "SKI_"; // start skyui object name
         if (strlen(name) >= 4 && name[0] == skyui_name[0] &&
