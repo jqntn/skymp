@@ -8,7 +8,7 @@ import { getMovement } from "../../sync/movementGet";
 import * as worldViewMisc from "../../view/worldViewMisc";
 
 import { Animation, getAnimationSource } from "../../sync/animation";
-import { Actor, EquipEvent, FormType } from "skyrimPlatform";
+import { Actor, EquipEvent, FormType, SpeakSoundEvent } from "skyrimPlatform";
 import { getAppearance } from "../../sync/appearance";
 import { ActorValues, getActorValues } from "../../sync/actorvalues";
 import { getEquipment } from "../../sync/equipment";
@@ -37,8 +37,25 @@ export class SendInputsService extends ClientListener {
         this.controller.on("equip", (e) => this.onEquip(e));
         this.controller.on("unequip", (e) => this.onUnequip(e));
         this.controller.on("loadGame", () => this.onLoadGame());
+        this.controller.on("speakSound", (e) => this.onSpeakSound(e));
         this.controller.emitter.on("hostStartMessage", (e) => this.onHostStart(e.message.target));
         this.controller.emitter.on("hostStopMessage", (e) => this.onHostStop(e.message.target));
+    }
+
+    private onSpeakSound(e: SpeakSoundEvent) {
+        const hosted = this.sp.storage["hosted"];
+        if (e.actorId < 0xff000000 && Array.isArray(hosted) && hosted.includes(e.actorId + espActorIdOffset)) {
+            this.pendingSpeaks.push(e);
+        }
+    }
+
+    private applyPendingSpeaks() {
+        for (const e of this.pendingSpeaks.splice(0)) {
+            const actor = this.sp.Actor.from(this.sp.Game.getFormEx(e.actorId));
+            if (actor) {
+                getAnimationSource(actor, true).addSpeak(e.voiceFile);
+            }
+        }
     }
 
     private onHostStart(remoteId: number) {
@@ -67,6 +84,7 @@ export class SendInputsService extends ClientListener {
     private onUpdate() {
         if (!this.singlePlayerService.isSinglePlayer) {
             this.applyStartedHosts();
+            this.applyPendingSpeaks();
             this.sendInputs();
             this.updatePapyrusEventsAllowedForms();
 
@@ -480,6 +498,7 @@ export class SendInputsService extends ClientListener {
     private yieldedAt = new Map<number, number>();
     private hiddenHosts = new Map<number, number>();
     private startedHosts = new Set<number>();
+    private pendingSpeaks = new Array<SpeakSoundEvent>();
     private stoppedHosts = new Map<number, number>();
     private papyrusEventsAllowedKey = "";
 }

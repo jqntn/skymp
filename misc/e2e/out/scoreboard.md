@@ -5,7 +5,7 @@ First non-PASS in plan order: S3.4
 
 | id | result | secs | at | detail |
 |---|---|---|---|---|
-| L1 | PASS | 130 | 2026-10-14 01:47 |  |
+| L1 | PASS | 127 | 2026-10-14 06:26 |  |
 | S0 | PASS | 30 | 2026-10-13 15:22 | 1/1 runs PASS |
 | S0b | PASS | 161 | 2026-10-13 15:25 | 1/1 runs PASS |
 | S0c | PASS | 30 | 2026-10-13 15:25 | 1/1 runs PASS |
@@ -36,8 +36,8 @@ First non-PASS in plan order: S3.4
 | G1.4 | PASS | 424 | 2026-10-13 17:31 | 3/3 runs PASS |
 | G1.5 | PASS | 370 | 2026-10-13 20:30 | 3/3 runs PASS |
 | G1.6 | PASS | 353 | 2026-10-14 01:53 | 3/3 runs PASS |
-| G1.7 | FAIL | 0 | - | not run |
-| G1.8 | FAIL | 0 | - | not run |
+| G1.7 | FAIL | 201 | 2026-10-14 05:10 | run 1/3: Sven: 5 activations of the crosshair NPC opened no dialogue on engine 1 (sit state on engine 2 0, on engine 1 0; NPC {"ai":false,"sit":0,"target":0,"pkg":"ea072","x":20629,"y":-46000,"events":[]}) |
+| G1.8 | PASS | 327 | 2026-10-14 06:39 | 3/3 runs PASS |
 | 2A.1 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | 2A.2 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | 2A.3 | FAIL | 0 | 2026-10-12 16:53 | no check script |
@@ -67,9 +67,9 @@ First non-PASS in plan order: S3.4
 ## Evidence
 
 ### L1
-- build: ok in 72 s (l1-build.log)
-- ts: ok in 1 s (l1-ts.log)
-- ctest: ok in 56 s (l1-ctest.log)
+- build: ok in 69 s (l1-build.log)
+- ts: ok in 0 s (l1-ts.log)
+- ctest: ok in 57 s (l1-ctest.log)
 ### S0
 - run 1: actor ff000000, RaceMenu open: false
 - run 1: client moved 365 units from 12156,-71991,6010, server moved 365 units from 12156,-71991,6010
@@ -365,6 +365,69 @@ First non-PASS in plan order: S3.4
 - ![G1.6](runs/G1_6/2/G1_6-puppets-engine2.png)
 - ![G1.6](runs/G1_6/3/G1_6-puppets-engine1.png)
 - ![G1.6](runs/G1_6/3/G1_6-puppets-engine2.png)
+### G1.7
+- run 1: Gerdur: hosted by engine 2 with its AI off on engine 1, press 5 opened the dialogue (sit state 0 on engine 2, 0 on engine 1)
+- run 1: Gerdur (13489) hosted by engine 2, player activation on engine 1: greeting "Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
+- run 1: Gerdur: hoster ff000001 after the talk
+- run 1: Alvor: hosted by engine 2 with its AI off on engine 1, press 1 opened the dialogue (sit state 0 on engine 2, 0 on engine 1)
+- run 1: Alvor (13482) hosted by engine 2, player activation on engine 1: greeting "Dites-moi ce qu'il vous faut. Par Ysmir, si c'est simple et solide, je peux le forger.", topic "Puis-je utiliser votre forge ?", answer "Si vous savez vous en servir, je n'ai pas d'objection."
+- run 1: Alvor: hoster ff000001 after the talk
+- run 1: Sven: hoster ff000001 after the talk
+- ![G1.7](runs/G1_7/1/G1_7-Gerdur.png)
+- ![G1.7](runs/G1_7/1/G1_7-Alvor.png)
+### G1.8
+- run 1: subtitle settings (dialogue, general): engine 1 true,false, engine 2 true,false
+- run 1: Gerdur hosted by engine 2 talks to engine 2's player: greeting "Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
+- run 1: topic: engine 2 said 5 lines, engine 1 played 5; engine 1 subtitles []; engine 2 subtitles 3
+- run 1: topic: Gerdur DialogueRiverwood_Revised__000453FF_1.wav on engine 1 after 93 ms
+- run 1: topic: Gerdur DialogueRiverwood_Revised__000453FF_1.wav on engine 1 after 99 ms
+- run 1: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 98 ms
+- run 1: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 134 ms
+- run 1: topic: Gerdur DialogueGe_DialogueGeneric_00087935_1.wav on engine 1 after 99 ms
+- run 1: scene: DialogueRiverwoodIntroScene stage 10 on engine 2
+- run 1: scene: engine 2 said 5 lines, engine 1 played 6; engine 1 subtitles []; engine 2 subtitles 5
+- run 1: scene: Sven DialogueRi__000954C6_1.wav on engine 1 after 66 ms
+- run 1: scene: Hilde DialogueRi__000954C8_1.wav on engine 1 after 99 ms
+- run 1: scene: Sven DialogueRi__000954D3_1.wav on engine 1 after 95 ms
+- run 1: scene: Sven DialogueRi__000BB963_1.wav on engine 1 after 108 ms
+- run 1: scene: Hilde DialogueRi__000D39A1_1.wav on engine 1 after 107 ms
+- run 1: scene: engine 1 also played Hilde DialogueRi__000954CC_1.wav, 342 ms into the part, with no line of engine 2 to match
+- run 2: subtitle settings (dialogue, general): engine 1 true,false, engine 2 true,false
+- run 2: Gerdur hosted by engine 2 talks to engine 2's player: greeting "D'après Lucan, du Marché de Rivebois, des voleurs se seraient introduits dans sa boutique. Ils n'ont quasiment rien pris, c'est étrange.", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
+- run 2: topic: engine 2 said 5 lines, engine 1 played 5; engine 1 subtitles []; engine 2 subtitles 3
+- run 2: topic: Gerdur MS13__00039642_1.wav on engine 1 after 92 ms
+- run 2: topic: Gerdur MS13__00039642_1.wav on engine 1 after 112 ms
+- run 2: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 111 ms
+- run 2: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 112 ms
+- run 2: topic: Gerdur DialogueGe_DialogueGeneric_000854CC_1.wav on engine 1 after 98 ms
+- run 2: scene: DialogueRiverwoodIntroScene stage 10 on engine 2
+- run 2: scene: engine 2 said 5 lines, engine 1 played 6; engine 1 subtitles []; engine 2 subtitles 5
+- run 2: scene: Sven DialogueRi__000954C6_1.wav on engine 1 after 63 ms
+- run 2: scene: Hilde DialogueRi__000954C8_1.wav on engine 1 after 76 ms
+- run 2: scene: Sven DialogueRi__000954D3_1.wav on engine 1 after 112 ms
+- run 2: scene: Sven DialogueRi__000BB963_1.wav on engine 1 after 114 ms
+- run 2: scene: Hilde DialogueRi__000D39A1_1.wav on engine 1 after 103 ms
+- run 2: scene: engine 1 also played Hilde DialogueRi__000954CC_1.wav, 350 ms into the part, with no line of engine 2 to match
+- run 3: subtitle settings (dialogue, general): engine 1 true,false, engine 2 true,false
+- run 3: Gerdur hosted by engine 2 talks to engine 2's player: greeting "D'après Lucan, du Marché de Rivebois, des voleurs se seraient introduits dans sa boutique. Ils n'ont quasiment rien pris, c'est étrange.", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
+- run 3: topic: engine 2 said 7 lines, engine 1 played 7; engine 1 subtitles []; engine 2 subtitles 4
+- run 3: topic: Gerdur MS13__00039642_1.wav on engine 1 after 69 ms
+- run 3: topic: Gerdur MS13__00039642_1.wav on engine 1 after 89 ms
+- run 3: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 122 ms
+- run 3: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 89 ms
+- run 3: topic: Gerdur DialogueGe_DialogueGeneric_000854CE_1.wav on engine 1 after 111 ms
+- run 3: topic: Gerdur DialogueRiverwood_Revised__00045400_1.wav on engine 1 after 90 ms
+- run 3: topic: Gerdur DialogueRiverwood_Revised__00045400_1.wav on engine 1 after 89 ms
+- run 3: scene: DialogueRiverwoodIntroScene stage 10 on engine 2
+- run 3: scene: engine 2 said 7 lines, engine 1 played 8; engine 1 subtitles []; engine 2 subtitles 6
+- run 3: scene: Sven DialogueRi__000954C6_1.wav on engine 1 after 63 ms
+- run 3: scene: Hilde DialogueRi__000954C8_1.wav on engine 1 after 92 ms
+- run 3: scene: Sven DialogueRi__000954D3_1.wav on engine 1 after 98 ms
+- run 3: scene: Sven DialogueRi__000BB963_1.wav on engine 1 after 94 ms
+- run 3: scene: Hilde DialogueRi__000D39A1_1.wav on engine 1 after 86 ms
+- run 3: scene: Sven FreeformRiverwood01__0005C832_1.wav on engine 1 after 94 ms
+- run 3: scene: Sven FreeformRiverwood01__0005C832_1.wav on engine 1 after 98 ms
+- run 3: scene: engine 1 also played Hilde DialogueRi__000954CC_1.wav, 331 ms into the part, with no line of engine 2 to match
 ### P8
 - run 1: 115 client log lines, 2 [Exception] lines
 - run 1: exception: [Exception] failed to get key 'data': failed to call custom Serialize for type struct Equipment: failed to get key 'inv': failed to call cus.

@@ -28,6 +28,10 @@ Napi::Value UpdateAnimations(const Napi::CallbackInfo& info);
 
 Napi::Value IsAnimationGraphReady(const Napi::CallbackInfo& info);
 
+Napi::Value SpeakSound(const Napi::CallbackInfo& info);
+
+Napi::Value GetSubtitles(const Napi::CallbackInfo& info);
+
 void DisableCtrlPrtScnHotkey();
 
 using NativeExportsMap =
@@ -95,5 +99,11 @@ inline void Register(Napi::Env env, Napi::Object& exports,
   exports.Set("isAnimationGraphReady",
               Napi::Function::New(
                 env, NapiHelper::WrapCppExceptions(IsAnimationGraphReady)));
+  exports.Set("speakSound",
+              Napi::Function::New(
+                env, NapiHelper::WrapCppExceptions(SpeakSound)));
+  exports.Set("getSubtitles",
+              Napi::Function::New(
+                env, NapiHelper::WrapCppExceptions(GetSubtitles)));
 }
 }

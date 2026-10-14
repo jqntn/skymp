@@ -23,6 +23,13 @@ declare module "skyrimPlatform" {
     function setPapyrusEventsAllowedForms(formIds: number[]): void;
     function updateAnimations(): void;
     function isAnimationGraphReady(formId: number): boolean;
+    function speakSound(formId: number, voiceFile: string): void;
+    interface SpeakSoundEvent {
+        actorId: number;
+        voiceFile: string;
+    }
+    function on(eventName: 'speakSound', callback: (event: SpeakSoundEvent) => void): EventHandle;
+    function once(eventName: 'speakSound', callback: (event: SpeakSoundEvent) => void): EventHandle;
 }
 
 export type Sp = Omit<typeof sp, "on" | "once">;

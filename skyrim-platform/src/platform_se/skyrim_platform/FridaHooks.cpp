@@ -1,7 +1,9 @@
 #include "FridaHooks.h"
+#include "EventHandler.h"
 #include "EventsApi.h"
 #include "FridaHookHandler.h"
 #include "FridaHooksUtils.h"
+#include "JsUtils.h"
 #include "Override.h"
 #include "PapyrusTESModPlatform.h"
 #include "StringHolder.h"
@@ -374,6 +376,43 @@ void InstallNativeFunctionCtorHook() noexcept
   // nativeFunctionCtor.address(), std::make_shared<Frida::Hook>(hook3));
 }
 
+thread_local uint32_t g_speakActorId = 0;
+thread_local std::string g_speakVoiceFile;
+
+void OnSpeakSoundEnter(GumInvocationContext* ic)
+{
+  auto actor =
+    static_cast<RE::Actor*>(gum_invocation_context_get_nth_argument(ic, 0));
+  auto voiceFile =
+    static_cast<const char*>(gum_invocation_context_get_nth_argument(ic, 1));
+  g_speakActorId = actor && voiceFile ? actor->GetFormID() : 0;
+  g_speakVoiceFile = voiceFile ? voiceFile : "";
+}
+
+void OnSpeakSoundLeave(GumInvocationContext* ic)
+{
+  auto played = static_cast<uint8_t>(
+    reinterpret_cast<uintptr_t>(gum_invocation_context_get_return_value(ic)));
+  if (!played || !g_speakActorId) {
+    return;
+  }
+  uint32_t actorId = g_speakActorId;
+  std::string file = g_speakVoiceFile;
+  EventHandler::SendEventOnTick("speakSound", [actorId, file](Napi::Env env) {
+    auto obj = Napi::Object::New(env);
+    AddObjProperty(&obj, "actorId", actorId);
+    AddObjProperty(&obj, "voiceFile", file);
+    return obj;
+  });
+}
+
+void InstallSpeakSoundHook()
+{
+  Frida::HookHandler::GetSingleton()->Install(
+    Frida::HookID::SPEAK_SOUND, Offsets::Hooks::SpeakSound.address(),
+    std::make_shared<Frida::Hook>(OnSpeakSoundEnter, OnSpeakSoundLeave));
+}
+
 void Frida::InstallHooks()
 {
   InstallSendEventHook();
@@ -382,6 +421,7 @@ void Frida::InstallHooks()
   InstallSendAnimationEventHook();
   InstallQueueNinodeUpdateHook();
   InstallRenderCursorMenuHook();
+  InstallSpeakSoundHook();
 #ifdef ENABLE_SKYRIM_AE
   InstallApplyMasksToRenderTargetsHook();
 #endif

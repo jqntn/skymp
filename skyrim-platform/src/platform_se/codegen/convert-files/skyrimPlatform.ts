@@ -21,6 +21,8 @@ export declare function setPapyrusEventsAllowedForms(formIds: number[]): void
 export declare function getPapyrusEventsAllowedForms(): number[]
 export declare function updateAnimations(): void
 export declare function isAnimationGraphReady(formId: number): boolean
+export declare function speakSound(formId: number, voiceFile: string): void
+export declare function getSubtitles(): { speakerId: number, text: string }[]
 export declare function sendIpcMessage(targetSystemName: string, message: ArrayBuffer): void
 export declare function encodeUtf8(text: string): ArrayBuffer
 export declare function decodeUtf8(buffer: ArrayBuffer): string
@@ -268,6 +270,11 @@ export interface BrowserMessageEvent {
  */
 export interface ConsoleMessageEvent {
   message: string
+}
+
+export interface SpeakSoundEvent {
+  actorId: number
+  voiceFile: string
 }
 
 export interface SpellCastEvent {
@@ -635,6 +642,8 @@ export declare function once(eventName: 'browserMessage', callback: (event: Brow
 
 export declare function on(eventName: 'consoleMessage', callback: (event: ConsoleMessageEvent) => void): EventHandle
 export declare function once(eventName: 'consoleMessage', callback: (event: ConsoleMessageEvent) => void): EventHandle
+export declare function on(eventName: 'speakSound', callback: (event: SpeakSoundEvent) => void): EventHandle
+export declare function once(eventName: 'speakSound', callback: (event: SpeakSoundEvent) => void): EventHandle
 
 export declare function on(eventName: 'spellCast', callback: (event: SpellCastEvent) => void): EventHandle
 export declare function once(eventName: 'spellCast', callback: (event: SpellCastEvent) => void): EventHandle

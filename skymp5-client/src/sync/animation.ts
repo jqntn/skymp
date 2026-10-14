@@ -8,6 +8,7 @@ import {
   Utility,
   Game,
   storage,
+  speakSound,
   // @ts-expect-error (TODO: Remove in 2.10.0)
   setCollision
 } from "skyrimPlatform";
@@ -34,6 +35,7 @@ const allowedIdles = new Array<[number, string]>();
 const lastAnimEvents = new Map<number, string>();
 
 export const standAnimEventName = "SkympStand";
+export const speakAnimPrefix = "SkympSpeak:";
 
 export const isFurnitureIdle = (animEventName: string | undefined): boolean =>
   !!animEventName && (animOverridesLowerCase[animEventName.toLowerCase()] !== undefined
@@ -173,6 +175,13 @@ export const applyAnimation = (
     return;
   }
 
+  if (anim.animEventName.startsWith(speakAnimPrefix)) {
+    if (ac && !ac.isDead()) {
+      speakSound(ac.getFormID(), anim.animEventName.slice(speakAnimPrefix.length));
+    }
+    return;
+  }
+
   if (anim.animEventName === standAnimEventName) {
     if (ac && !ac.isDead() && ac.getSitState() !== 0) {
       standUp(ac);
@@ -268,6 +277,10 @@ export class AnimationSource {
     this.onSendAnimationEvent(standAnimEventName);
   }
 
+  addSpeak(voiceFile: string): void {
+    this.enqueue(speakAnimPrefix + voiceFile);
+  }
+
   filterMovement(mov: Movement): Movement {
     if (this.weapDrawnBlocker >= Date.now()) {
       mov.isWeapDrawn = true;
@@ -317,6 +330,10 @@ export class AnimationSource {
       return;
     }
 
+    this.enqueue(animEventName);
+  }
+
+  private enqueue(animEventName: string) {
     this.numChanges++;
     this.animEventName = animEventName;
     if (this.keepQueue) {

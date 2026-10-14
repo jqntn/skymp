@@ -258,6 +258,45 @@ Napi::Value DevApi::IsAnimationGraphReady(const Napi::CallbackInfo& info)
                               graph->behaviorGraph->rootGenerator.get());
 }
 
+Napi::Value DevApi::GetSubtitles(const Napi::CallbackInfo& info)
+{
+  auto result = Napi::Array::New(info.Env());
+  auto manager = RE::SubtitleManager::GetSingleton();
+  if (!manager) {
+    return result;
+  }
+  RE::BSSpinLockGuard guard{ manager->lock };
+  for (auto& subtitle : manager->subtitles) {
+    auto speaker = subtitle.speaker.get();
+    auto obj = Napi::Object::New(info.Env());
+    obj.Set("speakerId",
+            Napi::Number::New(info.Env(), speaker ? speaker->GetFormID() : 0));
+    obj.Set("text", Napi::String::New(info.Env(), subtitle.subtitle.c_str()));
+    result.Set(result.Length(), obj);
+  }
+  return result;
+}
+
+Napi::Value DevApi::SpeakSound(const Napi::CallbackInfo& info)
+{
+  auto formId = NapiHelper::ExtractUInt32(info[0], "formId");
+  auto voiceFile = NapiHelper::ExtractString(info[1], "voiceFile");
+  g_nativeCallRequirements.gameThrQ->AddTask([formId, voiceFile](Viet::Void) {
+    auto actor = RE::TESForm::LookupByID<RE::Actor>(formId);
+    if (!actor) {
+      return;
+    }
+    using func_t = bool (*)(RE::Actor*, const char*, uint32_t*, uint32_t,
+                            uint32_t, uint32_t, uint64_t, uint64_t, uint64_t,
+                            bool, uint64_t, bool, bool, bool);
+    REL::Relocation<func_t> speak{ Offsets::Hooks::SpeakSound.address() };
+    uint32_t handle[3]{ 0xFFFFFFFF, 0, 0 };
+    speak(actor, voiceFile.data(), handle, 0, 0x32, 0, 0, 0, 0, false, 0,
+          false, true, true);
+  });
+  return info.Env().Undefined();
+}
+
 namespace {
 class WrapperScreenShotEventHandler : public RE::MenuEventHandler
 {

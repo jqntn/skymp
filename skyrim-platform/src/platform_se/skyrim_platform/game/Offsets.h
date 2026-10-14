@@ -30,6 +30,8 @@ inline REL::Relocation<std::uintptr_t> ApplyMasksToRenderTargets{
 };
 inline REL::Relocation<std::uintptr_t> RenderCursorMenu{ RELOCATION_ID(
   32867, 33632) };
+inline REL::Relocation<std::uintptr_t> SpeakSound{ RELOCATION_ID(36541,
+                                                                 37542) };
 }
 
 namespace EventSource {

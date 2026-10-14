@@ -249,7 +249,9 @@ void ActionListener::OnUpdateAnimation(const RawMessageData& rawMsgData,
     return;
   }
 
-  targetActor->SetLastAnimEvent(msg.data);
+  if (!msg.data.animEventName.starts_with("SkympSpeak:")) {
+    targetActor->SetLastAnimEvent(msg.data);
+  }
 
   if (targetActor != myActor) {
     return;

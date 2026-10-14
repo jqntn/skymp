@@ -15,6 +15,7 @@ void EventManager::InitCustom()
   manager->EmplaceEvent("tick");
   manager->EmplaceEvent("browserMessage");
   manager->EmplaceEvent("consoleMessage");
+  manager->EmplaceEvent("speakSound");
   manager->EmplaceEvent("ipcMessage");
 
   // skse messages
