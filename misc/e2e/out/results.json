@@ -17,13 +17,13 @@
     "result": "PASS",
     "reason": "",
     "evidence": [
-      "build: ok in 69 s (l1-build.log)",
+      "build: ok in 30 s (l1-build.log)",
       "ts: ok in 1 s (l1-ts.log)",
-      "ctest: ok in 0 s (skipped: the unit and server binaries and the integration tests are those of the last green ctest)"
+      "ctest: ok in 58 s (l1-ctest.log)"
     ],
-    "secs": 70,
+    "secs": 89,
     "shots": [],
-    "at": "2026-10-14T10:18:21.421Z"
+    "at": "2026-10-14T11:11:14.147Z"
   },
   "S0b": {
     "result": "PASS",

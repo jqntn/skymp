@@ -56,7 +56,7 @@ module.exports = {
     ctx.evidence.push(`server positions every 10th sample: ${samples.filter((_, i) => i % 10 === 0).map((x) => `${x.cell.split(":")[0]}@${x.server.slice(0, 2)}`).join(" ")}`);
     ctx.shot("G1_1-end");
 
-    ctx.assert.ok(arrived, `Ralof did not reach Riverwood in 10 min: server ${s.cell} at ${round(s.pos)}, ${Math.round(fromMarker(s.pos))} units from the marker`);
+    ctx.assert.ok(arrived, `Ralof did not reach Riverwood in 6 min: server ${s.cell} at ${round(s.pos)}, ${Math.round(fromMarker(s.pos))} units from the marker`);
     ctx.assert.ok(longest.d <= MAX_STEP, `Ralof did not walk: the server position jumped ${Math.round(longest.d)} units in one sample (to ${longest.at && longest.at.slice(0, 2)})`);
   },
 };

@@ -5,7 +5,7 @@ First non-PASS in plan order: G1.7
 
 | id | result | secs | at | detail |
 |---|---|---|---|---|
-| L1 | PASS | 70 | 2026-10-14 10:18 |  |
+| L1 | PASS | 89 | 2026-10-14 11:11 |  |
 | S0 | PASS | 30 | 2026-10-13 15:22 | 1/1 runs PASS |
 | S0b | PASS | 161 | 2026-10-13 15:25 | 1/1 runs PASS |
 | S0c | PASS | 30 | 2026-10-13 15:25 | 1/1 runs PASS |
@@ -67,9 +67,9 @@ First non-PASS in plan order: G1.7
 ## Evidence
 
 ### L1
-- build: ok in 69 s (l1-build.log)
+- build: ok in 30 s (l1-build.log)
 - ts: ok in 1 s (l1-ts.log)
-- ctest: ok in 0 s (skipped: the unit and server binaries and the integration tests are those of the last green ctest)
+- ctest: ok in 58 s (l1-ctest.log)
 ### S0
 - run 1: actor ff000000, RaceMenu open: false
 - run 1: client moved 365 units from 12156,-71991,6010, server moved 365 units from 12156,-71991,6010
