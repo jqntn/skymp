@@ -578,7 +578,7 @@ export class FormView {
         ac.blockActivation(corpse);
         this.corpseBlocked = corpse;
       }
-      if (corpse && model.inventory && model.inventory !== this.corpseInventory) {
+      if (corpse && model.inventory && model.inventory !== this.corpseInventory && !Utility.isInMenuMode()) {
         this.corpseInventory = model.inventory;
         ModelApplyUtils.applyModelCorpseInventory(ac, model.inventory);
       }

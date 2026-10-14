@@ -87,3 +87,21 @@ Napi::Value ObjectReferenceApi::GetInventoryReferences(
   }
   return result;
 }
+
+Napi::Value ObjectReferenceApi::GetRunningQuests(const Napi::CallbackInfo& info)
+{
+  auto result = Napi::Array::New(info.Env());
+  auto dataHandler = RE::TESDataHandler::GetSingleton();
+  if (!dataHandler) {
+    return result;
+  }
+  for (auto quest : dataHandler->GetFormArray<RE::TESQuest>()) {
+    if (quest && quest->IsEnabled()) {
+      auto entry = Napi::Array::New(info.Env(), 2);
+      entry.Set(0u, Napi::Number::New(info.Env(), quest->GetFormID()));
+      entry.Set(1u, Napi::Number::New(info.Env(), quest->GetCurrentStageID()));
+      result.Set(result.Length(), entry);
+    }
+  }
+  return result;
+}

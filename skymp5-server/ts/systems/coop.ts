@@ -1,7 +1,7 @@
 import { Content, Log, System, SystemContext } from "./system";
 import { Parties, Party } from "./party";
 import { QuestLogEntry, STOP, applyStage, applyStop, lastStage, outOfSyncQuests, parseQuestLog } from "./questLog";
-import { CreatedItem, QuestItems, acceptsHolder, parseQuestItems } from "./questItems";
+import { CreatedItem, QuestItems, acceptsHolder, isCreatedItem, parseQuestItems } from "./questItems";
 
 export const QUEST_LOG_PROPERTY = "private.questLog";
 export const COOP_CREATED_PROPERTY = "private.coopCreated";
@@ -14,6 +14,7 @@ const QUEST_FLAG_ALLOW_REPEATED_STAGES = 0x8;
 const QUEST_FLAG_RUN_ONCE = 0x100;
 const QUEST_TYPE_NONE = 0;
 const ALIAS_FILL_TTL_MS = 60000;
+const MAX_RUNNING_QUESTS = 10000;
 
 interface QuestInfo {
   stages: Set<number>;
@@ -35,8 +36,21 @@ export class Coop implements System {
     this.parties = new Parties(maxPartySize);
   }
 
+  async initAsync(ctx: SystemContext): Promise<void> {
+    let gamemode = ctx.svr.onTakeItem;
+    Object.defineProperty(ctx.svr, "onTakeItem", {
+      configurable: true,
+      get: () => (source: number, taker: number, baseId: number, count: number) =>
+        gamemode?.(source, taker, baseId, count) !== false && this.mayTake(ctx, source, taker, baseId),
+      set: (handler) => {
+        gamemode = handler;
+      },
+    });
+  }
+
   disconnect(userId: number, ctx: SystemContext): void {
     this.lastQuestLogRequest.delete(userId);
+    this.runningQuestsReported.delete(userId);
     const actor = ctx.svr.getUserActor(userId);
     if (!actor) {
       return;
@@ -69,6 +83,7 @@ export class Coop implements System {
     questStage: (ctx, actor, content) => this.onQuestStage(ctx, actor, content.quest, content.stage),
     questStop: (ctx, actor, content) => this.onQuestStop(ctx, actor, content.quest, content.completed === true),
     aliasFill: (ctx, actor, content) => this.onAliasFill(ctx, actor, content.quest, content.refs),
+    questsRunning: (ctx, actor, content, userId) => this.onQuestsRunning(ctx, actor, content.quests, userId),
   };
 
   private invite(ctx: SystemContext, inviter: number, target: unknown): void {
@@ -216,6 +231,36 @@ export class Coop implements System {
     if (changed.includes(reporter) && info.items.created.length) {
       this.requestQuestItems(ctx, reporter, quest as number, info);
     }
+  }
+
+  private onQuestsRunning(ctx: SystemContext, reporter: number, quests: unknown, userId: number): void {
+    const party = this.parties.partyOf(reporter);
+    if (this.runningQuestsReported.has(userId) || !Array.isArray(quests) || quests.length > MAX_RUNNING_QUESTS || (party && party.leader !== reporter)) {
+      return;
+    }
+    this.runningQuestsReported.add(userId);
+    const log = this.questLog(ctx, reporter);
+    for (const pair of quests) {
+      const quest = Array.isArray(pair) ? pair[0] : undefined;
+      const info = isFormId(quest) ? this.questInfo(ctx, quest) : null;
+      if (info?.items.created.length && lastStage(log, quest as number) !== STOP) {
+        this.requestQuestItems(ctx, reporter, quest as number, info);
+      }
+    }
+  }
+
+  private mayTake(ctx: SystemContext, source: number, taker: number, baseId: number): boolean {
+    const party = this.parties.partyOf(taker);
+    if (!party || party.leader === taker) {
+      return true;
+    }
+    const itemsOf = (quest: unknown) => (isFormId(quest) ? this.questInfo(ctx, quest)?.items : undefined);
+    if (!isCreatedItem(ctx.svr.get(source, COOP_CREATED_PROPERTY), baseId, itemsOf)) {
+      return true;
+    }
+    this.log(`Coop: ${hex(taker)} cannot take quest item ${hex(baseId)} from ${hex(source)}, only the leader can`);
+    this.notice(ctx, taker, "Only the party leader can take quest items");
+    return false;
   }
 
   private requestQuestItems(ctx: SystemContext, reporter: number, quest: number, info: QuestInfo): void {
@@ -415,6 +460,7 @@ export class Coop implements System {
   private log: Log;
   private parties: Parties;
   private lastQuestLogRequest = new Map<number, number>();
+  private runningQuestsReported = new Set<number>();
   private questLogs = new Map<number, QuestLogEntry[]>();
   private questInfos = new Map<number, QuestInfo | null>();
   private aliasFillRequests = new Map<string, number>();

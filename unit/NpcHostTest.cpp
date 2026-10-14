@@ -788,6 +788,69 @@ TEST_CASE("A player opens a dead ESP NPC, takes an item and closes it, "
   DisconnectClaimer(partOne);
 }
 
+namespace {
+class TakeItemBlocker : public PartOneListener
+{
+public:
+  void OnConnect(Networking::UserId) override {}
+  void OnDisconnect(Networking::UserId) override {}
+  void OnCustomPacket(Networking::UserId,
+                      const simdjson::dom::element&) override
+  {
+  }
+  bool OnMpApiEvent(const GameModeEvent& event) override
+  {
+    return !block || event.GetName() != std::string("onTakeItem");
+  }
+
+  bool block = true;
+};
+}
+
+TEST_CASE("A blocked take from a dead ESP NPC sends its inventory again",
+          "[NpcHost][espm][2A.4]")
+{
+  auto& partOne = GetNpcHostPartOne();
+  auto& guard = partOne.worldState.GetFormAt<MpActor>(kCrimeFactionGuard);
+  ConnectClaimer(partOne, guard, CellOf(partOne, guard));
+  auto& player = partOne.worldState.GetFormAt<MpActor>(kClaimer);
+  player.RemoveAllItems();
+  auto blocker = std::make_shared<TakeItemBlocker>();
+  partOne.AddListener(blocker);
+  auto activate = [&](bool second) {
+    DoMessage(partOne, 0,
+              nlohmann::json{ { "t", MsgType::Activate },
+                              { "data",
+                                { { "caster", 0x14 },
+                                  { "target", kCrimeFactionGuard },
+                                  { "isSecondActivation", second } } } });
+  };
+  guard.Kill();
+  activate(false);
+  REQUIRE(!guard.GetInventory().IsEmpty());
+  const auto item = guard.GetInventory().entries.front().baseId;
+  const auto count = guard.GetInventory().GetItemCount(item);
+
+  partOne.Messages().clear();
+  DoMessage(partOne, 0,
+            nlohmann::json{ { "t", MsgType::TakeItem },
+                            { "baseId", item },
+                            { "count", 1 },
+                            { "target", kCrimeFactionGuard } });
+  REQUIRE(guard.GetInventory().GetItemCount(item) == count);
+  REQUIRE(player.GetInventory().GetItemCount(item) == 0);
+  REQUIRE(std::any_of(
+    partOne.Messages().begin(), partOne.Messages().end(), [&](auto& m) {
+      return m.j["t"] == MsgType::UpdateProperty &&
+        m.j["propName"] == "inventory" && m.j["idx"] == guard.GetIdx();
+    }));
+
+  blocker->block = false;
+  activate(true);
+  guard.SetIsDead(false);
+  DisconnectClaimer(partOne);
+}
+
 TEST_CASE("Disabling and enabling an ESP NPC or ref tells the listeners",
           "[NpcHost][espm][2A.2]")
 {

@@ -52,6 +52,10 @@ export const parseQuestItems = (fields: EspField[]): QuestItems => {
   return { created, holders };
 };
 
+export const isCreatedItem = (granted: unknown, baseId: number, itemsOf: (quest: unknown) => QuestItems | undefined): boolean =>
+  Array.isArray(granted) &&
+  granted.some((g) => Array.isArray(g) && !!itemsOf(g[0])?.created.some((c) => c.alias === g[1] && c.item === baseId));
+
 export const acceptsHolder = (holder: AliasHolder | undefined, ref: unknown, record: { type: string; fields: EspField[] } | undefined): boolean => {
   if (!Number.isInteger(ref) || (ref as number) <= 0 || (ref as number) >= 0xff000000 || !record) {
     return false;

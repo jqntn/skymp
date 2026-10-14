@@ -94,6 +94,7 @@ export class CoopService extends ClientListener {
       GlobalVariable.from(Game.getFormEx(MQ_QUICKSTART_GLOBAL))?.setValue(-1);
       this.reporting = true;
       this.send({ customPacketType: "questLogRequest" });
+      this.send({ customPacketType: "questsRunning", quests: this.sp.getRunningQuests() });
     }
     if (this.applyQueue.length > 0 && !this.applying) {
       this.applying = true;

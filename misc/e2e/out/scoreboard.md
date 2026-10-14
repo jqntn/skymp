@@ -5,7 +5,7 @@ First non-PASS in plan order: G1.7
 
 | id | result | secs | at | detail |
 |---|---|---|---|---|
-| L1 | PASS | 67 | 2026-10-14 11:33 |  |
+| L1 | PASS | 28 | 2026-10-14 12:48 |  |
 | S0 | PASS | 30 | 2026-10-13 15:22 | 1/1 runs PASS |
 | S0b | PASS | 161 | 2026-10-13 15:25 | 1/1 runs PASS |
 | S0c | PASS | 30 | 2026-10-13 15:25 | 1/1 runs PASS |
@@ -19,7 +19,7 @@ First non-PASS in plan order: G1.7
 | S3.1 | PASS | 26 | 2026-10-13 15:36 | 1/1 runs PASS |
 | S3.2 | PASS | 24 | 2026-10-14 10:23 | 1/1 runs PASS |
 | S3.3 | PASS | 20 | 2026-10-14 07:12 | 1/1 runs PASS |
-| S3.4 | PASS | 38 | 2026-10-14 10:23 | 1/1 runs PASS |
+| S3.4 | PASS | 44 | 2026-10-14 12:54 | 1/1 runs PASS |
 | 1A.1 | PASS | 4 | 2026-10-13 15:37 | 1/1 runs PASS |
 | 1A.2 | PASS | 4 | 2026-10-13 15:37 | 1/1 runs PASS |
 | 1A.3 | PASS | 3 | 2026-10-13 15:37 | 1/1 runs PASS |
@@ -28,20 +28,20 @@ First non-PASS in plan order: G1.7
 | 1B.1 | PASS | 39 | 2026-10-14 07:45 | 1/1 runs PASS |
 | 1B.2 | PASS | 44 | 2026-10-14 07:46 | 1/1 runs PASS |
 | 1B.3 | PASS | 75 | 2026-10-14 07:47 | 1/1 runs PASS |
-| 1B.4 | PASS | 97 | 2026-10-14 09:52 | 1/1 runs PASS |
+| 1B.4 | PASS | 86 | 2026-10-14 12:55 | 1/1 runs PASS |
 | 1B.5 | PASS | 50 | 2026-10-14 08:11 | 1/1 runs PASS |
 | G1.1 | PASS | 224 | 2026-10-14 08:15 | 1/1 runs PASS |
 | G1.2 | PASS | 46 | 2026-10-14 09:53 | 1/1 runs PASS |
 | G1.3 | PASS | 103 | 2026-10-14 07:20 | 1/1 runs PASS |
-| G1.4 | PASS | 157 | 2026-10-14 09:56 | 1/1 runs PASS |
+| G1.4 | PASS | 158 | 2026-10-14 12:58 | 1/1 runs PASS |
 | G1.5 | PASS | 119 | 2026-10-14 08:17 | 1/1 runs PASS |
 | G1.6 | PASS | 120 | 2026-10-14 07:52 | 1/1 runs PASS |
 | G1.7 | FAIL | 201 | 2026-10-14 05:10 | run 1/3: Sven: 5 activations of the crosshair NPC opened no dialogue on engine 1 (sit state on engine 2 0, on engine 1 0; NPC {"ai":false,"sit":0,"target":0,"pkg":"ea072","x":20629,"y":-46000,"events":[]}) |
 | G1.8 | PASS | 327 | 2026-10-14 06:39 | 3/3 runs PASS |
-| 2A.1 | PASS | 55 | 2026-10-14 10:24 | 1/1 runs PASS |
+| 2A.1 | PASS | 55 | 2026-10-14 12:59 | 1/1 runs PASS |
 | 2A.2 | PASS | 140 | 2026-10-14 09:31 | 3/3 runs PASS |
-| 2A.3 | PASS | 40 | 2026-10-14 10:25 | 1/1 runs PASS |
-| 2A.4 | FAIL | 0 | 2026-10-12 16:53 | no check script |
+| 2A.3 | PASS | 34 | 2026-10-14 12:59 | 1/1 runs PASS |
+| 2A.4 | PASS | 199 | 2026-10-14 12:51 | 3/3 runs PASS |
 | 2A.5 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | G1.9 | FAIL | 0 | - | not run |
 | 2B.1 | FAIL | 0 | 2026-10-12 16:53 | no check script |
@@ -67,8 +67,8 @@ First non-PASS in plan order: G1.7
 ## Evidence
 
 ### L1
-- build: ok in 66 s (l1-build.log)
-- ts: ok in 0 s (l1-ts.log)
+- build: ok in 27 s (l1-build.log)
+- ts: ok in 1 s (l1-ts.log)
 - ctest: ok in 0 s (skipped: the unit and server binaries and the integration tests are those of the last green ctest)
 ### S0
 - run 1: actor ff000000, RaceMenu open: false
@@ -191,13 +191,13 @@ First non-PASS in plan order: G1.7
 - run 1: source: KillMove blocked for all ids true; actor values not sent for hosted NPCs true
 - ![1B.3](runs/1B_3/1/1B_3.png)
 ### 1B.4
-- run 1: at 8:00 the client has Alvor in 3c at 20632,-45126,-84 (3D true); before the engines start, the server has Alvor in 133c8 at -515,-154,240, hoster 0
-- run 1: claim without a FormView: server 3c at 20628,-45126,-84, 43 units from the work marker, hoster ff000000
-- run 1: hide: the player went two cells east of Alvor (20659,-45136,-84): server hoster 0; Alvor's cell attached true, Alvor 3D false, hidden true
-- run 1: retry: the server moved Alvor back to 133c8 while he was hidden; back at the forge the server has 3c at 20375,-45067,-80, 223 units from the marker, hoster ff000000; local Alvor 3D true, disabled false (33 ms after the claim)
+- run 1: at 8:00 the client has Alvor in 3c at 20587,-45138,-82 (3D true); before the engines start, the server has Alvor in 133c8 at -515,-154,240, hoster 0
+- run 1: claim without a FormView: server 3c at 20587,-45138,-82, 0 units from the work marker, hoster ff000000
+- run 1: hide: the player went two cells east of Alvor (20587,-45138,-82): server hoster 0; Alvor's cell attached true, Alvor 3D false, hidden true
+- run 1: retry: the server moved Alvor back to 133c8 while he was hidden; back at the forge the server has 3c at 20782,-45313,-84, 262 units from the marker, hoster ff000000; local Alvor 3D true, disabled false (17 ms after the claim)
 - run 1: walk-in: the driver enabled the hidden Alvor two cells away (a player who never hosted him): loaded true; server hoster held at 0 for 6 s: true
-- run 1: first movement: the server then streamed a stale Alvor 6037 units from the marker; 6 s later the local Alvor was 3D true, disabled false, at least 6031 units from the stale spot; back home: at least 6031 units from it; server 3c at 20594,-45041,-83, 97 units from the marker, hoster ff000000
-- run 1: replay, hosted movement: a quest replay starts, then the hoster takes Alvor out of his furniture and translates him 300 units (every 400 ms): 300 units from the server position at the end of the hold (20894,-45041,-124); server position held within 150 units of 20594,-45041,-83 for 2 s: true (last 20594,-45041,-83); after the replay the server follows the local position: true (20895,-45040,-151)
+- run 1: first movement: the server then streamed a stale Alvor 6037 units from the marker; 6 s later the local Alvor was 3D true, disabled false, at least 6031 units from the stale spot; back home: at least 6031 units from it; server 3c at 20594,-45041,-82, 97 units from the marker, hoster ff000000
+- run 1: replay, hosted movement: a quest replay starts, then the hoster takes Alvor out of his furniture and translates him 300 units (every 400 ms): 300 units from the server position at the end of the hold (20894,-45041,-118); server position held within 150 units of 20594,-45041,-82 for 2 s: true (last 20594,-45041,-82); after the replay the server follows the local position: true (20894,-45041,-151)
 - run 1: release: a script disables Alvor on the hoster: server hoster 0, disabled true; hoster still 0 after 6 s: true; the real actor was never deleted: true
 - run 1: replay, claim: a quest replay starts, then a script enables Alvor on the client: hoster held at 0 during the replay: true (last 0); after the replay the client claims him: true (hoster ff000000, server disabled false; local 3D true, disabled false)
 - run 1: party: Alvor's alias quests on the member 105385,45486,1bc95, member quest log [105385, 0]; joined: true; leader two cells away: hoster ff000001 (member ff000001): true; leader back within 4096: hoster ff000000 (leader ff000000): true; the leader still hosts 12 s later: true (last ff000000)
@@ -337,12 +337,12 @@ First non-PASS in plan order: G1.7
 - run 3: scene: engine 1 also played Hilde DialogueRi__000954CC_1.wav, 331 ms into the part, with no line of engine 2 to match
 ### 2A.1
 - run 1: bandit 1ebf6 in 3c:Skyrim.esm, hoster ff000001 (engine 1's player ff000000, engine 2's ff000001), server dead false
-- run 1: after engine 2 killed it: hoster ff000001, server inventory ["a x1","f x32","12eb6 x1","13910 x1","13911 x1","13988 x1"]
-- run 1: engine 2 corpse inventory ["f or x32","a Crochet x1","12eb6 Bouclier de fer x1","13910 Bottes en peau x1","13911 Armure en peau x1","13988 Masse d'acier x1"]
+- run 1: after engine 2 killed it: hoster ff000001, server inventory ["13910 x1","13981 x1","1b3a2 x1"]
+- run 1: engine 2 corpse inventory ["13981 Marteau de fer x1","13910 Bottes en peau x1","1b3a2 Armure cloutée x1"]
 - run 1: engine 1 opens the corpse: true
-- run 1: engine 1 corpse shows a Crochet x1; hoster at the take ff000001
+- run 1: engine 1 corpse shows 13910 Bottes en peau x1; hoster at the take ff000001
 - run 1: engine 2 opens the corpse: true
-- run 1: item a Crochet: corpse on the server 1 -> 0 (0 after engine 2 reopened it), on engine 2 1 -> 0 (0 with its loot menu open after the take); engine 1's player on the server 10 -> 11 (11 after the reopen), on engine 1 10 -> 11
+- run 1: item 13910 Bottes en peau: corpse on the server 1 -> 0 (0 after engine 2 reopened it), on engine 2 1 -> 0 (0 with its loot menu open after the take); engine 1's player on the server 0 -> 1 (1 after the reopen), on engine 1 0 -> 1
 - ![2A.1](runs/2A_1/1/2A_1-open.png)
 - ![2A.1](runs/2A_1/1/2A_1-engine2.png)
 ### 2A.2
@@ -377,9 +377,28 @@ First non-PASS in plan order: G1.7
 - run 3: barrel 20570 disabled while engine 1's player is away; players the server streams the barrel to at the disable: ["ff000001"]
 - run 3: barrel 20570 disabled on the server while engine 1's player was away: engine 1 {"loaded":false,"disabled":true} after the return
 ### 2A.3
-- run 1: FreeformRiften20 stage 10; satchel 85d54 holds 1 note on the client, 1 on the server; note alias ref ff000d8c (alias quests ["85d40"], in the satchel's inventory true, in the player's false)
-- run 1: satchel open true: the loot menu showed 1 note, alias ref with the menu open ff000d8c (alias quests ["85d40"], in the satchel's inventory true, in the player's false); after the take the player holds 1; alias ref ff000d8c (alias quests ["85d40"], in the satchel's inventory false, in the player's true); server: satchel 0, player 1
+- run 1: FreeformRiften20 stage 10; satchel 85d54 holds 1 note on the client, 1 on the server; note alias ref ff000d94 (alias quests ["85d40"], in the satchel's inventory true, in the player's false)
+- run 1: satchel open true: the loot menu showed 1 note, alias ref with the menu open ff000d94 (alias quests ["85d40"], in the satchel's inventory true, in the player's false); after the take the player holds 1; alias ref ff000d94 (alias quests ["85d40"], in the satchel's inventory false, in the player's true); server: satchel 0, player 1
 - ![2A.3](runs/2A_3/1/2A_3-open.png)
+### 2A.4
+- run 1: A: FreeformIvarstead02 on engine 1 at login {"running":true,"stage":10}; the server has 1 necklace in the satchel d9b78 (created true)
+- run 1: A: at login FreeformRiften20 runs on engine 1 false, its note in Sarthis's satchel on the server 0; MS13 runs true, its claw in Arvel on the server 1
+- run 1: A: stage 30, alias ref ff000cf5 (alias quests ["d9b64"], in the holder true, in the player false); with the menu open ff000cf5 (alias quests ["d9b64"], in the holder true, in the player false); taken true; after: alias ref ff000cf5 (alias quests ["d9b64"], in the holder false, in the player true), stage 40, server satchel 0, player 1; engine 1 satchel 0, player 1
+- run 1: B: party joined; Arvel hosted by ff000000, killed on engine 1; the server corpse holds 1 claw, engine 2's corpse 1, engine 2's player on the server 0
+- run 1: B: engine 2 (member) opens the corpse true, takes the claw locally true; then the server corpse 1, engine 2's player on the server 0, locally 0, engine 2's corpse 1
+- run 1: B: engine 1 (leader) opens the corpse true, takes true; then the server corpse 0, engine 1's player on the server 1, locally 1; MS13 stage on engine 1 40; claw alias ref ff000d51 (alias quests ["39645"], in the holder false, in the player true)
+- run 2: A: FreeformIvarstead02 on engine 1 at login {"running":true,"stage":10}; the server has 1 necklace in the satchel d9b78 (created true)
+- run 2: A: at login FreeformRiften20 runs on engine 1 false, its note in Sarthis's satchel on the server 0; MS13 runs true, its claw in Arvel on the server 1
+- run 2: A: stage 30, alias ref ff000cf5 (alias quests ["d9b64"], in the holder true, in the player false); with the menu open ff000cf5 (alias quests ["d9b64"], in the holder true, in the player false); taken true; after: alias ref ff000cf5 (alias quests ["d9b64"], in the holder false, in the player true), stage 40, server satchel 0, player 1; engine 1 satchel 0, player 1
+- run 2: B: party joined; Arvel hosted by ff000000, killed on engine 1; the server corpse holds 1 claw, engine 2's corpse 1, engine 2's player on the server 0
+- run 2: B: engine 2 (member) opens the corpse true, takes the claw locally true; then the server corpse 1, engine 2's player on the server 0, locally 0, engine 2's corpse 1
+- run 2: B: engine 1 (leader) opens the corpse true, takes true; then the server corpse 0, engine 1's player on the server 1, locally 1; MS13 stage on engine 1 40; claw alias ref ff000d51 (alias quests ["39645"], in the holder false, in the player true)
+- run 3: A: FreeformIvarstead02 on engine 1 at login {"running":true,"stage":10}; the server has 1 necklace in the satchel d9b78 (created true)
+- run 3: A: at login FreeformRiften20 runs on engine 1 false, its note in Sarthis's satchel on the server 0; MS13 runs true, its claw in Arvel on the server 1
+- run 3: A: stage 30, alias ref ff000cf5 (alias quests ["d9b64"], in the holder true, in the player false); with the menu open ff000cf5 (alias quests ["d9b64"], in the holder true, in the player false); taken true; after: alias ref ff000cf5 (alias quests ["d9b64"], in the holder false, in the player true), stage 40, server satchel 0, player 1; engine 1 satchel 0, player 1
+- run 3: B: party joined; Arvel hosted by ff000001, killed on engine 2; the server corpse holds 1 claw, engine 2's corpse 1, engine 2's player on the server 0
+- run 3: B: engine 2 (member) opens the corpse true, takes the claw locally true; then the server corpse 1, engine 2's player on the server 0, locally 0, engine 2's corpse 1
+- run 3: B: engine 1 (leader) opens the corpse true, takes true; then the server corpse 0, engine 1's player on the server 1, locally 1; MS13 stage on engine 1 40; claw alias ref ff000d51 (alias quests ["39645"], in the holder false, in the player true)
 ### P8
 - run 1: 115 client log lines, 2 [Exception] lines
 - run 1: exception: [Exception] failed to get key 'data': failed to call custom Serialize for type struct Equipment: failed to get key 'inv': failed to call cus.

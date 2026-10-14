@@ -31,6 +31,11 @@ std::string TakeItemEvent::GetArgumentsJsonArray() const
   return result;
 }
 
+void TakeItemEvent::OnFireBlocked(WorldState*)
+{
+  sourceRefr->SendInventoryUpdate();
+}
+
 void TakeItemEvent::OnFireSuccess(WorldState*)
 {
   sourceRefr->RemoveItems({ entry }, actor);

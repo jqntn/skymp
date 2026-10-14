@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import * as assert from "node:assert/strict";
-import { EspField, acceptsHolder, parseQuestItems } from "./questItems";
+import { EspField, acceptsHolder, isCreatedItem, parseQuestItems } from "./questItems";
 
 const field = (type: string, value: number): EspField => {
   const data = new Uint8Array(4);
@@ -44,4 +44,15 @@ test("a fill is accepted only for an ESP ref that matches the holder alias", () 
   assert.equal(acceptsHolder(undefined, 0xff000010, { type: "ACHR", fields: [] }), false);
   assert.equal(acceptsHolder(undefined, "39655", arvel), false);
   assert.equal(acceptsHolder(undefined, ARVEL, undefined), false);
+});
+
+test("only an item coop created in the holder counts as created", () => {
+  const MS13 = 0x1234;
+  const itemsOf = (quest: unknown) => (quest === MS13 ? parseQuestItems(ms13) : undefined);
+  assert.equal(isCreatedItem([[MS13, 11]], CLAW, itemsOf), true);
+  assert.equal(isCreatedItem([[MS13, 16]], CLAW, itemsOf), false);
+  assert.equal(isCreatedItem([[MS13, 11]], JOURNAL, itemsOf), false);
+  assert.equal(isCreatedItem([[0x999, 11]], CLAW, itemsOf), false);
+  assert.equal(isCreatedItem(undefined, CLAW, itemsOf), false);
+  assert.equal(isCreatedItem(["x", [MS13]], CLAW, itemsOf), false);
 });

@@ -17,6 +17,7 @@ public:
   std::string GetArgumentsJsonArray() const override;
 
 private:
+  void OnFireBlocked(WorldState* worldState) override;
   void OnFireSuccess(WorldState* worldState) override;
 
   MpActor* actor = nullptr;
