@@ -16,6 +16,10 @@ export class Parties {
     return this.byActor.get(actor);
   }
 
+  all(): Party[] {
+    return [...new Set(this.byActor.values())];
+  }
+
   questGroup(actor: number, quest: number): number[] {
     const party = this.byActor.get(actor);
     if (!party) {

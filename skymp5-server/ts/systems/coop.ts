@@ -16,6 +16,7 @@ const QUEST_FLAG_RUN_ONCE = 0x100;
 const QUEST_TYPE_NONE = 0;
 const ALIAS_FILL_TTL_MS = 60000;
 const MAX_RUNNING_QUESTS = 10000;
+const PARTY_POSITIONS_INTERVAL_MS = 500;
 
 interface QuestInfo {
   stages: Set<number>;
@@ -47,6 +48,16 @@ export class Coop implements System {
         gamemode = handler;
       },
     });
+  }
+
+  async updateAsync(ctx: SystemContext): Promise<void> {
+    await new Promise((r) => setTimeout(r, PARTY_POSITIONS_INTERVAL_MS));
+    for (const party of this.parties.all()) {
+      const positions = party.members.filter((m) => this.isOnline(ctx, m)).map((actor) => ({ actor, pos: ctx.svr.getActorPos(actor), cellOrWorld: ctx.svr.getActorCellOrWorld(actor) }));
+      for (const member of party.members) {
+        this.send(ctx, member, { customPacketType: "partyPositions", members: positions.filter((p) => p.actor !== member) });
+      }
+    }
   }
 
   disconnect(userId: number, ctx: SystemContext): void {

@@ -12,6 +12,8 @@ import { WorldCleanerService } from "./worldCleanerService";
 
 const STOP = -1;
 const MQ_QUICKSTART_GLOBAL = 0x4679e;
+const COMPASS_INTERVAL_MS = 100;
+const COMPASS_CARDINALS: [string, number][] = [["N", 0], ["E", 90], ["S", 180], ["W", 270]];
 const QUEST_LOG_REQUEST_DELAY_MS = 3000;
 const REPLAY_SETTLE_SECONDS = 3;
 const MAX_REPLAY_DRIFT = 2048;
@@ -20,6 +22,12 @@ const ECHO_TTL_MS = 10000;
 const PARTY_KEY = DxScanCode.F7;
 
 type QuestLogEntry = [quest: number, stage: number];
+
+interface PartyPosition {
+  actor: number;
+  pos: number[];
+  cellOrWorld: number;
+}
 
 interface PartyState {
   you: number;
@@ -89,6 +97,7 @@ export class CoopService extends ClientListener {
   }
 
   private onUpdate() {
+    this.updateCompass();
     if (this.questLogRequestAt && Date.now() >= this.questLogRequestAt) {
       this.questLogRequestAt = 0;
       GlobalVariable.from(Game.getFormEx(MQ_QUICKSTART_GLOBAL))?.setValue(-1);
@@ -248,7 +257,72 @@ export class CoopService extends ClientListener {
           this.notify(content["text"]);
         }
         break;
+      case "partyPositions":
+        if (Array.isArray(content["members"])) {
+          this.partyPositions = content["members"] as PartyPosition[];
+        }
+        break;
     }
+  }
+
+  private updateCompass() {
+    const now = Date.now();
+    if (now - this.compassAt < COMPASS_INTERVAL_MS) {
+      return;
+    }
+    this.compassAt = now;
+    const player = Game.getPlayer();
+    if (!player) {
+      return;
+    }
+    const here = player.getWorldSpace()?.getFormID() ?? player.getParentCell()?.getFormID() ?? 0;
+    const party = this.partyState?.party;
+    const members = party ? this.partyPositions : [];
+    let heading = player.getAngleZ();
+    try {
+      heading = this.sp.getCameraAngleZ();
+    } catch {
+    }
+    const toLeft = (bearing: number) => Math.round((50 + (((((bearing - heading) % 360) + 540) % 360) - 180) / 3.6) * 10) / 10;
+    const markers = members.filter((m) => m.cellOrWorld === here).map((m) => ({
+      actor: m.actor,
+      name: party?.members.find((x) => x.actor === m.actor)?.name ?? "",
+      left: toLeft((Math.atan2(m.pos[0] - player.getPositionX(), m.pos[1] - player.getPositionY()) * 180) / Math.PI),
+    }));
+    const cardinals = this.partyState?.party ? COMPASS_CARDINALS.map(([text, bearing]) => ({ text, left: toLeft(bearing) })) : [];
+    const key = JSON.stringify({ markers, cardinals });
+    if (key === this.compassKey) {
+      return;
+    }
+    this.compassKey = key;
+    this.sp.browser.executeJavaScript(`(() => {
+      const state = ${key};
+      let bar = document.getElementById("skymp-party-compass");
+      if (!bar) {
+        bar = document.createElement("div");
+        bar.id = "skymp-party-compass";
+        bar.style.cssText = "position:fixed;top:7%;left:35%;width:30%;height:40px;pointer-events:none;z-index:1000;font:bold 11px sans-serif;color:#d8d0b8;text-shadow:0 0 2px #000";
+        document.body.appendChild(bar);
+      }
+      bar.style.borderTop = state.cardinals.length ? "1px solid rgba(216,208,184,0.5)" : "none";
+      bar.replaceChildren(...state.cardinals.map((c) => {
+        const e = document.createElement("div");
+        e.dataset.cardinal = c.text;
+        e.textContent = c.text;
+        e.style.cssText = "position:absolute;top:1px;left:" + c.left + "%;transform:translateX(-50%)";
+        return e;
+      }), ...state.markers.map((m) => {
+        const e = document.createElement("div");
+        e.dataset.actor = String(m.actor);
+        e.style.cssText = "position:absolute;top:16px;left:" + m.left + "%;transform:translateX(-50%);text-align:center;white-space:nowrap;font-size:10px";
+        const diamond = document.createElement("div");
+        diamond.style.cssText = "width:9px;height:9px;margin:0 auto 3px;transform:rotate(45deg);background:#7fd3ff;border:1px solid #102030";
+        const name = document.createElement("div");
+        name.textContent = m.name;
+        e.replaceChildren(diamond, name);
+        return e;
+      }));
+    })();`);
   }
 
   private sendAliasFill(quest: number, aliases: number[]) {
@@ -355,6 +429,9 @@ export class CoopService extends ClientListener {
   private applyQueue = new Array<{ entries: QuestLogEntry[], replay: boolean }>();
   private isQuestAuthority: boolean | undefined;
   private partyState: PartyState | undefined;
+  private partyPositions = new Array<PartyPosition>();
+  private compassAt = 0;
+  private compassKey = "";
   private trackedQuests = new Set<number>();
   private expectedEchoes = new Map<string, number>();
   private partyKeyDown = false;

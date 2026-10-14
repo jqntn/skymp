@@ -1,7 +1,8 @@
 #include "CameraApi.h"
 #include "NullPointerException.h"
 
-Napi::Value CameraApi::WorldPointToScreenPoint(const Napi::CallbackInfo& info)
+namespace {
+RE::NiCamera* GetNiCamera()
 {
   auto camera = RE::PlayerCamera::GetSingleton();
   if (!camera)
@@ -22,7 +23,20 @@ Napi::Value CameraApi::WorldPointToScreenPoint(const Napi::CallbackInfo& info)
   }
   if (!niCamera)
     throw NullPointerException("matrix");
+  return niCamera;
+}
+}
 
+Napi::Value CameraApi::GetCameraAngleZ(const Napi::CallbackInfo& info)
+{
+  auto& rotate = GetNiCamera()->world.rotate.entry;
+  auto angle = std::atan2(rotate[0][0], rotate[1][0]) * 180.0 / RE::NI_PI;
+  return Napi::Number::New(info.Env(), angle < 0 ? angle + 360 : angle);
+}
+
+Napi::Value CameraApi::WorldPointToScreenPoint(const Napi::CallbackInfo& info)
+{
+  auto niCamera = GetNiCamera();
   auto length = info.Length();
 
   auto res = Napi::Array::New(info.Env(), length);

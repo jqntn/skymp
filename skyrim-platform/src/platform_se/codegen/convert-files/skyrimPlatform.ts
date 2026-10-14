@@ -64,6 +64,7 @@ export interface ChangeFormNpc {
 export declare function loadGame(pos: number[], angle: number[], worldOrCell: number, changeFormNpc?: ChangeFormNpc, loadOrder?: string[], time?: { seconds: number, minutes: number, hours: number }): void
 
 export declare function worldPointToScreenPoint(...args: number[][]): number[][]
+export declare function getCameraAngleZ(): number
 
 export type PacketType = 'message' | 'disconnect' | 'connectionAccepted' | 'connectionFailed' | 'connectionDenied'
 

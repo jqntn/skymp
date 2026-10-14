@@ -22,6 +22,7 @@ declare module "skyrimPlatform" {
     function getReferenceAliasQuests(refrFormId: number): number[];
     function getInventoryReferences(refrFormId: number): { ref: number, baseId: number }[];
     function getRunningQuests(): [number, number][];
+    function getCameraAngleZ(): number;
     function setPapyrusEventsAllowedForms(formIds: number[]): void;
     function updateAnimations(): void;
     function isAnimationGraphReady(formId: number): boolean;
