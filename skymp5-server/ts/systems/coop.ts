@@ -2,6 +2,7 @@ import { Content, Log, System, SystemContext } from "./system";
 import { Parties, Party } from "./party";
 import { QuestLogEntry, STOP, applyStage, applyStop, lastStage, outOfSyncQuests, parseQuestLog } from "./questLog";
 import { CreatedItem, QuestItems, acceptsHolder, isCreatedItem, parseQuestItems } from "./questItems";
+import { GAIN_WINDOW_MS, InventoryEntry, ItemWindow, acceptGains, applyItems, parseItems } from "./scriptItems";
 
 export const QUEST_LOG_PROPERTY = "private.questLog";
 export const COOP_CREATED_PROPERTY = "private.coopCreated";
@@ -58,6 +59,8 @@ export class Coop implements System {
     this.parties.forget(actor);
     this.leaveParty(ctx, actor, `${this.name(ctx, actor)} left the party`, false);
     this.questLogs.delete(actor);
+    this.itemWindows.delete(actor);
+    this.replays.delete(actor);
   }
 
   customPacket(userId: number, type: string, content: Content, ctx: SystemContext): void {
@@ -84,6 +87,7 @@ export class Coop implements System {
     questStop: (ctx, actor, content) => this.onQuestStop(ctx, actor, content.quest, content.completed === true),
     aliasFill: (ctx, actor, content) => this.onAliasFill(ctx, actor, content.quest, content.refs),
     questsRunning: (ctx, actor, content, userId) => this.onQuestsRunning(ctx, actor, content.quests, userId),
+    scriptItems: (ctx, actor, content) => this.onScriptItems(ctx, actor, content.gains, content.losses, content.dialogue === true),
   };
 
   private invite(ctx: SystemContext, inviter: number, target: unknown): void {
@@ -197,6 +201,7 @@ export class Coop implements System {
       return;
     }
     this.lastQuestLogRequest.set(userId, now);
+    this.replays.set(actor, now);
     const log = this.questLog(ctx, actor);
     this.log(`Coop: replay of ${log.length} quest log entries to ${hex(actor)}`);
     this.send(ctx, actor, { customPacketType: "questApply", entries: log, replay: true });
@@ -210,6 +215,7 @@ export class Coop implements System {
     if (!info || !info.stages.has(stage as number)) {
       return;
     }
+    this.openItemWindow(reporter);
     const changed = new Array<number>();
     for (const actor of this.parties.questGroup(reporter, quest)) {
       if (info.repeatStages && actor !== reporter) {
@@ -222,6 +228,9 @@ export class Coop implements System {
       }
       if (applyStage(log, quest, stage as number, info.repeatStages, info.runOnce)) {
         this.saveQuestLog(ctx, actor, log, actor === reporter ? undefined : [quest, stage as number]);
+        if (actor !== reporter) {
+          this.openItemWindow(actor);
+        }
         changed.push(actor);
       }
     }
@@ -261,6 +270,34 @@ export class Coop implements System {
     this.log(`Coop: ${hex(taker)} cannot take quest item ${hex(baseId)} from ${hex(source)}, only the leader can`);
     this.notice(ctx, taker, "Only the party leader can take quest items");
     return false;
+  }
+
+  private openItemWindow(actor: number): void {
+    this.itemWindows.set(actor, { openedAt: Date.now(), spent: new Map() });
+  }
+
+  private onScriptItems(ctx: SystemContext, actor: number, rawGains: unknown, rawLosses: unknown, dialogue: boolean): void {
+    const gains = parseItems(rawGains);
+    const losses = parseItems(rawLosses);
+    if (!gains || !losses || (!gains.length && !losses.length)) {
+      return;
+    }
+    const now = Date.now();
+    if (dialogue && !(now - (this.itemWindows.get(actor)?.openedAt ?? -Infinity) <= GAIN_WINDOW_MS)) {
+      this.openItemWindow(actor);
+    }
+    const typeOf = (baseId: number) => {
+      try {
+        return ctx.svr.lookupEspmRecordById(baseId).record?.type;
+      } catch {
+        return undefined;
+      }
+    };
+    const accepted = acceptGains(gains, this.itemWindows.get(actor), this.replays.get(actor) ?? -Infinity, now, typeOf);
+    const inventory = ctx.svr.get(actor, "inventory") as { entries?: InventoryEntry[] } | undefined;
+    ctx.svr.set(actor, "inventory", { entries: applyItems(inventory?.entries ?? [], losses, accepted) });
+    const list = (items: { baseId: number; count: number }[]) => items.map((i) => `${hex(i.baseId)}x${i.count}`).join(",") || "-";
+    this.log(`Coop: script items of ${hex(actor)}: losses ${list(losses)}, gains ${list(accepted)}, refused ${list(gains.filter((g) => !accepted.includes(g)))}${dialogue ? " (dialogue)" : ""}`);
   }
 
   private requestQuestItems(ctx: SystemContext, reporter: number, quest: number, info: QuestInfo): void {
@@ -464,4 +501,6 @@ export class Coop implements System {
   private questLogs = new Map<number, QuestLogEntry[]>();
   private questInfos = new Map<number, QuestInfo | null>();
   private aliasFillRequests = new Map<string, number>();
+  private itemWindows = new Map<number, ItemWindow>();
+  private replays = new Map<number, number>();
 }

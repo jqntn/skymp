@@ -78,6 +78,14 @@ const setPcInventory = (inv: Inventory): void => {
 };
 
 let pcInvLastApply = 0;
+
+export const isPcInventoryApplyPending = (): boolean => pcInvLastApply === 0;
+
+export const delayPcInventoryApply = (): void => {
+  if (!isPcInventoryApplyPending()) {
+    pcInvLastApply = Date.now();
+  }
+};
 on('update', () => {
   if (isBadMenuShown()) {
     return;

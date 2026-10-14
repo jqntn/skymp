@@ -1,7 +1,8 @@
 import { Actor, ContainerChangedEvent, printConsole } from "skyrimPlatform";
 import { ClientListener, CombinedController, Sp } from "./clientListener";
 import { MsgType } from "../../messages";
-import { getPcInventory } from "./remoteServer";
+import { delayPcInventoryApply, getPcInventory, isPcInventoryApplyPending } from "./remoteServer";
+import { CoopService } from "./coopService";
 import { getInventory, getDiff, hasExtras, removeSimpleItemsAsManyAsPossible, sumInventories } from "../../sync/inventory";
 import { LastInvService } from "./lastInvService";
 
@@ -9,14 +10,81 @@ import { PutItemMessage } from "../messages/putItemMessage";
 import { TakeItemMessage } from "../messages/takeItemMessage";
 import { SweetTaffySweetCantDropService } from "./sweetTaffySweetCantDropService";
 import { localIdToRemoteId } from "../../view/worldViewMisc";
+import { CustomPacketMessage } from "../messages/customPacketMessage";
+
+const SCRIPT_ITEMS_DELAY_MS = 1000;
+const SCRIPT_ITEMS_ANSWER_MS = 5000;
+const MENUS_WITH_OWN_SYNC = ["ContainerMenu", "BarterMenu", "GiftMenu", "Crafting Menu"];
 
 export class ContainersService extends ClientListener {
     constructor(private sp: Sp, private controller: CombinedController) {
         super();
         controller.on('containerChanged', (e) => this.onContainerChanged(e));
+        controller.on('update', () => this.onUpdate());
+        controller.emitter.on('setInventoryMessage', () => this.onServerInventory());
     }
 
+    private onServerInventory() {
+        this.answerDeadline = 0;
+        if (this.scriptCheck) {
+            this.scriptCheck.at = Date.now() + SCRIPT_ITEMS_DELAY_MS;
+        }
+    }
+
+    private onUpdate() {
+        const check = this.scriptCheck;
+        if (!check || Date.now() < check.at) {
+            return;
+        }
+        if (isPcInventoryApplyPending() || Date.now() < this.answerDeadline) {
+            check.at = Date.now() + SCRIPT_ITEMS_DELAY_MS;
+            return;
+        }
+        this.scriptCheck = undefined;
+        const serverInv = getPcInventory();
+        const player = this.sp.Game.getPlayer();
+        if (!serverInv || !player) {
+            return;
+        }
+        const diff = getDiff(getInventory(player), serverInv, true).entries.filter((e) => check.baseIds.has(e.baseId));
+        if (!diff.length) {
+            return;
+        }
+        const message: CustomPacketMessage = {
+            t: MsgType.CustomPacket,
+            contentJsonDump: JSON.stringify({
+                customPacketType: "scriptItems",
+                gains: diff.filter((e) => e.count > 0).map((e) => ({ baseId: e.baseId, count: e.count })),
+                losses: diff.filter((e) => e.count < 0).map((e) => ({ baseId: e.baseId, count: -e.count })),
+                dialogue: check.dialogue,
+            }),
+        };
+        this.controller.emitter.emit("sendMessage", { message, reliability: "reliable" });
+        this.answerDeadline = Date.now() + SCRIPT_ITEMS_ANSWER_MS;
+    }
+
+    private watchScriptItems(e: ContainerChangedEvent) {
+        const oldId = e.oldContainer ? e.oldContainer.getFormID() : 0;
+        const newId = e.newContainer ? e.newContainer.getFormID() : 0;
+        if ((oldId !== 0x14 && newId !== 0x14) || !e.baseObj || !this.controller.lookupListener(CoopService).isReporting()) {
+            return;
+        }
+        if ((oldId && newId && this.sp.Ui.isMenuOpen("ContainerMenu")) || MENUS_WITH_OWN_SYNC.some((m) => this.sp.Ui.isMenuOpen(m))) {
+            return;
+        }
+        const check = this.scriptCheck ?? { at: 0, baseIds: new Set<number>(), dialogue: false };
+        check.at = Date.now() + SCRIPT_ITEMS_DELAY_MS;
+        check.baseIds.add(e.baseObj.getFormID());
+        check.dialogue ||= this.sp.Ui.isMenuOpen("Dialogue Menu");
+        this.scriptCheck = check;
+        delayPcInventoryApply();
+    }
+
+    private scriptCheck?: { at: number; baseIds: Set<number>; dialogue: boolean };
+    private answerDeadline = 0;
+
     private onContainerChanged(e: ContainerChangedEvent) {
+        this.watchScriptItems(e);
         const sweetCantDropService = this.controller.lookupListener(SweetTaffySweetCantDropService);
 
         if (e.oldContainer && e.newContainer) {

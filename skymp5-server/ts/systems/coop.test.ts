@@ -1,4 +1,7 @@
 import { test } from "node:test";
+import { EventEmitter } from "events";
+import { Coop } from "./coop";
+import { SystemContext } from "./system";
 import * as assert from "node:assert/strict";
 import { Parties, INVITE_TTL_MS } from "./party";
 import { QuestLogEntry, STOP, applyStage, applyStop, lastStage, outOfSyncQuests, parseQuestLog } from "./questLog";
@@ -106,4 +109,40 @@ test("promote and kick need the leader", () => {
   assert.ok(typeof party !== "string");
   assert.equal(party.leader, 2);
   assert.equal(parties.canKick(2, 1), undefined);
+});
+
+test("a member's script gain is accepted only after a stage relayed to it", () => {
+  const LEADER = 0xff000000;
+  const MEMBER = 0xff000001;
+  const QUEST = 0x39645;
+  const GOLD = 0xf;
+  const dnam = new Uint8Array(12);
+  dnam[8] = 1;
+  const indx = new Uint8Array(2);
+  indx[0] = 100;
+  const records: Record<number, unknown> = { [QUEST]: { type: "QUST", fields: [{ type: "DNAM", data: dnam }, { type: "INDX", data: indx }] }, [GOLD]: { type: "MISC", fields: [] } };
+  const props = new Map<string, unknown>();
+  const svr = {
+    getUserActor: (userId: number) => LEADER + userId,
+    getUserByActor: (actor: number) => actor - LEADER,
+    isConnected: () => true,
+    getActorName: () => "player",
+    getActorCellOrWorld: () => 0x3c,
+    getActorPos: () => [0, 0, 0],
+    sendCustomPacket: () => {},
+    get: (id: number, name: string) => props.get(`${id}:${name}`),
+    set: (id: number, name: string, value: unknown) => props.set(`${id}:${name}`, value),
+    lookupEspmRecordById: (id: number) => ({ record: records[id] }),
+  };
+  const ctx = { svr, gm: new EventEmitter() } as unknown as SystemContext;
+  const coop = new Coop(() => {}, 4);
+  const gold = () => (props.get(`${MEMBER}:inventory`) as { entries: { baseId: number; count: number }[] }).entries.find((e) => e.baseId === GOLD)?.count;
+  coop.customPacket(0, "partyInvite", { target: MEMBER }, ctx);
+  coop.customPacket(1, "partyAccept", { inviter: LEADER }, ctx);
+  props.set(`${MEMBER}:inventory`, { entries: [{ baseId: GOLD, count: 140 }] });
+  coop.customPacket(1, "scriptItems", { gains: [{ baseId: GOLD, count: 400 }], losses: [] }, ctx);
+  assert.equal(gold(), 140);
+  coop.customPacket(0, "questStage", { quest: QUEST, stage: 100 }, ctx);
+  coop.customPacket(1, "scriptItems", { gains: [{ baseId: GOLD, count: 400 }], losses: [] }, ctx);
+  assert.equal(gold(), 540);
 });
