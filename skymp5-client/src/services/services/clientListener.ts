@@ -24,7 +24,7 @@ declare module "skyrimPlatform" {
     function getRunningQuests(): [number, number][];
     function getCameraAngleZ(): number;
     function setPapyrusEventsAllowedForms(formIds: number[]): void;
-    function updateAnimations(): void;
+    function updateAnimations(drivenFormIds?: number[]): void;
     function isAnimationGraphReady(formId: number): boolean;
     function speakSound(formId: number, voiceFile: string): void;
     function getQuestAliasReference(questFormId: number, aliasId: number): number;

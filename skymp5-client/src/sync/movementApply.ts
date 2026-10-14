@@ -104,13 +104,16 @@ const keepOffsetFromActor = (ac: Actor, m: Movement) => {
   );
 };
 
-const movingActors = new Set<number>();
+export const movingActors = new Set<number>();
 
 const applyLocomotion = (ac: Actor, m: Movement) => {
   const id = ac.getFormID();
   const moving = m.runMode !== "Standing";
-  if (moving !== movingActors.has(id)) {
+  if (moving !== movingActors.has(id) || (moving && ac.getAnimationVariableBool("bAnimationDriven"))) {
     moving ? movingActors.add(id) : movingActors.delete(id);
+    if (moving) {
+      Debug.sendAnimationEvent(ac, "IdleForceDefaultState");
+    }
     Debug.sendAnimationEvent(ac, moving ? "moveStart" : "moveStop");
   }
   ac.setAnimationVariableFloat("Speed", moving ? m.speed : 0);

@@ -19,7 +19,7 @@ export declare function disableCtrlPrtScnHotkey(): void
 export declare function blockPapyrusEvents(block: boolean): void
 export declare function setPapyrusEventsAllowedForms(formIds: number[]): void
 export declare function getPapyrusEventsAllowedForms(): number[]
-export declare function updateAnimations(): void
+export declare function updateAnimations(drivenFormIds?: number[]): void
 export declare function isAnimationGraphReady(formId: number): boolean
 export declare function speakSound(formId: number, voiceFile: string): void
 export declare function getQuestAliasReference(questFormId: number, aliasId: number): number

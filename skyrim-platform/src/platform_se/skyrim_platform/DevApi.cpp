@@ -6,6 +6,7 @@
 #include "PapyrusTESModPlatform.h"
 #include "Settings.h"
 #include "Validators.h"
+#include <set>
 
 DevApi::NativeExportsMap DevApi::nativeExportsMap;
 
@@ -224,16 +225,43 @@ Napi::Value DevApi::GetPapyrusEventsAllowedForms(
 
 Napi::Value DevApi::UpdateAnimations(const Napi::CallbackInfo& info)
 {
-  g_nativeCallRequirements.gameThrQ->AddTask([](Viet::Void) {
+  std::set<uint32_t> driven;
+  if (info.Length() > 0 && !info[0].IsUndefined()) {
+    auto formIds = NapiHelper::ExtractArray(info[0], "drivenFormIds");
+    for (uint32_t i = 0; i < formIds.Length(); ++i) {
+      driven.insert(
+        NapiHelper::ExtractUInt32(formIds.Get(i), "drivenFormIds[i]"));
+    }
+  }
+  g_nativeCallRequirements.gameThrQ->AddTask([driven](Viet::Void) {
     auto processLists = RE::ProcessLists::GetSingleton();
     if (!processLists) {
       return;
     }
     float delta = RE::GetSecondsSinceLastFrame();
-    processLists->ForAllActors([delta](RE::Actor* actor) {
+    processLists->ForAllActors([delta, &driven](RE::Actor* actor) {
       if (actor && !actor->IsPlayerRef() && actor->Is3DLoaded() &&
           !actor->IsAIEnabled()) {
+        RE::BSTSmartPointer<RE::BSAnimationGraphManager> manager;
+        std::vector<RE::BSTSmartPointer<RE::BSAnimationGraphChannel>> detached;
+        if (driven.count(actor->GetFormID()) &&
+            actor->GetAnimationGraphManager(manager) && manager) {
+          auto& channels = manager->boundChannels;
+          for (uint32_t i = 0; i < channels.size();) {
+            const char* name =
+              channels[i] ? channels[i]->channelName.c_str() : "";
+            if (!_stricmp(name, "speed") || !_stricmp(name, "Direction")) {
+              detached.push_back(channels[i]);
+              channels.erase(channels.begin() + i);
+            } else {
+              ++i;
+            }
+          }
+        }
         actor->UpdateAnimation(delta);
+        for (auto& channel : detached) {
+          manager->boundChannels.push_back(channel);
+        }
       }
       return RE::BSContainer::ForEachResult::kContinue;
     });

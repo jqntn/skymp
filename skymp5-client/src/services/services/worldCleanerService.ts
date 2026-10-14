@@ -3,6 +3,7 @@ import { Actor, ObjectLoadedEvent } from "skyrimPlatform";
 import { CoopService } from "./coopService";
 import { tryHost } from "../../view/hostAttempts";
 import { getViewFromStorage } from "../../view/worldViewMisc";
+import { movingActors } from "../../sync/movementApply";
 
 const serverBannedRaceIds = [0x000e7713, 0x001052a3, 0x0010760a];
 
@@ -43,7 +44,7 @@ export class WorldCleanerService extends ClientListener {
   }
 
   private onUpdate() {
-    this.sp.updateAnimations();
+    this.sp.updateAnimations(Array.from(movingActors));
     this.processOneActor();
   }
 
