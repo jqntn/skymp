@@ -19,9 +19,15 @@ module.exports = {
     const actors = [await ctx.ready(1), await ctx.ready(2)];
     const teleport = async (id) => {
       const loc = await ctx.npcLocation(id);
-      for (const actor of actors) await ctx.probe(`mp.set(${actor}, "locationalData", ${JSON.stringify(loc)}); return 0;`);
-      for (const n of [1, 2]) {
-        await ctx.waitFor(() => ctx.drv(`const a = sp.Actor.from(sp.Game.getFormEx(${id})); return !sp.Ui.isMenuOpen("Loading Menu") && !!a && a.is3DLoaded();`, n).catch(() => false), 120000, `${id.toString(16)} is loaded on engine ${n}`);
+      for (let k = 0; ; k++) {
+        for (const actor of actors) await ctx.probe(`mp.set(${actor}, "locationalData", ${JSON.stringify(loc)}); return 0;`);
+        for (const n of [1, 2]) {
+          await ctx.waitFor(() => ctx.drv(`const a = sp.Actor.from(sp.Game.getFormEx(${id})); return !sp.Ui.isMenuOpen("Loading Menu") && !!a && a.is3DLoaded();`, n).catch(() => false), 120000, `${id.toString(16)} is loaded on engine ${n}`);
+        }
+        await ctx.sleep(1000);
+        const away = await Promise.all([1, 2].map((n) => ctx.drv(`const p = sp.Game.getPlayer(); return Math.round(Math.hypot(p.getPositionX() - ${loc.pos[0]}, p.getPositionY() - ${loc.pos[1]}));`, n)));
+        if (away.every((d) => d < 1000)) break;
+        ctx.assert.ok(k < 2, `the players are ${away.join(" and ")} units from ${id.toString(16)} after 3 moves`);
       }
     };
     await ctx.probe(`mp.set(${HADVAR}, "locationalData", { cellOrWorldDesc: "3c:Skyrim.esm", pos: ${JSON.stringify(ROAD)}, rot: [0, 0, 0] }); return 0;`);
@@ -48,8 +54,8 @@ module.exports = {
     const sample = async (n, kick) => {
       for (let i = 0; i < n; i++) {
         if (kick) await ctx.drv(kick, h);
-        const [hs, ps] = await Promise.all([ctx.drv(state, h), ctx.drv(state, p)]);
-        samples.push({ t: Date.now(), host: hs, puppet: ps });
+        const [hs, ps, owner] = await Promise.all([ctx.drv(state, h), ctx.drv(state, p), ctx.probe(`return mp.get(${HADVAR}, "hoster");`)]);
+        samples.push({ t: Date.now(), host: hs, puppet: ps, owner });
         await ctx.sleep(300);
       }
     };
@@ -87,6 +93,9 @@ module.exports = {
     ctx.evidence.push(`foot stride pairs (hoster/puppet): ${samples.map((s) => `${Math.round(s.host[3])}/${Math.round(s.puppet[3])}`).join(" ")}`);
     ctx.evidence.push(`Speed pairs (hoster/puppet): ${samples.map((s) => `${Math.round(s.host[2])}/${Math.round(s.puppet[2])}`).join(" ")}`);
     ctx.shot("S1_6-puppet", p);
+    const owners = [...new Set(samples.map((s) => s.owner))];
+    ctx.evidence.push(`Hadvar's server hoster during the samples: ${owners.map((o) => (o >>> 0).toString(16)).join(", ")}`);
+    ctx.assert.ok(owners.length === 1 && owners[0] === hoster, `Hadvar's hoster changed during the samples: ${owners.map((o) => (o >>> 0).toString(16)).join(", ")}`);
     ctx.assert.ok(walked > 300, `Hadvar walked only ${walked.toFixed(0)} units on the hoster`);
     ctx.assert.ok(puppetAi === false, `the puppet Hadvar on engine ${p} has its own AI on`);
     ctx.assert.ok(puppetWalked > 0.5 * walked, `the puppet moved only ${puppetWalked.toFixed(0)} of ${walked.toFixed(0)} units`);

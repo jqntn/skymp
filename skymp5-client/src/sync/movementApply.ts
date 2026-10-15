@@ -109,12 +109,14 @@ export const movingActors = new Set<number>();
 const applyLocomotion = (ac: Actor, m: Movement) => {
   const id = ac.getFormID();
   const moving = m.runMode !== "Standing";
-  if (moving !== movingActors.has(id) || (moving && ac.getAnimationVariableBool("bAnimationDriven"))) {
-    moving ? movingActors.add(id) : movingActors.delete(id);
-    if (moving) {
+  if (moving) {
+    if (!movingActors.has(id) || ac.getAnimationVariableBool("bAnimationDriven")) {
       Debug.sendAnimationEvent(ac, "IdleForceDefaultState");
     }
-    Debug.sendAnimationEvent(ac, moving ? "moveStart" : "moveStop");
+    movingActors.add(id);
+    Debug.sendAnimationEvent(ac, "moveStart");
+  } else if (movingActors.delete(id)) {
+    Debug.sendAnimationEvent(ac, "moveStop");
   }
   ac.setAnimationVariableFloat("Speed", moving ? m.speed : 0);
   ac.setAnimationVariableFloat("Direction", moving ? (m.direction % 360) / 360 : 0);

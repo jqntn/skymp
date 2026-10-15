@@ -306,7 +306,7 @@ export class AnimationSource {
   }
 
   private onSendAnimationEvent(animEventName: string) {
-    if (ignoredAnims.has(animEventName)) {
+    if (ignoredAnims.has(animEventName) || (this.keepQueue && animEventName.toLowerCase().startsWith("horse"))) {
       return;
     }
 
