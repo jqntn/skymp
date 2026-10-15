@@ -17,6 +17,7 @@ const QUEST_TYPE_NONE = 0;
 const ALIAS_FILL_TTL_MS = 60000;
 const MAX_RUNNING_QUESTS = 10000;
 const PARTY_POSITIONS_INTERVAL_MS = 500;
+const DRAGON_SCRIPT = "dragonactorscript";
 
 interface QuestInfo {
   stages: Set<number>;
@@ -46,6 +47,20 @@ export class Coop implements System {
         gamemode?.(source, taker, baseId, count) !== false && this.mayTake(ctx, source, taker, baseId),
       set: (handler) => {
         gamemode = handler;
+      },
+    });
+    let gamemodeDeath = ctx.svr.onDeath;
+    Object.defineProperty(ctx.svr, "onDeath", {
+      configurable: true,
+      get: () => (actor: number, killer: number) => {
+        const result = gamemodeDeath?.(actor, killer);
+        if (result !== false) {
+          this.onDeath(ctx, actor);
+        }
+        return result;
+      },
+      set: (handler) => {
+        gamemodeDeath = handler;
       },
     });
   }
@@ -446,6 +461,29 @@ export class Coop implements System {
     }
     this.questInfos.set(quest, info);
     return info;
+  }
+
+  private onDeath(ctx: SystemContext, dying: number): void {
+    if (!this.isDragon(ctx, dying)) {
+      return;
+    }
+    for (const party of this.parties.all()) {
+      for (const member of party.members.filter((m) => this.isOnline(ctx, m) && this.isNearby(ctx, m, dying))) {
+        this.send(ctx, member, { customPacketType: "dragonSoul", dragon: dying });
+        this.log(`Coop: dragon ${hex(dying)} gives its soul to ${hex(member)}`);
+      }
+    }
+  }
+
+  private isDragon(ctx: SystemContext, actor: number): boolean {
+    try {
+      const chain = ctx.svr.get(actor, "templateChain");
+      return Array.isArray(chain) && chain.some((id) => isFormId(id) && (ctx.svr.lookupEspmRecordById(id).record?.fields ?? [])
+        .some((f) => f.type === "VMAD" && Buffer.from(f.data).toString("latin1").toLowerCase().includes(DRAGON_SCRIPT)));
+    } catch (e) {
+      this.log(`Coop: dragon lookup of ${hex(actor)} failed`, e);
+      return false;
+    }
   }
 
   private broadcast(ctx: SystemContext, party: Party, text: string): void {

@@ -60,6 +60,7 @@ export interface ScampServer {
   callPapyrusFunction(callType: "method" | "global", className: string, functionName: string, self: unknown, args: unknown[]): unknown;
   lookupEspmRecordById(globalRecordId: number): EspmLookupResult;
   onTakeItem?: (source: number, taker: number, baseId: number, count: number) => boolean | undefined;
+  onDeath?: (actor: number, killer: number) => boolean | undefined;
 
   executeJavaScriptOnChakra(src: string): void;
   clear(): void;

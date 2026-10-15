@@ -146,3 +146,48 @@ test("a member's script gain is accepted only after a stage relayed to it", () =
   coop.customPacket(1, "scriptItems", { gains: [{ baseId: GOLD, count: 400 }], losses: [] }, ctx);
   assert.equal(gold(), 540);
 });
+
+test("a dragon death sends its soul to the party members near it", async () => {
+  const LEADER = 0xff000000;
+  const MEMBER = 0xff000001;
+  const DRAGON = 0x5a6ca;
+  const WOLF = 0x23ab9;
+  const HEAD = 0x1ca05;
+  const TEMPLATE = 0xfae86;
+  const records: Record<number, unknown> = {
+    [HEAD]: { type: "NPC_", fields: [] },
+    [TEMPLATE]: { type: "NPC_", fields: [{ type: "VMAD", data: new TextEncoder().encode("\u0005\u0000\u0002\u0000\u0001\u0000\u0011\u0000dragonActorSCRIPT") }] },
+  };
+  const chains: Record<number, number[]> = { [DRAGON]: [HEAD, TEMPLATE], [WOLF]: [HEAD] };
+  const pos: Record<number, number[]> = { [LEADER]: [0, 0, 0], [MEMBER]: [50, 0, 0], [DRAGON]: [100, 0, 0], [WOLF]: [100, 0, 0] };
+  const sent: [number, Record<string, unknown>][] = [];
+  const svr = {
+    getUserActor: (userId: number) => LEADER + userId,
+    getUserByActor: (actor: number) => actor - LEADER,
+    isConnected: () => true,
+    getActorName: () => "player",
+    getActorCellOrWorld: () => 0x3c,
+    getActorPos: (actor: number) => pos[actor],
+    sendCustomPacket: (userId: number, json: string) => sent.push([userId, JSON.parse(json)]),
+    get: (id: number, name: string) => (name === "templateChain" ? chains[id] : undefined),
+    set: () => {},
+    lookupEspmRecordById: (id: number) => ({ record: records[id] }),
+  } as Record<string, unknown>;
+  const ctx = { svr, gm: new EventEmitter() } as unknown as SystemContext;
+  const coop = new Coop(() => {}, 4);
+  await coop.initAsync(ctx);
+  coop.customPacket(0, "partyInvite", { target: MEMBER }, ctx);
+  coop.customPacket(1, "partyAccept", { inviter: LEADER }, ctx);
+  const souls = () => sent.filter(([, c]) => c.customPacketType === "dragonSoul").map(([userId]) => userId);
+  const onDeath = svr.onDeath as (actor: number, killer: number) => unknown;
+  onDeath(WOLF, 0);
+  assert.deepEqual(souls(), []);
+  onDeath(DRAGON, 0);
+  assert.deepEqual(souls(), [0, 1]);
+  pos[MEMBER] = [9000, 0, 0];
+  onDeath(DRAGON, 0);
+  assert.deepEqual(souls(), [0, 1, 0]);
+  svr.onDeath = () => false;
+  onDeath(DRAGON, 0);
+  assert.deepEqual(souls(), [0, 1, 0]);
+});

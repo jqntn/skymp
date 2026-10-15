@@ -20,6 +20,9 @@ const MAX_REPLAY_DRIFT = 2048;
 const MAX_WORLD_CLEANER_PAUSE_MS = 20000;
 const ECHO_TTL_MS = 10000;
 const PARTY_KEY = DxScanCode.F7;
+const MQ104 = 0x2610c;
+const MQ104_SOUL_STAGE = 90;
+const DRAGONS_ABSORBED_GLOBAL = 0x1c0f2;
 
 type QuestLogEntry = [quest: number, stage: number];
 
@@ -257,6 +260,9 @@ export class CoopService extends ClientListener {
           this.notify(content["text"]);
         }
         break;
+      case "dragonSoul":
+        this.controller.once("update", () => this.absorbDragonSoul());
+        break;
       case "partyPositions":
         if (Array.isArray(content["members"])) {
           this.partyPositions = content["members"] as PartyPosition[];
@@ -330,6 +336,20 @@ export class CoopService extends ClientListener {
       this.send({ customPacketType: "aliasFill", quest, refs: aliases.map((alias) => [alias, this.sp.getQuestAliasReference(quest, alias)]) });
     } catch (e) {
       logError(this, "aliasFillRequest failed for quest", quest.toString(16), e);
+    }
+  }
+
+  private absorbDragonSoul() {
+    const player = Game.getPlayer();
+    if (!player) {
+      return;
+    }
+    player.modActorValue("DragonSouls", 1);
+    const absorbed = GlobalVariable.from(Game.getFormEx(DRAGONS_ABSORBED_GLOBAL));
+    absorbed?.setValue(absorbed.getValue() + 1);
+    const mq104 = Quest.from(Game.getFormEx(MQ104));
+    if (this.isQuestAuthority && mq104?.isRunning() && !mq104.isStageDone(MQ104_SOUL_STAGE)) {
+      mq104.setCurrentStageID(MQ104_SOUL_STAGE);
     }
   }
 

@@ -5,7 +5,7 @@ First non-PASS in plan order: G1.7
 
 | id | result | secs | at | detail |
 |---|---|---|---|---|
-| L1 | PASS | 16 | 2026-10-15 21:38 |  |
+| L1 | PASS | 66 | 2026-10-15 22:12 |  |
 | S0 | PASS | 26 | 2026-10-14 17:25 | 1/1 runs PASS |
 | S0b | PASS | 161 | 2026-10-13 15:25 | 1/1 runs PASS |
 | S0c | PASS | 30 | 2026-10-13 15:25 | 1/1 runs PASS |
@@ -24,7 +24,7 @@ First non-PASS in plan order: G1.7
 | 1A.2 | PASS | 3 | 2026-10-14 17:36 | 1/1 runs PASS |
 | 1A.3 | PASS | 3 | 2026-10-14 17:36 | 1/1 runs PASS |
 | 1A.4 | PASS | 3 | 2026-10-14 17:36 | 1/1 runs PASS |
-| 1A.5 | PASS | 60 | 2026-10-14 17:37 | 1/1 runs PASS |
+| 1A.5 | PASS | 61 | 2026-10-15 22:15 | 1/1 runs PASS |
 | 1B.1 | PASS | 37 | 2026-10-15 20:04 | 1/1 runs PASS |
 | 1B.2 | PASS | 41 | 2026-10-15 20:04 | 1/1 runs PASS |
 | 1B.3 | PASS | 42 | 2026-10-15 20:05 | 1/1 runs PASS |
@@ -33,20 +33,20 @@ First non-PASS in plan order: G1.7
 | G1.1 | PASS | 213 | 2026-10-15 20:11 | 1/1 runs PASS |
 | G1.2 | PASS | 44 | 2026-10-15 20:12 | 1/1 runs PASS |
 | G1.3 | PASS | 71 | 2026-10-15 20:13 | 1/1 runs PASS |
-| G1.4 | PASS | 128 | 2026-10-15 20:15 | 1/1 runs PASS |
+| G1.4 | PASS | 129 | 2026-10-15 22:18 | 1/1 runs PASS |
 | G1.5 | PASS | 119 | 2026-10-15 20:17 | 1/1 runs PASS |
 | G1.6 | PASS | 241 | 2026-10-15 21:42 | 3/3 runs PASS |
 | G1.7 | FAIL | 201 | 2026-10-14 05:10 | run 1/3: Sven: 5 activations of the crosshair NPC opened no dialogue on engine 1 (sit state on engine 2 0, on engine 1 0; NPC {"ai":false,"sit":0,"target":0,"pkg":"ea072","x":20629,"y":-46000,"events":[]}) |
 | G1.8 | PASS | 92 | 2026-10-15 20:18 | 1/1 runs PASS |
-| 2A.1 | PASS | 55 | 2026-10-14 17:59 | 1/1 runs PASS |
+| 2A.1 | PASS | 54 | 2026-10-15 22:18 | 1/1 runs PASS |
 | 2A.2 | PASS | 95 | 2026-10-14 18:08 | 2/2 runs PASS |
 | 2A.3 | PASS | 64 | 2026-10-14 18:00 | 1/1 runs PASS |
 | 2A.4 | PASS | 65 | 2026-10-14 18:02 | 1/1 runs PASS |
-| 2A.5 | PASS | 78 | 2026-10-14 18:03 | 1/1 runs PASS |
+| 2A.5 | PASS | 74 | 2026-10-15 22:20 | 1/1 runs PASS |
 | G1.9 | PASS | 88 | 2026-10-14 18:04 | 1/1 runs PASS |
-| 2B.1 | PASS | 35 | 2026-10-14 18:05 | 1/1 runs PASS |
-| 2B.2 | PASS | 148 | 2026-10-14 21:54 | 1/1 runs PASS |
-| 2B.3 | FAIL | 0 | 2026-10-12 16:53 | no check script |
+| 2B.1 | PASS | 32 | 2026-10-15 22:20 | 1/1 runs PASS |
+| 2B.2 | PASS | 67 | 2026-10-15 22:21 | 1/1 runs PASS |
+| 2B.3 | PASS | 165 | 2026-10-15 22:39 | 2/2 runs PASS |
 | 2B.4 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | 2B.5 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | G2.1 | FAIL | 0 | 2026-10-12 16:53 | no check script |
@@ -69,7 +69,7 @@ First non-PASS in plan order: G1.7
 ### L1
 - build: ok in 15 s (l1-build.log)
 - ts: ok in 0 s (l1-ts.log)
-- ctest: ok in 0 s (skipped: the unit and server binaries and the integration tests are those of the last green ctest)
+- ctest: ok in 50 s (l1-ctest.log)
 ### S0
 - run 1: actor ff000000, RaceMenu open: false
 - run 1: client moved 365 units from 12156,-71991,6010, server moved 365 units from 12156,-71991,6010
@@ -165,12 +165,12 @@ First non-PASS in plan order: G1.7
 - run 1: unit [1A.4]: exit 0; All tests passed (19 assertions in 6 test cases)
 ### 1A.5
 - run 1: the puppet applies the hoster's movement only when isHostedByOther, an UpdateProperty with the raw ESP id, reaches the FormView of the real actor
-- run 1: Alvor (13482): hoster engine 1 translates it 200 units to 20659,-45225,-83, NPC path on the hoster 200 units, 50 puppet samples on engine 2, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
-- run 1: Gerdur (13489): hoster engine 1 translates it 200 units to 504,-383,2, NPC path on the hoster 200 units, 51 puppet samples on engine 2, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
+- run 1: Alvor (13482): hoster engine 1 translates it 200 units to 20751,-45014,-84, NPC path on the hoster 200 units, 52 puppet samples on engine 2, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
+- run 1: Gerdur (13489): hoster engine 2 translates it 200 units to 170,-539,2, NPC path on the hoster 200 units, 53 puppet samples on engine 1, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
 - ![1A.5](runs/1A_5/1/S1_1-Alvor-engine1.png)
 - ![1A.5](runs/1A_5/1/S1_1-Alvor-engine2.png)
-- ![1A.5](runs/1A_5/1/S1_1-Gerdur-engine1.png)
 - ![1A.5](runs/1A_5/1/S1_1-Gerdur-engine2.png)
+- ![1A.5](runs/1A_5/1/S1_1-Gerdur-engine1.png)
 ### 1B.1
 - run 1: with a FormView: {"loaded":true,"disabled":false,"deleted":false,"health":131,"magicka":68,"name":"Alvor","baseName":"Alvor","clones":[],"hoster":4278190080} (clones: dynamic actors 0xff000000-0xff004000 with Alvor's base or name)
 - run 1: while the player was away (another cell), Alvor 3D loaded on the client: false
@@ -323,12 +323,12 @@ First non-PASS in plan order: G1.7
 - run 1: scene: engine 1 also played Hilde DialogueRi__000954CC_1.wav, 336 ms into the part, with no line of engine 2 to match
 ### 2A.1
 - run 1: bandit 1ebf6 in 3c:Skyrim.esm, hoster ff000001 (engine 1's player ff000000, engine 2's ff000001), server dead false
-- run 1: after engine 2 killed it: hoster ff000001, server inventory ["12eb7 x1","1b3a2 x1","3133c x1","6f398 x1","6f39b x1","721e8 x1"]
-- run 1: engine 2 corpse inventory ["6f398 Chaussures de fourrure x1","12eb7 Épée de fer x1","1b3a2 Armure cloutée x1","3133c Vin x1","6f39b Gantelets de fourrure x1","721e8 Boeuf cuit x1"]
+- run 1: after engine 2 killed it: hoster ff000001, server inventory ["f x25","13910 x1","13988 x1","10594f x1"]
+- run 1: engine 2 corpse inventory ["13910 Bottes en peau x1","13988 Masse d'acier x1","10594f Armure de fourrure x1","f or x25"]
 - run 1: engine 1 opens the corpse: true
-- run 1: engine 1 corpse shows 12eb7 Épée de fer x1; hoster at the take ff000001
+- run 1: engine 1 corpse shows 13910 Bottes en peau x1; hoster at the take ff000001
 - run 1: engine 2 opens the corpse: true
-- run 1: item 12eb7 Épée de fer: corpse on the server 1 -> 0 (0 after engine 2 reopened it), on engine 2 1 -> 0 (0 with its loot menu open after the take); engine 1's player on the server 1 -> 2 (2 after the reopen), on engine 1 1 -> 2
+- run 1: item 13910 Bottes en peau: corpse on the server 1 -> 0 (0 after engine 2 reopened it), on engine 2 1 -> 0 (0 with its loot menu open after the take); engine 1's player on the server 0 -> 1 (1 after the reopen), on engine 1 0 -> 1
 - ![2A.1](runs/2A_1/1/2A_1-open.png)
 - ![2A.1](runs/2A_1/1/2A_1-engine2.png)
 ### 2A.2
@@ -382,16 +382,29 @@ First non-PASS in plan order: G1.7
 - ![G1.9](runs/G1_9/1/compass-engine1.png)
 ### 2B.1
 - run 1: party joined; before the wall: engine 1 shout global 0, MS13 stage 0, 3.4028234663852886e+38 units from the wall's look target, line of sight false, heading 286; engine 2 shout global 0, MS13 stage 0, 3.4028234663852886e+38 units from the wall's look target, line of sight false, heading 286
-- run 1: at the wall: engine 1 (leader) shout global 1, MS13 stage 60, 274 units from the wall's look target, line of sight true, heading 315, learned after 2.5 s; engine 2 (member) shout global 1, MS13 stage 60, 274 units from the wall's look target, line of sight true, heading 0, learned after 3.1 s
+- run 1: at the wall: engine 1 (leader) shout global 1, MS13 stage 60, 274 units from the wall's look target, line of sight true, heading 315, learned after 3.0 s; engine 2 (member) shout global 1, MS13 stage 60, 274 units from the wall's look target, line of sight true, heading 0, learned after 3.0 s
 - ![2B.1](runs/2B_1/1/wordwall-engine2.png)
 ### 2B.2
 - run 1: A: party joined in Bleak Falls Barrow; server script states: pillars position01, position03, position01, gate waiting; gate node RuinsGate01 height on engine 1 -768, on engine 2 -768
 - run 1: A: control, engine 2 pulled the lever before the pillars were solved: lever activations in the server log 1, lever server state Waiting, gate server state waiting, gate animation events on engine 1 [], on engine 2 [], gate height -768, -768
 - run 1: A: before the second pull (19 s after the control pull): lever server state Waiting, gate animation events on engine 1 [], on engine 2 [], gate height -768, -768
-- run 1: A: engine 2 (member) turned the pillars 1, 2, 3, then 1, 2: server pillar states position03, position02, position02; engine 2 pulled the lever: gate server state busy, gate animation events on engine 1 ["Open"], on engine 2 ["Open"]; gate height on engine 1 -768 -> -583, on engine 2 -768 -> -579
+- run 1: A: engine 2 (member) turned the pillars 1, 2, 3, then 1, 2: server pillar states position03, position02, position02; engine 2 pulled the lever: gate server state busy, gate animation events on engine 1 ["Open"], on engine 2 ["Open"]; gate height on engine 1 -768 -> -583, on engine 2 -768 -> -576
 - run 1: A: gate server state after the opening: waiting
-- run 1: B: engine 1 (leader, with the claw) turned each ring twice: server ring states {"large":"position02","medium":"position03","small":"position01"}; engine 1 used the keyhole: keyhole server state done, door node DoorBase height on engine 1 -171 -> -230, on engine 2 -171 -> -231; MS13 stage on engine 1 50, on engine 2 50
+- run 1: B: engine 1 (leader, with the claw) turned each ring twice: server ring states {"large":"position02","medium":"position03","small":"position01"}; engine 1 used the keyhole: keyhole server state done, door node DoorBase height on engine 1 -171 -> -230, on engine 2 -171 -> -233; MS13 stage on engine 1 50, on engine 2 50
 - ![2B.2](runs/2B_2/1/clawdoor-engine2.png)
+### 2B.3
+- run 1: A: party formed, the server enabled the dragon and it is loaded on both engines, MQ104 not running (engine 1 -1, engine 2 -1); dragon 5a6ca server dead false, distance to the leader 2553, to the member 2543; before: engine 1 {"souls":0,"absorbed":0}, engine 2 {"souls":0,"absorbed":0}
+- run 1: A: the server killed the dragon with both players near; 0.1 s to the first gain, then 8 s more: engine 1 {"souls":1,"absorbed":1} (gained {"souls":1,"absorbed":1}), engine 2 {"souls":1,"absorbed":1} (gained {"souls":1,"absorbed":1})
+- run 1: A: moves next to the corpse: {"1":[{"target":[2682,-40658,4489],"d":175,"corpse":[2843,-40689,4411],"player":[2882,-40608,4261]}],"2":[{"target":[6,-61,7],"d":5633,"corpse":[94,-179,-216],"player":[237,-112,-5847]},{"target":[100,-173,-284],"d":1131,"corpse":[53,-244,-4770],"player":[300,-223,-5874]},{"target":[46,-248,-5012],"d":505,"corpse":[356,-779,-5751],"player":[246,-298,-5860]},{"target":[359,-779,-5753],"d":174,"corpse":[477,-709,-5750],"player":[559,-829,-5845]}]}
+- run 1: A: the dragon is dead on engine 1 true, on engine 2 true; both players then stood next to the corpse for 10 s (distance 175 and 169): engine 1 {"souls":1,"absorbed":1}, engine 2 {"souls":1,"absorbed":1}
+- run 1: B: MQ104 running, the server revived and killed the dragon again: engine 1 {"souls":1,"absorbed":1,"fus":false,"stage":10} -> {"souls":0,"absorbed":2,"fus":true,"stage":90}, engine 2 {"souls":1,"absorbed":1,"fus":false,"stage":10} -> {"souls":0,"absorbed":2,"fus":true,"stage":90}
+- run 1: C: the member went to Whiterun (distance to the dragon -1, -1 for another worldspace; leader 4580); the server revived and killed the dragon again: engine 1 gained {"souls":1,"absorbed":1}, engine 2 gained {"souls":0,"absorbed":0}
+- run 2: A: party formed, the server enabled the dragon and it is loaded on both engines, MQ104 not running (engine 1 -1, engine 2 -1); dragon 5a6ca server dead false, distance to the leader 2553, to the member 2543; before: engine 1 {"souls":0,"absorbed":0}, engine 2 {"souls":0,"absorbed":0}
+- run 2: A: the server killed the dragon with both players near; 0.6 s to the first gain, then 8 s more: engine 1 {"souls":1,"absorbed":1} (gained {"souls":1,"absorbed":1}), engine 2 {"souls":1,"absorbed":1} (gained {"souls":1,"absorbed":1})
+- run 2: A: moves next to the corpse: {"1":[{"target":[2898,-40585,4286],"d":495,"corpse":[2705,-40690,4476],"player":[3098,-40535,4218]},{"target":[2708,-40692,4475],"d":189,"corpse":[2801,-40687,4405],"player":[2908,-40642,4254]}],"2":[{"target":[6,-61,7],"d":5699,"corpse":[81,-192,-151],"player":[237,-112,-5847]},{"target":[99,-176,-250],"d":1010,"corpse":[54,-244,-4893],"player":[299,-226,-5874]},{"target":[51,-245,-5015],"d":538,"corpse":[286,-791,-5653],"player":[251,-295,-5860]},{"target":[289,-793,-5659],"d":181,"corpse":[351,-780,-5736],"player":[489,-843,-5833]}]}
+- run 2: A: the dragon is dead on engine 1 true, on engine 2 true; both players then stood next to the corpse for 10 s (distance 189 and 184): engine 1 {"souls":1,"absorbed":1}, engine 2 {"souls":1,"absorbed":1}
+- run 2: B: MQ104 running, the server revived and killed the dragon again: engine 1 {"souls":1,"absorbed":1,"fus":false,"stage":10} -> {"souls":0,"absorbed":2,"fus":true,"stage":90}, engine 2 {"souls":1,"absorbed":1,"fus":false,"stage":10} -> {"souls":0,"absorbed":2,"fus":true,"stage":90}
+- run 2: C: the member went to Whiterun (distance to the dragon -1, -1 for another worldspace; leader 5387); the server revived and killed the dragon again: engine 1 gained {"souls":1,"absorbed":1}, engine 2 gained {"souls":0,"absorbed":0}
 ### P8
 - run 1: 115 client log lines, 2 [Exception] lines
 - run 1: exception: [Exception] failed to get key 'data': failed to call custom Serialize for type struct Equipment: failed to get key 'inv': failed to call cus.
