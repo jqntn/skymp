@@ -49,7 +49,7 @@ First non-PASS in plan order: G1.7
 | 2B.3 | PASS | 165 | 2026-10-15 22:39 | 2/2 runs PASS |
 | 2B.4 | PASS | 36 | 2026-10-15 23:13 | 1/1 runs PASS |
 | 2B.5 | PASS | 30 | 2026-10-15 23:33 | 1/1 runs PASS |
-| G2.1 | FAIL | 0 | 2026-10-12 16:53 | no check script |
+| G2.1 | PASS | 126 | 2026-10-15 23:42 | 3/3 runs PASS |
 | G2.2 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | G2.3 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | G2.4 | FAIL | 0 | 2026-10-12 16:53 | no check script |
@@ -414,6 +414,22 @@ First non-PASS in plan order: G1.7
 - run 1: integration_test_coop: exit 0, Test passed!
 - run 1: scenarios in the server log: alias fill creates the claw in Arvel: true; running quest grant creates the necklace in the satchel: true; script items gain accepted: true; script items gain over the cap refused: true; script items loss applied: true; member take of a quest item refused: true
 - run 1: coop lines: 1: [2026-10-16 01:32:56.848] [console] [info] Coop: quest 39645 alias 16 created 39654 in 39655 | 1: [2026-10-16 01:32:56.848] [console] [info] Coop: quest 39645 alias 11 created 39647 in 39655 | 1: [2026-10-16 01:32:57.477] [console] [info] Coop: script items of ff000001: losses -, gains fx400, refused - | 1: [2026-10-16 01:32:57.663] [console] [info] Coop: script items of ff000001: losses -, gains -, refused fx5000 | 1: [2026-10-16 01:32:57.880] [console] [info] Coop: script items of ff000001: losses fx100, gains -, refused - | 1: [2026-10-16 01:32:58.092] [console] [info] Coop: quest d9b64 alias 3 created 663da in d9b78 | 1: [2026-10-16 01:32:59.018] [console] [info] Coop: ff000001 cannot take quest item 663da from d9b78, only the leader can
+### G2.1
+- run 1: MS13 stage 10; Arvel 39655 in 371de:Skyrim.esm holds 1 Golden Claw on the client, 1 on the server; GoldenClaw alias ref ff000d51 (alias quests ["39645"], deleted true, in Arvel's inventory true, in the player's false)
+- run 1: Arvel dead: the client corpse holds 1 claw, the server 1; GoldenClaw alias ref ff000d51 (alias quests ["39645"], deleted true, in Arvel's inventory true, in the player's false); MS13 stage 10
+- run 1: after the loot: with the loot menu open the corpse held 1 claw (open true; the claw is taken by script, removeItem to the player, while the menu is open); the player holds 1; GoldenClaw alias ref ff000d51 (alias quests ["39645"], deleted true, in Arvel's inventory false, in the player's true); MS13 stage 10 -> 40; server: Arvel 0, player 1
+- run 1: party: leader ff000000 (engine 1), member ff000001 (bot, in 371de:Skyrim.esm with the leader); the member's server quest log for MS13: [10,40]
+- run 2: MS13 stage 10; Arvel 39655 in 371de:Skyrim.esm holds 1 Golden Claw on the client, 1 on the server; GoldenClaw alias ref ff000d51 (alias quests ["39645"], deleted true, in Arvel's inventory true, in the player's false)
+- run 2: Arvel dead: the client corpse holds 1 claw, the server 1; GoldenClaw alias ref ff000d51 (alias quests ["39645"], deleted true, in Arvel's inventory true, in the player's false); MS13 stage 10
+- run 2: after the loot: with the loot menu open the corpse held 1 claw (open true; the claw is taken by script, removeItem to the player, while the menu is open); the player holds 1; GoldenClaw alias ref ff000d51 (alias quests ["39645"], deleted true, in Arvel's inventory false, in the player's true); MS13 stage 10 -> 40; server: Arvel 0, player 1
+- run 2: party: leader ff000000 (engine 1), member ff000001 (bot, in 371de:Skyrim.esm with the leader); the member's server quest log for MS13: [10,40]
+- run 3: MS13 stage 10; Arvel 39655 in 371de:Skyrim.esm holds 1 Golden Claw on the client, 1 on the server; GoldenClaw alias ref ff000d51 (alias quests ["39645"], deleted true, in Arvel's inventory true, in the player's false)
+- run 3: Arvel dead: the client corpse holds 1 claw, the server 1; GoldenClaw alias ref ff000d51 (alias quests ["39645"], deleted true, in Arvel's inventory true, in the player's false); MS13 stage 10
+- run 3: after the loot: with the loot menu open the corpse held 1 claw (open true; the claw is taken by script, removeItem to the player, while the menu is open); the player holds 1; GoldenClaw alias ref ff000d51 (alias quests ["39645"], deleted true, in Arvel's inventory false, in the player's true); MS13 stage 10 -> 40; server: Arvel 0, player 1
+- run 3: party: leader ff000000 (engine 1), member ff000001 (bot, in 371de:Skyrim.esm with the leader); the member's server quest log for MS13: [10,40]
+- ![G2.1](runs/G2_1/1/G2_1-open.png)
+- ![G2.1](runs/G2_1/2/G2_1-open.png)
+- ![G2.1](runs/G2_1/3/G2_1-open.png)
 ### P8
 - run 1: 115 client log lines, 2 [Exception] lines
 - run 1: exception: [Exception] failed to get key 'data': failed to call custom Serialize for type struct Equipment: failed to get key 'inv': failed to call cus.

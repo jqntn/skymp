@@ -820,12 +820,35 @@
     "at": "2026-10-15T23:33:02.365Z"
   },
   "G2.1": {
-    "result": "FAIL",
-    "reason": "no check script",
-    "secs": 0,
-    "evidence": [],
-    "shots": [],
-    "at": "2026-10-12T16:53:46.492Z"
+    "result": "PASS",
+    "reason": "3/3 runs PASS",
+    "secs": 126,
+    "evidence": [
+      "run 1: MS13 stage 10; Arvel 39655 in 371de:Skyrim.esm holds 1 Golden Claw on the client, 1 on the server; GoldenClaw alias ref ff000d51 (alias quests [\"39645\"], deleted true, in Arvel's inventory true, in the player's false)",
+      "run 1: Arvel dead: the client corpse holds 1 claw, the server 1; GoldenClaw alias ref ff000d51 (alias quests [\"39645\"], deleted true, in Arvel's inventory true, in the player's false); MS13 stage 10",
+      "run 1: after the loot: with the loot menu open the corpse held 1 claw (open true; the claw is taken by script, removeItem to the player, while the menu is open); the player holds 1; GoldenClaw alias ref ff000d51 (alias quests [\"39645\"], deleted true, in Arvel's inventory false, in the player's true); MS13 stage 10 -> 40; server: Arvel 0, player 1",
+      "run 1: party: leader ff000000 (engine 1), member ff000001 (bot, in 371de:Skyrim.esm with the leader); the member's server quest log for MS13: [10,40]",
+      "run 2: MS13 stage 10; Arvel 39655 in 371de:Skyrim.esm holds 1 Golden Claw on the client, 1 on the server; GoldenClaw alias ref ff000d51 (alias quests [\"39645\"], deleted true, in Arvel's inventory true, in the player's false)",
+      "run 2: Arvel dead: the client corpse holds 1 claw, the server 1; GoldenClaw alias ref ff000d51 (alias quests [\"39645\"], deleted true, in Arvel's inventory true, in the player's false); MS13 stage 10",
+      "run 2: after the loot: with the loot menu open the corpse held 1 claw (open true; the claw is taken by script, removeItem to the player, while the menu is open); the player holds 1; GoldenClaw alias ref ff000d51 (alias quests [\"39645\"], deleted true, in Arvel's inventory false, in the player's true); MS13 stage 10 -> 40; server: Arvel 0, player 1",
+      "run 2: party: leader ff000000 (engine 1), member ff000001 (bot, in 371de:Skyrim.esm with the leader); the member's server quest log for MS13: [10,40]",
+      "run 3: MS13 stage 10; Arvel 39655 in 371de:Skyrim.esm holds 1 Golden Claw on the client, 1 on the server; GoldenClaw alias ref ff000d51 (alias quests [\"39645\"], deleted true, in Arvel's inventory true, in the player's false)",
+      "run 3: Arvel dead: the client corpse holds 1 claw, the server 1; GoldenClaw alias ref ff000d51 (alias quests [\"39645\"], deleted true, in Arvel's inventory true, in the player's false); MS13 stage 10",
+      "run 3: after the loot: with the loot menu open the corpse held 1 claw (open true; the claw is taken by script, removeItem to the player, while the menu is open); the player holds 1; GoldenClaw alias ref ff000d51 (alias quests [\"39645\"], deleted true, in Arvel's inventory false, in the player's true); MS13 stage 10 -> 40; server: Arvel 0, player 1",
+      "run 3: party: leader ff000000 (engine 1), member ff000001 (bot, in 371de:Skyrim.esm with the leader); the member's server quest log for MS13: [10,40]"
+    ],
+    "shots": [
+      "runs/G2_1/1/G2_1-open.png",
+      "runs/G2_1/2/G2_1-open.png",
+      "runs/G2_1/3/G2_1-open.png"
+    ],
+    "rtt": {
+      "1": {
+        "median": 38,
+        "calls": 25
+      }
+    },
+    "at": "2026-10-15T23:42:17.630Z"
   },
   "G2.2": {
     "result": "FAIL",
