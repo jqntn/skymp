@@ -24,7 +24,7 @@ module.exports = {
       await ctx.waitFor(() => ctx.drv(inWorld(world), n).catch(() => false), 120000, `engine ${n} arrives in ${hex(world)}`);
     };
     const hosters = () => ctx.probe(`return ${JSON.stringify(NPCS.map(([, id]) => id))}.map((id) => mp.get(id, "hoster") || 0);`);
-    const bones = (id, n) => ctx.drv(`const N = sp.NetImmerse; const a = sp.Actor.from(sp.Game.getFormEx(${id})); if (!a || !a.is3DLoaded()) return null;
+    const bones = (id, n) => ctx.drv(`const N = sp.NetImmerse; const a = sp.Actor.from(sp.Game.getFormEx(${id})); if (!a || !a.is3DLoaded()) return null; const pl = sp.Game.getPlayer(); pl.setAngle(0, 0, pl.getAngleZ() + pl.getHeadingAngle(a));
       const g = (b) => [N.getNodeWorldPositionX(a, b, false), N.getNodeWorldPositionY(a, b, false), N.getNodeWorldPositionZ(a, b, false)];
       const pel = g("NPC Pelvis [Pelv]"); const t = a.getAngleZ() * Math.PI / 180;
       const rel = (v) => { const dx = v[0] - pel[0], dy = v[1] - pel[1]; return [dx * Math.cos(t) - dy * Math.sin(t), dx * Math.sin(t) + dy * Math.cos(t), v[2] - pel[2]]; };

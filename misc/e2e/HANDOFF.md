@@ -47,6 +47,7 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 - `fix(coop): play puppet NPC walks and runs from the hoster's movement (S1.6)`: regression fix, see the S1.6 regression Status bullet and the S1.6 log line of 21:31.
 - `fix(coop): run Bleak Falls Barrow puzzles on the server for real clients (2B.2)`: see the 2B.2 Status bullet and the 2B.2 findings in PLAN.
 - `fix(coop): keep puppet NPCs out of riding poses and back in their walk after a reset (S1.6)`: see the S1.6 flake Status bullet and the S1.6 log line of 2026-10-15 20:25.
+- `test(e2e): face the NPC at each sample in the puppet posture check (G1.6)`: see the G1.6 log line of 2026-10-15 21:45 and the G1.6 plan edit and findings of that day.
 
 ## What the last commit holds (G1.2)
 
@@ -60,7 +61,7 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 
 - G1.7 work is in the stash "G1.7 harness press attempts" (not in the tree).
 - Nothing for 2A.2 (committed).
-- G1.6 stand fix in sendInputsService.ts (not committed): a client taking over a seated NPC disables it for 300 ms, and that sent a false SkympStand (the puppet stood and the relayed furniture enter failed). `applyStartedHosts` restarts the animation source standing only when the owner was hidden or is not disabled, and `sendAnimation` skips the sit-state stand while the owner is disabled. G1.6 3/3 at 19:03 UTC with it; red and review not done; Hilde still failed once with it (hips oscillate for 10 s on the old hoster's engine after the hand-over, see Watch).
+- Stashes "G1.6 stand fix" and "G1.6 hold after a relayed stand": dropped G1.6 parts (no red on the final check); apply one only with the Alvor signature on the HEAD client (see the G1.6 findings of 2026-10-15 in PLAN).
 - misc/e2e/checks/P8.js: red (client Equipment serialize exception at login). Stays uncommitted until P8 is reached in plan order.
 
 ## User decisions (2026-10-12)
@@ -102,12 +103,11 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 0. Retro 1 (2026-10-14): done (log lines 12:30, 13:15, 13:40). S1.3 lost its ACCEPTED escape (tell the user: their 2026-10-12 decision accepted a FAIL that no longer happens).
    - 2A.3 PASS (committed). Red patches for the check-the-checks batch are in the scratchpad (redpatches/, index.md) and the batch script redbatch.sh (turns PUBLISH_CLIENT_DIST off during red builds, back on at the end); results in redbatch.txt. S1.3 needs a rewrite: it returns ACCEPTED on the regressions it targets.
 1. Gate 1 is done except G1.7, which waits for the user's hand check (or a harness that can press keys: a visible run with focus is the untried option). Tell the user: G1.9 shows no marker for a member in another worldspace or interior cell; that narrows "each other member" and needs their acceptance (option: point to the door the member used). Tell the user: 2B.1's leader-flag bullet (run ESP non-actor ref scripts on the leader) is proposed for removal because the server VM already runs those scripts (S2) and the leader would apply their effects twice; it stays open until they decide.
-2. Next: the G1.6 flake as a regression (stand fix in the tree, see Uncommitted and Watch), then 2B.3 (it also tests that a hoster does not allow a dragon's script events), 2B.4, 2B.5, G2, P. P8 stays red until reached. Passes since retro 1: 2A.4, 2A.5, G1.9, 2B.1, 2B.2 (5).
+2. Next: 2B.3 (it also tests that a hoster does not allow a dragon's script events), 2B.4, 2B.5, G2, P. P8 stays red until reached. Passes since retro 1: 2A.4, 2A.5, G1.9, 2B.1, 2B.2 (5).
 3. Watch:
-   - G1.6 flakes (3 of 6 runs on 2026-10-14 evening, the HEAD client too): after the host of Alvor changes, the new puppet stands up (`IdleForceDefaultState` from the stand path) and the relayed `IdleSharpeningWheelStart` fails while its exit plays, so it stands while the hoster works (hips 70 vs 44.6). Treat it as the next regression.
+   - G1.6: the Alvor shape (after a hand-over the old hoster's puppet stands, sit 0 hips 67 to 71, while the new hoster has him at the grindstone, sit 3 hips 44.6) did not come back on the HEAD client with the facing check (13 of 13); if it does, the two stashed parts are the candidates. The Hilde shape (hoster hips seated while its log shows her walking) has no confirmed cause: log the pelvis XY against the actor XY on the hoster when it recurs. Unexplained G1.6 FAILs of 2026-10-14 22:28 and 22:50 (hosting and loading) and 2026-10-15 00:51 (Hilde puppet hips swinging after the hand-over).
    - S1.6: a forced `HorseEnterInstant` + `HorseExit` pair froze the hoster's own Hadvar (AI on) in the riding stance for a whole stretch (forced run L1, the check FAILs on "measure does not work"). If the natural pair does that, S1.6 flakes for an engine reason; forcing the pair inside S1.6 was considered and not done for that reason.
    - The `Horse*` filter means an NPC that really rides a horse shows no riding pose on puppets (no mount sync for NPCs exists).
-   - G1.6 Hilde (2026-10-15 00:51, with the stand fix): after the hand-over the old hoster's engine shows her hips swinging for over 10 s (sit, stand, sit) while the new hoster has her standing (hips 52.7 vs 69.1).
    - S1.6, once on the round-1 build: the puppet stopped getting the hoster's movement after the first leg (Speed stuck at 361, moved 824 of 2961 units). Not seen again; cause unknown.
    - S1.6 does not control its setup: the stuck-puppet case (Hadvar already moving at the first leg) comes only in some runs, so a regression of the forced default state or the `bAnimationDriven` re-assert passes the one-leg runs (review round 2). Follow-up: have Hadvar move before the first leg. Twice a run with a part removed showed Speed 581 to 601 and the puppet walking farther than the hoster (unexplained).
    - `movingActors` keeps an id when this client starts hosting that NPC (no `moveStop` comes); harmless while hosted (AI on), but the first movement as a puppet again sees no change of the moving flag.

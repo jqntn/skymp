@@ -5,16 +5,16 @@ First non-PASS in plan order: G1.7
 
 | id | result | secs | at | detail |
 |---|---|---|---|---|
-| L1 | PASS | 91 | 2026-10-15 19:06 |  |
+| L1 | PASS | 16 | 2026-10-15 21:38 |  |
 | S0 | PASS | 26 | 2026-10-14 17:25 | 1/1 runs PASS |
 | S0b | PASS | 161 | 2026-10-13 15:25 | 1/1 runs PASS |
 | S0c | PASS | 30 | 2026-10-13 15:25 | 1/1 runs PASS |
-| S1.1 | PASS | 74 | 2026-10-15 20:00 | 1/1 runs PASS |
-| S1.2 | PASS | 71 | 2026-10-15 20:01 | 1/1 runs PASS |
-| S1.4 | PASS | 64 | 2026-10-15 20:02 | 1/1 runs PASS |
-| S1.3 | PASS | 20 | 2026-10-15 20:02 | 1/1 runs PASS |
-| S1.5 | PASS | 50 | 2026-10-15 20:03 | 1/1 runs PASS |
-| S1.6 | PASS | 168 | 2026-10-15 20:21 | 3/3 runs PASS |
+| S1.1 | PASS | 76 | 2026-10-15 21:32 | 1/1 runs PASS |
+| S1.2 | PASS | 71 | 2026-10-15 21:33 | 1/1 runs PASS |
+| S1.4 | PASS | 66 | 2026-10-15 21:34 | 1/1 runs PASS |
+| S1.3 | PASS | 21 | 2026-10-15 21:35 | 1/1 runs PASS |
+| S1.5 | PASS | 52 | 2026-10-15 21:36 | 1/1 runs PASS |
+| S1.6 | PASS | 61 | 2026-10-15 21:37 | 1/1 runs PASS |
 | S2 | PASS | 117 | 2026-10-14 17:33 | 1/1 runs PASS |
 | S3.1 | PASS | 25 | 2026-10-14 17:34 | 1/1 runs PASS |
 | S3.2 | PASS | 49 | 2026-10-14 17:34 | 1/1 runs PASS |
@@ -35,7 +35,7 @@ First non-PASS in plan order: G1.7
 | G1.3 | PASS | 71 | 2026-10-15 20:13 | 1/1 runs PASS |
 | G1.4 | PASS | 128 | 2026-10-15 20:15 | 1/1 runs PASS |
 | G1.5 | PASS | 119 | 2026-10-15 20:17 | 1/1 runs PASS |
-| G1.6 | PASS | 340 | 2026-10-15 19:03 | 3/3 runs PASS |
+| G1.6 | PASS | 241 | 2026-10-15 21:42 | 3/3 runs PASS |
 | G1.7 | FAIL | 201 | 2026-10-14 05:10 | run 1/3: Sven: 5 activations of the crosshair NPC opened no dialogue on engine 1 (sit state on engine 2 0, on engine 1 0; NPC {"ai":false,"sit":0,"target":0,"pkg":"ea072","x":20629,"y":-46000,"events":[]}) |
 | G1.8 | PASS | 92 | 2026-10-15 20:18 | 1/1 runs PASS |
 | 2A.1 | PASS | 55 | 2026-10-14 17:59 | 1/1 runs PASS |
@@ -67,9 +67,9 @@ First non-PASS in plan order: G1.7
 ## Evidence
 
 ### L1
-- build: ok in 27 s (l1-build.log)
-- ts: ok in 1 s (l1-ts.log)
-- ctest: ok in 63 s (l1-ctest.log)
+- build: ok in 15 s (l1-build.log)
+- ts: ok in 0 s (l1-ts.log)
+- ctest: ok in 0 s (skipped: the unit and server binaries and the integration tests are those of the last green ctest)
 ### S0
 - run 1: actor ff000000, RaceMenu open: false
 - run 1: client moved 365 units from 12156,-71991,6010, server moved 365 units from 12156,-71991,6010
@@ -88,13 +88,13 @@ First non-PASS in plan order: G1.7
 - run 1: server online players ff000000, connect events in server.log: 1
 - ![S0c](runs/S0c/1/S0c-engine1.png)
 ### S1.1
-- run 1: Alvor (13482): hoster engine 1 translates it 200 units to 20408,-45115,-82, NPC path on the hoster 200 units, 50 puppet samples on engine 2, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
-- run 1: Gerdur (13489): hoster engine 2 translates it 200 units to 170,-539,2, NPC path on the hoster 200 units, 51 puppet samples on engine 1, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
+- run 1: Alvor (13482): hoster engine 1 translates it 200 units to 20575,-45067,-80, NPC path on the hoster 200 units, 51 puppet samples on engine 2, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
+- run 1: Gerdur (13489): hoster engine 1 translates it 200 units to -738,104,2, NPC path on the hoster 200 units, 52 puppet samples on engine 2, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
 - run 1: Hadvar (2bfa2): hoster engine 2 translates it 200 units to 22928,-95299,13930, NPC path on the hoster 200 units, 52 puppet samples on engine 1, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
 - ![S1.1](runs/S1_1/1/S1_1-Alvor-engine1.png)
 - ![S1.1](runs/S1_1/1/S1_1-Alvor-engine2.png)
-- ![S1.1](runs/S1_1/1/S1_1-Gerdur-engine2.png)
 - ![S1.1](runs/S1_1/1/S1_1-Gerdur-engine1.png)
+- ![S1.1](runs/S1_1/1/S1_1-Gerdur-engine2.png)
 - ![S1.1](runs/S1_1/1/S1_1-Hadvar-engine2.png)
 - ![S1.1](runs/S1_1/1/S1_1-Hadvar-engine1.png)
 ### S1.2
@@ -102,7 +102,7 @@ First non-PASS in plan order: G1.7
 - run 1: Orgnar (13486) on engine 2 (puppet), approach spot 0 deg from its facing, 1 activation(s): Dialogue Menu open and in dialogue with the player: true
 - run 1: Orgnar on engine 2 (puppet): greeting "Nous avons des chambres et de la nourriture. De quoi boire, aussi. Je cuisine. Y a pas grand-chose d'autre à dire.", topic "Puis-je utiliser le laboratoire alchimique ?", answer "Du moment que vous nettoyez. Vous savez comment vous en servir ? Mélangez quelques ingrédients et regardez ce qu'il se produit."
 - run 1: Orgnar (13486) on engine 1 (hoster), approach spot 0 deg from its facing, 1 activation(s): Dialogue Menu open and in dialogue with the player: true
-- run 1: Orgnar on engine 1 (hoster): greeting "S'il vous faut une chambre, parlez à Delphine.", topic "Puis-je utiliser le laboratoire alchimique ?", answer "Du moment que vous nettoyez. Vous savez comment vous en servir ? Mélangez quelques ingrédients et regardez ce qu'il se produit."
+- run 1: Orgnar on engine 1 (hoster): greeting "Nous avons des chambres et de la nourriture. De quoi boire, aussi. Je cuisine. Y a pas grand-chose d'autre à dire.", topic "Puis-je utiliser le laboratoire alchimique ?", answer "Du moment que vous nettoyez. Vous savez comment vous en servir ? Mélangez quelques ingrédients et regardez ce qu'il se produit."
 - run 1: Delphine (13485) on engine 1 (hoster), approach spot 135 deg from its facing, 1 activation(s): Dialogue Menu open and in dialogue with the player: true
 - run 1: Delphine on engine 1 (hoster): greeting "C'est mon auberge. Il est normal que je note le passage des étrangers.", topic "Je voudrais une chambre. (10 or)", answer "Pas de problème, elle est à vous."
 - run 1: Delphine (13485) on engine 2 (puppet), approach spot 0 deg from its facing, 1 activation(s): Dialogue Menu open and in dialogue with the player: true
@@ -112,44 +112,30 @@ First non-PASS in plan order: G1.7
 - ![S1.2](runs/S1_2/1/S1_2-Delphine-engine1-hoster.png)
 - ![S1.2](runs/S1_2/1/S1_2-Delphine-engine2-puppet.png)
 ### S1.4
-- run 1: 13486: 78 puppet samples; frenzied and nudged on engine 2 (largest move seen in the next 15 frames 150 units) at +11218 ms, Aggression 3 held in 51 of 51 later samples, worst distance to the hoster path in the 3000 ms after the nudge 0
-- run 1: 13485: 78 puppet samples; frenzied and nudged on engine 2 (largest move seen in the next 15 frames 150 units) at +11218 ms, Aggression 3 held in 51 of 51 later samples, worst distance to the hoster path in the 3000 ms after the nudge 0
-- run 1: 2 hosted NPCs in the inn, 78 samples over 30 s, 0 violations
+- run 1: 13486: 79 puppet samples; frenzied and nudged on engine 2 (largest move seen in the next 15 frames 150 units) at +11464 ms, Aggression 3 held in 51 of 51 later samples, worst distance to the hoster path in the 3000 ms after the nudge 6
+- run 1: 13485: 79 puppet samples; frenzied and nudged on engine 2 (largest move seen in the next 15 frames 150 units) at +11464 ms, Aggression 3 held in 51 of 51 later samples, worst distance to the hoster path in the 3000 ms after the nudge 6
+- run 1: 2 hosted NPCs in the inn, 79 samples over 30 s, 0 violations
 - run 1: positive control, Aggression 3 and startCombat(player) on the hosted NPCs: in combat after at most 15 s: 13486 on hoster engine 1, 13485 on hoster engine 1
 - ![S1.4](runs/S1_4/1/S1_4-engine1.png)
 - ![S1.4](runs/S1_4/1/S1_4-engine2.png)
 ### S1.3
-- run 1: game hour 8.00; RiverwoodBlacksmithWorkMarker 2c308 at 20587,-45138,-81; client after 17 ms: Alvor in world 3c at 20587,-45138,-82, 0 units from the forge, 3D loaded true, enabled true; server: 133c8 at -515,-154,240
-- run 1: 5000 ms later: Alvor in world 3c at 20587,-45138,-82, 0 units from the forge, 3D loaded true, enabled true
+- run 1: game hour 8.02; RiverwoodBlacksmithWorkMarker 2c308 at 20587,-45138,-81; client after 18 ms: Alvor in world 3c at 20586,-45138,-82, 1 units from the forge, 3D loaded true, enabled true; server: 133c8 at -515,-154,240
+- run 1: 5000 ms later: Alvor in world 3c at 20584,-45132,-82, 7 units from the forge, 3D loaded true, enabled true
 - ![S1.3](runs/S1_3/1/S1_3.png)
 ### S1.5
 - run 1: engine 1 talks to the puppet Delphine (13485) hosted by engine 2; topic "Je voudrais une chambre. (10 or)", answer "Pas de problème, elle est à vous."
 - run 1: dialogue closed on engine 1
-- run 1: then engine 2 translates Delphine 200 units to -986,839,-1: 191 units from its start on the hoster, 50 puppet samples on engine 1, worst distance to the hoster path of the last 1000 ms: 1.3, hosters ff000001
+- run 1: then engine 2 translates Delphine 200 units to -986,839,-1: 190 units from its start on the hoster, 51 puppet samples on engine 1, worst distance to the hoster path of the last 1000 ms: 1.6, hosters ff000001
 - ![S1.5](runs/S1_5/1/S1_5-topic.png)
 - ![S1.5](runs/S1_5/1/S1_5-follow.png)
 ### S1.6
 - run 1: Hadvar on the hoster after the moves: {"ai":true,"combat":false,"pkg":"4679f","sit":0,"scene":0,"dialogue":false}; puppet AI on: false
-- run 1: hoster engine 2, Hadvar walked 4353 units on the hoster and 4356 on the puppet; 30 samples with hoster Speed > 20 for 500 ms, puppet Speed > 20 in 30; 18 samples with hoster Speed < 1 for 500 ms, puppet Speed < 20 in 18
-- run 1: foot swing (mean change of the left foot minus the right foot along the heading between consecutive samples) per moving stretch: 19 samples: hoster 68.1, puppet 75.7; 5 samples: hoster 43.4, puppet 34.9; per standing stretch: 16 samples: hoster 0.2, puppet 0.1
-- run 1: foot stride pairs (hoster/puppet): 0/0 -2/13 -2/13 2/15 2/26 2/-14 -2/-1 -2/-46 -61/61 28/-44 -24/20 -14/4 32/-38 -72/51 72/-74 -72/69 57/-67 -26/27 -2/-13 32/-32 -68/46 47/-60 -38/39 -30/12 18/42 -29/-21 29/-17 15/45 -37/-13 11/-29 0/-16 0/13 -1/26 -40/-14 14/12 45/43 45/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 27/43 33/-42 34/11 35/28 43/28 43/28 43/28 43/28 43/13
-- run 1: Speed pairs (hoster/puppet): 0/0 0/0 5/0 55/0 55/81 55/79 55/78 183/151 360/356 361/348 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 349/361 224/300 105/249 18/75 80/77 80/91 80/91 80/91 80/91 80/91 0/0 43/0 332/174 186/324 0/143 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 80/115 80/115 80/115 0/0 0/0 0/0 619/0 613/619 613/619
+- run 1: hoster engine 2, Hadvar walked 2182 units on the hoster and 5681 on the puppet; 28 samples with hoster Speed > 20 for 500 ms, puppet Speed > 20 in 27; 25 samples with hoster Speed < 1 for 500 ms, puppet Speed < 20 in 25
+- run 1: foot swing (mean change of the left foot minus the right foot along the heading between consecutive samples) per moving stretch: 26 samples: hoster 58.7, puppet 66.5; per standing stretch: 25 samples: hoster 1.7, puppet 1.3
+- run 1: foot stride pairs (hoster/puppet): 0/0 -2/13 -2/-17 2/14 2/40 2/-10 2/27 -2/41 -2/-21 32/45 -58/-66 61/67 -76/-76 71/68 -63/-54 40/32 -17/-7 -10/-18 20/28 -45/-53 64/68 -69/-73 26/52 24/0 41/13 24/-21 -62/-7 -71/-12 -5/-14 1/-22 0/-4 0/13 4/7 15/7 -26/-25 38/43 40/43 42/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 11/43 10/13 12/13
+- run 1: Speed pairs (hoster/puppet): 0/0 0/0 6/0 56/0 56/83 56/79 55/79 55/78 316/211 322/335 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 337/361 218/304 105/280 24/75 638/638 638/632 638/638 638/638 55/19 119/119 0/0 123/0 361/361 247/323 0/189 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0
 - run 1: Hadvar's server hoster during the samples: ff000001
-- run 2: Hadvar on the hoster after the moves: {"ai":true,"combat":false,"pkg":"4679f","sit":0,"scene":0,"dialogue":false}; puppet AI on: false
-- run 2: hoster engine 1, Hadvar walked 2217 units on the hoster and 2214 on the puppet; 16 samples with hoster Speed > 20 for 500 ms, puppet Speed > 20 in 16; 10 samples with hoster Speed < 1 for 500 ms, puppet Speed < 20 in 10
-- run 2: foot swing (mean change of the left foot minus the right foot along the heading between consecutive samples) per moving stretch: 16 samples: hoster 86.7, puppet 88.7; per standing stretch: 10 samples: hoster 6.2, puppet 7.4
-- run 2: foot stride pairs (hoster/puppet): 0/0 -2/13 -15/14 1/57 -37/-76 20/62 -44/-70 61/30 -76/-4 56/-31 -25/46 -3/-76 33/69 -60/-56 67/25 -76/-11 57/-23 -35/39 7/-66 -38/54 32/46 25/25 23/24 34/39 40/40 41/41 40/41 39/40 24/25 12/12
-- run 2: Speed pairs (hoster/puppet): 0/0 0/0 275/142 259/307 361/361 240/266 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 210/308 0/56 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0
-- run 2: Hadvar's server hoster during the samples: ff000000
-- run 3: Hadvar on the hoster after the moves: {"ai":true,"combat":false,"pkg":"4679f","sit":0,"scene":0,"dialogue":false}; puppet AI on: false
-- run 3: hoster engine 2, Hadvar walked 2172 units on the hoster and 2175 on the puppet; 25 samples with hoster Speed > 20 for 500 ms, puppet Speed > 20 in 25; 25 samples with hoster Speed < 1 for 500 ms, puppet Speed < 20 in 25
-- run 3: foot swing (mean change of the left foot minus the right foot along the heading between consecutive samples) per moving stretch: 19 samples: hoster 69.1, puppet 84.6; per standing stretch: 25 samples: hoster 1.9, puppet 1.3
-- run 3: foot stride pairs (hoster/puppet): 0/0 -2/13 -2/13 2/14 2/27 2/-16 -2/9 -2/-50 -73/54 56/-71 -47/53 21/-41 5/7 -19/6 37/-40 -71/54 71/-76 -75/71 57/-71 -42/53 5/-31 -31/32 29/-41 -45/44 36/13 39/-17 -23/0 -69/-14 -72/-10 -1/-12 0/13 -1/13 7/-3 -18/15 29/-12 37/43 40/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 34/43 8/43 12/13
-- run 3: Speed pairs (hoster/puppet): 0/0 0/0 5/0 55/0 55/81 55/79 55/78 171/152 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 337/361 224/331 105/297 18/197 587/53 593/593 593/593 593/593 587/593 0/0 0/0 149/0 361/361 181/277 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0
-- run 3: Hadvar's server hoster during the samples: ff000001
 - ![S1.6](runs/S1_6/1/S1_6-puppet.png)
-- ![S1.6](runs/S1_6/2/S1_6-puppet.png)
-- ![S1.6](runs/S1_6/3/S1_6-puppet.png)
 ### S2
 - run 1: bot actor ff000000 in BleakFallsBarrow01; pillar states position01, position03, position01
 - run 1: control, lever before the pillars are solved: dart traps activated 39fdd, 3720f, 2ad49, 2ad43, gate opening false
@@ -273,35 +259,35 @@ First non-PASS in plan order: G1.7
 - ![G1.5](runs/G1_5/1/G1_5-mq103.png)
 ### G1.6
 - run 1: engine 2 hosts: Faendal ff000001, Alvor ff000001, Hilde ff000001
-- run 1: Faendal, hoster engine 2 (server ff000001): hoster motion 4.9, drop 19.0, head 14.6, hips 60.5; puppet engine 1: motion 52.5, drop 27.1, head 22.4, hips 63.7
-- run 1: Alvor, hoster engine 2 (server ff000001): hoster motion 1.0, drop 34.3, head 50.0, hips 44.6; puppet engine 1: motion 1.1, drop 34.3, head 50.0, hips 44.6
-- run 1: Hilde, hoster engine 2 (server ff000001): hoster motion 35.7, drop 2.4, head 48.5, hips 36.9; puppet engine 1: motion 4.9, drop 34.4, head 51.2, hips 37.0
-- run 1: 2 NPC(s) moved on the hoster engine 2, so the motion test ran for them; still on engine 1: none
+- run 1: Faendal, hoster engine 2 (server ff000001): hoster motion 44.4, drop 25.3, head 27.5, hips 64.5; puppet engine 1: motion 59.1, drop 25.8, head 20.4, hips 63.3
+- run 1: Alvor, hoster engine 2 (server ff000001): hoster motion 5.0, drop 22.8, head 44.0, hips 44.6; puppet engine 1: motion 0.8, drop 35.4, head 51.6, hips 46.0
+- run 1: Hilde, hoster engine 2 (server ff000001): hoster motion 39.2, drop 1.3, head 48.7, hips 37.0; puppet engine 1: motion 52.9, drop 3.0, head 48.4, hips 37.0
+- run 1: 3 NPC(s) moved on the hoster engine 2, so the motion test ran for them; still on engine 1: none
 - run 1: engine 1 hosts: Faendal ff000000, Alvor ff000000, Hilde ff000000
-- run 1: Faendal, hoster engine 1 (server ff000000): hoster motion 0.2, drop 36.0, head 50.4, hips 67.6; puppet engine 2: motion 0.0, drop 32.9, head 50.4, hips 67.6
-- run 1: Alvor, hoster engine 1 (server ff000000): hoster motion 4.7, drop 35.5, head 52.6, hips 38.0; puppet engine 2: motion 4.2, drop 34.4, head 51.1, hips 36.9
-- run 1: Hilde, hoster engine 1 (server ff000000): hoster motion 0.0, drop 33.7, head 51.4, hips 68.9; puppet engine 2: motion 3.8, drop 37.7, head 51.9, hips 69.1
-- run 1: 1 NPC(s) moved on the hoster engine 1, so the motion test ran for them; still on engine 2: none
+- run 1: Faendal, hoster engine 1 (server ff000000): hoster motion 22.1, drop 34.3, head 50.5, hips 66.2; puppet engine 2: motion 25.1, drop 32.3, head 49.9, hips 66.1
+- run 1: Alvor, hoster engine 1 (server ff000000): hoster motion 56.9, drop 24.4, head 50.0, hips 37.0; puppet engine 2: motion 4.1, drop 7.3, head 49.5, hips 38.1
+- run 1: Hilde, hoster engine 1 (server ff000000): hoster motion 4.1, drop 38.0, head 50.9, hips 69.1; puppet engine 2: motion 3.7, drop 38.0, head 51.5, hips 69.1
+- run 1: 3 NPC(s) moved on the hoster engine 1, so the motion test ran for them; still on engine 2: none
 - run 2: engine 2 hosts: Faendal ff000001, Alvor ff000001, Hilde ff000001
-- run 2: Faendal, hoster engine 2 (server ff000001): hoster motion 4.3, drop 22.8, head 23.8, hips 62.3; puppet engine 1: motion 57.1, drop 26.3, head 20.7, hips 63.4
-- run 2: Alvor, hoster engine 2 (server ff000001): hoster motion 0.9, drop 34.3, head 50.0, hips 44.6; puppet engine 1: motion 1.0, drop 34.3, head 50.0, hips 44.6
-- run 2: Hilde, hoster engine 2 (server ff000001): hoster motion 4.5, drop 33.7, head 51.4, hips 39.0; puppet engine 1: motion 1.4, drop 15.4, head 49.1, hips 39.0
-- run 2: 2 NPC(s) moved on the hoster engine 2, so the motion test ran for them; still on engine 1: none
+- run 2: Faendal, hoster engine 2 (server ff000001): hoster motion 63.4, drop 23.7, head 48.0, hips 66.6; puppet engine 1: motion 31.2, drop 34.3, head 50.3, hips 66.5
+- run 2: Alvor, hoster engine 2 (server ff000001): hoster motion 42.4, drop 29.5, head 47.7, hips 44.6; puppet engine 1: motion 42.6, drop 23.2, head 44.4, hips 44.6
+- run 2: Hilde, hoster engine 2 (server ff000001): hoster motion 37.2, drop 3.2, head 48.7, hips 37.0; puppet engine 1: motion 65.8, drop 3.0, head 48.8, hips 37.0
+- run 2: 3 NPC(s) moved on the hoster engine 2, so the motion test ran for them; still on engine 1: none
 - run 2: engine 1 hosts: Faendal ff000000, Alvor ff000000, Hilde ff000000
-- run 2: Faendal, hoster engine 1 (server ff000000): hoster motion 0.2, drop 35.5, head 50.2, hips 64.2; puppet engine 2: motion 2.0, drop 36.4, head 50.5, hips 67.3
-- run 2: Alvor, hoster engine 1 (server ff000000): hoster motion 14.2, drop 11.8, head 41.7, hips 67.3; puppet engine 2: motion 2.7, drop 31.9, head 47.9, hips 67.2
-- run 2: Hilde, hoster engine 1 (server ff000000): hoster motion 0.7, drop 37.5, head 50.3, hips 68.7; puppet engine 2: motion 7.0, drop 37.6, head 51.8, hips 69.0
-- run 2: 1 NPC(s) moved on the hoster engine 1, so the motion test ran for them; still on engine 2: none
+- run 2: Faendal, hoster engine 1 (server ff000000): hoster motion 17.5, drop 34.5, head 50.5, hips 66.2; puppet engine 2: motion 31.1, drop 32.5, head 49.9, hips 66.1
+- run 2: Alvor, hoster engine 1 (server ff000000): hoster motion 61.8, drop 7.7, head 49.3, hips 37.0; puppet engine 2: motion 51.8, drop 15.0, head 48.7, hips 36.9
+- run 2: Hilde, hoster engine 1 (server ff000000): hoster motion 5.7, drop 37.5, head 50.1, hips 68.7; puppet engine 2: motion 4.2, drop 37.5, head 51.8, hips 69.0
+- run 2: 3 NPC(s) moved on the hoster engine 1, so the motion test ran for them; still on engine 2: none
 - run 3: engine 2 hosts: Faendal ff000001, Alvor ff000001, Hilde ff000001
-- run 3: Faendal, hoster engine 2 (server ff000001): hoster motion 1.5, drop 32.8, head 45.2, hips 65.1; puppet engine 1: motion 26.8, drop 34.1, head 50.3, hips 66.1
-- run 3: Alvor, hoster engine 2 (server ff000001): hoster motion 13.8, drop 5.4, head 42.6, hips 67.2; puppet engine 1: motion 2.7, drop 35.3, head 52.8, hips 69.2
-- run 3: Hilde, hoster engine 2 (server ff000001): hoster motion 40.3, drop 1.7, head 48.6, hips 37.0; puppet engine 1: motion 4.7, drop 34.4, head 51.2, hips 37.0
-- run 3: 2 NPC(s) moved on the hoster engine 2, so the motion test ran for them; still on engine 1: none
+- run 3: Faendal, hoster engine 2 (server ff000001): hoster motion 35.4, drop 25.0, head 29.6, hips 64.7; puppet engine 1: motion 54.6, drop 26.2, head 20.8, hips 63.4
+- run 3: Alvor, hoster engine 2 (server ff000001): hoster motion 42.3, drop 25.0, head 45.4, hips 44.6; puppet engine 1: motion 1.0, drop 35.4, head 51.6, hips 46.0
+- run 3: Hilde, hoster engine 2 (server ff000001): hoster motion 33.0, drop 1.6, head 48.6, hips 37.0; puppet engine 1: motion 65.7, drop 3.9, head 48.7, hips 37.0
+- run 3: 3 NPC(s) moved on the hoster engine 2, so the motion test ran for them; still on engine 1: none
 - run 3: engine 1 hosts: Faendal ff000000, Alvor ff000000, Hilde ff000000
-- run 3: Faendal, hoster engine 1 (server ff000000): hoster motion 0.2, drop 31.6, head 50.2, hips 64.7; puppet engine 2: motion 1.3, drop 36.1, head 49.4, hips 67.7
-- run 3: Alvor, hoster engine 1 (server ff000000): hoster motion 24.4, drop 13.8, head 41.7, hips 67.2; puppet engine 2: motion 2.9, drop 34.4, head 51.4, hips 67.4
-- run 3: Hilde, hoster engine 1 (server ff000000): hoster motion 0.0, drop 37.0, head 49.1, hips 69.1; puppet engine 2: motion 2.0, drop 38.0, head 51.7, hips 69.0
-- run 3: 1 NPC(s) moved on the hoster engine 1, so the motion test ran for them; still on engine 2: none
+- run 3: Faendal, hoster engine 1 (server ff000000): hoster motion 23.9, drop 34.3, head 50.5, hips 66.1; puppet engine 2: motion 33.9, drop 31.7, head 49.9, hips 65.8
+- run 3: Alvor, hoster engine 1 (server ff000000): hoster motion 49.6, drop 23.7, head 47.6, hips 67.3; puppet engine 2: motion 51.1, drop 16.6, head 43.9, hips 69.1
+- run 3: Hilde, hoster engine 1 (server ff000000): hoster motion 11.7, drop 37.3, head 50.3, hips 68.5; puppet engine 2: motion 5.2, drop 37.5, head 51.8, hips 69.0
+- run 3: 3 NPC(s) moved on the hoster engine 1, so the motion test ran for them; still on engine 2: none
 - ![G1.6](runs/G1_6/1/G1_6-puppets-engine1.png)
 - ![G1.6](runs/G1_6/1/G1_6-puppets-engine2.png)
 - ![G1.6](runs/G1_6/2/G1_6-puppets-engine1.png)
