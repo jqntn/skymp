@@ -5,7 +5,7 @@ First non-PASS in plan order: G1.7
 
 | id | result | secs | at | detail |
 |---|---|---|---|---|
-| L1 | PASS | 66 | 2026-10-15 22:12 |  |
+| L1 | PASS | 71 | 2026-10-15 23:28 |  |
 | S0 | PASS | 26 | 2026-10-14 17:25 | 1/1 runs PASS |
 | S0b | PASS | 161 | 2026-10-13 15:25 | 1/1 runs PASS |
 | S0c | PASS | 30 | 2026-10-13 15:25 | 1/1 runs PASS |
@@ -48,7 +48,7 @@ First non-PASS in plan order: G1.7
 | 2B.2 | PASS | 67 | 2026-10-15 22:21 | 1/1 runs PASS |
 | 2B.3 | PASS | 165 | 2026-10-15 22:39 | 2/2 runs PASS |
 | 2B.4 | PASS | 36 | 2026-10-15 23:13 | 1/1 runs PASS |
-| 2B.5 | FAIL | 0 | 2026-10-12 16:53 | no check script |
+| 2B.5 | PASS | 30 | 2026-10-15 23:33 | 1/1 runs PASS |
 | G2.1 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | G2.2 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | G2.3 | FAIL | 0 | 2026-10-12 16:53 | no check script |
@@ -67,9 +67,9 @@ First non-PASS in plan order: G1.7
 ## Evidence
 
 ### L1
-- build: ok in 15 s (l1-build.log)
+- build: ok in 16 s (l1-build.log)
 - ts: ok in 0 s (l1-ts.log)
-- ctest: ok in 50 s (l1-ctest.log)
+- ctest: ok in 54 s (l1-ctest.log)
 ### S0
 - run 1: actor ff000000, RaceMenu open: false
 - run 1: client moved 365 units from 12156,-71991,6010, server moved 365 units from 12156,-71991,6010
@@ -410,6 +410,10 @@ First non-PASS in plan order: G1.7
 - run 1: B: after the replay, 50 of 148 ESP refs in the player's cell are known to the server; disabled state differs on none, open state differs on none
 - run 1: C: 15.3 s after the replay line the client started FreeformRiften20 (85d40) at stage 10: server logged it true
 - run 1: A: replay of 5 entries at 01:12:41.388; client stages after it: MQ102B 30, MQ102 15, MQ104 12 (the MQ104 stage 10 fragment moves on to 12); server lines from this client from the replay line until the last entry plus the settle time (5.7 s): none
+### 2B.5
+- run 1: integration_test_coop: exit 0, Test passed!
+- run 1: scenarios in the server log: alias fill creates the claw in Arvel: true; running quest grant creates the necklace in the satchel: true; script items gain accepted: true; script items gain over the cap refused: true; script items loss applied: true; member take of a quest item refused: true
+- run 1: coop lines: 1: [2026-10-16 01:32:56.848] [console] [info] Coop: quest 39645 alias 16 created 39654 in 39655 | 1: [2026-10-16 01:32:56.848] [console] [info] Coop: quest 39645 alias 11 created 39647 in 39655 | 1: [2026-10-16 01:32:57.477] [console] [info] Coop: script items of ff000001: losses -, gains fx400, refused - | 1: [2026-10-16 01:32:57.663] [console] [info] Coop: script items of ff000001: losses -, gains -, refused fx5000 | 1: [2026-10-16 01:32:57.880] [console] [info] Coop: script items of ff000001: losses fx100, gains -, refused - | 1: [2026-10-16 01:32:58.092] [console] [info] Coop: quest d9b64 alias 3 created 663da in d9b78 | 1: [2026-10-16 01:32:59.018] [console] [info] Coop: ff000001 cannot take quest item 663da from d9b78, only the leader can
 ### P8
 - run 1: 115 client log lines, 2 [Exception] lines
 - run 1: exception: [Exception] failed to get key 'data': failed to call custom Serialize for type struct Equipment: failed to get key 'inv': failed to call cus.

@@ -5,6 +5,14 @@ const MQ102 = 0x4e50d;
 const MQ102B = 0x2610a;
 const MQ00 = 0x1c5d9;
 const STOP = -1;
+const MS13 = 0x39645;
+const ARVEL = 0x39655;
+const CLAW = 0x39647;
+const FFI02 = 0xd9b64;
+const SATCHEL = 0xd9b78;
+const NECKLACE = 0x663da;
+const GOLD = 0xf;
+const SATCHEL_SPOT = { cellOrWorldDesc: "3c:Skyrim.esm", pos: [79686, -66915, 10584], rot: [0, 0, 0] };
 const START = [[MQ102B, 0], [MQ102B, 5], [MQ102, 15], [MQ102B, 30]];
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -25,6 +33,9 @@ const lastTo = (userId, type) => sent.filter((p) => p.userId === userId && p.con
 const countTo = (userId, type) => sent.filter((p) => p.userId === userId && p.content.customPacketType === type).length;
 const questLog = (actor) => mp.get(actor, "private.questLog");
 const hasEntry = (actor, quest, stage) => questLog(actor).some(([q, s]) => q === quest && s === stage);
+const count = (ref, baseId) => ((mp.get(ref, "inventory") || {}).entries || []).filter((e) => e.baseId === baseId).reduce((n, e) => n + e.count, 0);
+const activate = (bot, target, isSecondActivation = false) => bot.send({ t: 6, data: { caster: 0x14, target, isSecondActivation } });
+const take = (bot, target, baseId) => bot.send({ t: 9, baseId, count: 1, target });
 
 const main = async () => {
   const bots = [mp.createBot(), mp.createBot(), mp.createBot()];
@@ -110,6 +121,68 @@ const main = async () => {
   mp.kick(u3);
   await sleep(300);
   assert.equal(lastTo(u1, "partyState").party, null);
+
+  send(bot1, { customPacketType: "partyInvite", target: a2 });
+  await sleep(100);
+  send(bot2, { customPacketType: "partyAccept", inviter: a1 });
+  await sleep(100);
+  assert.deepEqual(lastTo(u2, "partyState").party.members.map((m) => m.actor), [a1, a2]);
+
+  send(bot1, { customPacketType: "questStage", quest: MS13, stage: 10 });
+  await sleep(200);
+  const fill = lastTo(u1, "aliasFillRequest");
+  assert.ok(fill && fill.quest === MS13 && fill.aliases.length > 0, `aliasFillRequest ${JSON.stringify(fill)}`);
+  send(bot2, { customPacketType: "aliasFill", quest: MS13, refs: fill.aliases.map((alias) => [alias, ARVEL]) });
+  await sleep(200);
+  assert.equal(count(ARVEL, CLAW), 0);
+  send(bot1, { customPacketType: "aliasFill", quest: MS13, refs: fill.aliases.map((alias) => [alias, ARVEL]) });
+  await sleep(200);
+  assert.equal(count(ARVEL, CLAW), 1);
+  send(bot1, { customPacketType: "aliasFill", quest: MS13, refs: fill.aliases.map((alias) => [alias, ARVEL]) });
+  await sleep(200);
+  assert.equal(count(ARVEL, CLAW), 1);
+
+  const gold = () => count(a2, GOLD);
+  send(bot1, { customPacketType: "questStage", quest: MS13, stage: 20 });
+  await sleep(200);
+  assert.ok(hasEntry(a2, MS13, 20));
+  const goldBefore = gold();
+  send(bot2, { customPacketType: "scriptItems", gains: [{ baseId: GOLD, count: 400 }], losses: [] });
+  await sleep(200);
+  assert.equal(gold(), goldBefore + 400);
+  send(bot2, { customPacketType: "scriptItems", gains: [{ baseId: GOLD, count: 5000 }], losses: [] });
+  await sleep(200);
+  assert.equal(gold(), goldBefore + 400);
+  send(bot2, { customPacketType: "scriptItems", gains: [], losses: [{ baseId: GOLD, count: 100 }] });
+  await sleep(200);
+  assert.equal(gold(), goldBefore + 300);
+
+  send(bot1, { customPacketType: "questsRunning", quests: [[FFI02, 10]] });
+  await sleep(300);
+  assert.equal(lastTo(u1, "aliasFillRequest").quest, MS13);
+  assert.equal(count(SATCHEL, NECKLACE), 1);
+  for (const actor of [a1, a2]) mp.set(actor, "locationalData", SATCHEL_SPOT);
+  await sleep(300);
+  activate(bot2, SATCHEL);
+  await sleep(300);
+  assert.equal(mp.get(SATCHEL, "isOpen"), true);
+  const noticesBefore = countTo(u2, "partyNotice");
+  take(bot2, SATCHEL, NECKLACE);
+  await sleep(300);
+  assert.equal(count(SATCHEL, NECKLACE), 1);
+  assert.equal(count(a2, NECKLACE), 0);
+  assert.equal(countTo(u2, "partyNotice"), noticesBefore + 1);
+  assert.equal(lastTo(u2, "partyNotice").text, "Only the party leader can take quest items");
+  activate(bot2, SATCHEL, true);
+  await sleep(300);
+  assert.equal(mp.get(SATCHEL, "isOpen"), false);
+  activate(bot1, SATCHEL);
+  await sleep(300);
+  assert.equal(mp.get(SATCHEL, "isOpen"), true);
+  take(bot1, SATCHEL, NECKLACE);
+  await sleep(300);
+  assert.equal(count(SATCHEL, NECKLACE), 0);
+  assert.equal(count(a1, NECKLACE), 1);
 };
 
 main().then(() => {

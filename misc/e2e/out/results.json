@@ -23,13 +23,13 @@
     "result": "PASS",
     "reason": "",
     "evidence": [
-      "build: ok in 15 s (l1-build.log)",
+      "build: ok in 16 s (l1-build.log)",
       "ts: ok in 0 s (l1-ts.log)",
-      "ctest: ok in 50 s (l1-ctest.log)"
+      "ctest: ok in 54 s (l1-ctest.log)"
     ],
-    "secs": 66,
+    "secs": 71,
     "shots": [],
-    "at": "2026-10-15T22:12:03.120Z"
+    "at": "2026-10-15T23:28:19.923Z"
   },
   "S0b": {
     "result": "PASS",
@@ -807,12 +807,17 @@
     "at": "2026-10-15T23:13:00.398Z"
   },
   "2B.5": {
-    "result": "FAIL",
-    "reason": "no check script",
-    "secs": 0,
-    "evidence": [],
+    "result": "PASS",
+    "reason": "1/1 runs PASS",
+    "secs": 30,
+    "evidence": [
+      "run 1: integration_test_coop: exit 0, Test passed!",
+      "run 1: scenarios in the server log: alias fill creates the claw in Arvel: true; running quest grant creates the necklace in the satchel: true; script items gain accepted: true; script items gain over the cap refused: true; script items loss applied: true; member take of a quest item refused: true",
+      "run 1: coop lines: 1: [2026-10-16 01:32:56.848] [console] [info] Coop: quest 39645 alias 16 created 39654 in 39655 | 1: [2026-10-16 01:32:56.848] [console] [info] Coop: quest 39645 alias 11 created 39647 in 39655 | 1: [2026-10-16 01:32:57.477] [console] [info] Coop: script items of ff000001: losses -, gains fx400, refused - | 1: [2026-10-16 01:32:57.663] [console] [info] Coop: script items of ff000001: losses -, gains -, refused fx5000 | 1: [2026-10-16 01:32:57.880] [console] [info] Coop: script items of ff000001: losses fx100, gains -, refused - | 1: [2026-10-16 01:32:58.092] [console] [info] Coop: quest d9b64 alias 3 created 663da in d9b78 | 1: [2026-10-16 01:32:59.018] [console] [info] Coop: ff000001 cannot take quest item 663da from d9b78, only the leader can"
+    ],
     "shots": [],
-    "at": "2026-10-12T16:53:46.492Z"
+    "rtt": {},
+    "at": "2026-10-15T23:33:02.365Z"
   },
   "G2.1": {
     "result": "FAIL",
