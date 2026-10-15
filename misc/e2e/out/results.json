@@ -788,12 +788,23 @@
     "at": "2026-10-15T22:39:08.882Z"
   },
   "2B.4": {
-    "result": "FAIL",
-    "reason": "no check script",
-    "secs": 0,
-    "evidence": [],
+    "result": "PASS",
+    "reason": "1/1 runs PASS",
+    "secs": 36,
+    "evidence": [
+      "run 1: A: client stages [MQ102B, MQ102, MQ104] by seconds after the replay line: 0.2:0/0/0 0.6:10/5/0 1.7:10/15/0 2.4:30/15/0 3.2:30/15/10 5.3:30/15/12",
+      "run 1: B: after the replay, 50 of 148 ESP refs in the player's cell are known to the server; disabled state differs on none, open state differs on none",
+      "run 1: C: 15.3 s after the replay line the client started FreeformRiften20 (85d40) at stage 10: server logged it true",
+      "run 1: A: replay of 5 entries at 01:12:41.388; client stages after it: MQ102B 30, MQ102 15, MQ104 12 (the MQ104 stage 10 fragment moves on to 12); server lines from this client from the replay line until the last entry plus the settle time (5.7 s): none"
+    ],
     "shots": [],
-    "at": "2026-10-12T16:53:46.491Z"
+    "rtt": {
+      "1": {
+        "median": 60,
+        "calls": 47
+      }
+    },
+    "at": "2026-10-15T23:13:00.398Z"
   },
   "2B.5": {
     "result": "FAIL",

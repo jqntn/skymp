@@ -47,7 +47,7 @@ First non-PASS in plan order: G1.7
 | 2B.1 | PASS | 32 | 2026-10-15 22:20 | 1/1 runs PASS |
 | 2B.2 | PASS | 67 | 2026-10-15 22:21 | 1/1 runs PASS |
 | 2B.3 | PASS | 165 | 2026-10-15 22:39 | 2/2 runs PASS |
-| 2B.4 | FAIL | 0 | 2026-10-12 16:53 | no check script |
+| 2B.4 | PASS | 36 | 2026-10-15 23:13 | 1/1 runs PASS |
 | 2B.5 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | G2.1 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | G2.2 | FAIL | 0 | 2026-10-12 16:53 | no check script |
@@ -405,6 +405,11 @@ First non-PASS in plan order: G1.7
 - run 2: A: the dragon is dead on engine 1 true, on engine 2 true; both players then stood next to the corpse for 10 s (distance 189 and 184): engine 1 {"souls":1,"absorbed":1}, engine 2 {"souls":1,"absorbed":1}
 - run 2: B: MQ104 running, the server revived and killed the dragon again: engine 1 {"souls":1,"absorbed":1,"fus":false,"stage":10} -> {"souls":0,"absorbed":2,"fus":true,"stage":90}, engine 2 {"souls":1,"absorbed":1,"fus":false,"stage":10} -> {"souls":0,"absorbed":2,"fus":true,"stage":90}
 - run 2: C: the member went to Whiterun (distance to the dragon -1, -1 for another worldspace; leader 5387); the server revived and killed the dragon again: engine 1 gained {"souls":1,"absorbed":1}, engine 2 gained {"souls":0,"absorbed":0}
+### 2B.4
+- run 1: A: client stages [MQ102B, MQ102, MQ104] by seconds after the replay line: 0.2:0/0/0 0.6:10/5/0 1.7:10/15/0 2.4:30/15/0 3.2:30/15/10 5.3:30/15/12
+- run 1: B: after the replay, 50 of 148 ESP refs in the player's cell are known to the server; disabled state differs on none, open state differs on none
+- run 1: C: 15.3 s after the replay line the client started FreeformRiften20 (85d40) at stage 10: server logged it true
+- run 1: A: replay of 5 entries at 01:12:41.388; client stages after it: MQ102B 30, MQ102 15, MQ104 12 (the MQ104 stage 10 fragment moves on to 12); server lines from this client from the replay line until the last entry plus the settle time (5.7 s): none
 ### P8
 - run 1: 115 client log lines, 2 [Exception] lines
 - run 1: exception: [Exception] failed to get key 'data': failed to call custom Serialize for type struct Equipment: failed to get key 'inv': failed to call cus.
