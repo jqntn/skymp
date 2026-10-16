@@ -503,7 +503,7 @@ nlohmann::json Movement(uint32_t idx, uint32_t cell, NiPoint3 pos,
 }
 }
 
-TEST_CASE("An NPC that moves up to 4 cells from its hoster stays hosted, a "
+TEST_CASE("An NPC that moves up to 16 cells from its hoster stays hosted, a "
           "hoster that moves 2 cells away loses it",
           "[NpcHost][espm][F5]")
 {
@@ -527,12 +527,12 @@ TEST_CASE("An NPC that moves up to 4 cells from its hoster stays hosted, a "
   partOne.Messages().clear();
   DoMessage(partOne, 0,
             Movement(alvor.GetIdx(), kTamriel,
-                     { spot.x + 4 * 4096.f, spot.y, spot.z }));
+                     { spot.x + 16 * 4096.f, spot.y, spot.z }));
   REQUIRE(partOne.worldState.hosters[kAlvor] == kClaimer);
   REQUIRE(hostStops() == 0);
   DoMessage(partOne, 0,
             Movement(alvor.GetIdx(), kTamriel,
-                     { spot.x + 5 * 4096.f, spot.y, spot.z }));
+                     { spot.x + 17 * 4096.f, spot.y, spot.z }));
   REQUIRE(partOne.worldState.hosters[kAlvor] == 0);
   REQUIRE(hostStops() == 1);
   DisconnectClaimer(partOne);

@@ -27,7 +27,7 @@ const range = (prefix, n) => Array.from({ length: n }, (_, i) => `${prefix}${i +
 const ORDER = [
   "L1", "S0", "S0b", "S0c", "S1.1", "S1.2", "S1.4", "S1.3", "S1.5", "S1.6", "S2", "S3.1", "S3.2", "S3.3", "S3.4",
   ...range("1A.", 5), ...range("1B.", 5), ...range("G1.", 8),
-  ...range("2A.", 5), "G1.9", ...range("2B.", 5), "G2.1", "G2.2", "G2.3", "F1", "G2.4", "G2.5", "F4", "F5", "G2.6", "F2", "F3", ...range("P", 8),
+  ...range("2A.", 5), "G1.9", ...range("2B.", 5), "G2.1", "G2.2", "G2.3", "F1", "G2.4", "G2.5", "F4", "F5", "G2.6", "F6", "F2", "F3", ...range("P", 8),
 ];
 
 class Env extends Error {}

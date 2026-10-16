@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const DRAGON = 0x5a6ca;
+const MQ104 = 0x2610c;
 const SPOT = [7572, -39162, 3807];
 const CELL = 4096;
 const SAMPLE_S = 120;
@@ -33,11 +34,11 @@ module.exports = {
     const joined = await ctx.waitFor(() => fs.readFileSync(path.join(ctx.dir, "server.log"), "utf8").includes(`Coop: ${hex(member)} joined party`), 15000, "engine 2 joins the party").then(() => true).catch(() => false);
     ctx.assert.ok(joined, "engine 2 did not join engine 1's party");
 
-    await ctx.probe(`mp.callPapyrusFunction("method", "ObjectReference", "Enable", { type: "form", desc: mp.getDescFromId(${DRAGON}) }, [false]); return 0;`);
+    await ctx.drv(`return sp.Quest.from(sp.Game.getFormEx(${MQ104})).setCurrentStageID(60);`, 1);
     const hosted = await ctx.waitFor(() => server().then((s) => !!engineOf[s.hoster]), 30000, "a player hosts the dragon").then(() => true).catch(() => false);
     ctx.assert.ok(hosted, `nobody hosts the enabled dragon (server ${JSON.stringify(await server())})`);
     const first = await server();
-    ctx.evidence.push(`A: party formed at the Western Watchtower; the server enabled Mirmulnir ${hex(DRAGON)}; first hoster ${hex(first.hoster)} (leader ${hex(leader)}, member ${hex(member)})`);
+    ctx.evidence.push(`A: party formed at the Western Watchtower; the leader set MQ104 to 60 by script (its fragment enables Mirmulnir ${hex(DRAGON)}, who then patrols); first hoster ${hex(first.hoster)} (leader ${hex(leader)}, member ${hex(member)})`);
 
     const samples = [];
     const started = Date.now();

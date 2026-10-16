@@ -148,7 +148,7 @@ private:
 };
 
 namespace {
-constexpr int kHostedGridRadius = 4;
+constexpr int kHostedGridRadius = 16;
 
 std::pair<int16_t, int16_t> GetGridPos(const NiPoint3& pos) noexcept
 {

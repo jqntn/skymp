@@ -178,3 +178,5 @@ Facts about the engine, the server, and the harness. Add one after each ENV, eac
 - Rare events (a dragon 2 cells away) make a check pass by luck if the check does not prove the event happened: fail a run as "not exercised" when the bug's trigger did not occur, and count only exercised runs (F5).
 - A dragon kills a fresh character in under a minute; a long dragon check heals the players on the server each sample (`mp.set(actor, "percentages", ...)`) or a death and far respawn looks like the bug (F5's first runs).
 - The server's cells are `int16_t(pos / 4096)` (truncation toward zero), not floor; cell 0 is twice as wide.
+- Start a quest NPC the way the game does: Mirmulnir enabled by a server script fights at the tower, while MQ104 stage 60 sends him on a patrol 5 to 8 cells away first. F5's check used the server enable and passed a fix that the vanilla flow broke (reopened from G2.6).
+- A per-second diagnostic of every copy (server, each client) found in one run what three G2.6 failures hid: the dragon left, the hoster dropped, the member was unsubscribed. Write it before the second guess.
