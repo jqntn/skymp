@@ -5,16 +5,16 @@ First non-PASS in plan order: G1.7
 
 | id | result | secs | at | detail |
 |---|---|---|---|---|
-| L1 | PASS | 69 | 2026-10-16 11:38 |  |
+| L1 | PASS | 30 | 2026-10-16 14:55 |  |
 | S0 | PASS | 26 | 2026-10-14 17:25 | 1/1 runs PASS |
 | S0b | PASS | 161 | 2026-10-13 15:25 | 1/1 runs PASS |
 | S0c | PASS | 30 | 2026-10-13 15:25 | 1/1 runs PASS |
-| S1.1 | PASS | 76 | 2026-10-15 21:32 | 1/1 runs PASS |
+| S1.1 | PASS | 81 | 2026-10-16 14:56 | 1/1 runs PASS |
 | S1.2 | PASS | 78 | 2026-10-16 02:20 | 1/1 runs PASS |
-| S1.4 | PASS | 66 | 2026-10-15 21:34 | 1/1 runs PASS |
+| S1.4 | PASS | 65 | 2026-10-16 14:57 | 1/1 runs PASS |
 | S1.3 | PASS | 44 | 2026-10-16 00:21 | 2/2 runs PASS |
 | S1.5 | PASS | 52 | 2026-10-15 21:36 | 1/1 runs PASS |
-| S1.6 | PASS | 61 | 2026-10-15 21:37 | 1/1 runs PASS |
+| S1.6 | PASS | 58 | 2026-10-16 14:58 | 1/1 runs PASS |
 | S2 | PASS | 117 | 2026-10-14 17:33 | 1/1 runs PASS |
 | S3.1 | PASS | 25 | 2026-10-14 17:34 | 1/1 runs PASS |
 | S3.2 | PASS | 49 | 2026-10-14 17:34 | 1/1 runs PASS |
@@ -28,34 +28,35 @@ First non-PASS in plan order: G1.7
 | 1B.1 | PASS | 37 | 2026-10-15 20:04 | 1/1 runs PASS |
 | 1B.2 | PASS | 41 | 2026-10-16 02:21 | 1/1 runs PASS |
 | 1B.3 | PASS | 41 | 2026-10-16 02:22 | 1/1 runs PASS |
-| 1B.4 | PASS | 88 | 2026-10-16 11:40 | 1/1 runs PASS |
+| 1B.4 | PASS | 87 | 2026-10-16 15:00 | 1/1 runs PASS |
 | 1B.5 | PASS | 46 | 2026-10-15 20:07 | 1/1 runs PASS |
 | G1.1 | PASS | 213 | 2026-10-15 20:11 | 1/1 runs PASS |
 | G1.2 | PASS | 44 | 2026-10-15 20:12 | 1/1 runs PASS |
 | G1.3 | PASS | 71 | 2026-10-15 20:13 | 1/1 runs PASS |
 | G1.4 | PASS | 129 | 2026-10-15 22:18 | 1/1 runs PASS |
 | G1.5 | PASS | 119 | 2026-10-15 20:17 | 1/1 runs PASS |
-| G1.6 | PASS | 392 | 2026-10-16 00:19 | 5/5 runs PASS |
+| G1.6 | PASS | 76 | 2026-10-16 15:01 | 1/1 runs PASS |
 | G1.7 | FAIL | 201 | 2026-10-14 05:10 | run 1/3: Sven: 5 activations of the crosshair NPC opened no dialogue on engine 1 (sit state on engine 2 0, on engine 1 0; NPC {"ai":false,"sit":0,"target":0,"pkg":"ea072","x":20629,"y":-46000,"events":[]}) |
 | G1.8 | PASS | 92 | 2026-10-15 20:18 | 1/1 runs PASS |
 | 2A.1 | PASS | 53 | 2026-10-16 02:22 | 1/1 runs PASS |
-| 2A.2 | PASS | 139 | 2026-10-16 02:30 | 3/3 runs PASS |
+| 2A.2 | PASS | 46 | 2026-10-16 15:02 | 1/1 runs PASS |
 | 2A.3 | PASS | 64 | 2026-10-14 18:00 | 1/1 runs PASS |
 | 2A.4 | PASS | 66 | 2026-10-16 11:41 | 1/1 runs PASS |
 | 2A.5 | PASS | 74 | 2026-10-15 22:20 | 1/1 runs PASS |
 | G1.9 | PASS | 88 | 2026-10-14 18:04 | 1/1 runs PASS |
 | 2B.1 | PASS | 32 | 2026-10-15 22:20 | 1/1 runs PASS |
 | 2B.2 | PASS | 67 | 2026-10-15 22:21 | 1/1 runs PASS |
-| 2B.3 | PASS | 78 | 2026-10-16 02:26 | 1/1 runs PASS |
+| 2B.3 | PASS | 381 | 2026-10-16 15:10 | 5/5 runs PASS |
 | 2B.4 | PASS | 34 | 2026-10-16 11:42 | 1/1 runs PASS |
 | 2B.5 | PASS | 30 | 2026-10-16 11:43 | 1/1 runs PASS |
 | G2.1 | PASS | 40 | 2026-10-16 02:26 | 1/1 runs PASS |
 | G2.2 | PASS | 185 | 2026-10-16 00:04 | 3/3 runs PASS |
 | G2.3 | PASS | 50 | 2026-10-16 02:27 | 1/1 runs PASS |
-| F1 | PASS | 59 | 2026-10-16 11:44 | 1/1 runs PASS |
-| G2.4 | PASS | 109 | 2026-10-16 11:45 | 1/1 runs PASS |
-| G2.5 | PASS | 742 | 2026-10-16 11:37 | 1/1 runs PASS |
-| F4 | FAIL | 0 | - | not run |
+| F1 | PASS | 121 | 2026-10-16 14:53 | 2/2 runs PASS |
+| G2.4 | PASS | 115 | 2026-10-16 15:04 | 1/1 runs PASS |
+| G2.5 | PASS | 757 | 2026-10-16 13:59 | 1/1 runs PASS |
+| F4 | PASS | 225 | 2026-10-16 14:44 | 3/3 runs PASS |
+| F5 | FAIL | 0 | - | not run |
 | G2.6 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | F2 | FAIL | 0 | - | not run |
 | F3 | FAIL | 0 | - | not run |
@@ -71,9 +72,9 @@ First non-PASS in plan order: G1.7
 ## Evidence
 
 ### L1
-- build: ok in 14 s (l1-build.log)
-- ts: ok in 0 s (l1-ts.log)
-- ctest: ok in 54 s (l1-ctest.log)
+- build: ok in 29 s (l1-build.log)
+- ts: ok in 1 s (l1-ts.log)
+- ctest: ok in 0 s (skipped: the unit and server binaries and the integration tests are those of the last green ctest)
 ### S0
 - run 1: actor ff000000, RaceMenu open: false
 - run 1: client moved 365 units from 12156,-71991,6010, server moved 365 units from 12156,-71991,6010
@@ -92,13 +93,13 @@ First non-PASS in plan order: G1.7
 - run 1: server online players ff000000, connect events in server.log: 1
 - ![S0c](runs/S0c/1/S0c-engine1.png)
 ### S1.1
-- run 1: Alvor (13482): hoster engine 1 translates it 200 units to 20575,-45067,-80, NPC path on the hoster 200 units, 51 puppet samples on engine 2, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
-- run 1: Gerdur (13489): hoster engine 1 translates it 200 units to -738,104,2, NPC path on the hoster 200 units, 52 puppet samples on engine 2, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
-- run 1: Hadvar (2bfa2): hoster engine 2 translates it 200 units to 22928,-95299,13930, NPC path on the hoster 200 units, 52 puppet samples on engine 1, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
+- run 1: Alvor (13482): hoster engine 1 translates it 200 units to 20828,-45087,-82, NPC path on the hoster 200 units, 52 puppet samples on engine 2, worst distance to the hoster path of the last 1000 ms: 22.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
+- run 1: Gerdur (13489): hoster engine 2 translates it 200 units to -946,-77,2, NPC path on the hoster 200 units, 51 puppet samples on engine 1, worst distance to the hoster path of the last 1000 ms: 0.4; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
+- run 1: Hadvar (2bfa2): hoster engine 2 translates it 200 units to 22928,-95299,13930, NPC path on the hoster 200 units, 50 puppet samples on engine 1, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
 - ![S1.1](runs/S1_1/1/S1_1-Alvor-engine1.png)
 - ![S1.1](runs/S1_1/1/S1_1-Alvor-engine2.png)
-- ![S1.1](runs/S1_1/1/S1_1-Gerdur-engine1.png)
 - ![S1.1](runs/S1_1/1/S1_1-Gerdur-engine2.png)
+- ![S1.1](runs/S1_1/1/S1_1-Gerdur-engine1.png)
 - ![S1.1](runs/S1_1/1/S1_1-Hadvar-engine2.png)
 - ![S1.1](runs/S1_1/1/S1_1-Hadvar-engine1.png)
 ### S1.2
@@ -116,8 +117,8 @@ First non-PASS in plan order: G1.7
 - ![S1.2](runs/S1_2/1/S1_2-Delphine-engine1-hoster.png)
 - ![S1.2](runs/S1_2/1/S1_2-Delphine-engine2-puppet.png)
 ### S1.4
-- run 1: 13486: 79 puppet samples; frenzied and nudged on engine 2 (largest move seen in the next 15 frames 150 units) at +11464 ms, Aggression 3 held in 51 of 51 later samples, worst distance to the hoster path in the 3000 ms after the nudge 6
-- run 1: 13485: 79 puppet samples; frenzied and nudged on engine 2 (largest move seen in the next 15 frames 150 units) at +11464 ms, Aggression 3 held in 51 of 51 later samples, worst distance to the hoster path in the 3000 ms after the nudge 6
+- run 1: 13486: 79 puppet samples; frenzied and nudged on engine 2 (largest move seen in the next 15 frames 150 units) at +11451 ms, Aggression 3 held in 51 of 51 later samples, worst distance to the hoster path in the 3000 ms after the nudge 7
+- run 1: 13485: 79 puppet samples; frenzied and nudged on engine 2 (largest move seen in the next 15 frames 150 units) at +11451 ms, Aggression 3 held in 51 of 51 later samples, worst distance to the hoster path in the 3000 ms after the nudge 4
 - run 1: 2 hosted NPCs in the inn, 79 samples over 30 s, 0 violations
 - run 1: positive control, Aggression 3 and startCombat(player) on the hosted NPCs: in combat after at most 15 s: 13486 on hoster engine 1, 13485 on hoster engine 1
 - ![S1.4](runs/S1_4/1/S1_4-engine1.png)
@@ -137,11 +138,11 @@ First non-PASS in plan order: G1.7
 - ![S1.5](runs/S1_5/1/S1_5-follow.png)
 ### S1.6
 - run 1: Hadvar on the hoster after the moves: {"ai":true,"combat":false,"pkg":"4679f","sit":0,"scene":0,"dialogue":false}; puppet AI on: false
-- run 1: hoster engine 2, Hadvar walked 2182 units on the hoster and 5681 on the puppet; 28 samples with hoster Speed > 20 for 500 ms, puppet Speed > 20 in 27; 25 samples with hoster Speed < 1 for 500 ms, puppet Speed < 20 in 25
-- run 1: foot swing (mean change of the left foot minus the right foot along the heading between consecutive samples) per moving stretch: 26 samples: hoster 58.7, puppet 66.5; per standing stretch: 25 samples: hoster 1.7, puppet 1.3
-- run 1: foot stride pairs (hoster/puppet): 0/0 -2/13 -2/-17 2/14 2/40 2/-10 2/27 -2/41 -2/-21 32/45 -58/-66 61/67 -76/-76 71/68 -63/-54 40/32 -17/-7 -10/-18 20/28 -45/-53 64/68 -69/-73 26/52 24/0 41/13 24/-21 -62/-7 -71/-12 -5/-14 1/-22 0/-4 0/13 4/7 15/7 -26/-25 38/43 40/43 42/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 11/43 10/13 12/13
-- run 1: Speed pairs (hoster/puppet): 0/0 0/0 6/0 56/0 56/83 56/79 55/79 55/78 316/211 322/335 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 337/361 218/304 105/280 24/75 638/638 638/632 638/638 638/638 55/19 119/119 0/0 123/0 361/361 247/323 0/189 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0
-- run 1: Hadvar's server hoster during the samples: ff000001
+- run 1: hoster engine 1, Hadvar walked 2175 units on the hoster and 5916 on the puppet; 26 samples with hoster Speed > 20 for 500 ms, puppet Speed > 20 in 26; 26 samples with hoster Speed < 1 for 500 ms, puppet Speed < 20 in 26
+- run 1: foot swing (mean change of the left foot minus the right foot along the heading between consecutive samples) per moving stretch: 24 samples: hoster 57.4, puppet 56.9; per standing stretch: 25 samples: hoster 1.8, puppet 1.4
+- run 1: foot stride pairs (hoster/puppet): 0/0 -2/13 -2/13 2/14 2/-23 2/11 -2/2 -2/-42 -63/53 42/-59 -32/29 -13/-2 36/-35 -72/55 67/-76 -47/47 18/-31 11/1 -29/19 38/-37 -62/45 35/-62 -28/26 -41/7 41/13 24/26 -58/9 -71/10 -4/13 -1/13 0/13 0/13 0/48 -12/-41 24/40 45/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 34/43 8/43 13/13
+- run 1: Speed pairs (hoster/puppet): 0/0 0/0 5/0 55/0 55/81 55/79 55/78 183/152 361/361 361/360 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 349/361 222/288 100/235 24/60 570/570 570/570 570/564 570/564 0/0 0/0 0/0 148/0 361/336 123/246 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0
+- run 1: Hadvar's server hoster during the samples: ff000000
 - ![S1.6](runs/S1_6/1/S1_6-puppet.png)
 ### S2
 - run 1: bot actor ff000000 in BleakFallsBarrow01; pillar states position01, position03, position01
@@ -196,10 +197,10 @@ First non-PASS in plan order: G1.7
 - run 1: source: KillMove blocked for all ids true; actor values not sent for hosted NPCs true
 - ![1B.3](runs/1B_3/1/1B_3.png)
 ### 1B.4
-- run 1: at 8:00 the client has Alvor in 3c at 20581,-45127,-84 (3D true); before the engines start, the server has Alvor in 133c8 at -515,-154,240, hoster 0
-- run 1: claim without a FormView: server 3c at 20595,-45121,-83, 19 units from the work marker, hoster ff000000
-- run 1: hide: the player went two cells east of Alvor (20595,-45121,-82): server hoster 0; Alvor's cell attached true, Alvor 3D false, hidden true
-- run 1: retry: the server moved Alvor back to 133c8 while he was hidden; back at the forge the server has 3c at 20325,-45141,-84, 262 units from the marker, hoster ff000000; local Alvor 3D true, disabled false (24 ms after the claim)
+- run 1: at 8:00 the client has Alvor in 3c at 20587,-45138,-82 (3D true); before the engines start, the server has Alvor in 133c8 at -515,-154,240, hoster 0
+- run 1: claim without a FormView: server 3c at 20587,-45138,-82, 0 units from the work marker, hoster ff000000
+- run 1: hide: the player went two cells east of Alvor (20587,-45138,-82): server hoster 0; Alvor's cell attached true, Alvor 3D false, hidden true
+- run 1: retry: the server moved Alvor back to 133c8 while he was hidden; back at the forge the server has 3c at 20375,-45067,-80, 223 units from the marker, hoster ff000000; local Alvor 3D true, disabled false (18 ms after the claim)
 - run 1: walk-in: the driver enabled the hidden Alvor two cells away (a player who never hosted him): loaded true; server hoster held at 0 for 6 s: true
 - run 1: first movement: the server then streamed a stale Alvor 6037 units from the marker; 6 s later the local Alvor was 3D true, disabled false, at least 5852 units from the stale spot; back home: at least 5852 units from it; server 3c at 20772,-45188,-84, 192 units from the marker, hoster ff000000
 - run 1: replay, hosted movement: a quest replay starts, then the hoster takes Alvor out of his furniture and translates him 300 units (every 400 ms): 300 units from the server position at the end of the hold (21072,-45188,-84); server position held within 150 units of 20772,-45188,-84 for 2 s: true (last 20772,-45188,-84); after the replay the server follows the local position: true (21072,-45188,-84)
@@ -266,65 +267,17 @@ First non-PASS in plan order: G1.7
 - ![G1.5](runs/G1_5/1/G1_5-mq103.png)
 ### G1.6
 - run 1: engine 2 hosts: Faendal ff000001, Alvor ff000001, Hilde ff000001
-- run 1: Faendal, hoster engine 2 (server ff000001): hoster motion 46.4, drop 23.4, head 39.7, hips 66.0; puppet engine 1: motion 62.9, drop 29.8, head 31.5, hips 64.5
-- run 1: Alvor, hoster engine 2 (server ff000001): hoster motion 72.2, drop 5.4, head 51.0, hips 38.0; puppet engine 1: motion 64.7, drop 4.7, head 50.5, hips 38.0
-- run 1: Hilde, hoster engine 2 (server ff000001): hoster motion 45.9, drop 6.5, head 48.4, hips 39.0; puppet engine 1: motion 18.1, drop 10.0, head 48.5, hips 39.0
+- run 1: Faendal, hoster engine 2 (server ff000001): hoster motion 54.4, drop 23.5, head 32.9, hips 65.1; puppet engine 1: motion 55.5, drop 27.3, head 23.3, hips 63.4
+- run 1: Alvor, hoster engine 2 (server ff000001): hoster motion 47.6, drop 13.9, head 44.0, hips 67.2; puppet engine 1: motion 22.8, drop 32.0, head 46.7, hips 69.3
+- run 1: Hilde, hoster engine 2 (server ff000001): hoster motion 12.4, drop 38.0, head 51.7, hips 68.8; puppet engine 1: motion 4.7, drop 36.6, head 51.5, hips 68.7
 - run 1: 3 NPC(s) moved on the hoster engine 2, so the motion test ran for them; still on engine 1: none
 - run 1: engine 1 hosts: Faendal ff000000, Alvor ff000000, Hilde ff000000
-- run 1: Faendal, hoster engine 1 (server ff000000): hoster motion 14.5, drop 34.5, head 50.5, hips 66.3; puppet engine 2: motion 9.5, drop 36.0, head 50.1, hips 67.2
-- run 1: Alvor, hoster engine 1 (server ff000000): hoster motion 72.9, drop 10.6, head 51.5, hips 38.0; puppet engine 2: motion 70.4, drop 3.3, head 48.8, hips 37.0
-- run 1: Hilde, hoster engine 1 (server ff000000): hoster motion 4.4, drop 38.0, head 51.2, hips 69.1; puppet engine 2: motion 2.5, drop 38.0, head 51.6, hips 69.1
+- run 1: Faendal, hoster engine 1 (server ff000000): hoster motion 16.5, drop 34.7, head 50.5, hips 66.3; puppet engine 2: motion 49.2, drop 32.7, head 49.9, hips 65.8
+- run 1: Alvor, hoster engine 1 (server ff000000): hoster motion 61.3, drop 28.2, head 44.4, hips 65.3; puppet engine 2: motion 63.7, drop 29.0, head 45.0, hips 65.3
+- run 1: Hilde, hoster engine 1 (server ff000000): hoster motion 4.3, drop 38.0, head 51.5, hips 69.1; puppet engine 2: motion 6.1, drop 38.0, head 51.8, hips 69.1
 - run 1: 3 NPC(s) moved on the hoster engine 1, so the motion test ran for them; still on engine 2: none
-- run 2: engine 2 hosts: Faendal ff000001, Alvor ff000001, Hilde ff000001
-- run 2: Faendal, hoster engine 2 (server ff000001): hoster motion 40.0, drop 25.3, head 27.2, hips 64.4; puppet engine 1: motion 62.7, drop 25.9, head 20.9, hips 63.3
-- run 2: Alvor, hoster engine 2 (server ff000001): hoster motion 40.9, drop 28.1, head 47.0, hips 44.6; puppet engine 1: motion 1.2, drop 35.4, head 51.6, hips 46.0
-- run 2: Hilde, hoster engine 2 (server ff000001): hoster motion 31.8, drop 2.0, head 48.7, hips 37.0; puppet engine 1: motion 64.8, drop 3.2, head 48.8, hips 37.0
-- run 2: 3 NPC(s) moved on the hoster engine 2, so the motion test ran for them; still on engine 1: none
-- run 2: engine 1 hosts: Faendal ff000000, Alvor ff000000, Hilde ff000000
-- run 2: Faendal, hoster engine 1 (server ff000000): hoster motion 24.3, drop 34.6, head 50.5, hips 66.1; puppet engine 2: motion 21.3, drop 33.0, head 50.1, hips 66.1
-- run 2: Alvor, hoster engine 1 (server ff000000): hoster motion 16.9, drop 35.7, head 50.8, hips 68.7; puppet engine 2: motion 41.2, drop 35.7, head 50.6, hips 68.5
-- run 2: Hilde, hoster engine 1 (server ff000000): hoster motion 8.2, drop 38.0, head 51.3, hips 69.0; puppet engine 2: motion 8.8, drop 37.9, head 51.8, hips 69.0
-- run 2: 3 NPC(s) moved on the hoster engine 1, so the motion test ran for them; still on engine 2: none
-- run 3: engine 2 hosts: Faendal ff000001, Alvor ff000001, Hilde ff000001
-- run 3: Faendal, hoster engine 2 (server ff000001): hoster motion 38.6, drop 25.2, head 29.6, hips 64.8; puppet engine 1: motion 68.0, drop 26.7, head 21.5, hips 63.4
-- run 3: Alvor, hoster engine 2 (server ff000001): hoster motion 43.6, drop 24.3, head 45.2, hips 44.6; puppet engine 1: motion 0.9, drop 35.4, head 51.6, hips 46.0
-- run 3: Hilde, hoster engine 2 (server ff000001): hoster motion 27.6, drop 1.9, head 48.6, hips 37.0; puppet engine 1: motion 63.7, drop 3.4, head 48.8, hips 37.0
-- run 3: 3 NPC(s) moved on the hoster engine 2, so the motion test ran for them; still on engine 1: none
-- run 3: engine 1 hosts: Faendal ff000000, Alvor ff000000, Hilde ff000000
-- run 3: Faendal, hoster engine 1 (server ff000000): hoster motion 17.2, drop 34.4, head 50.5, hips 66.2; puppet engine 2: motion 33.8, drop 31.7, head 49.9, hips 65.8
-- run 3: Alvor, hoster engine 1 (server ff000000): hoster motion 5.8, drop 21.4, head 43.9, hips 44.6; puppet engine 2: motion 0.8, drop 34.3, head 50.0, hips 44.6
-- run 3: Hilde, hoster engine 1 (server ff000000): hoster motion 14.7, drop 37.5, head 51.3, hips 68.8; puppet engine 2: motion 37.8, drop 35.9, head 51.8, hips 68.0
-- run 3: 3 NPC(s) moved on the hoster engine 1, so the motion test ran for them; still on engine 2: none
-- run 4: engine 2 hosts: Faendal ff000001, Alvor ff000001, Hilde ff000001
-- run 4: Faendal, hoster engine 2 (server ff000001): hoster motion 63.8, drop 22.8, head 34.4, hips 65.3; puppet engine 1: motion 75.6, drop 28.3, head 26.9, hips 63.9
-- run 4: Alvor, hoster engine 2 (server ff000001): hoster motion 42.0, drop 28.8, head 47.1, hips 44.6; puppet engine 1: motion 1.3, drop 35.4, head 51.6, hips 46.0
-- run 4: Hilde, hoster engine 2 (server ff000001): hoster motion 36.9, drop 27.1, head 45.1, hips 68.5; puppet engine 1: motion 2.8, drop 26.7, head 44.9, hips 68.5
-- run 4: 3 NPC(s) moved on the hoster engine 2, so the motion test ran for them; still on engine 1: none
-- run 4: engine 1 hosts: Faendal ff000000, Alvor ff000000, Hilde ff000000
-- run 4: Faendal, hoster engine 1 (server ff000000): hoster motion 18.2, drop 34.6, head 50.5, hips 66.3; puppet engine 2: motion 20.1, drop 32.6, head 50.0, hips 66.0
-- run 4: Alvor, hoster engine 1 (server ff000000): hoster motion 46.9, drop 19.4, head 45.6, hips 67.2; puppet engine 2: motion 50.2, drop 15.0, head 43.8, hips 69.2
-- run 4: Hilde, hoster engine 1 (server ff000000): hoster motion 39.5, drop 29.8, head 51.7, hips 68.8; puppet engine 2: motion 39.0, drop 30.0, head 51.8, hips 69.0
-- run 4: 3 NPC(s) moved on the hoster engine 1, so the motion test ran for them; still on engine 2: none
-- run 5: engine 2 hosts: Faendal ff000001, Alvor ff000001, Hilde ff000001
-- run 5: Faendal, hoster engine 2 (server ff000001): hoster motion 38.4, drop 25.4, head 27.6, hips 64.5; puppet engine 1: motion 59.8, drop 25.9, head 20.9, hips 63.4
-- run 5: Alvor, hoster engine 2 (server ff000001): hoster motion 43.5, drop 21.8, head 44.1, hips 44.7; puppet engine 1: motion 5.7, drop 20.7, head 43.3, hips 44.7
-- run 5: Hilde, hoster engine 2 (server ff000001): hoster motion 45.1, drop 2.2, head 48.7, hips 37.0; puppet engine 1: motion 68.0, drop 4.4, head 48.5, hips 37.0
-- run 5: 3 NPC(s) moved on the hoster engine 2, so the motion test ran for them; still on engine 1: none
-- run 5: engine 1 hosts: Faendal ff000000, Alvor ff000000, Hilde ff000000
-- run 5: Faendal, hoster engine 1 (server ff000000): hoster motion 33.7, drop 34.0, head 50.5, hips 66.0; puppet engine 2: motion 26.5, drop 32.2, head 50.0, hips 66.0
-- run 5: Alvor, hoster engine 1 (server ff000000): hoster motion 31.5, drop 26.8, head 43.6, hips 67.3; puppet engine 2: motion 40.2, drop 30.8, head 46.1, hips 69.3
-- run 5: Hilde, hoster engine 1 (server ff000000): hoster motion 5.0, drop 37.9, head 50.9, hips 69.1; puppet engine 2: motion 8.7, drop 38.0, head 51.5, hips 69.0
-- run 5: 3 NPC(s) moved on the hoster engine 1, so the motion test ran for them; still on engine 2: none
 - ![G1.6](runs/G1_6/1/G1_6-puppets-engine1.png)
 - ![G1.6](runs/G1_6/1/G1_6-puppets-engine2.png)
-- ![G1.6](runs/G1_6/2/G1_6-puppets-engine1.png)
-- ![G1.6](runs/G1_6/2/G1_6-puppets-engine2.png)
-- ![G1.6](runs/G1_6/3/G1_6-puppets-engine1.png)
-- ![G1.6](runs/G1_6/3/G1_6-puppets-engine2.png)
-- ![G1.6](runs/G1_6/4/G1_6-puppets-engine1.png)
-- ![G1.6](runs/G1_6/4/G1_6-puppets-engine2.png)
-- ![G1.6](runs/G1_6/5/G1_6-puppets-engine1.png)
-- ![G1.6](runs/G1_6/5/G1_6-puppets-engine2.png)
 ### G1.7
 - run 1: Gerdur: hosted by engine 2 with its AI off on engine 1, press 5 opened the dialogue (sit state 0 on engine 2, 0 on engine 1)
 - run 1: Gerdur (13489) hosted by engine 2, player activation on engine 1: greeting "Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
@@ -363,36 +316,16 @@ First non-PASS in plan order: G1.7
 - ![2A.1](runs/2A_1/1/2A_1-open.png)
 - ![2A.1](runs/2A_1/1/2A_1-engine2.png)
 ### 2A.2
-- run 1: barrel 20570 before: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}; NPC 1a689 hosted by engine 1 (ff000000), engine 2 shows a puppet; before: {"loaded":true,"disabled":false} / {"loaded":true,"disabled":false}
+- run 1: barrel 20570 before: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}; NPC 38258 hosted by engine 1 (ff000000), engine 2 shows a puppet; before: {"loaded":true,"disabled":false} / {"loaded":true,"disabled":false}
 - run 1: barrel 20570: server isDisabled true; within 5 s of the server disable: engine 1 {"loaded":false,"disabled":true}, engine 2 {"loaded":false,"disabled":true}
 - run 1: barrel 20570: server isDisabled false; within 5 s of the server enable: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}
-- run 1: NPC 1a689 on the server before the disable: {"hoster":4278190080,"listeners":[4278190080,4278190081],"at":["1a26f:Skyrim.esm",20663,-7612,-3637]}
-- run 1: NPC 1a689: server isDisabled true; within 5 s of the server disable: engine 1 {"loaded":false,"disabled":true}, engine 2 {"loaded":false,"disabled":true}
-- run 1: NPC 1a689: server isDisabled false; within 5 s of the server enable: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}
-- run 1: NPC 1a689 on the server after the enable: {"hoster":0,"listeners":[4278190080,4278190081],"at":["1a26f:Skyrim.esm",20663,-7612,-3637]}
-- run 1: NPC 1a689 hoster within 30 s of the enable (not asserted): ff000001
+- run 1: NPC 38258 on the server before the disable: {"hoster":4278190080,"listeners":[4278190080,4278190081],"at":["1a26f:Skyrim.esm",20329,-6317,-3214]}
+- run 1: NPC 38258: server isDisabled true; within 5 s of the server disable: engine 1 {"loaded":false,"disabled":true}, engine 2 {"loaded":false,"disabled":true}
+- run 1: NPC 38258: server isDisabled false; within 5 s of the server enable: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}
+- run 1: NPC 38258 on the server after the enable: {"hoster":0,"listeners":[4278190080,4278190081],"at":["1a26f:Skyrim.esm",20329,-6317,-3214]}
+- run 1: NPC 38258 hoster within 30 s of the enable (not asserted): ff000000
 - run 1: barrel 20570 disabled while engine 1's player is away; players the server streams the barrel to at the disable: ["ff000001"]
 - run 1: barrel 20570 disabled on the server while engine 1's player was away: engine 1 {"loaded":false,"disabled":true} after the return
-- run 2: barrel 20570 before: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}; NPC 1a689 hosted by engine 1 (ff000000), engine 2 shows a puppet; before: {"loaded":true,"disabled":false} / {"loaded":true,"disabled":false}
-- run 2: barrel 20570: server isDisabled true; within 5 s of the server disable: engine 1 {"loaded":false,"disabled":true}, engine 2 {"loaded":false,"disabled":true}
-- run 2: barrel 20570: server isDisabled false; within 5 s of the server enable: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}
-- run 2: NPC 1a689 on the server before the disable: {"hoster":4278190080,"listeners":[4278190080,4278190081],"at":["1a26f:Skyrim.esm",20663,-7612,-3637]}
-- run 2: NPC 1a689: server isDisabled true; within 5 s of the server disable: engine 1 {"loaded":false,"disabled":true}, engine 2 {"loaded":false,"disabled":true}
-- run 2: NPC 1a689: server isDisabled false; within 5 s of the server enable: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}
-- run 2: NPC 1a689 on the server after the enable: {"hoster":0,"listeners":[4278190080,4278190081],"at":["1a26f:Skyrim.esm",20663,-7612,-3637]}
-- run 2: NPC 1a689 hoster within 30 s of the enable (not asserted): ff000000
-- run 2: barrel 20570 disabled while engine 1's player is away; players the server streams the barrel to at the disable: ["ff000001"]
-- run 2: barrel 20570 disabled on the server while engine 1's player was away: engine 1 {"loaded":false,"disabled":true} after the return
-- run 3: barrel 20570 before: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}; NPC 2c90f hosted by engine 2 (ff000001), engine 1 shows a puppet; before: {"loaded":true,"disabled":false} / {"loaded":true,"disabled":false}
-- run 3: barrel 20570: server isDisabled true; within 5 s of the server disable: engine 1 {"loaded":false,"disabled":true}, engine 2 {"loaded":false,"disabled":true}
-- run 3: barrel 20570: server isDisabled false; within 5 s of the server enable: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}
-- run 3: NPC 2c90f on the server before the disable: {"hoster":4278190081,"listeners":[4278190080,4278190081],"at":["1a26f:Skyrim.esm",20852,-7361,-3625]}
-- run 3: NPC 2c90f: server isDisabled true; within 5 s of the server disable: engine 1 {"loaded":false,"disabled":true}, engine 2 {"loaded":false,"disabled":true}
-- run 3: NPC 2c90f: server isDisabled false; within 5 s of the server enable: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}
-- run 3: NPC 2c90f on the server after the enable: {"hoster":0,"listeners":[4278190080,4278190081],"at":["1a26f:Skyrim.esm",20853,-7351,-3625]}
-- run 3: NPC 2c90f hoster within 30 s of the enable (not asserted): ff000000
-- run 3: barrel 20570 disabled while engine 1's player is away; players the server streams the barrel to at the disable: ["ff000001"]
-- run 3: barrel 20570 disabled on the server while engine 1's player was away: engine 1 {"loaded":false,"disabled":true} after the return
 ### 2A.3
 - run 1: FreeformRiften20 stage 10; satchel 85d54 holds 1 note on the client, 1 on the server; note alias ref ff000d92 (alias quests ["85d40"], in the satchel's inventory true, in the player's false)
 - run 1: satchel open true: the loot menu showed 1 note, alias ref with the menu open ff000d92 (alias quests ["85d40"], in the satchel's inventory true, in the player's false); after the take the player holds 1; alias ref ff000d92 (alias quests ["85d40"], in the satchel's inventory false, in the player's true); server: satchel 0, player 1
@@ -436,10 +369,34 @@ First non-PASS in plan order: G1.7
 ### 2B.3
 - run 1: A: party formed, the server enabled the dragon and it is loaded on both engines, MQ104 not running (engine 1 -1, engine 2 -1); dragon 5a6ca server dead false, distance to the leader 2553, to the member 2543; before: engine 1 {"souls":0,"absorbed":0}, engine 2 {"souls":0,"absorbed":0}
 - run 1: A: the server killed the dragon with both players near; 0.1 s to the first gain, then 8 s more: engine 1 {"souls":1,"absorbed":1} (gained {"souls":1,"absorbed":1}), engine 2 {"souls":1,"absorbed":1} (gained {"souls":1,"absorbed":1})
-- run 1: A: moves next to the corpse: {"1":[{"target":[2693,-40661,4501],"d":182,"corpse":[2838,-40692,4412],"player":[2893,-40611,4258]}],"2":[{"target":[6,-61,7],"d":5788,"corpse":[60,-214,-63],"player":[237,-112,-5847]},{"target":[82,-191,-152],"d":2340,"corpse":[93,-218,-3538],"player":[282,-241,-5870]},{"target":[84,-226,-3862],"d":15086,"corpse":[957,-13431,1419],"player":[282,-241,-5870]},{"target":[957,-13431,1419],"d":6503,"corpse":[1002,-13570,1063],"player":[1157,-13481,-5438]}]}
-- run 1: A: the dragon is dead on engine 1 true, on engine 2 true; both players then stood next to the corpse for 10 s (distance 182 and 296): engine 1 {"souls":1,"absorbed":1}, engine 2 {"souls":1,"absorbed":1}
+- run 1: A: moves next to the corpse: {"1":[{"target":[2687,-40659,4500],"d":146,"corpse":[2897,-40579,4402],"player":[2887,-40609,4260]}],"2":[{"target":[2856,-40671,4407],"d":278,"corpse":[2856,-40672,4406],"player":[3056,-40721,4220]}]}
+- run 1: A: the dragon is dead on engine 1 true, on engine 2 true; both players then stood next to the corpse for 10 s (distance 146 and 278): engine 1 {"souls":1,"absorbed":1}, engine 2 {"souls":1,"absorbed":1}
 - run 1: B: MQ104 running, the server revived and killed the dragon again: engine 1 {"souls":1,"absorbed":1,"fus":false,"stage":10} -> {"souls":0,"absorbed":2,"fus":true,"stage":90}, engine 2 {"souls":1,"absorbed":1,"fus":false,"stage":10} -> {"souls":0,"absorbed":2,"fus":true,"stage":90}
-- run 1: C: the member went to Whiterun (distance to the dragon -1, -1 for another worldspace; leader 4632); the server revived and killed the dragon again: engine 1 gained {"souls":1,"absorbed":1}, engine 2 gained {"souls":0,"absorbed":0}
+- run 1: C: the member went to Whiterun (distance to the dragon -1, -1 for another worldspace; leader 4711); the server revived and killed the dragon again: engine 1 gained {"souls":1,"absorbed":1}, engine 2 gained {"souls":0,"absorbed":0}
+- run 2: A: party formed, the server enabled the dragon and it is loaded on both engines, MQ104 not running (engine 1 -1, engine 2 -1); dragon 5a6ca server dead false, distance to the leader 2553, to the member 2543; before: engine 1 {"souls":0,"absorbed":0}, engine 2 {"souls":0,"absorbed":0}
+- run 2: A: the server killed the dragon with both players near; 0.1 s to the first gain, then 8 s more: engine 1 {"souls":1,"absorbed":1} (gained {"souls":1,"absorbed":1}), engine 2 {"souls":1,"absorbed":1} (gained {"souls":1,"absorbed":1})
+- run 2: A: moves next to the corpse: {"1":[{"target":[2709,-40667,4508],"d":180,"corpse":[2847,-40689,4407],"player":[2909,-40617,4254]}],"2":[{"target":[2806,-40617,4430],"d":281,"corpse":[2810,-40621,4428],"player":[3006,-40667,4232]}]}
+- run 2: A: the dragon is dead on engine 1 true, on engine 2 true; both players then stood next to the corpse for 10 s (distance 182 and 280): engine 1 {"souls":1,"absorbed":1}, engine 2 {"souls":1,"absorbed":1}
+- run 2: B: MQ104 running, the server revived and killed the dragon again: engine 1 {"souls":1,"absorbed":1,"fus":false,"stage":10} -> {"souls":0,"absorbed":2,"fus":true,"stage":90}, engine 2 {"souls":1,"absorbed":1,"fus":false,"stage":10} -> {"souls":0,"absorbed":2,"fus":true,"stage":90}
+- run 2: C: the member went to Whiterun (distance to the dragon -1, -1 for another worldspace; leader 4724); the server revived and killed the dragon again: engine 1 gained {"souls":1,"absorbed":1}, engine 2 gained {"souls":0,"absorbed":0}
+- run 3: A: party formed, the server enabled the dragon and it is loaded on both engines, MQ104 not running (engine 1 -1, engine 2 -1); dragon 5a6ca server dead false, distance to the leader 2553, to the member 2543; before: engine 1 {"souls":0,"absorbed":0}, engine 2 {"souls":0,"absorbed":0}
+- run 3: A: the server killed the dragon with both players near; 0.1 s to the first gain, then 8 s more: engine 1 {"souls":1,"absorbed":1} (gained {"souls":1,"absorbed":1}), engine 2 {"souls":1,"absorbed":1} (gained {"souls":1,"absorbed":1})
+- run 3: A: moves next to the corpse: {"1":[{"target":[2698,-40662,4509],"d":136,"corpse":[2907,-40608,4392],"player":[2898,-40612,4257]}],"2":[{"target":[2865,-40682,4404],"d":276,"corpse":[2865,-40684,4404],"player":[3065,-40732,4220]}]}
+- run 3: A: the dragon is dead on engine 1 true, on engine 2 true; both players then stood next to the corpse for 10 s (distance 136 and 276): engine 1 {"souls":1,"absorbed":1}, engine 2 {"souls":1,"absorbed":1}
+- run 3: B: MQ104 running, the server revived and killed the dragon again: engine 1 {"souls":1,"absorbed":1,"fus":false,"stage":10} -> {"souls":0,"absorbed":2,"fus":true,"stage":90}, engine 2 {"souls":1,"absorbed":1,"fus":false,"stage":10} -> {"souls":0,"absorbed":2,"fus":true,"stage":90}
+- run 3: C: the member went to Whiterun (distance to the dragon -1, -1 for another worldspace; leader 4685); the server revived and killed the dragon again: engine 1 gained {"souls":1,"absorbed":1}, engine 2 gained {"souls":0,"absorbed":0}
+- run 4: A: party formed, the server enabled the dragon and it is loaded on both engines, MQ104 not running (engine 1 -1, engine 2 -1); dragon 5a6ca server dead false, distance to the leader 2553, to the member 2543; before: engine 1 {"souls":0,"absorbed":0}, engine 2 {"souls":0,"absorbed":0}
+- run 4: A: the server killed the dragon with both players near; 0.7 s to the first gain, then 8 s more: engine 1 {"souls":1,"absorbed":1} (gained {"souls":1,"absorbed":1}), engine 2 {"souls":1,"absorbed":1} (gained {"souls":1,"absorbed":1})
+- run 4: A: moves next to the corpse: {"1":[{"target":[2787,-40679,4427],"d":239,"corpse":[2842,-40710,4408],"player":[2987,-40629,4237]}],"2":[{"target":[2943,-40790,4388],"d":347,"corpse":[2997,-40525,4244],"player":[3143,-40840,4238]}]}
+- run 4: A: the dragon is dead on engine 1 true, on engine 2 true; both players then stood next to the corpse for 10 s (distance 239 and 347): engine 1 {"souls":1,"absorbed":1}, engine 2 {"souls":1,"absorbed":1}
+- run 4: B: MQ104 running, the server revived and killed the dragon again: engine 1 {"souls":1,"absorbed":1,"fus":false,"stage":10} -> {"souls":0,"absorbed":2,"fus":true,"stage":90}, engine 2 {"souls":1,"absorbed":1,"fus":false,"stage":10} -> {"souls":0,"absorbed":2,"fus":true,"stage":90}
+- run 4: C: the member went to Whiterun (distance to the dragon -1, -1 for another worldspace; leader 4630); the server revived and killed the dragon again: engine 1 gained {"souls":1,"absorbed":1}, engine 2 gained {"souls":0,"absorbed":0}
+- run 5: A: party formed, the server enabled the dragon and it is loaded on both engines, MQ104 not running (engine 1 -1, engine 2 -1); dragon 5a6ca server dead false, distance to the leader 2553, to the member 2543; before: engine 1 {"souls":0,"absorbed":0}, engine 2 {"souls":0,"absorbed":0}
+- run 5: A: the server killed the dragon with both players near; 0.7 s to the first gain, then 8 s more: engine 1 {"souls":1,"absorbed":1} (gained {"souls":1,"absorbed":1}), engine 2 {"souls":1,"absorbed":1} (gained {"souls":1,"absorbed":1})
+- run 5: A: moves next to the corpse: {"1":[{"target":[2791,-40661,4468],"d":197,"corpse":[2891,-40600,4404],"player":[2991,-40611,4236]}],"2":[{"target":[2859,-40702,4404],"d":273,"corpse":[2860,-40702,4404],"player":[3059,-40752,4223]}]}
+- run 5: A: the dragon is dead on engine 1 true, on engine 2 true; both players then stood next to the corpse for 10 s (distance 196 and 273): engine 1 {"souls":1,"absorbed":1}, engine 2 {"souls":1,"absorbed":1}
+- run 5: B: MQ104 running, the server revived and killed the dragon again: engine 1 {"souls":1,"absorbed":1,"fus":false,"stage":10} -> {"souls":0,"absorbed":2,"fus":true,"stage":90}, engine 2 {"souls":1,"absorbed":1,"fus":false,"stage":10} -> {"souls":0,"absorbed":2,"fus":true,"stage":90}
+- run 5: C: the member went to Whiterun (distance to the dragon -1, -1 for another worldspace; leader 4695); the server revived and killed the dragon again: engine 1 gained {"souls":1,"absorbed":1}, engine 2 gained {"souls":0,"absorbed":0}
 ### 2B.4
 - run 1: A: client stages [MQ102B, MQ102, MQ104] by seconds after the replay line: 0.3:1/0/0 0.6:10/5/0 1.7:10/15/0 2.4:30/15/0 3.2:30/15/10 5.4:30/15/12
 - run 1: B: after the replay, 50 of 148 ESP refs in the player's cell are known to the server; disabled state differs on none, open state differs on none
@@ -478,32 +435,45 @@ First non-PASS in plan order: G1.7
 - ![G2.3](runs/G2_3/1/G2_3-loot.png)
 - ![G2.3](runs/G2_3/1/G2_3-farengar.png)
 ### F1
-- run 1: A: party formed; the server enabled Mirmulnir 5a6ca; after 6 s: server {"pos":[5274,-41442,7512],"cell":"3c:Skyrim.esm","hoster":4278190081,"dead":false} (hoster ff000001), engine 1 {"pos":[7794,-37462,4587],"ref":[7796,-37462,4587],"node":"NPC Pelvis","loaded":true,"dead":false}, engine 2 {"pos":[5453,-41443,7655],"ref":[5513,-41442,7700],"node":"NPC Pelvis","loaded":true,"dead":false}; leader ff000000, member ff000001
-- run 1: B: the server killed the dragon at [5513,-41442,7700] in 3c:Skyrim.esm (hoster ff000001); the server's position stayed within 50 units for 8 s 26 s after the kill, at [8015,-40490,3491] (hoster ff000001, 4988 units from the kill point)
-- run 1: B: engine 1 every 1 s: 1s [5963,-41373,7958]; 2s [5910,-41312,7401]; 3s [5959,-41358,6051]; 4s [6429,-41374,5418]; 5s [6966,-41331,4340]; 7s [7135,-41295,3823]; 8s [7226,-41288,3750]; 9s [7245,-41283,3738]; 10s [7259,-41285,3710]; 11s [7271,-41272,3694]; 12s [7270,-41269,3697]; 13s [7270,-41269,3696]; 14s [7270,-41268,3696]; 15s [7269,-41268,3696]; 17s [7270,-41268,3696]; 18s [7269,-41268,3696]; 19s [8016,-40488,3492]; 20s [8016,-40488,3492]; 21s [8016,-40488,3492]; 22s [8016,-40488,3492]; 23s [8016,-40488,3492]; 24s [8016,-40487,3492]; 25s [8015,-40487,3492]
-- run 1: B: engine 2 every 1 s: 1s [5618,-41431,7906]; 2s [5633,-41494,7251]; 3s [5633,-41428,6397]; 4s [5787,-41523,6256]; 5s [6017,-41517,5826]; 7s [6354,-41255,5168]; 8s [6791,-40954,4449]; 9s [7333,-40707,3838]; 10s [7693,-40512,3720]; 11s [7705,-40506,3688]; 12s [7698,-40550,3710]; 13s [7824,-40511,3645]; 14s [7927,-40464,3561]; 15s [7975,-40503,3521]; 17s [8005,-40488,3491]; 18s [8013,-40489,3491]; 19s [8014,-40489,3491]; 20s [8016,-40488,3492]; 21s [8014,-40491,3491]; 22s [8016,-40488,3492]; 23s [8016,-40489,3491]; 24s [8016,-40489,3491]; 25s [8015,-40490,3491]
-- run 1: B: server every 1 s: 1s [5616,-41425,7912]; 2s [5638,-41497,7330]; 3s [5630,-41423,6395]; 4s [5780,-41523,6271]; 5s [5995,-41519,5890]; 7s [6316,-41282,5253]; 8s [6762,-40969,4491]; 9s [7280,-40750,3825]; 10s [7690,-40513,3719]; 11s [7708,-40504,3690]; 12s [7693,-40551,3710]; 13s [7827,-40509,3645]; 14s [7924,-40460,3561]; 15s [7973,-40502,3524]; 17s [8005,-40488,3491]; 18s [8013,-40488,3491]; 19s [8014,-40489,3491]; 20s [8016,-40488,3492]; 21s [8014,-40490,3491]; 22s [8016,-40488,3492]; 23s [8016,-40489,3491]; 24s [8016,-40489,3491]; 25s [8015,-40490,3491]
-- run 1: B: engine 1 at the end: body (NPC Pelvis) [8015,-40487,3492], ref position [8001,-40448,3781], dead true, loaded true, body 3 units from the server's corpse position
-- run 1: B: engine 2 at the end: body (NPC Pelvis) [8015,-40490,3491], ref position [8015,-40490,3491], dead true, loaded true, body 0 units from the server's corpse position
-- run 1: C: engine 1 corpse pose, node offsets from the dragon's position: {"NPC Head":[-121,-195,153],"NPC Pelvis":[15,-39,-289],"NPC Spine1":[3,-59,-263],"NPC Tail1":[23,-29,-318]}
-- run 1: C: engine 2 corpse pose, node offsets from the dragon's position: {"NPC Head":[259,-353,-227],"NPC Pelvis":[0,0,0],"NPC Spine1":[15,-31,-11],"NPC Tail1":[-21,23,6]}
-- run 1: D: after both players stood next to the corpse for 4 s: engine 1 body [8015,-40487,3492], dead true, loaded true, 2 units from the server's position [8016,-40489,3491]
-- run 1: D: after both players stood next to the corpse for 4 s: engine 2 body [8016,-40489,3491], dead true, loaded true, 0 units from the server's position [8016,-40489,3491]
+- run 1: A: party formed; the server enabled Mirmulnir 5a6ca; after 6 s: server {"pos":[5151,-41445,7313],"cell":"3c:Skyrim.esm","hoster":4278190080,"dead":false} (hoster ff000000), engine 1 {"pos":[5214,-41449,7358],"ref":[5275,-41452,7396],"node":"NPC Pelvis","loaded":true,"dead":false}, engine 2 {"pos":[4908,-41420,7140],"ref":[5151,-41445,7313],"node":"NPC Pelvis","loaded":true,"dead":false}; leader ff000000, member ff000001
+- run 1: B: the server killed the dragon at [5151,-41445,7313] in 3c:Skyrim.esm (hoster ff000000); the server's position stayed within 50 units for 8 s 17 s after the kill, at [5065,-40479,5100] (hoster ff000000, 2416 units from the kill point)
+- run 1: B: engine 1 every 1 s: 1s [5496,-41446,7696]; 2s [5513,-41517,7085]; 3s [5469,-41204,6315]; 4s [5336,-40945,5843]; 5s [5186,-40551,5326]; 7s [5143,-40486,5063]; 8s [5078,-40480,5100]; 9s [5066,-40479,5101]; 10s [5065,-40479,5100]; 11s [5066,-40479,5100]; 12s [5065,-40479,5100]; 13s [5065,-40479,5100]; 14s [5065,-40479,5100]; 15s [5065,-40479,5100]; 16s [5065,-40479,5100]
+- run 1: B: engine 2 every 1 s: 1s [5490,-41445,7735]; 2s [5520,-41518,7174]; 3s [5466,-41235,6321]; 4s [5357,-40981,5917]; 5s [5194,-40569,5364]; 7s [5154,-40477,5052]; 8s [5083,-40479,5100]; 9s [5067,-40478,5101]; 10s [5066,-40479,5100]; 11s [5065,-40479,5100]; 12s [5065,-40479,5100]; 13s [5065,-40479,5100]; 14s [5065,-40479,5100]; 15s [5065,-40479,5100]; 16s [5065,-40479,5100]
+- run 1: B: server every 1 s: 1s [5499,-41456,7687]; 2s [5513,-41517,7082]; 3s [5466,-41221,6319]; 4s [5347,-40967,5888]; 5s [5183,-40545,5309]; 7s [5142,-40487,5064]; 8s [5079,-40480,5100]; 9s [5067,-40479,5101]; 10s [5065,-40479,5100]; 11s [5066,-40479,5100]; 12s [5065,-40479,5100]; 13s [5065,-40479,5100]; 14s [5065,-40479,5100]; 15s [5065,-40479,5100]; 16s [5065,-40479,5100]
+- run 1: B: engine 1 at the end: body (NPC Pelvis) [5065,-40479,5100], ref position [5065,-40479,5100], dead true, loaded true, body 0 units from the server's corpse position
+- run 1: B: engine 2 at the end: body (NPC Pelvis) [5065,-40479,5100], ref position [5065,-40479,5100], dead true, loaded true, body 0 units from the server's corpse position
+- run 1: C: engine 1 corpse pose, node offsets from the dragon's position: {"NPC Head":[-237,143,-375],"NPC Pelvis":[0,0,0],"NPC Spine1":[-31,15,-9],"NPC Tail1":[29,-5,13]}
+- run 1: C: engine 2 corpse pose, node offsets from the dragon's position: {"NPC Head":[-232,149,-375],"NPC Pelvis":[0,0,0],"NPC Spine1":[-31,15,-9],"NPC Tail1":[29,-5,13]}
+- run 1: D: after both players stood next to the corpse for 4 s: engine 1 body [5065,-40479,5100], dead true, loaded true, 0 units from the server's position [5065,-40479,5100]
+- run 1: D: after both players stood next to the corpse for 4 s: engine 2 body [5065,-40479,5100], dead true, loaded true, 0 units from the server's position [5065,-40479,5100]
+- run 2: A: party formed; the server enabled Mirmulnir 5a6ca; after 6 s: server {"pos":[5151,-41445,7313],"cell":"3c:Skyrim.esm","hoster":4278190080,"dead":false} (hoster ff000000), engine 1 {"pos":[5214,-41449,7358],"ref":[5275,-41452,7396],"node":"NPC Pelvis","loaded":true,"dead":false}, engine 2 {"pos":[4908,-41420,7140],"ref":[4907,-41419,7139],"node":"NPC Pelvis","loaded":true,"dead":false}; leader ff000000, member ff000001
+- run 2: B: the server killed the dragon at [5400,-41456,7476] in 3c:Skyrim.esm (hoster ff000000); the server's position stayed within 50 units for 8 s 27 s after the kill, at [3916,-40139,4257] (hoster ff000000, 3781 units from the kill point)
+- run 2: B: engine 1 every 1 s: 1s [5499,-41455,7688]; 2s [5512,-41517,7056]; 3s [5420,-41281,6354]; 4s [5312,-41063,6008]; 6s [5172,-40733,5389]; 7s [5099,-40472,5178]; 8s [5061,-40390,5173]; 9s [5019,-40428,5173]; 10s [4983,-40443,5163]; 11s [4878,-40377,5078]; 12s [4867,-40293,4885]; 13s [4813,-40209,4863]; 15s [4691,-40229,4809]; 16s [4470,-40232,4764]; 17s [4245,-40169,4595]; 18s [3931,-40181,4263]; 19s [3920,-40128,4258]; 20s [3920,-40139,4257]; 21s [3919,-40137,4258]; 22s [3919,-40137,4258]; 24s [3918,-40137,4258]; 25s [3917,-40139,4256]; 26s [3916,-40139,4257]; 27s [3916,-40139,4257]
+- run 2: B: engine 2 every 1 s: 1s [5493,-41441,7709]; 2s [5516,-41517,7125]; 3s [5482,-41210,6318]; 4s [5377,-40930,5898]; 6s [5106,-40529,5346]; 7s [5156,-40538,5273]; 8s [5194,-40492,5269]; 9s [5204,-40475,5237]; 10s [5248,-40450,5211]; 11s [5350,-40361,5091]; 12s [5465,-40305,4944]; 13s [5462,-40315,4927]; 15s [5461,-40315,4927]; 16s [5461,-40315,4926]; 17s [5461,-40314,4926]; 18s [5461,-40314,4926]; 19s [5461,-40314,4926]; 20s [5461,-40314,4926]; 21s [3919,-40139,4257]; 22s [3919,-40139,4257]; 24s [3919,-40139,4257]; 25s [3919,-40139,4257]; 26s [3919,-40139,4257]; 27s [3920,-40139,4257]
+- run 2: B: server every 1 s: 1s [5499,-41456,7687]; 2s [5514,-41517,7084]; 3s [5416,-41273,6361]; 4s [5316,-41067,6024]; 6s [5164,-40720,5373]; 7s [5101,-40473,5177]; 8s [5059,-40392,5175]; 9s [5019,-40427,5173]; 10s [4982,-40445,5162]; 11s [4882,-40381,5083]; 12s [4863,-40293,4884]; 13s [4815,-40210,4863]; 15s [4682,-40231,4803]; 16s [4474,-40233,4765]; 17s [4232,-40167,4585]; 18s [3932,-40185,4264]; 19s [3921,-40128,4258]; 20s [3920,-40139,4257]; 21s [3919,-40137,4258]; 22s [3919,-40137,4258]; 24s [3918,-40137,4258]; 25s [3917,-40139,4256]; 26s [3916,-40139,4257]; 27s [3916,-40139,4257]
+- run 2: B: engine 1 at the end: body (NPC Pelvis) [3916,-40139,4257], ref position [3916,-40139,4257], dead true, loaded true, body 0 units from the server's corpse position
+- run 2: B: engine 2 at the end: body (NPC Pelvis) [3920,-40139,4257], ref position [3978,-40074,4536], dead true, loaded true, body 4 units from the server's corpse position
+- run 2: C: engine 1 corpse pose, node offsets from the dragon's position: {"NPC Head":[-139,452,-87],"NPC Pelvis":[0,0,0],"NPC Spine1":[-24,26,-4],"NPC Tail1":[19,-22,13]}
+- run 2: C: engine 2 corpse pose, node offsets from the dragon's position: {"NPC Head":[182,-156,136],"NPC Pelvis":[-59,-65,-279],"NPC Spine1":[-36,-79,-255],"NPC Tail1":[-75,-60,-306]}
+- run 2: D: after both players stood next to the corpse for 4 s: engine 1 body [3916,-40139,4257], dead true, loaded true, 0 units from the server's position [3916,-40139,4257]
+- run 2: D: after both players stood next to the corpse for 4 s: engine 2 body [3920,-40139,4257], dead true, loaded true, 4 units from the server's position [3916,-40139,4257]
 - ![F1](runs/F1/1/F1-engine1.png)
 - ![F1](runs/F1/1/F1-engine2.png)
+- ![F1](runs/F1/2/F1-engine1.png)
+- ![F1](runs/F1/2/F1-engine2.png)
 ### G2.4
-- run 1: A: leader ff000000, bot member ff000001 in the party at the Western Watchtower; the leader set MQ104 to 60 by script (its fragment enables Mirmulnir): MQ104 stage 60; Mirmulnir 5a6ca on the server {"cell":"3c:Skyrim.esm","pos":[7796,-37462,5697],"disabled":false,"dead":false,"hoster":4278190080} (hoster ff000000); the member's MQ104 log [60]; the leader before: {"souls":0,"absorbed":0,"fus":false}
-- run 1: B: the server killed Mirmulnir; 3.7 s later: MQ104 stage 90 (90 done true); the leader {"souls":0,"absorbed":0,"fus":false} -> {"souls":0,"absorbed":1,"fus":true}; server soul lines ["dragon 5a6ca gives its soul to ff000000","dragon 5a6ca gives its soul to ff000001"]; the member's MQ104 log [60,65,90,85,80]
-- run 1: C: Balgruuf: message boxes answered (first button) at MQ104 stages [90]; 7 topic picks ("J'ai tué le dragon. Ça mérite bien une récompense, non ?", "La tour de guet a été détruite, mais nous avons tué le dragon.", "Il s'avère que je pourrais être "Enfant de dragon".", "À la mort du dragon, j'ai absorbé une partie de son pouvoir.", "Les hommes m'ont donné ce nom, c'est tout.", "Que me veulent les Grises-barbes ?"), MQ104 stages 90 -> 150 -> 160, last line "En mon droit de jarl, je vous nomme thane de Blancherive. C'est le plus grand honneur que je puisse vous accorder."; 160 done true
-- run 1: C: Lydia a2c94 enabled and loaded on the leader true; before the talk {"teammate":false,"rank":-1}; message boxes answered []; 1 topic picks ("Suivez-moi, j'ai besoin de votre aide."), last line ""; after: {"teammate":true,"rank":0} (CurrentFollowerFaction rank, player teammate); server {"cell":"165a3:Skyrim.esm","pos":[-349,-288,-318],"disabled":false,"dead":false,"hoster":4278190080} (hoster ff000000)
+- run 1: A: leader ff000000, bot member ff000001 in the party at the Western Watchtower; the leader set MQ104 to 60 by script (its fragment enables Mirmulnir): MQ104 stage 65; Mirmulnir 5a6ca on the server {"cell":"3c:Skyrim.esm","pos":[7734,-37463,5697],"disabled":false,"dead":false,"hoster":4278190080} (hoster ff000000); the member's MQ104 log [60,65]; the leader before: {"souls":0,"absorbed":0,"fus":false}
+- run 1: B: the server killed Mirmulnir; 3.6 s later: MQ104 stage 90 (90 done true); the leader {"souls":0,"absorbed":0,"fus":false} -> {"souls":0,"absorbed":1,"fus":true}; server soul lines ["dragon 5a6ca gives its soul to ff000000","dragon 5a6ca gives its soul to ff000001"]; the member's MQ104 log [60,65,90,85]
+- run 1: C: Balgruuf: message boxes answered (first button) at MQ104 stages [90]; 8 topic picks ("J'ai tué le dragon. Ça mérite bien une récompense, non ?", "La tour de guet a été détruite, mais nous avons tué le dragon.", "Il s'avère que je pourrais être "Enfant de dragon".", "À la mort du dragon, j'ai absorbé une partie de son pouvoir.", "Les hommes m'ont donné ce nom, c'est tout.", "Que me veulent les Grises-barbes ?"), MQ104 stages 90 -> 150 -> 160, last line "En mon droit de jarl, je vous nomme thane de Blancherive. C'est le plus grand honneur que je puisse vous accorder."; 160 done true
+- run 1: C: Lydia a2c94 enabled and loaded on the leader true; before the talk {"teammate":false,"rank":-1}; message boxes answered []; 1 topic picks ("Suivez-moi, j'ai besoin de votre aide."), last line ""; after: {"teammate":true,"rank":0} (CurrentFollowerFaction rank, player teammate); server {"cell":"165a3:Skyrim.esm","pos":[-349,-287,-318],"disabled":false,"dead":false,"hoster":4278190080} (hoster ff000000)
 - ![G2.4](runs/G2_4/1/G2_4-lydia.png)
 ### G2.5
 - run 1: S1 start after the relog, at Arvel: Arvel holds 1 claw on the client, 1 on the server
 - run 1: S1 (G2.1's step): MS13 40; the claw 39647: client 1, server 1; 10 s later client 1, server 1; the member's MS13 log [10,40]
 - run 1: S1 after the relog: MS13 40, the claw client 1, server 1
 - run 1: S1 after the relog: Arvel (the claw) holds 0 on the client, 0 on the server
-- run 1: S2 (G2.2's step): the claw door DoorBase -171 -> -226, MS13 50, the keyhole's server state done, the member's MS13 log [10,40,50]
-- run 1: S2 after the relog: MS13 50, the claw door DoorBase -368 (closed -171), the claw held 1
+- run 1: S2 (G2.2's step): the claw door DoorBase -171 -> -227, MS13 50, the keyhole's server state done, the member's MS13 log [10,40,50]
+- run 1: S2 after the relog: MS13 50, the claw door DoorBase -373 (closed -171), the claw held 1
 - run 1: S2 after the relog: Arvel (the claw) holds 0 on the client, 0 on the server
 - run 1: S3 (G2.3's loot): MQ103 180 (180 done true); 10 s after the loot the Dragonstone: client 1, server 1; the member's MQ103 log [10,180,20,60]
 - run 1: S3 after the relog: MQ103 180 done true, the Dragonstone client 1, server 1
@@ -513,20 +483,33 @@ First non-PASS in plan order: G1.7
 - run 1: S4 after the relog: MQ103 190 done true, the Dragonstone client 0, server 0
 - run 1: S4 after the relog: Arvel (the claw) holds 0 on the client, 0 on the server
 - run 1: S4 after the relog: the boss (the Dragonstone) holds 0 on the client, 0 on the server
-- run 1: S5 (G2.4's step): MQ104 90 done true, 160 done true (8 topic picks, 0 boxes); Fus true; the leader gained ["5d178"], the reward weapon 5d178 10 s later: client 1, server 1
-- run 1: S5: the leader equipped 5d178: client right hand 5d178, server worn ["12e46","12e49","12e4b","12e4d","5d178"]
+- run 1: S5 (G2.4's step): MQ104 90 done true, 160 done true (8 topic picks, 0 boxes); Fus true; the leader gained ["4b155"], the reward weapon 4b155 10 s later: client 1, server 1
+- run 1: S5: the leader equipped 4b155: client right hand 4b155, server worn ["12e46","12e49","12e4b","12e4d","4b155"]
 - run 1: S5: Lydia follows the leader true ({"teammate":true,"rank":0}); the server's stored followers [666772,0]; the member's MQ104 log [10,60,65,90,85,150,160]
-- run 1: S5 after the relog: {"souls":0,"soulsBefore":0,"done160":true,"fus":true,"axe":1,"serverAxe":1,"equipped":"5d178","worn":["12e46","12e49","12e4b","12e4d","5d178"],"lydia":{"teammate":true,"rank":0}}
+- run 1: S5 after the relog: {"souls":0,"soulsBefore":0,"done160":true,"fus":true,"axe":1,"serverAxe":1,"equipped":"4b155","worn":["12e46","12e49","12e4b","12e4d","4b155"],"lydia":{"teammate":true,"rank":0}}
 - run 1: S5 after the relog: Arvel (the claw) holds 0 on the client, 0 on the server
 - run 1: S5 after the relog: the boss (the Dragonstone) holds 0 on the client, 0 on the server
 - run 1: relog S1 start: the leader and the bot logged in again; 0 message boxes answered; state back 0.7 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)
 - run 1: relog S1: the leader and the bot logged in again; 0 message boxes answered; state back 2.0 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)
-- run 1: relog S2: the leader and the bot logged in again; 0 message boxes answered; state back 2.1 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)
-- run 1: relog S3: the leader and the bot logged in again; 0 message boxes answered; state back 2.0 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)
-- run 1: relog S4: the leader and the bot logged in again; 0 message boxes answered; state back 2.0 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)
-- run 1: relog S5: the leader and the bot logged in again; 1 message boxes answered; state back 10.1 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)
+- run 1: relog S2: the leader and the bot logged in again; 0 message boxes answered; state back 3.3 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)
+- run 1: relog S3: the leader and the bot logged in again; 0 message boxes answered; state back 1.4 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [["1ceee",1]] (relayed from the leader)
+- run 1: relog S4: the leader and the bot logged in again; 0 message boxes answered; state back 2.6 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)
+- run 1: relog S5: the leader and the bot logged in again; 1 message boxes answered; state back 10.2 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)
 - run 1: the leader client's stray removals and failed relinks: ["Stray quest item removed d0800 18 9bcd6","Stray quest item removed d0800 18 9bcd6"]
 - ![G2.5](runs/G2_5/1/G2_5-relog.png)
+### F4
+- run 1: A: party formed; the member started 33221 units away; the server enabled Mirmulnir 5a6ca, hosted by the leader ff000000; the server moved the member ff000001 next to the leader, and the dragon loaded on the member's client
+- run 1: B: every 1 s for 40 s after the load: 0s server [7090,-37539,4787] flying, leader [6914,-37599,4845] state 2, member [7090,-37539,4787] state 2 0; 1.1s server [5379,-38369,5312] flying, leader [5260,-38431,5345] state 2, member [5379,-38369,5312] state 2 0; 2.2s server [3604,-39940,5933] flying, leader [3614,-40170,6006] state 2, member [3604,-39940,5933] state 2 0; 3.3s server [4907,-41419,7139] flying, leader [5151,-41445,7313] state 2, member [4907,-41419,7139] state 2 0; 4.4s server [6684,-40556,6320] flying, leader [6736,-40471,6228] state 2, member [6562,-40749,6537] state 2 315; 5.5s server [7462,-39259,4892] flying, leader [7536,-39141,4764] state 2, member [7462,-39259,4892] state 2 0; 6.6s server [8375,-37883,5474] flying, leader [8544,-37637,5760] state 2, member [8375,-37883,5474] state 2 0; 7.8s server [9605,-36093,7410] flying, leader [9674,-35992,7507] state 2, member [9468,-36293,7212] state 2 313; 8.9s server [11418,-35873,8704] flying, leader [11642,-36105,8779] state 2, member [11418,-35873,8704] state 2 0; 10s server [11881,-38121,8080] flying, leader [11785,-38496,7831] state 2, member [11820,-38373,7914] state 2 308; 11.2s server [11221,-40328,6619] flying, leader [11159,-40542,6482] state 2, member [11221,-40328,6619] state 2 0; 12.3s server [10415,-42794,4977] flying, leader [10288,-43172,4723] state 2, member [10415,-42794,4977] state 2 0; 13.4s server [9607,-42687,4443] flying, leader [9541,-42570,4446] state 3, member [9607,-42687,4443] state 3 0; 14.5s server [8905,-41442,4473] flying, leader [8817,-41287,4476] state 3, member [8905,-41442,4473] state 3 0; 15.6s server [8334,-40436,4496] flying, leader [8334,-40436,4496] state 3, member [8334,-40436,4496] state 3 0; 16.7s server [8334,-40436,4496] flying, leader [8334,-40436,4496] state 3, member [8334,-40436,4496] state 3 0; 17.9s server [8334,-40436,4496] flying, leader [8334,-40436,4496] state 3, member [8334,-40436,4496] state 3 0; 19s server [8334,-40436,4496] flying, leader [8334,-40436,4496] state 3, member [8334,-40436,4496] state 3 0; 20.1s server [8306,-40389,4533] flying, leader [8257,-40307,4596] state 3, member [8306,-40389,4533] state 3 0; 21.2s server [7714,-39400,5301] flying, leader [7596,-39203,5454] state 3, member [7714,-39400,5301] state 3 0; 22.3s server [7107,-38388,6088] flying, leader [7044,-38282,6170] state 3, member [7107,-38388,6088] state 3 0; 23.5s server [6591,-37526,6745] flying, leader [6449,-37282,6767] state 2, member [6591,-37526,6745] state 2 0; 24.6s server [5691,-35771,6315] flying, leader [5613,-35544,6264] state 2, member [5691,-35771,6315] state 2 0; 25.7s server [6303,-33814,6433] flying, leader [6661,-33908,6638] state 2, member [6303,-33814,6433] state 2 0; 26.8s server [7919,-35627,7706] flying, leader [7942,-35781,7700] state 2, member [7859,-35321,7685] state 2 313; 27.9s server [7818,-37942,7109] flying, leader [7758,-38252,7024] state 2, member [7818,-37942,7109] state 2 0; 29.1s server [7439,-40687,6413] flying, leader [7425,-40768,6309] state 3, member [7439,-40687,6413] state 3 0; 30.2s server [7429,-40741,5703] flying, leader [7430,-40737,5622] state 3, member [7428,-40748,5865] state 3 162; 31.3s server [7436,-40712,5057] flying, leader [7437,-40708,4956] state 3, member [7435,-40716,5138] state 3 81; 32.5s server [7440,-40685,4410] flying, leader [7440,-40683,4368] state 3, member [7440,-40685,4410] state 3 0; 33.5s server [7440,-40683,4368] flying, leader [7440,-40683,4368] state 3, member [7440,-40685,4410] state 3 42; 34.7s server [7440,-40683,4368] flying, leader [7440,-40683,4368] state 3, member [7440,-40685,4410] state 3 42; 35.8s server [7440,-40683,4368] flying, leader [7440,-40683,4368] state 3, member [7440,-40685,4410] state 3 42; 36.9s server [7440,-40683,4368] flying, leader [7440,-40683,4368] state 3, member [7440,-40685,4410] state 3 42; 38s server [7520,-40057,4789] flying, leader [7539,-39905,4892] state 3, member [7520,-40057,4789] state 3 0; 39.2s server [7695,-38688,5709] flying, leader [7705,-38612,5760] state 3, member [7695,-38688,5709] state 3 0
+- run 1: C: 36 samples flying and hosted by the leader; the server's dragon travelled 50189 units in them; 2 hover starts (state 2 to 3) among them; the member's copy was over 1000 units from the server's position in 0 (max 315); hosters seen ["ff000000"] (a hoster other than the leader is F5's, those samples do not count)
+- run 2: A: party formed; the member started 33221 units away; the server enabled Mirmulnir 5a6ca, hosted by the leader ff000000; the server moved the member ff000001 next to the leader, and the dragon loaded on the member's client
+- run 2: B: every 1 s for 40 s after the load: 0s server [7057,-37549,4798] flying, leader [6988,-37572,4820] state 2, member [7057,-37549,4798] state 2 0; 1.1s server [5547,-38280,5265] flying, leader [5379,-38369,5312] state 2, member [5547,-38280,5265] state 2 0; 2.2s server [3684,-39799,5886] flying, leader [3676,-40020,5953] state 2, member [3684,-39799,5886] state 2 0; 3.3s server [4801,-41395,7091] flying, leader [5096,-41460,7369] state 2, member [4801,-41395,7091] state 2 0; 4.5s server [6738,-40747,6872] flying, leader [6788,-40664,6780] state 2, member [6620,-40928,7074] state 2 296; 5.6s server [7351,-39524,5315] flying, leader [7416,-39386,5114] state 2, member [7351,-39524,5315] state 2 0; 6.7s server [7973,-38181,5061] flying, leader [8091,-37970,5310] state 2, member [7973,-38181,5061] state 2 0; 7.9s server [9053,-36243,6890] flying, leader [9149,-36070,7028] state 2, member [9053,-36243,6890] state 2 0; 9s server [10589,-34989,8348] flying, leader [10911,-35213,8507] state 2, member [10589,-34989,8348] state 2 0; 10.1s server [11899,-37345,8624] flying, leader [11898,-37483,8553] state 2, member [11899,-37345,8624] state 2 0; 11.2s server [11554,-39311,7292] flying, leader [11509,-39568,7118] state 2, member [11554,-39311,7292] state 2 0; 12.4s server [10998,-41769,5537] flying, leader [10903,-42147,5260] state 2, member [10998,-41769,5537] state 2 0; 13.5s server [10241,-42815,4412] flying, leader [10162,-42705,4416] state 3, member [10241,-42815,4412] state 3 0; 14.6s server [9378,-41607,4453] flying, leader [9273,-41461,4458] state 3, member [9378,-41607,4453] state 3 0; 15.8s server [8472,-40343,4496] flying, leader [8472,-40343,4496] state 3, member [8472,-40343,4496] state 3 0; 16.9s server [8472,-40343,4496] flying, leader [8472,-40343,4496] state 3, member [8472,-40343,4496] state 3 0; 18s server [8472,-40343,4496] flying, leader [8472,-40343,4496] state 3, member [8472,-40343,4496] state 3 0; 19.1s server [8472,-40343,4496] flying, leader [8472,-40343,4496] state 3, member [8472,-40343,4496] state 3 0; 20.3s server [8472,-40343,4496] flying, leader [8472,-40343,4496] state 3, member [8472,-40343,4496] state 3 0; 21.4s server [8438,-40299,4533] flying, leader [8413,-40266,4560] state 3, member [8438,-40299,4533] state 3 0; 22.5s server [7739,-39383,5301] flying, leader [7646,-39261,5403] state 3, member [7739,-39383,5301] state 3 0; 23.7s server [6995,-38408,6119] flying, leader [6856,-38225,6272] state 3, member [6995,-38408,6119] state 3 0; 24.8s server [5940,-37321,6412] flying, leader [5761,-37253,6178] state 2, member [5940,-37321,6412] state 2 0; 25.9s server [4248,-37472,4505] flying, leader [4126,-37539,4464] state 2, member [4248,-37472,4505] state 2 0; 27s server [3604,-39116,5720] flying, leader [3698,-39301,5845] state 2, member [3604,-39116,5720] state 2 0; 28.2s server [5511,-40294,6332] flying, leader [5835,-40340,6321] state 2, member [5511,-40294,6332] state 2 0; 29.3s server [7399,-40130,5274] flying, leader [7500,-40095,5122] state 2, member [7399,-40130,5274] state 2 0; 30.5s server [8845,-39708,4794] flying, leader [9186,-39649,4903] state 2, member [8845,-39708,4794] state 2 0; 31.6s server [11771,-39226,5495] flying, leader [11963,-39195,5536] state 2, member [11405,-39285,5418] state 2 379; 32.7s server [12570,-39184,5631] flying hoster 0, leader [12128,-41333,5379] state 2, member [12251,-39153,5578] state 2 325; 33.8s server [12570,-39184,5631] flying hoster 0, leader [11856,-41624,5372] state 2 unloaded, member [12251,-39153,5578] state 2 325; 34.9s server [12570,-39184,5631] flying hoster 0, leader [11856,-41624,5372] state 2 unloaded, member [12251,-39153,5578] state 2 325; 36.1s server [12570,-39184,5631] flying hoster 0, leader [11856,-41624,5372] state 2 unloaded, member [12251,-39153,5578] state 2 325; 37.2s server [12570,-39184,5631] flying hoster 0, leader [11856,-41624,5372] state 2 unloaded, member [12251,-39153,5578] state 2 325; 38.3s server [12570,-39184,5631] flying hoster 0, leader [11856,-41624,5372] state 2 unloaded, member [12251,-39153,5578] state 2 325; 39.5s server [12570,-39184,5631] flying hoster 0, leader [11856,-41624,5372] state 2 unloaded, member [12251,-39153,5578] state 2 325
+- run 2: C: 29 samples flying and hosted by the leader; the server's dragon travelled 48703 units in them; 1 hover starts (state 2 to 3) among them; the member's copy was over 1000 units from the server's position in 0 (max 379); hosters seen ["ff000000","0"] (a hoster other than the leader is F5's, those samples do not count)
+- run 3: A: party formed; the member started 33221 units away; the server enabled Mirmulnir 5a6ca, hosted by the leader ff000000; the server moved the member ff000001 next to the leader, and the dragon loaded on the member's client
+- run 3: B: every 1 s for 40 s after the load: 0s server [7093,-37539,4759] flying, leader [7027,-37559,4782] state 2, member [7210,-37510,4720] state 2 127; 1.1s server [5608,-38248,5245] flying, leader [5445,-38334,5291] state 2, member [5608,-38248,5245] state 2 0; 2.2s server [3706,-39791,5829] flying, leader [3704,-40036,5899] state 2, member [3706,-39791,5829] state 2 0; 3.3s server [4888,-41398,7251] flying, leader [5192,-41464,7491] state 2, member [4888,-41398,7251] state 2 0; 4.4s server [6873,-41084,6939] flying, leader [7112,-40926,6708] state 2, member [6873,-41084,6939] state 2 0; 5.5s server [7682,-40581,5732] flying, leader [7682,-40583,5685] state 3, member [7686,-40573,5920] state 3 188; 6.6s server [7670,-40613,4953] flying, leader [7669,-40615,4906] state 3, member [7673,-40606,5142] state 3 189; 7.7s server [7659,-40643,4244] flying, leader [7659,-40643,4244] state 3, member [7659,-40641,4293] state 3 49; 8.8s server [7659,-40643,4244] flying, leader [7659,-40643,4244] state 3, member [7659,-40641,4293] state 3 49; 9.9s server [7659,-40643,4244] flying, leader [7659,-40643,4244] state 3, member [7659,-40641,4293] state 3 49; 11.1s server [7659,-40643,4244] flying, leader [7659,-40643,4244] state 3, member [7659,-40641,4293] state 3 49; 12.2s server [7653,-40644,4244] flying, leader [7648,-40646,4244] state 3, member [7659,-40641,4293] state 3 49; 13.3s server [7416,-40016,4691] flying, leader [7350,-39837,4819] state 3, member [7416,-40016,4691] state 3 0; 14.4s server [6941,-38720,5611] flying, leader [6915,-38649,5662] state 3, member [6994,-38865,5509] state 3 185; 15.5s server [6528,-37597,6414] flying, leader [6441,-37438,6529] state 2, member [6528,-37597,6414] state 2 0; 16.7s server [4730,-38040,6289] flying, leader [4477,-38452,6209] state 2, member [4730,-38040,6289] state 2 0; 17.8s server [3525,-40711,6065] flying, leader [3452,-40937,6073] state 2, member [3525,-40711,6065] state 2 0; 18.9s server [3802,-42935,6876] flying, leader [4070,-43076,7006] state 2, member [3802,-42935,6876] state 2 0; 20s server [6137,-43046,7682] flying, leader [6498,-42920,7694] state 2, member [6137,-43046,7682] state 2 0; 21.1s server [7110,-41622,6271] flying, leader [7133,-41522,6105] state 2, member [7110,-41622,6271] state 2 0; 22.3s server [7421,-40538,4514] flying, leader [7491,-40305,4488] state 2, member [7421,-40538,4514] state 2 0; 23.4s server [8019,-38314,5622] flying, leader [8057,-38169,5695] state 2, member [8019,-38314,5622] state 2 0; 24.6s server [8607,-36027,6798] flying, leader [8656,-35772,6865] state 2, member [8607,-36027,6798] state 2 0; 25.8s server [8112,-33966,7141] flying, leader [7746,-33832,7116] state 2, member [8112,-33966,7141] state 2 0; 26.9s server [6230,-34773,6914] flying, leader [6176,-35073,6894] state 2, member [6230,-34773,6914] state 2 0; 28s server [6680,-37196,6693] flying, leader [6800,-37635,6639] state 2, member [6680,-37196,6693] state 2 0; 29.1s server [7449,-40063,6353] flying, leader [7561,-40482,6304] state 2, member [7449,-40063,6353] state 2 0; 30.2s server [7634,-40774,5726] flying, leader [7632,-40770,5684] state 3, member [7639,-40787,5891] state 3 166; 31.3s server [7610,-40718,5041] flying, leader [7608,-40713,4979] state 3, member [7610,-40718,5041] state 3 0; 32.5s server [7588,-40664,4357] flying, leader [7586,-40659,4295] state 3, member [7591,-40671,4440] state 3 83; 33.5s server [7586,-40655,4240] flying, leader [7586,-40655,4240] state 3, member [7586,-40658,4274] state 3 34; 34.6s server [7586,-40655,4240] flying, leader [7586,-40655,4240] state 3, member [7586,-40658,4274] state 3 34; 35.7s server [7586,-40655,4240] flying, leader [7586,-40655,4240] state 3, member [7586,-40658,4274] state 3 34; 36.8s server [7586,-40655,4240] flying, leader [7586,-40655,4240] state 3, member [7586,-40658,4274] state 3 34; 37.9s server [7587,-40440,4383] flying, leader [7588,-40215,4533] state 3, member [7587,-40440,4383] state 3 0; 39.1s server [7594,-39026,5326] flying, leader [7594,-38950,5377] state 3, member [7593,-39180,5224] state 3 185
+- run 3: C: 36 samples flying and hosted by the leader; the server's dragon travelled 48903 units in them; 2 hover starts (state 2 to 3) among them; the member's copy was over 1000 units from the server's position in 0 (max 189); hosters seen ["ff000000"] (a hoster other than the leader is F5's, those samples do not count)
+- ![F4](runs/F4/1/F4-member.png)
+- ![F4](runs/F4/2/F4-member.png)
+- ![F4](runs/F4/3/F4-member.png)
 ### P8
 - run 1: 115 client log lines, 2 [Exception] lines
 - run 1: exception: [Exception] failed to get key 'data': failed to call custom Serialize for type struct Equipment: failed to get key 'inv': failed to call cus.

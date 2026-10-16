@@ -14,7 +14,7 @@ import { SpApiInteractor } from "../services/spApiInteractor";
 
 const sqr = (x: number) => x * x;
 
-export const applyMovement = (refr: ObjectReference, m: Movement, isMyClone?: boolean): void => {
+export const applyMovement = (refr: ObjectReference, m: Movement, isMyClone?: boolean, deadOnServer?: boolean): void => {
   if (teleportIfNeed(refr, m)) {
     return;
   }
@@ -28,7 +28,7 @@ export const applyMovement = (refr: ObjectReference, m: Movement, isMyClone?: bo
     SpApiInteractor.getControllerInstance().emitter.emit("newLocalLagValueCalculated", { lagUnitsNoZ });
   }
 
-  translateTo(refr, m);
+  translateTo(refr, m, !!deadOnServer || m.isDead);
 
   const ac = Actor.from(refr);
   if (!ac) {
@@ -178,7 +178,7 @@ const applyHealthPercentage = (ac: Actor, healthPercentage: number) => {
 // Use global temp var to avoid allocation of an array on each translateTo
 const gTempTargetPos: NiPoint3 = [0, 0, 0];
 
-const translateTo = (refr: ObjectReference, m: Movement) => {
+const translateTo = (refr: ObjectReference, m: Movement, dead: boolean) => {
   let time = 0.2;
   if (m.isInJumpState || m.runMode !== "Standing") {
     time = 0.2;
@@ -216,7 +216,10 @@ const translateTo = (refr: ObjectReference, m: Movement) => {
       return;
     }
 
-    if (!actor || !actor.isDead()) {
+    if (actor && !dead && !actor.isDead() && actor.isFlying()) {
+      refr.setPosition(gTempTargetPos[0], gTempTargetPos[1], gTempTargetPos[2]);
+      refr.setAngle(m.rot[0], m.rot[1], m.rot[2]);
+    } else if (!actor || !actor.isDead()) {
       refr.translateTo(
         gTempTargetPos[0],
         gTempTargetPos[1],

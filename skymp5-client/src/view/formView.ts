@@ -358,6 +358,8 @@ export class FormView {
     const serverDead = this.serverDead;
     const healthPercentage = this.serverHealthPercentage;
     const pendingEnable = this.enableAt !== 0;
+    const flightHeld = this.flightHeld;
+    this.flightHeld = false;
     this.enableAt = 0;
     this.puppetLethalHit = false;
     this.realActor = false;
@@ -371,6 +373,9 @@ export class FormView {
         ac?.enableAI(false);
         if (pendingEnable) {
           ac?.enableNoWait(false);
+        }
+        if (flightHeld) {
+          ac?.setDontMove(false);
         }
         if (ac && wasPuppet) {
           endPuppetHold(ac, damageMult, lethalHit, serverDead, healthPercentage);
@@ -523,7 +528,7 @@ export class FormView {
             model.movement.isWeapDrawn = forcedWeapDrawn;
           }
           try {
-            applyMovement(refr, model.movement, !!model.isMyClone);
+            applyMovement(refr, model.movement, !!model.isMyClone, !!model.isDead);
           } catch (e) {
             if (e instanceof RespawnNeededError) {
               this.lastWorldOrCell = model.movement.worldOrCell;
@@ -579,6 +584,11 @@ export class FormView {
       if (!deadOnServer) {
         this.flyingDeathReloads = 0;
         this.corpseTarget = undefined;
+      }
+      const holdFlight = !wantAI && !!model.isHostedByOther && !deadOnServer && !ac.isDead() && ac.isFlying();
+      if (holdFlight !== this.flightHeld) {
+        this.flightHeld = holdFlight;
+        ac.setDontMove(holdFlight);
       }
       if (deadOnServer && !ac.isDead() && ac.isFlying() && this.flyingDeathReloads < 3 && !this.enableAt) {
         this.flyingDeathReloads++;
@@ -876,6 +886,7 @@ export class FormView {
   private refrId = 0;
   private flyingDeathReloads = 0;
   private corpseMovedAt = 0;
+  private flightHeld = false;
   private corpseTarget?: number[];
   private corpseTargetAt = 0;
   private ready = false;
