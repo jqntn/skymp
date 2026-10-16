@@ -29,7 +29,7 @@
     ],
     "secs": 71,
     "shots": [],
-    "at": "2026-10-15T23:28:19.923Z"
+    "at": "2026-10-16T00:06:22.119Z"
   },
   "S0b": {
     "result": "PASS",
@@ -851,12 +851,35 @@
     "at": "2026-10-15T23:42:17.630Z"
   },
   "G2.2": {
-    "result": "FAIL",
-    "reason": "no check script",
-    "secs": 0,
-    "evidence": [],
-    "shots": [],
-    "at": "2026-10-12T16:53:46.493Z"
+    "result": "PASS",
+    "reason": "3/3 runs PASS",
+    "secs": 185,
+    "evidence": [
+      "run 1: A: bot member ff000001 joined leader ff000000 in Bleak Falls Barrow; server script states: pillars position01, position03, position01, gate waiting; gate node RuinsGate01 on the leader -768",
+      "run 1: A: control, the member pulled the lever before the pillars: lever activations in the server log 1, gate server state waiting, gate events on the leader [], gate height -768",
+      "run 1: A: the member turned the pillars 1, 2, 3, then 1, 2 (bot activations to the server): server pillar states position01, position03, position01 -> position03, position02, position02; the member pulled the lever: gate events on the leader [\"Open\"], gate height -768 -> -601; gate server script after the pull: busy, then back to waiting true",
+      "run 1: B: the leader, given the claw by the server, turned each ring twice: server ring states {\"large\":\"position02\",\"medium\":\"position03\",\"small\":\"position01\"}; used the keyhole: keyhole server state done, door node DoorBase on the leader -171 -> -228; MS13 on the leader 50, in the member's server quest log [50]",
+      "run 2: A: bot member ff000001 joined leader ff000000 in Bleak Falls Barrow; server script states: pillars position01, position03, position01, gate waiting; gate node RuinsGate01 on the leader -768",
+      "run 2: A: control, the member pulled the lever before the pillars: lever activations in the server log 1, gate server state waiting, gate events on the leader [], gate height -768",
+      "run 2: A: the member turned the pillars 1, 2, 3, then 1, 2 (bot activations to the server): server pillar states position01, position03, position01 -> position03, position02, position02; the member pulled the lever: gate events on the leader [\"Open\"], gate height -768 -> -609; gate server script after the pull: busy, then back to waiting true",
+      "run 2: B: the leader, given the claw by the server, turned each ring twice: server ring states {\"large\":\"position02\",\"medium\":\"position03\",\"small\":\"position01\"}; used the keyhole: keyhole server state done, door node DoorBase on the leader -171 -> -227; MS13 on the leader 50, in the member's server quest log [50]",
+      "run 3: A: bot member ff000001 joined leader ff000000 in Bleak Falls Barrow; server script states: pillars position01, position03, position01, gate waiting; gate node RuinsGate01 on the leader -768",
+      "run 3: A: control, the member pulled the lever before the pillars: lever activations in the server log 1, gate server state waiting, gate events on the leader [], gate height -768",
+      "run 3: A: the member turned the pillars 1, 2, 3, then 1, 2 (bot activations to the server): server pillar states position01, position03, position01 -> position03, position02, position02; the member pulled the lever: gate events on the leader [\"Open\"], gate height -768 -> -609; gate server script after the pull: busy, then back to waiting true",
+      "run 3: B: the leader, given the claw by the server, turned each ring twice: server ring states {\"large\":\"position02\",\"medium\":\"position03\",\"small\":\"position01\"}; used the keyhole: keyhole server state done, door node DoorBase on the leader -171 -> -228; MS13 on the leader 50, in the member's server quest log [50]"
+    ],
+    "shots": [
+      "runs/G2_2/1/G2_2-clawdoor.png",
+      "runs/G2_2/2/G2_2-clawdoor.png",
+      "runs/G2_2/3/G2_2-clawdoor.png"
+    ],
+    "rtt": {
+      "1": {
+        "median": 56,
+        "calls": 44
+      }
+    },
+    "at": "2026-10-16T00:04:56.332Z"
   },
   "G2.3": {
     "result": "FAIL",

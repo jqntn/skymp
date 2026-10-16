@@ -5,7 +5,7 @@ First non-PASS in plan order: G1.7
 
 | id | result | secs | at | detail |
 |---|---|---|---|---|
-| L1 | PASS | 71 | 2026-10-15 23:28 |  |
+| L1 | PASS | 71 | 2026-10-16 00:06 |  |
 | S0 | PASS | 26 | 2026-10-14 17:25 | 1/1 runs PASS |
 | S0b | PASS | 161 | 2026-10-13 15:25 | 1/1 runs PASS |
 | S0c | PASS | 30 | 2026-10-13 15:25 | 1/1 runs PASS |
@@ -50,7 +50,7 @@ First non-PASS in plan order: G1.7
 | 2B.4 | PASS | 36 | 2026-10-15 23:13 | 1/1 runs PASS |
 | 2B.5 | PASS | 30 | 2026-10-15 23:33 | 1/1 runs PASS |
 | G2.1 | PASS | 126 | 2026-10-15 23:42 | 3/3 runs PASS |
-| G2.2 | FAIL | 0 | 2026-10-12 16:53 | no check script |
+| G2.2 | PASS | 185 | 2026-10-16 00:04 | 3/3 runs PASS |
 | G2.3 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | G2.4 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | G2.5 | FAIL | 0 | 2026-10-12 16:53 | no check script |
@@ -430,6 +430,22 @@ First non-PASS in plan order: G1.7
 - ![G2.1](runs/G2_1/1/G2_1-open.png)
 - ![G2.1](runs/G2_1/2/G2_1-open.png)
 - ![G2.1](runs/G2_1/3/G2_1-open.png)
+### G2.2
+- run 1: A: bot member ff000001 joined leader ff000000 in Bleak Falls Barrow; server script states: pillars position01, position03, position01, gate waiting; gate node RuinsGate01 on the leader -768
+- run 1: A: control, the member pulled the lever before the pillars: lever activations in the server log 1, gate server state waiting, gate events on the leader [], gate height -768
+- run 1: A: the member turned the pillars 1, 2, 3, then 1, 2 (bot activations to the server): server pillar states position01, position03, position01 -> position03, position02, position02; the member pulled the lever: gate events on the leader ["Open"], gate height -768 -> -601; gate server script after the pull: busy, then back to waiting true
+- run 1: B: the leader, given the claw by the server, turned each ring twice: server ring states {"large":"position02","medium":"position03","small":"position01"}; used the keyhole: keyhole server state done, door node DoorBase on the leader -171 -> -228; MS13 on the leader 50, in the member's server quest log [50]
+- run 2: A: bot member ff000001 joined leader ff000000 in Bleak Falls Barrow; server script states: pillars position01, position03, position01, gate waiting; gate node RuinsGate01 on the leader -768
+- run 2: A: control, the member pulled the lever before the pillars: lever activations in the server log 1, gate server state waiting, gate events on the leader [], gate height -768
+- run 2: A: the member turned the pillars 1, 2, 3, then 1, 2 (bot activations to the server): server pillar states position01, position03, position01 -> position03, position02, position02; the member pulled the lever: gate events on the leader ["Open"], gate height -768 -> -609; gate server script after the pull: busy, then back to waiting true
+- run 2: B: the leader, given the claw by the server, turned each ring twice: server ring states {"large":"position02","medium":"position03","small":"position01"}; used the keyhole: keyhole server state done, door node DoorBase on the leader -171 -> -227; MS13 on the leader 50, in the member's server quest log [50]
+- run 3: A: bot member ff000001 joined leader ff000000 in Bleak Falls Barrow; server script states: pillars position01, position03, position01, gate waiting; gate node RuinsGate01 on the leader -768
+- run 3: A: control, the member pulled the lever before the pillars: lever activations in the server log 1, gate server state waiting, gate events on the leader [], gate height -768
+- run 3: A: the member turned the pillars 1, 2, 3, then 1, 2 (bot activations to the server): server pillar states position01, position03, position01 -> position03, position02, position02; the member pulled the lever: gate events on the leader ["Open"], gate height -768 -> -609; gate server script after the pull: busy, then back to waiting true
+- run 3: B: the leader, given the claw by the server, turned each ring twice: server ring states {"large":"position02","medium":"position03","small":"position01"}; used the keyhole: keyhole server state done, door node DoorBase on the leader -171 -> -228; MS13 on the leader 50, in the member's server quest log [50]
+- ![G2.2](runs/G2_2/1/G2_2-clawdoor.png)
+- ![G2.2](runs/G2_2/2/G2_2-clawdoor.png)
+- ![G2.2](runs/G2_2/3/G2_2-clawdoor.png)
 ### P8
 - run 1: 115 client log lines, 2 [Exception] lines
 - run 1: exception: [Exception] failed to get key 'data': failed to call custom Serialize for type struct Equipment: failed to get key 'inv': failed to call cus.
