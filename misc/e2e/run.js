@@ -17,6 +17,8 @@ const SERVER = path.join(BUILD, "dist", "e2e-server");
 const GAME = fs.readFileSync(path.join(BUILD, "CMakeCache.txt"), "utf8").match(/^SKYRIM_DIR:\w+=(.*)$/m)[1].trim();
 const MYGAMES = path.join(os.homedir(), "Documents", "My Games", "Skyrim Special Edition");
 const PORT = { server: 7790, probe: 7792, runner: 7793 };
+const SLOW_ENGINE_MS = 1000;
+const STEAMWEBHELPER_MAX_GB = 10;
 const SKYRIM_VERSION = "1.6.1170.0";
 const desktopOf = (n) => (process.argv.includes("--visible") ? "Default" : `skymp-e2e-${n}`);
 const HELGEN_EXIT = { pos: [12155.9, -71991.3, 6015.5], angleZ: 286.1, worldOrCell: 0x3c };
@@ -25,7 +27,7 @@ const range = (prefix, n) => Array.from({ length: n }, (_, i) => `${prefix}${i +
 const ORDER = [
   "L1", "S0", "S0b", "S0c", "S1.1", "S1.2", "S1.4", "S1.3", "S1.5", "S1.6", "S2", "S3.1", "S3.2", "S3.3", "S3.4",
   ...range("1A.", 5), ...range("1B.", 5), ...range("G1.", 8),
-  ...range("2A.", 5), "G1.9", ...range("2B.", 5), ...range("G2.", 6), ...range("P", 8),
+  ...range("2A.", 5), "G1.9", ...range("2B.", 5), "G2.1", "G2.2", "G2.3", "F1", "G2.4", "G2.5", "G2.6", "F2", "F3", ...range("P", 8),
 ];
 
 class Env extends Error {}
@@ -120,6 +122,11 @@ const memGB = (image) => {
 
 const hostProblem = (engines) => {
   if (!procs("steam.exe").length) return Object.assign(new Env("Steam is not running: each game launch would hang on steam://run"), { stop: true });
+  if (os.freemem() / 2 ** 30 < 3 * engines + 2 && memGB("steamwebhelper.exe") > STEAMWEBHELPER_MAX_GB) {
+    log(`steamwebhelper uses ${memGB("steamwebhelper.exe").toFixed(1)} GB, killing it`);
+    spawnSync("taskkill", ["/F", "/IM", "steamwebhelper.exe"]);
+    spawnSync("powershell", ["-NoProfile", "-Command", "Start-Sleep -Seconds 5"]);
+  }
   const free = os.freemem() / 2 ** 30;
   if (free < 3 * engines + 2) return new Env(`only ${free.toFixed(1)} GB of RAM free for ${engines} engines (steamwebhelper uses ${memGB("steamwebhelper.exe").toFixed(1)} GB)`);
   return null;
@@ -348,7 +355,7 @@ const makeCtx = (id, dir) => {
     drv: (code, engine = 1, ms = 15000) =>
       new Promise((resolve, reject) => {
         const cmdId = drivers.nextId++;
-        const site = (new Error().stack.split("\n").find((l) => l.includes(`${path.sep}checks${path.sep}`)) || "").trim();
+        const site = (new Error().stack.split("\n").slice(1).find((l) => l.includes(".js") && !l.includes("run.js") && !l.includes("node:")) || "").trim();
         const timer = setTimeout(() => {
           drivers.pending.delete(cmdId);
           reject(new Env(`engine ${engine} driver did not answer in ${ms / 1000} s (${site})`));
@@ -438,13 +445,19 @@ const runOnce = async (id, check, n, attempt) => {
     restore();
   }
   const rtt = Object.fromEntries(Object.keys(ctx.rtt).map((e) => [e, { median: ctx.driverRtt(Number(e)), calls: ctx.rtt[e].length }]));
+  const slow = Object.entries(rtt).find(([, r]) => r.median > SLOW_ENGINE_MS);
+  if (result === "FAIL" && slow) {
+    result = "ENV";
+    reason = `slow engine ${slow[0]} (median driver round trip ${slow[1].median} ms): ${reason}`;
+  }
   return { result, reason, secs: Math.round((Date.now() - t) / 1000), evidence: ctx.evidence, shots: ctx.shots, rtt };
 };
 
-const buildStamp = () => {
+const buildStamp = (checkFile) => {
   const git = (...a) => (spawnSync("git", a, { cwd: REPO, encoding: "utf8" }).stdout || "").trim();
   const mtime = (f) => { try { return fs.statSync(f).mtime.toISOString(); } catch { return null; } };
-  return { head: git("rev-parse", "--short", "HEAD"), dirty: git("status", "--porcelain", "--untracked-files=no") !== "", client: mtime(path.join(GAME, "Data", "Platform", "Plugins", "skymp5-client.js")), server: mtime(path.join(DIST, "scam_native.node")) };
+  const sha = (f) => { try { return require("crypto").createHash("sha1").update(fs.readFileSync(f)).digest("hex").slice(0, 12); } catch { return null; } };
+  return { head: git("rev-parse", "--short", "HEAD"), dirty: git("status", "--porcelain", "--untracked-files=no") !== "", client: mtime(path.join(GAME, "Data", "Platform", "Plugins", "skymp5-client.js")), server: mtime(path.join(DIST, "scam_native.node")), serverJs: sha(path.join(DIST, "dist_back", "skymp5-server.js")), check: sha(checkFile) };
 };
 
 const runCheck = async (id, opts, envStreak) => {
@@ -454,20 +467,22 @@ const runCheck = async (id, opts, envStreak) => {
   const check = require(file);
   const runs = opts.runs || (opts.final && check.engines ? 3 : 1);
   const results = [];
-  const build = buildStamp();
+  const build = buildStamp(file);
   const checkName = id === "adhoc" ? `adhoc:${path.basename(file)}` : id;
   for (let n = 1; n <= runs; n++) {
     let r;
+    let prevReason;
     for (let attempt = 0; attempt < 3; attempt++) {
       log(`${id} run ${n}/${runs}${attempt ? ` retry ${attempt}` : ""}`);
       r = await runOnce(id, check, n, attempt);
       log(`${id} run ${n}: ${r.result} ${r.reason}`);
       fs.appendFileSync(path.join(OUT, "attempts.jsonl"), `${JSON.stringify({ id: checkName, run: n, attempt, result: r.result, reason: r.reason, secs: r.secs, evidence: r.evidence, rtt: r.rtt, freeGB: +(os.freemem() / 2 ** 30).toFixed(1), build, at: new Date().toISOString() })}\n`);
       envStreak.n = r.result === "ENV" ? envStreak.n + 1 : 0;
-      if (r.result !== "ENV" || envStreak.n >= 3) break;
+      if (r.result !== "ENV" || envStreak.n >= 3 || (attempt > 0 && r.reason === prevReason)) break;
+      prevReason = r.reason;
     }
     results.push(r);
-    if (r.result !== "PASS" && r.result !== "ACCEPTED") break;
+    if (r.result !== "PASS" && r.result !== "ACCEPTED" && !opts.keepGoing) break;
   }
   const last = results[results.length - 1];
   return {
@@ -510,7 +525,7 @@ const main = async () => {
   const args = process.argv.slice(2);
   const arg = (name) => { const i = args.indexOf(name); return i >= 0 ? args[i + 1] : undefined; };
   const only = arg("--only")?.split(",");
-  const opts = { runs: Number(arg("--runs")) || 0, adhoc: arg("--check"), final: args.includes("--final") };
+  const opts = { runs: Number(arg("--runs")) || 0, adhoc: arg("--check"), final: args.includes("--final"), keepGoing: args.includes("--keep-going") };
   fs.mkdirSync(OUT, { recursive: true });
 
   await waitNoForeignSkyrim();

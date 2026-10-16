@@ -12,7 +12,7 @@ First non-PASS in plan order: G1.7
 | S1.1 | PASS | 76 | 2026-10-15 21:32 | 1/1 runs PASS |
 | S1.2 | PASS | 71 | 2026-10-15 21:33 | 1/1 runs PASS |
 | S1.4 | PASS | 66 | 2026-10-15 21:34 | 1/1 runs PASS |
-| S1.3 | PASS | 21 | 2026-10-15 21:35 | 1/1 runs PASS |
+| S1.3 | PASS | 44 | 2026-10-16 00:21 | 2/2 runs PASS |
 | S1.5 | PASS | 52 | 2026-10-15 21:36 | 1/1 runs PASS |
 | S1.6 | PASS | 61 | 2026-10-15 21:37 | 1/1 runs PASS |
 | S2 | PASS | 117 | 2026-10-14 17:33 | 1/1 runs PASS |
@@ -119,9 +119,12 @@ First non-PASS in plan order: G1.7
 - ![S1.4](runs/S1_4/1/S1_4-engine1.png)
 - ![S1.4](runs/S1_4/1/S1_4-engine2.png)
 ### S1.3
-- run 1: game hour 8.02; RiverwoodBlacksmithWorkMarker 2c308 at 20587,-45138,-81; client after 18 ms: Alvor in world 3c at 20586,-45138,-82, 1 units from the forge, 3D loaded true, enabled true; server: 133c8 at -515,-154,240
-- run 1: 5000 ms later: Alvor in world 3c at 20584,-45132,-82, 7 units from the forge, 3D loaded true, enabled true
+- run 1: game hour 8.00; RiverwoodBlacksmithWorkMarker 2c308 at 20587,-45138,-81; client after 17 ms: Alvor in world 3c at 20587,-45138,-82, 0 units from the forge, 3D loaded true, enabled true; server: 133c8 at -515,-154,240
+- run 1: 5000 ms later: Alvor in world 3c at 20587,-45138,-82, 0 units from the forge, 3D loaded true, enabled true
+- run 2: game hour 8.00; RiverwoodBlacksmithWorkMarker 2c308 at 20587,-45138,-81; client after 18 ms: Alvor in world 3c at 20586,-45135,-82, 3 units from the forge, 3D loaded true, enabled true; server: 133c8 at -515,-154,240
+- run 2: 5000 ms later: Alvor in world 3c at 20374,-45064,-84, 225 units from the forge, 3D loaded true, enabled true
 - ![S1.3](runs/S1_3/1/S1_3.png)
+- ![S1.3](runs/S1_3/2/S1_3.png)
 ### S1.5
 - run 1: engine 1 talks to the puppet Delphine (13485) hosted by engine 2; topic "Je voudrais une chambre. (10 or)", answer "Pas de problème, elle est à vous."
 - run 1: dialogue closed on engine 1

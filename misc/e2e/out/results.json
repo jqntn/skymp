@@ -137,22 +137,25 @@
   },
   "S1.3": {
     "result": "PASS",
-    "reason": "1/1 runs PASS",
-    "secs": 21,
+    "reason": "2/2 runs PASS",
+    "secs": 44,
     "evidence": [
-      "run 1: game hour 8.02; RiverwoodBlacksmithWorkMarker 2c308 at 20587,-45138,-81; client after 18 ms: Alvor in world 3c at 20586,-45138,-82, 1 units from the forge, 3D loaded true, enabled true; server: 133c8 at -515,-154,240",
-      "run 1: 5000 ms later: Alvor in world 3c at 20584,-45132,-82, 7 units from the forge, 3D loaded true, enabled true"
+      "run 1: game hour 8.00; RiverwoodBlacksmithWorkMarker 2c308 at 20587,-45138,-81; client after 17 ms: Alvor in world 3c at 20587,-45138,-82, 0 units from the forge, 3D loaded true, enabled true; server: 133c8 at -515,-154,240",
+      "run 1: 5000 ms later: Alvor in world 3c at 20587,-45138,-82, 0 units from the forge, 3D loaded true, enabled true",
+      "run 2: game hour 8.00; RiverwoodBlacksmithWorkMarker 2c308 at 20587,-45138,-81; client after 18 ms: Alvor in world 3c at 20586,-45135,-82, 3 units from the forge, 3D loaded true, enabled true; server: 133c8 at -515,-154,240",
+      "run 2: 5000 ms later: Alvor in world 3c at 20374,-45064,-84, 225 units from the forge, 3D loaded true, enabled true"
     ],
     "shots": [
-      "runs/S1_3/1/S1_3.png"
+      "runs/S1_3/1/S1_3.png",
+      "runs/S1_3/2/S1_3.png"
     ],
     "rtt": {
       "1": {
-        "median": 31,
+        "median": 45,
         "calls": 5
       }
     },
-    "at": "2026-10-15T21:35:15.850Z"
+    "at": "2026-10-16T00:21:09.440Z"
   },
   "S2": {
     "result": "PASS",
