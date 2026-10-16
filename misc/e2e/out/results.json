@@ -900,12 +900,35 @@
     "at": "2026-10-16T02:27:36.115Z"
   },
   "G2.4": {
-    "result": "FAIL",
-    "reason": "no check script",
-    "secs": 0,
-    "evidence": [],
-    "shots": [],
-    "at": "2026-10-12T16:53:46.494Z"
+    "result": "PASS",
+    "reason": "3/3 runs PASS",
+    "secs": 368,
+    "evidence": [
+      "run 1: A: leader ff000000, bot member ff000001 in the party at the Western Watchtower; the leader set MQ104 to 60 by script (its fragment enables Mirmulnir): MQ104 stage 60; Mirmulnir 5a6ca on the server {\"cell\":\"3c:Skyrim.esm\",\"pos\":[7796,-37462,5697],\"disabled\":false,\"dead\":false,\"hoster\":4278190080} (hoster ff000000); the member's MQ104 log [60]; the leader before: {\"souls\":0,\"absorbed\":0,\"fus\":false}",
+      "run 1: B: the server killed Mirmulnir; 3.6 s later: MQ104 stage 90 (90 done true); the leader {\"souls\":0,\"absorbed\":0,\"fus\":false} -> {\"souls\":0,\"absorbed\":1,\"fus\":true}; server soul lines [\"dragon 5a6ca gives its soul to ff000000\",\"dragon 5a6ca gives its soul to ff000001\"]; the member's MQ104 log [60,65,90,85,80]",
+      "run 1: C: Balgruuf: message boxes answered (first button) at MQ104 stages [90]; 11 topic picks (\"J'ai tué le dragon. Ça mérite bien une récompense, non ?\", \"La tour de guet a été détruite, mais nous avons tué le dragon.\", \"Il s'avère que je pourrais être \"Enfant de dragon\".\", \"À la mort du dragon, j'ai absorbé une partie de son pouvoir.\", \"Les hommes m'ont donné ce nom, c'est tout.\", \"Que me veulent les Grises-barbes ?\"), MQ104 stages 90 -> 150 -> 160, last line \"En mon droit de jarl, je vous nomme thane de Blancherive. C'est le plus grand honneur que je puisse vous accorder.\"; 160 done true",
+      "run 1: C: Lydia a2c94 enabled and loaded on the leader true; before the talk {\"teammate\":false,\"rank\":-1}; message boxes answered []; 1 topic picks (\"Suivez-moi, j'ai besoin de votre aide.\"), last line \"\"; after: {\"teammate\":true,\"rank\":0} (CurrentFollowerFaction rank, player teammate); server {\"cell\":\"165a3:Skyrim.esm\",\"pos\":[-227,-74,-318],\"disabled\":false,\"dead\":false,\"hoster\":4278190080} (hoster ff000000)",
+      "run 2: A: leader ff000000, bot member ff000001 in the party at the Western Watchtower; the leader set MQ104 to 60 by script (its fragment enables Mirmulnir): MQ104 stage 65; Mirmulnir 5a6ca on the server {\"cell\":\"3c:Skyrim.esm\",\"pos\":[7796,-37462,5697],\"disabled\":false,\"dead\":false,\"hoster\":4278190080} (hoster ff000000); the member's MQ104 log [60,65]; the leader before: {\"souls\":0,\"absorbed\":0,\"fus\":false}",
+      "run 2: B: the server killed Mirmulnir; 3.6 s later: MQ104 stage 90 (90 done true); the leader {\"souls\":0,\"absorbed\":0,\"fus\":false} -> {\"souls\":0,\"absorbed\":1,\"fus\":true}; server soul lines [\"dragon 5a6ca gives its soul to ff000000\",\"dragon 5a6ca gives its soul to ff000001\"]; the member's MQ104 log [60,65,90,85,80]",
+      "run 2: C: Balgruuf: message boxes answered (first button) at MQ104 stages [90]; 9 topic picks (\"J'ai tué le dragon. Ça mérite bien une récompense, non ?\", \"La tour de guet a été détruite, mais nous avons tué le dragon.\", \"Il s'avère que je pourrais être \"Enfant de dragon\".\", \"À la mort du dragon, j'ai absorbé une partie de son pouvoir.\", \"Les hommes m'ont donné ce nom, c'est tout.\", \"Les Grises-barbes ?\", \"Que me veulent les Grises-barbes ?\"), MQ104 stages 90 -> 150 -> 160, last line \"En mon droit de jarl, je vous nomme thane de Blancherive. C'est le plus grand honneur que je puisse vous accorder.\"; 160 done true",
+      "run 2: C: Lydia a2c94 enabled and loaded on the leader true; before the talk {\"teammate\":false,\"rank\":-1}; message boxes answered []; 1 topic picks (\"Suivez-moi, j'ai besoin de votre aide.\"), last line \"\"; after: {\"teammate\":true,\"rank\":0} (CurrentFollowerFaction rank, player teammate); server {\"cell\":\"165a3:Skyrim.esm\",\"pos\":[-228,-75,-318],\"disabled\":false,\"dead\":false,\"hoster\":4278190080} (hoster ff000000)",
+      "run 3: A: leader ff000000, bot member ff000001 in the party at the Western Watchtower; the leader set MQ104 to 60 by script (its fragment enables Mirmulnir): MQ104 stage 65; Mirmulnir 5a6ca on the server {\"cell\":\"3c:Skyrim.esm\",\"pos\":[7790,-37462,5697],\"disabled\":false,\"dead\":false,\"hoster\":4278190080} (hoster ff000000); the member's MQ104 log [60,65]; the leader before: {\"souls\":0,\"absorbed\":0,\"fus\":false}",
+      "run 3: B: the server killed Mirmulnir; 3.7 s later: MQ104 stage 90 (90 done true); the leader {\"souls\":0,\"absorbed\":0,\"fus\":false} -> {\"souls\":0,\"absorbed\":1,\"fus\":true}; server soul lines [\"dragon 5a6ca gives its soul to ff000000\",\"dragon 5a6ca gives its soul to ff000001\"]; the member's MQ104 log [60,65,90,85,80]",
+      "run 3: C: Balgruuf: message boxes answered (first button) at MQ104 stages [90]; 7 topic picks (\"J'ai tué le dragon. Ça mérite bien une récompense, non ?\", \"La tour de guet a été détruite, mais nous avons tué le dragon.\", \"Il s'avère que je pourrais être \"Enfant de dragon\".\", \"À la mort du dragon, j'ai absorbé une partie de son pouvoir.\", \"Les hommes m'ont donné ce nom, c'est tout.\", \"Que me veulent les Grises-barbes ?\"), MQ104 stages 90 -> 150 -> 160, last line \"En mon droit de jarl, je vous nomme thane de Blancherive. C'est le plus grand honneur que je puisse vous accorder.\"; 160 done true",
+      "run 3: C: Lydia a2c94 enabled and loaded on the leader true; before the talk {\"teammate\":false,\"rank\":-1}; message boxes answered []; 1 topic picks (\"Suivez-moi, j'ai besoin de votre aide.\"), last line \"\"; after: {\"teammate\":true,\"rank\":0} (CurrentFollowerFaction rank, player teammate); server {\"cell\":\"165a3:Skyrim.esm\",\"pos\":[-349,-288,-318],\"disabled\":false,\"dead\":false,\"hoster\":4278190080} (hoster ff000000)"
+    ],
+    "shots": [
+      "runs/G2_4/1/G2_4-lydia.png",
+      "runs/G2_4/2/G2_4-lydia.png",
+      "runs/G2_4/3/G2_4-lydia.png"
+    ],
+    "rtt": {
+      "1": {
+        "median": 44,
+        "calls": 166
+      }
+    },
+    "at": "2026-10-16T03:46:50.005Z"
   },
   "G2.5": {
     "result": "FAIL",
