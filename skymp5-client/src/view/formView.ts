@@ -35,6 +35,20 @@ export const getScreenResolution = (): ScreenResolution => {
 
 const espActorIdOffset = 0x100000000;
 
+const pelvisNodes = ["NPC Pelvis [Pelv]", "NPC Pelvis"];
+
+const bodyOffset = (ac: Actor): number[] => {
+  const node = pelvisNodes.find((name) => NetImmerse.hasNode(ac, name, false));
+  if (!node) {
+    return [0, 0, 0];
+  }
+  return [
+    NetImmerse.getNodeWorldPositionX(ac, node, false) - ac.getPositionX(),
+    NetImmerse.getNodeWorldPositionY(ac, node, false) - ac.getPositionY(),
+    NetImmerse.getNodeWorldPositionZ(ac, node, false) - ac.getPositionZ(),
+  ];
+};
+
 const endPuppetHold = (ac: Actor, damageMult: number, lethalHit: boolean, serverDead: boolean, healthPercentage?: number) => {
   ac.endDeferredKill();
   if (!serverDead && (lethalHit || ac.getActorValue("health") <= 0)) {
@@ -560,6 +574,40 @@ export class FormView {
         ac.disableNoWait(false);
         this.enableAt = Date.now() + 300;
       }
+      const deadOnServer = !!model.isDead || !!model.movement?.isDead;
+      const serverPos = !this.hostedHere ? model.movement?.pos : undefined;
+      if (!deadOnServer) {
+        this.flyingDeathReloads = 0;
+        this.corpseTarget = undefined;
+      }
+      if (deadOnServer && !ac.isDead() && ac.isFlying() && this.flyingDeathReloads < 3 && !this.enableAt) {
+        this.flyingDeathReloads++;
+        ac.disableNoWait(false);
+        if (serverPos) {
+          ac.setPosition(serverPos[0], serverPos[1], serverPos[2]);
+        }
+        this.enableAt = Date.now() + 500;
+      }
+      const corpseTarget = deadOnServer && ac.isDead() && serverPos ? [serverPos[0], serverPos[1], serverPos[2]] : undefined;
+      if (corpseTarget && (!this.corpseTarget || Math.hypot(corpseTarget[0] - this.corpseTarget[0], corpseTarget[1] - this.corpseTarget[1], corpseTarget[2] - this.corpseTarget[2]) > 32)) {
+        this.corpseTarget = corpseTarget;
+        this.corpseTargetAt = Date.now();
+      }
+      const body = corpseTarget && ac.is3DLoaded() ? bodyOffset(ac) : undefined;
+      if (
+        corpseTarget && body && !this.enableAt && Date.now() - this.corpseTargetAt > 2000 && Date.now() - this.corpseMovedAt > 3000
+        && Math.hypot(ac.getPositionX() + body[0] - corpseTarget[0], ac.getPositionY() + body[1] - corpseTarget[1], ac.getPositionZ() + body[2] - corpseTarget[2]) > 128
+      ) {
+        this.corpseMovedAt = Date.now();
+        const refrId = this.refrId;
+        ac.forceRemoveRagdollFromWorld().then(() => once("update", () => {
+          const corpse = Actor.from(Game.getFormEx(refrId));
+          if (corpse) {
+            const offset = bodyOffset(corpse);
+            corpse.setPosition(corpseTarget[0] - offset[0], corpseTarget[1] - offset[1], corpseTarget[2] - offset[2]);
+          }
+        }));
+      }
       if (this.enableAt && Date.now() >= this.enableAt) {
         this.enableAt = 0;
         ac.enableNoWait(false);
@@ -826,6 +874,10 @@ export class FormView {
   }
 
   private refrId = 0;
+  private flyingDeathReloads = 0;
+  private corpseMovedAt = 0;
+  private corpseTarget?: number[];
+  private corpseTargetAt = 0;
   private ready = false;
   private animState = this.getDefaultAnimState();
   private movState = {
