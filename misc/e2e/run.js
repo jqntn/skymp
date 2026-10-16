@@ -498,16 +498,21 @@ const runCheck = async (id, opts, envStreak) => {
     results.push(r);
     if (r.result !== "PASS" && r.result !== "ACCEPTED" && !opts.keepGoing) break;
   }
-  const last = results[results.length - 1];
+  const counted = results.filter((r) => !notExercised(r));
+  const failed = counted.filter((r) => r.result !== "PASS" && r.result !== "ACCEPTED");
+  const shown = failed[0] || counted[counted.length - 1] || results[results.length - 1];
+  const skipped = results.length - counted.length ? `, ${results.length - counted.length} not exercised` : "";
   return {
-    ...last,
+    ...shown,
     secs: results.reduce((s, r) => s + r.secs, 0),
-    reason: last.result === "PASS" ? `${results.length}/${runs} runs PASS` : `run ${results.length}/${runs}: ${last.reason}`,
-    result: results.some((r) => r.result !== "PASS" && r.result !== "ACCEPTED") ? last.result : results.some((r) => r.result === "ACCEPTED") ? "ACCEPTED" : "PASS",
+    reason: failed.length ? `${failed.length} of ${results.length} runs not PASS${skipped}; run ${results.indexOf(shown) + 1}/${runs}: ${shown.reason}` : counted.length ? `${counted.length}/${runs} runs PASS${skipped}` : `run ${results.length}/${runs}: ${shown.reason}`,
+    result: failed.length ? shown.result : !counted.length ? shown.result : counted.some((r) => r.result === "ACCEPTED") ? "ACCEPTED" : "PASS",
     evidence: results.flatMap((r, i) => r.evidence.map((e) => `run ${i + 1}: ${e}`)),
     shots: results.flatMap((r) => r.shots),
   };
 };
+
+const notExercised = (r) => r.result === "FAIL" && /^not exercised:[^;]*$/.test(r.reason || "");
 
 const writeScoreboard = (results, stopped) => {
   const rows = ORDER.map((id) => {
