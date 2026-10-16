@@ -73,13 +73,15 @@ module.exports = {
         let w = await window(id, h, p);
         for (let k = 0; k < 3 && w.hoster && (w.hoster.motion < HOSTER_MOVES || !w.hoster.settled || !w.puppet?.settled); k++) w = await window(id, h, p);
         const owner = (await hosters())[NPCS.findIndex(([, x]) => x === id)];
+        const seated = await ctx.drv(`const a = sp.Actor.from(sp.Game.getFormEx(${id})); return a ? a.getSitState() : -1;`, h);
         ctx.evidence.push(`${name}, hoster engine ${h} (server ${hex(owner)}): hoster ${round(w.hoster) || "not loaded"}; puppet engine ${p}: ${round(w.puppet) || "not loaded"}`);
         if (owner !== actors[h - 1]) fails.push(`${name} changed hoster to ${hex(owner)} during the samples`);
         else if (!w.hoster || !w.puppet) fails.push(`${name} is not loaded on both engines`);
         else {
           if (w.hoster.motion >= HOSTER_MOVES) {
             moved++;
-            if (w.puppet.motion < PUPPET_MOVES) frozen.push(`${name} (hands moved ${w.puppet.motion.toFixed(1)} while the hoster's moved ${w.hoster.motion.toFixed(1)})`);
+            if (w.puppet.motion < PUPPET_MOVES) frozen.push(`${name} (hands moved ${w.puppet.motion.toFixed(1)} while the hoster's moved ${w.hoster.motion.toFixed(1)}, hoster sit state ${seated})`);
+            if (w.puppet.motion < PUPPET_MOVES && seated === 0) fails.push(`${name} on engine ${p} stands frozen (hands moved ${w.puppet.motion.toFixed(1)}) while the hoster's NPC, not seated, moves its hands ${w.hoster.motion.toFixed(1)}`);
           }
           if (w.hoster.dz >= ARMS_DOWN && w.puppet.dz < NOT_APOSE && w.puppet.motion < PUPPET_MOVES) {
             fails.push(`${name} on engine ${p} holds its arms up without moving (an A-pose): drop ${w.puppet.dz.toFixed(1)}, motion ${w.puppet.motion.toFixed(1)} while the hoster's arms hang (${w.hoster.dz.toFixed(1)})`);
