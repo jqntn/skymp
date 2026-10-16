@@ -56,7 +56,7 @@ const main = async () => {
   send(bot1, { customPacketType: "questLogRequest" });
   await sleep(100);
   assert.equal(countTo(u1, "questApply"), 1);
-  assert.deepEqual(lastTo(u1, "questApply"), { customPacketType: "questApply", entries: START, replay: true });
+  assert.deepEqual(lastTo(u1, "questApply"), { customPacketType: "questApply", entries: START, replay: true, followers: [0, 0], questItems: [] });
 
   send(bot1, { customPacketType: "partyInvite", target: a2 });
   await sleep(100);
@@ -120,6 +120,10 @@ const main = async () => {
 
   mp.kick(u3);
   await sleep(300);
+  assert.equal(lastTo(u1, "partyState").party.leader, a3);
+  assert.ok(lastTo(u1, "partyNotice").text.endsWith("went offline"));
+  send(bot1, { customPacketType: "partyLeave" });
+  await sleep(100);
   assert.equal(lastTo(u1, "partyState").party, null);
 
   send(bot1, { customPacketType: "partyInvite", target: a2 });

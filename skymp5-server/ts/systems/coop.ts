@@ -17,6 +17,8 @@ const QUEST_TYPE_NONE = 0;
 const ALIAS_FILL_TTL_MS = 60000;
 const MAX_RUNNING_QUESTS = 10000;
 const PARTY_POSITIONS_INTERVAL_MS = 500;
+const LEADER_GRACE_MS = 5 * 60_000;
+const QUEST_ITEM_HOLDERS_WINDOW_MS = 120_000;
 const DRAGON_SCRIPT = "dragonactorscript";
 
 interface QuestInfo {
@@ -28,8 +30,11 @@ interface QuestInfo {
 
 type Handler = (ctx: SystemContext, actor: number, content: Content, userId: number) => void;
 
+const FOLLOWERS_PROPERTY = "private.coopFollowers";
+const FOLLOWER_SLOTS = 2;
 const isFormId = (x: unknown): x is number => Number.isInteger(x) && (x as number) > 0 && (x as number) <= 0xffffffff;
 const hex = (x: number) => x.toString(16);
+const wasCreated = (granted: unknown, quest: number, alias: number) => Array.isArray(granted) && granted.some((g) => Array.isArray(g) && g[0] === quest && g[1] === alias);
 
 export class Coop implements System {
   systemName = "Coop";
@@ -72,6 +77,34 @@ export class Coop implements System {
       for (const member of party.members) {
         this.send(ctx, member, { customPacketType: "partyPositions", members: positions.filter((p) => p.actor !== member) });
       }
+      this.replaceOfflineLeader(ctx, party);
+    }
+  }
+
+  private replaceOfflineLeader(ctx: SystemContext, party: Party): void {
+    const now = Date.now();
+    if (party.members.every((m) => !this.isOnline(ctx, m) && now - (this.offlineSince.get(m) ?? now) >= LEADER_GRACE_MS)) {
+      const members = [...party.members];
+      members.forEach((m) => {
+        this.parties.leave(m);
+        this.offlineSince.delete(m);
+      });
+      this.log(`Coop: party ${party.id} ended, nobody in it was online for ${LEADER_GRACE_MS / 1000} s`);
+      return;
+    }
+    const since = this.offlineSince.get(party.leader);
+    if (since === undefined || Date.now() - since < LEADER_GRACE_MS || this.isOnline(ctx, party.leader)) {
+      return;
+    }
+    const next = party.members.find((m) => m !== party.leader && this.isOnline(ctx, m));
+    if (!next || typeof this.parties.promote(party.leader, next) === "string") {
+      return;
+    }
+    this.resync(ctx, party);
+    this.log(`Coop: ${hex(next)} leads party ${party.id}, the leader was offline for ${LEADER_GRACE_MS / 1000} s`);
+    for (const member of party.members) {
+      this.sendState(ctx, member);
+      this.notice(ctx, member, `${this.name(ctx, next)} is now the party leader`);
     }
   }
 
@@ -83,10 +116,16 @@ export class Coop implements System {
       return;
     }
     this.parties.forget(actor);
-    this.leaveParty(ctx, actor, `${this.name(ctx, actor)} left the party`, false);
+    const party = this.parties.partyOf(actor);
+    if (party) {
+      this.offlineSince.set(actor, Date.now());
+      this.log(`Coop: ${hex(actor)} went offline in party ${party.id}`);
+      party.members.filter((m) => m !== actor).forEach((m) => this.notice(ctx, m, `${this.name(ctx, actor)} went offline`));
+    }
     this.questLogs.delete(actor);
     this.itemWindows.delete(actor);
     this.replays.delete(actor);
+    this.holderAnswers.delete(actor);
   }
 
   customPacket(userId: number, type: string, content: Content, ctx: SystemContext): void {
@@ -114,6 +153,8 @@ export class Coop implements System {
     aliasFill: (ctx, actor, content) => this.onAliasFill(ctx, actor, content.quest, content.refs),
     questsRunning: (ctx, actor, content, userId) => this.onQuestsRunning(ctx, actor, content.quests, userId),
     scriptItems: (ctx, actor, content) => this.onScriptItems(ctx, actor, content.gains, content.losses, content.dialogue === true),
+    followers: (ctx, actor, content) => this.onFollowers(ctx, actor, content.refs),
+    questItemHolders: (ctx, actor, content) => this.onQuestItemHolders(ctx, actor, content.holders),
   };
 
   private invite(ctx: SystemContext, inviter: number, target: unknown): void {
@@ -228,9 +269,82 @@ export class Coop implements System {
     }
     this.lastQuestLogRequest.set(userId, now);
     this.replays.set(actor, now);
+    const party = this.parties.partyOf(actor);
+    if (this.offlineSince.delete(actor) && party) {
+      this.log(`Coop: ${hex(actor)} is back in party ${party.id}`);
+      party.members.filter((m) => m !== actor).forEach((m) => this.notice(ctx, m, `${this.name(ctx, actor)} is back`));
+    }
+    this.sendState(ctx, actor);
     const log = this.questLog(ctx, actor);
     this.log(`Coop: replay of ${log.length} quest log entries to ${hex(actor)}`);
-    this.send(ctx, actor, { customPacketType: "questApply", entries: log, replay: true });
+    this.send(ctx, actor, { customPacketType: "questApply", entries: log, replay: true, followers: this.followers(ctx, actor), questItems: this.replayQuestItems(ctx, actor, log) });
+  }
+
+  private replayQuestItems(ctx: SystemContext, actor: number, log: QuestLogEntry[]): number[][] {
+    const quests = [...new Set(log.map(([quest]) => quest))].filter((quest) => lastStage(log, quest) !== STOP);
+    return quests.flatMap((quest) => (this.questInfo(ctx, quest)?.items.created ?? [])
+      .filter((c) => this.relinkable(ctx, c))
+      .map((c) => [quest, c.alias, c.item, c.holderAlias, this.countOf(ctx, actor, c.item) > 0 ? 1 : 0]));
+  }
+
+  private relinkable(ctx: SystemContext, created: CreatedItem): boolean {
+    try {
+      return created.questObject && ctx.svr.lookupEspmRecordById(created.item).record?.type !== "LVLI";
+    } catch {
+      return false;
+    }
+  }
+
+  private countOf(ctx: SystemContext, ref: number, baseId: number): number {
+    const inventory = ctx.svr.get(ref, "inventory") as { entries?: InventoryEntry[] } | undefined;
+    return (inventory?.entries ?? []).filter((e) => e.baseId === baseId).reduce((sum, e) => sum + e.count, 0);
+  }
+
+  private onQuestItemHolders(ctx: SystemContext, actor: number, holders: unknown): void {
+    const replayAt = this.replays.get(actor);
+    if (replayAt === undefined || Date.now() - replayAt > QUEST_ITEM_HOLDERS_WINDOW_MS || this.holderAnswers.get(actor) === replayAt || !Array.isArray(holders)) {
+      return;
+    }
+    this.holderAnswers.set(actor, replayAt);
+    const expected = this.replayQuestItems(ctx, actor, this.questLog(ctx, actor)).filter(([, , , , held]) => !held);
+    const counts = new Array<number[]>();
+    for (const entry of holders.slice(0, expected.length)) {
+      if (!Array.isArray(entry) || entry.length !== 3 || !entry.every((x) => Number.isInteger(x))) {
+        continue;
+      }
+      const [quest, alias, holder] = entry as number[];
+      const item = expected.find(([q, a]) => q === quest && a === alias);
+      try {
+        if (item && isFormId(holder) && holder < 0xff000000 && wasCreated(ctx.svr.get(holder, COOP_CREATED_PROPERTY), quest, alias)) {
+          counts.push([quest, alias, holder, this.countOf(ctx, holder, item[2])]);
+        }
+      } catch (e) {
+        this.log(`Coop: no count of quest ${hex(quest)} alias ${alias} in ${hex(holder)}`, e);
+      }
+    }
+    this.send(ctx, actor, { customPacketType: "questItemCounts", counts });
+  }
+
+  private followers(ctx: SystemContext, actor: number): number[] {
+    const stored = ctx.svr.get(actor, FOLLOWERS_PROPERTY);
+    return Array.isArray(stored) && stored.length === FOLLOWER_SLOTS && stored.every((ref) => ref === 0 || isFormId(ref)) ? (stored as number[]) : new Array(FOLLOWER_SLOTS).fill(0);
+  }
+
+  private onFollowers(ctx: SystemContext, actor: number, refs: unknown): void {
+    const isNpcRef = (ref: unknown) => {
+      try {
+        return isFormId(ref) && ref < 0xff000000 && ctx.svr.lookupEspmRecordById(ref).record?.type === "ACHR";
+      } catch {
+        return false;
+      }
+    };
+    if (!Array.isArray(refs) || refs.length !== FOLLOWER_SLOTS) {
+      this.log(`Coop: followers of ${hex(actor)} rejected (${JSON.stringify(refs)})`);
+      return;
+    }
+    const kept = refs.map((ref) => (isNpcRef(ref) ? (ref as number) : 0));
+    ctx.svr.set(actor, FOLLOWERS_PROPERTY, kept);
+    this.log(`Coop: followers of ${hex(actor)}: ${kept.map(hex).join(", ")}${kept.some((ref, i) => ref !== refs[i]) ? ` (from ${JSON.stringify(refs)})` : ""}`);
   }
 
   private onQuestStage(ctx: SystemContext, reporter: number, quest: unknown, stage: unknown): void {
@@ -379,7 +493,7 @@ export class Coop implements System {
     try {
       const done = ctx.svr.get(holder, COOP_CREATED_PROPERTY);
       const granted = Array.isArray(done) ? (done as unknown[]) : [];
-      if (granted.some((g) => Array.isArray(g) && g[0] === quest && g[1] === created.alias)) {
+      if (wasCreated(granted, quest, created.alias)) {
         return;
       }
       const item = ctx.svr.callPapyrusFunction("global", "Game", "GetFormEx", null, [created.item]);
@@ -550,6 +664,8 @@ export class Coop implements System {
   private questLogs = new Map<number, QuestLogEntry[]>();
   private questInfos = new Map<number, QuestInfo | null>();
   private aliasFillRequests = new Map<string, number>();
+  private offlineSince = new Map<number, number>();
   private itemWindows = new Map<number, ItemWindow>();
   private replays = new Map<number, number>();
+  private holderAnswers = new Map<number, number>();
 }

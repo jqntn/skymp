@@ -113,13 +113,26 @@ CallNative::ObjectPtr GetSingleObjectPtr(
     }
   }
 
+  std::optional<const char*> aliasClassName;
+  for (auto [aliasTypeId, aliasName] :
+       { std::pair{ RE::BGSRefAlias::VMTYPEID, "ReferenceAlias" },
+         std::pair{ RE::BGSLocAlias::VMTYPEID, "LocationAlias" } }) {
+    if (!objPtr && policy->HandleIsType(aliasTypeId, object->handle)) {
+      objPtr = object->Resolve(aliasTypeId);
+      aliasClassName = aliasName;
+    }
+  }
+
   if (objPtr) {
     auto objectTypeInfo = r.varType.GetTypeInfo();
     if (!objectTypeInfo) {
       throw NullPointerException("objectTypeInfo");
     }
     return std::make_shared<Object>(
-      className.has_value() ? *className : objectTypeInfo->GetName(), objPtr);
+      aliasClassName.has_value()
+        ? *aliasClassName
+        : (className.has_value() ? *className : objectTypeInfo->GetName()),
+      objPtr);
   } else {
     return ObjectPtr();
   }

@@ -23,13 +23,13 @@
     "result": "PASS",
     "reason": "",
     "evidence": [
-      "build: ok in 16 s (l1-build.log)",
+      "build: ok in 14 s (l1-build.log)",
       "ts: ok in 0 s (l1-ts.log)",
       "ctest: ok in 54 s (l1-ctest.log)"
     ],
-    "secs": 71,
+    "secs": 69,
     "shots": [],
-    "at": "2026-10-16T00:06:22.119Z"
+    "at": "2026-10-16T11:38:41.580Z"
   },
   "S0b": {
     "result": "PASS",
@@ -226,7 +226,7 @@
   "S3.4": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 39,
+    "secs": 42,
     "evidence": [
       "run 1: MS13 stage 10; Arvel 39655 in 371de:Skyrim.esm holds 1 Golden Claw on the client, 1 on the server; GoldenClaw alias ref ff000d51 (alias quests [\"39645\"], deleted true, in Arvel's inventory true, in the player's false)",
       "run 1: Arvel dead: the client corpse holds 1 claw, the server 1; GoldenClaw alias ref ff000d51 (alias quests [\"39645\"], deleted true, in Arvel's inventory true, in the player's false); MS13 stage 10",
@@ -237,11 +237,11 @@
     ],
     "rtt": {
       "1": {
-        "median": 43,
+        "median": 33,
         "calls": 24
       }
     },
-    "at": "2026-10-16T02:20:39.078Z"
+    "at": "2026-10-16T11:39:23.646Z"
   },
   "1A.1": {
     "result": "PASS",
@@ -390,15 +390,15 @@
   "1B.4": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 85,
+    "secs": 88,
     "evidence": [
-      "run 1: at 8:00 the client has Alvor in 3c at 20590,-45127,-84 (3D true); before the engines start, the server has Alvor in 133c8 at -515,-154,240, hoster 0",
-      "run 1: claim without a FormView: server 3c at 20590,-45127,-82, 12 units from the work marker, hoster ff000000",
-      "run 1: hide: the player went two cells east of Alvor (20590,-45127,-82): server hoster 0; Alvor's cell attached true, Alvor 3D false, hidden true",
-      "run 1: retry: the server moved Alvor back to 133c8 while he was hidden; back at the forge the server has 3c at 20319,-45137,-84, 268 units from the marker, hoster ff000000; local Alvor 3D true, disabled false (25 ms after the claim)",
+      "run 1: at 8:00 the client has Alvor in 3c at 20581,-45127,-84 (3D true); before the engines start, the server has Alvor in 133c8 at -515,-154,240, hoster 0",
+      "run 1: claim without a FormView: server 3c at 20595,-45121,-83, 19 units from the work marker, hoster ff000000",
+      "run 1: hide: the player went two cells east of Alvor (20595,-45121,-82): server hoster 0; Alvor's cell attached true, Alvor 3D false, hidden true",
+      "run 1: retry: the server moved Alvor back to 133c8 while he was hidden; back at the forge the server has 3c at 20325,-45141,-84, 262 units from the marker, hoster ff000000; local Alvor 3D true, disabled false (24 ms after the claim)",
       "run 1: walk-in: the driver enabled the hidden Alvor two cells away (a player who never hosted him): loaded true; server hoster held at 0 for 6 s: true",
-      "run 1: first movement: the server then streamed a stale Alvor 6037 units from the marker; 6 s later the local Alvor was 3D true, disabled false, at least 6030 units from the stale spot; back home: at least 6030 units from it; server 3c at 20594,-45041,-83, 97 units from the marker, hoster ff000000",
-      "run 1: replay, hosted movement: a quest replay starts, then the hoster takes Alvor out of his furniture and translates him 300 units (every 400 ms): 300 units from the server position at the end of the hold (20894,-45041,-83); server position held within 150 units of 20594,-45041,-83 for 2 s: true (last 20594,-45041,-83); after the replay the server follows the local position: true (20894,-45041,-83)",
+      "run 1: first movement: the server then streamed a stale Alvor 6037 units from the marker; 6 s later the local Alvor was 3D true, disabled false, at least 5852 units from the stale spot; back home: at least 5852 units from it; server 3c at 20772,-45188,-84, 192 units from the marker, hoster ff000000",
+      "run 1: replay, hosted movement: a quest replay starts, then the hoster takes Alvor out of his furniture and translates him 300 units (every 400 ms): 300 units from the server position at the end of the hold (21072,-45188,-84); server position held within 150 units of 20772,-45188,-84 for 2 s: true (last 20772,-45188,-84); after the replay the server follows the local position: true (21072,-45188,-84)",
       "run 1: release: a script disables Alvor on the hoster: server hoster 0, disabled true; hoster still 0 after 6 s: true; the real actor was never deleted: true",
       "run 1: replay, claim: a quest replay starts, then a script enables Alvor on the client: hoster held at 0 during the replay: true (last 0); after the replay the client claims him: true (hoster ff000000, server disabled false; local 3D true, disabled false)",
       "run 1: party: Alvor's alias quests on the member 105385,45486,1bc95, member quest log [105385, 0]; joined: true; leader two cells away: hoster ff000001 (member ff000001): true; leader back within 4096: hoster ff000000 (leader ff000000): true; the leader still hosts 12 s later: true (last ff000000)"
@@ -412,11 +412,11 @@
         "calls": 39
       },
       "2": {
-        "median": 40,
+        "median": 58,
         "calls": 5
       }
     },
-    "at": "2026-10-15T20:07:04.601Z"
+    "at": "2026-10-16T11:40:52.185Z"
   },
   "1B.5": {
     "result": "PASS",
@@ -672,7 +672,7 @@
   "2A.4": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 64,
+    "secs": 66,
     "evidence": [
       "run 1: A: FreeformIvarstead02 on engine 1 at login {\"running\":true,\"stage\":10}; the server has 1 necklace in the satchel d9b78 (created true)",
       "run 1: A: at login FreeformRiften20 runs on engine 1 false, its note in Sarthis's satchel on the server 0; MS13 runs true, its claw in Arvel on the server 1",
@@ -684,7 +684,7 @@
     "shots": [],
     "rtt": {
       "1": {
-        "median": 42,
+        "median": 39,
         "calls": 38
       },
       "2": {
@@ -692,7 +692,7 @@
         "calls": 14
       }
     },
-    "at": "2026-10-16T02:24:47.959Z"
+    "at": "2026-10-16T11:41:57.998Z"
   },
   "2A.5": {
     "result": "PASS",
@@ -797,21 +797,21 @@
   "2B.4": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 36,
+    "secs": 34,
     "evidence": [
-      "run 1: A: client stages [MQ102B, MQ102, MQ104] by seconds after the replay line: 0.2:0/0/0 0.6:10/5/0 1.7:10/15/0 2.4:30/15/0 3.2:30/15/10 5.3:30/15/12",
+      "run 1: A: client stages [MQ102B, MQ102, MQ104] by seconds after the replay line: 0.3:1/0/0 0.6:10/5/0 1.7:10/15/0 2.4:30/15/0 3.2:30/15/10 5.4:30/15/12",
       "run 1: B: after the replay, 50 of 148 ESP refs in the player's cell are known to the server; disabled state differs on none, open state differs on none",
-      "run 1: C: 15.3 s after the replay line the client started FreeformRiften20 (85d40) at stage 10: server logged it true",
-      "run 1: A: replay of 5 entries at 01:12:41.388; client stages after it: MQ102B 30, MQ102 15, MQ104 12 (the MQ104 stage 10 fragment moves on to 12); server lines from this client from the replay line until the last entry plus the settle time (5.7 s): none"
+      "run 1: C: 15.2 s after the replay line the client started FreeformRiften20 (85d40) at stage 10: server logged it true",
+      "run 1: A: replay of 5 entries at 13:42:13.250; client stages after it: MQ102B 30, MQ102 15, MQ104 12 (the MQ104 stage 10 fragment moves on to 12); server lines from this client from the replay line until the last entry plus the settle time (5.7 s): none"
     ],
     "shots": [],
     "rtt": {
       "1": {
-        "median": 60,
+        "median": 57,
         "calls": 47
       }
     },
-    "at": "2026-10-15T23:13:00.398Z"
+    "at": "2026-10-16T11:42:32.307Z"
   },
   "2B.5": {
     "result": "PASS",
@@ -820,11 +820,11 @@
     "evidence": [
       "run 1: integration_test_coop: exit 0, Test passed!",
       "run 1: scenarios in the server log: alias fill creates the claw in Arvel: true; running quest grant creates the necklace in the satchel: true; script items gain accepted: true; script items gain over the cap refused: true; script items loss applied: true; member take of a quest item refused: true",
-      "run 1: coop lines: 1: [2026-10-16 01:32:56.848] [console] [info] Coop: quest 39645 alias 16 created 39654 in 39655 | 1: [2026-10-16 01:32:56.848] [console] [info] Coop: quest 39645 alias 11 created 39647 in 39655 | 1: [2026-10-16 01:32:57.477] [console] [info] Coop: script items of ff000001: losses -, gains fx400, refused - | 1: [2026-10-16 01:32:57.663] [console] [info] Coop: script items of ff000001: losses -, gains -, refused fx5000 | 1: [2026-10-16 01:32:57.880] [console] [info] Coop: script items of ff000001: losses fx100, gains -, refused - | 1: [2026-10-16 01:32:58.092] [console] [info] Coop: quest d9b64 alias 3 created 663da in d9b78 | 1: [2026-10-16 01:32:59.018] [console] [info] Coop: ff000001 cannot take quest item 663da from d9b78, only the leader can"
+      "run 1: coop lines: 1: [2026-10-16 13:42:57.103] [console] [info] Coop: quest 39645 alias 16 created 39654 in 39655 | 1: [2026-10-16 13:42:57.103] [console] [info] Coop: quest 39645 alias 11 created 39647 in 39655 | 1: [2026-10-16 13:42:57.724] [console] [info] Coop: script items of ff000001: losses -, gains fx400, refused - | 1: [2026-10-16 13:42:57.926] [console] [info] Coop: script items of ff000001: losses -, gains -, refused fx5000 | 1: [2026-10-16 13:42:58.114] [console] [info] Coop: script items of ff000001: losses fx100, gains -, refused - | 1: [2026-10-16 13:42:58.342] [console] [info] Coop: quest d9b64 alias 3 created 663da in d9b78 | 1: [2026-10-16 13:42:59.271] [console] [info] Coop: ff000001 cannot take quest item 663da from d9b78, only the leader can"
     ],
     "shots": [],
     "rtt": {},
-    "at": "2026-10-15T23:33:02.365Z"
+    "at": "2026-10-16T11:43:02.621Z"
   },
   "G2.1": {
     "result": "PASS",
@@ -901,42 +901,69 @@
   },
   "G2.4": {
     "result": "PASS",
-    "reason": "3/3 runs PASS",
-    "secs": 368,
+    "reason": "1/1 runs PASS",
+    "secs": 109,
     "evidence": [
       "run 1: A: leader ff000000, bot member ff000001 in the party at the Western Watchtower; the leader set MQ104 to 60 by script (its fragment enables Mirmulnir): MQ104 stage 60; Mirmulnir 5a6ca on the server {\"cell\":\"3c:Skyrim.esm\",\"pos\":[7796,-37462,5697],\"disabled\":false,\"dead\":false,\"hoster\":4278190080} (hoster ff000000); the member's MQ104 log [60]; the leader before: {\"souls\":0,\"absorbed\":0,\"fus\":false}",
-      "run 1: B: the server killed Mirmulnir; 3.6 s later: MQ104 stage 90 (90 done true); the leader {\"souls\":0,\"absorbed\":0,\"fus\":false} -> {\"souls\":0,\"absorbed\":1,\"fus\":true}; server soul lines [\"dragon 5a6ca gives its soul to ff000000\",\"dragon 5a6ca gives its soul to ff000001\"]; the member's MQ104 log [60,65,90,85,80]",
-      "run 1: C: Balgruuf: message boxes answered (first button) at MQ104 stages [90]; 11 topic picks (\"J'ai tué le dragon. Ça mérite bien une récompense, non ?\", \"La tour de guet a été détruite, mais nous avons tué le dragon.\", \"Il s'avère que je pourrais être \"Enfant de dragon\".\", \"À la mort du dragon, j'ai absorbé une partie de son pouvoir.\", \"Les hommes m'ont donné ce nom, c'est tout.\", \"Que me veulent les Grises-barbes ?\"), MQ104 stages 90 -> 150 -> 160, last line \"En mon droit de jarl, je vous nomme thane de Blancherive. C'est le plus grand honneur que je puisse vous accorder.\"; 160 done true",
-      "run 1: C: Lydia a2c94 enabled and loaded on the leader true; before the talk {\"teammate\":false,\"rank\":-1}; message boxes answered []; 1 topic picks (\"Suivez-moi, j'ai besoin de votre aide.\"), last line \"\"; after: {\"teammate\":true,\"rank\":0} (CurrentFollowerFaction rank, player teammate); server {\"cell\":\"165a3:Skyrim.esm\",\"pos\":[-227,-74,-318],\"disabled\":false,\"dead\":false,\"hoster\":4278190080} (hoster ff000000)",
-      "run 2: A: leader ff000000, bot member ff000001 in the party at the Western Watchtower; the leader set MQ104 to 60 by script (its fragment enables Mirmulnir): MQ104 stage 65; Mirmulnir 5a6ca on the server {\"cell\":\"3c:Skyrim.esm\",\"pos\":[7796,-37462,5697],\"disabled\":false,\"dead\":false,\"hoster\":4278190080} (hoster ff000000); the member's MQ104 log [60,65]; the leader before: {\"souls\":0,\"absorbed\":0,\"fus\":false}",
-      "run 2: B: the server killed Mirmulnir; 3.6 s later: MQ104 stage 90 (90 done true); the leader {\"souls\":0,\"absorbed\":0,\"fus\":false} -> {\"souls\":0,\"absorbed\":1,\"fus\":true}; server soul lines [\"dragon 5a6ca gives its soul to ff000000\",\"dragon 5a6ca gives its soul to ff000001\"]; the member's MQ104 log [60,65,90,85,80]",
-      "run 2: C: Balgruuf: message boxes answered (first button) at MQ104 stages [90]; 9 topic picks (\"J'ai tué le dragon. Ça mérite bien une récompense, non ?\", \"La tour de guet a été détruite, mais nous avons tué le dragon.\", \"Il s'avère que je pourrais être \"Enfant de dragon\".\", \"À la mort du dragon, j'ai absorbé une partie de son pouvoir.\", \"Les hommes m'ont donné ce nom, c'est tout.\", \"Les Grises-barbes ?\", \"Que me veulent les Grises-barbes ?\"), MQ104 stages 90 -> 150 -> 160, last line \"En mon droit de jarl, je vous nomme thane de Blancherive. C'est le plus grand honneur que je puisse vous accorder.\"; 160 done true",
-      "run 2: C: Lydia a2c94 enabled and loaded on the leader true; before the talk {\"teammate\":false,\"rank\":-1}; message boxes answered []; 1 topic picks (\"Suivez-moi, j'ai besoin de votre aide.\"), last line \"\"; after: {\"teammate\":true,\"rank\":0} (CurrentFollowerFaction rank, player teammate); server {\"cell\":\"165a3:Skyrim.esm\",\"pos\":[-228,-75,-318],\"disabled\":false,\"dead\":false,\"hoster\":4278190080} (hoster ff000000)",
-      "run 3: A: leader ff000000, bot member ff000001 in the party at the Western Watchtower; the leader set MQ104 to 60 by script (its fragment enables Mirmulnir): MQ104 stage 65; Mirmulnir 5a6ca on the server {\"cell\":\"3c:Skyrim.esm\",\"pos\":[7790,-37462,5697],\"disabled\":false,\"dead\":false,\"hoster\":4278190080} (hoster ff000000); the member's MQ104 log [60,65]; the leader before: {\"souls\":0,\"absorbed\":0,\"fus\":false}",
-      "run 3: B: the server killed Mirmulnir; 3.7 s later: MQ104 stage 90 (90 done true); the leader {\"souls\":0,\"absorbed\":0,\"fus\":false} -> {\"souls\":0,\"absorbed\":1,\"fus\":true}; server soul lines [\"dragon 5a6ca gives its soul to ff000000\",\"dragon 5a6ca gives its soul to ff000001\"]; the member's MQ104 log [60,65,90,85,80]",
-      "run 3: C: Balgruuf: message boxes answered (first button) at MQ104 stages [90]; 7 topic picks (\"J'ai tué le dragon. Ça mérite bien une récompense, non ?\", \"La tour de guet a été détruite, mais nous avons tué le dragon.\", \"Il s'avère que je pourrais être \"Enfant de dragon\".\", \"À la mort du dragon, j'ai absorbé une partie de son pouvoir.\", \"Les hommes m'ont donné ce nom, c'est tout.\", \"Que me veulent les Grises-barbes ?\"), MQ104 stages 90 -> 150 -> 160, last line \"En mon droit de jarl, je vous nomme thane de Blancherive. C'est le plus grand honneur que je puisse vous accorder.\"; 160 done true",
-      "run 3: C: Lydia a2c94 enabled and loaded on the leader true; before the talk {\"teammate\":false,\"rank\":-1}; message boxes answered []; 1 topic picks (\"Suivez-moi, j'ai besoin de votre aide.\"), last line \"\"; after: {\"teammate\":true,\"rank\":0} (CurrentFollowerFaction rank, player teammate); server {\"cell\":\"165a3:Skyrim.esm\",\"pos\":[-349,-288,-318],\"disabled\":false,\"dead\":false,\"hoster\":4278190080} (hoster ff000000)"
+      "run 1: B: the server killed Mirmulnir; 3.7 s later: MQ104 stage 90 (90 done true); the leader {\"souls\":0,\"absorbed\":0,\"fus\":false} -> {\"souls\":0,\"absorbed\":1,\"fus\":true}; server soul lines [\"dragon 5a6ca gives its soul to ff000000\",\"dragon 5a6ca gives its soul to ff000001\"]; the member's MQ104 log [60,65,90,85,80]",
+      "run 1: C: Balgruuf: message boxes answered (first button) at MQ104 stages [90]; 7 topic picks (\"J'ai tué le dragon. Ça mérite bien une récompense, non ?\", \"La tour de guet a été détruite, mais nous avons tué le dragon.\", \"Il s'avère que je pourrais être \"Enfant de dragon\".\", \"À la mort du dragon, j'ai absorbé une partie de son pouvoir.\", \"Les hommes m'ont donné ce nom, c'est tout.\", \"Que me veulent les Grises-barbes ?\"), MQ104 stages 90 -> 150 -> 160, last line \"En mon droit de jarl, je vous nomme thane de Blancherive. C'est le plus grand honneur que je puisse vous accorder.\"; 160 done true",
+      "run 1: C: Lydia a2c94 enabled and loaded on the leader true; before the talk {\"teammate\":false,\"rank\":-1}; message boxes answered []; 1 topic picks (\"Suivez-moi, j'ai besoin de votre aide.\"), last line \"\"; after: {\"teammate\":true,\"rank\":0} (CurrentFollowerFaction rank, player teammate); server {\"cell\":\"165a3:Skyrim.esm\",\"pos\":[-349,-288,-318],\"disabled\":false,\"dead\":false,\"hoster\":4278190080} (hoster ff000000)"
     ],
     "shots": [
-      "runs/G2_4/1/G2_4-lydia.png",
-      "runs/G2_4/2/G2_4-lydia.png",
-      "runs/G2_4/3/G2_4-lydia.png"
+      "runs/G2_4/1/G2_4-lydia.png"
     ],
     "rtt": {
       "1": {
-        "median": 44,
-        "calls": 166
+        "median": 47,
+        "calls": 165
       }
     },
-    "at": "2026-10-16T03:46:50.005Z"
+    "at": "2026-10-16T11:45:50.376Z"
   },
   "G2.5": {
-    "result": "FAIL",
-    "reason": "no check script",
-    "secs": 0,
-    "evidence": [],
-    "shots": [],
-    "at": "2026-10-12T16:53:46.494Z"
+    "result": "PASS",
+    "reason": "1/1 runs PASS",
+    "secs": 742,
+    "evidence": [
+      "run 1: S1 start after the relog, at Arvel: Arvel holds 1 claw on the client, 1 on the server",
+      "run 1: S1 (G2.1's step): MS13 40; the claw 39647: client 1, server 1; 10 s later client 1, server 1; the member's MS13 log [10,40]",
+      "run 1: S1 after the relog: MS13 40, the claw client 1, server 1",
+      "run 1: S1 after the relog: Arvel (the claw) holds 0 on the client, 0 on the server",
+      "run 1: S2 (G2.2's step): the claw door DoorBase -171 -> -226, MS13 50, the keyhole's server state done, the member's MS13 log [10,40,50]",
+      "run 1: S2 after the relog: MS13 50, the claw door DoorBase -368 (closed -171), the claw held 1",
+      "run 1: S2 after the relog: Arvel (the claw) holds 0 on the client, 0 on the server",
+      "run 1: S3 (G2.3's loot): MQ103 180 (180 done true); 10 s after the loot the Dragonstone: client 1, server 1; the member's MQ103 log [10,180,20,60]",
+      "run 1: S3 after the relog: MQ103 180 done true, the Dragonstone client 1, server 1",
+      "run 1: S3 after the relog: Arvel (the claw) holds 0 on the client, 0 on the server",
+      "run 1: S3 after the relog: the boss (the Dragonstone) holds 0 on the client, 0 on the server",
+      "run 1: S4 (G2.3's turn-in): 0 topic picks; MQ103 190 done true; the Dragonstone client 0, server 0; the member's MQ103 log [10,180,20,60,190,185]",
+      "run 1: S4 after the relog: MQ103 190 done true, the Dragonstone client 0, server 0",
+      "run 1: S4 after the relog: Arvel (the claw) holds 0 on the client, 0 on the server",
+      "run 1: S4 after the relog: the boss (the Dragonstone) holds 0 on the client, 0 on the server",
+      "run 1: S5 (G2.4's step): MQ104 90 done true, 160 done true (8 topic picks, 0 boxes); Fus true; the leader gained [\"5d178\"], the reward weapon 5d178 10 s later: client 1, server 1",
+      "run 1: S5: the leader equipped 5d178: client right hand 5d178, server worn [\"12e46\",\"12e49\",\"12e4b\",\"12e4d\",\"5d178\"]",
+      "run 1: S5: Lydia follows the leader true ({\"teammate\":true,\"rank\":0}); the server's stored followers [666772,0]; the member's MQ104 log [10,60,65,90,85,150,160]",
+      "run 1: S5 after the relog: {\"souls\":0,\"soulsBefore\":0,\"done160\":true,\"fus\":true,\"axe\":1,\"serverAxe\":1,\"equipped\":\"5d178\",\"worn\":[\"12e46\",\"12e49\",\"12e4b\",\"12e4d\",\"5d178\"],\"lydia\":{\"teammate\":true,\"rank\":0}}",
+      "run 1: S5 after the relog: Arvel (the claw) holds 0 on the client, 0 on the server",
+      "run 1: S5 after the relog: the boss (the Dragonstone) holds 0 on the client, 0 on the server",
+      "run 1: relog S1 start: the leader and the bot logged in again; 0 message boxes answered; state back 0.7 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)",
+      "run 1: relog S1: the leader and the bot logged in again; 0 message boxes answered; state back 2.0 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)",
+      "run 1: relog S2: the leader and the bot logged in again; 0 message boxes answered; state back 2.1 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)",
+      "run 1: relog S3: the leader and the bot logged in again; 0 message boxes answered; state back 2.0 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)",
+      "run 1: relog S4: the leader and the bot logged in again; 0 message boxes answered; state back 2.0 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)",
+      "run 1: relog S5: the leader and the bot logged in again; 1 message boxes answered; state back 10.1 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)",
+      "run 1: the leader client's stray removals and failed relinks: [\"Stray quest item removed d0800 18 9bcd6\",\"Stray quest item removed d0800 18 9bcd6\"]"
+    ],
+    "shots": [
+      "runs/G2_5/1/G2_5-relog.png"
+    ],
+    "rtt": {
+      "1": {
+        "median": 43,
+        "calls": 469
+      }
+    },
+    "at": "2026-10-16T11:37:31.981Z"
   },
   "G2.6": {
     "result": "FAIL",
@@ -1244,62 +1271,36 @@
     "at": "2026-10-14T18:04:48.920Z"
   },
   "F1": {
-    "result": "FAIL",
-    "reason": "run 3/3: engine 1: the corpse is not loaded; engine 2: the corpse's body lies 5024 units from the server's corpse position ([7884,-40756,4112] vs [6162,-45266,5503]); engine 1, next to the corpse: dead true, loaded false, body 2436 units from the server's position; engine 2, next to the corpse: dead true, loaded true, body 5024 units from the server's position",
-    "secs": 205,
+    "result": "PASS",
+    "reason": "1/1 runs PASS",
+    "secs": 59,
     "evidence": [
-      "run 1: A: party formed; the server enabled Mirmulnir 5a6ca; after 6 s: server {\"pos\":[5121,-41459,7447],\"cell\":\"3c:Skyrim.esm\",\"hoster\":4278190080,\"dead\":false} (hoster ff000000), engine 1 {\"pos\":[5381,-41496,7615],\"ref\":[5450,-41502,7649],\"node\":\"NPC Pelvis\",\"loaded\":true,\"dead\":false}, engine 2 {\"pos\":[7794,-37461,4539],\"ref\":[7796,-37462,4539],\"node\":\"NPC Pelvis\",\"loaded\":true,\"dead\":false}; leader ff000000, member ff000001",
-      "run 1: B: the server killed the dragon at [5450,-41502,7649] in 3c:Skyrim.esm (hoster ff000000); the server's position stayed within 50 units for 8 s 22 s after the kill, at [8897,-45117,5094] (hoster 0, 5611 units from the kill point)",
-      "run 1: B: engine 1 every 1 s: 1s [7298,-40809,6529] alive; 2s [7810,-40623,5524] alive; 3s [7677,-40633,4715] alive; 4s [7661,-40629,4221] alive; 6s [7651,-40637,4233] alive; 7s [7632,-40683,4263] alive; 8s [7653,-40706,4282] alive; 9s [7678,-40731,4228] alive; 10s [7941,-41770,4929] alive; 11s [8301,-43132,5942] alive; 12s [8678,-44561,6283] alive; 13s [9140,-45253,3968] alive; 15s [10195,-45442,3232] unloaded; 16s [10195,-45442,3232] unloaded; 17s [10195,-45442,3232] unloaded; 18s [10195,-45442,3232] unloaded; 19s [10195,-45442,3232] unloaded; 20s [10195,-45442,3232] unloaded; 21s [10195,-45442,3232] unloaded; 22s [10195,-45442,3232] unloaded",
-      "run 1: B: engine 2 every 1 s: 1s [7795,-37462,4539] alive; 2s [5268,-25189,2991] alive; 3s [1473,-7053,951] alive; 4s [0,-20,35] alive; 6s [0,-24,42] alive; 7s [0,-11,18] alive; 8s [0,11,-15] alive; 9s [0,31,-59] alive; 10s [7947,-41791,4968] unloaded; 11s [7789,-41769,4734]; 12s [7841,-41698,3604]; 13s [8157,-41810,3352]; 15s [8477,-41747,3266]; 16s [8801,-41655,2931]; 17s [9162,-41592,2511]; 18s [9436,-41948,1991]; 19s [9660,-42358,1382]; 20s [9750,-42878,778]; 21s [9879,-43176,632]; 22s [9874,-43183,628]",
-      "run 1: B: server every 1 s: 1s [7250,-40840,6574]; 2s [7709,-40573,5513]; 3s [7681,-40614,4773]; 4s [7662,-40643,4240]; 6s [7651,-40646,4240]; 7s [7621,-40681,4240]; 8s [7641,-40727,4240]; 9s [7682,-40749,4251]; 10s [7984,-41940,5070]; 11s [8286,-43129,5888]; 12s [8702,-44629,6152]; 13s [8897,-45117,5094]; 15s [8897,-45117,5094]; 16s [8897,-45117,5094]; 17s [8897,-45117,5094]; 18s [8897,-45117,5094]; 19s [8897,-45117,5094]; 20s [8897,-45117,5094]; 21s [8897,-45117,5094]; 22s [8897,-45117,5094]",
-      "run 1: B: engine 1 at the end: body (no pelvis node, ref position) [10195,-45442,3232], ref position [10195,-45442,3232], dead true, loaded false, body 2293 units from the server's corpse position",
-      "run 1: B: engine 2 at the end: body (NPC Pelvis) [9874,-43183,628], ref position [9874,-43183,628], dead true, loaded true, body 4964 units from the server's corpse position",
-      "run 1: C: engine 1 corpse pose, node offsets from the dragon's position: {}",
-      "run 1: C: engine 2 corpse pose, node offsets from the dragon's position: {\"NPC Head\":[-244,379,200],\"NPC Pelvis\":[0,0,0],\"NPC Spine1\":[-17,24,21],\"NPC Tail1\":[7,-21,-23]}",
-      "run 1: D: after both players stood next to the corpse for 4 s: engine 1 body [10195,-45442,3232], dead true, loaded false, 2293 units from the server's position [8897,-45117,5094]",
-      "run 1: D: after both players stood next to the corpse for 4 s: engine 2 body [9866,-43182,624], dead true, loaded true, 4966 units from the server's position [8897,-45117,5094]",
-      "run 2: A: party formed; the server enabled Mirmulnir 5a6ca; after 6 s: server {\"pos\":[5304,-41533,7598],\"cell\":\"3c:Skyrim.esm\",\"hoster\":4278190080,\"dead\":false} (hoster ff000000), engine 1 {\"pos\":[5439,-41550,7679],\"ref\":[5510,-41557,7712],\"node\":\"NPC Pelvis\",\"loaded\":true,\"dead\":false}, engine 2 {\"pos\":[7794,-37461,4539],\"ref\":[7796,-37462,4538],\"node\":\"NPC Pelvis\",\"loaded\":true,\"dead\":false}; leader ff000000, member ff000001",
-      "run 2: B: the server killed the dragon at [5583,-41563,7742] in 3c:Skyrim.esm (hoster ff000000); the server's position stayed within 50 units for 8 s 23 s after the kill, at [8896,-45065,5218] (hoster 0, 5442 units from the kill point)",
-      "run 2: B: engine 1 every 1 s: 1s [7346,-40801,6504] alive; 2s [7795,-40621,5524] alive; 3s [7676,-40633,4715] alive; 4s [7666,-40629,4222] alive; 5s [7658,-40642,4241] alive; 7s [7642,-40683,4269] alive; 8s [7659,-40705,4283] alive; 9s [7683,-40733,4223] alive; 10s [7936,-41712,4876] alive; 11s [8306,-43094,5908] alive; 12s [8678,-44498,6327] alive; 13s [9114,-45195,4063] alive; 14s [9898,-45207,3153] unloaded; 16s [9898,-45207,3153] unloaded; 17s [9898,-45207,3153] unloaded; 18s [9898,-45207,3153] unloaded; 19s [9898,-45207,3153] unloaded; 20s [9898,-45207,3153] unloaded; 21s [9898,-45207,3153] unloaded; 22s [9898,-45207,3153] unloaded",
-      "run 2: B: engine 2 every 1 s: 1s [7794,-37462,4539] alive; 2s [5268,-25189,2991] alive; 3s [1473,-7053,951] alive; 4s [0,-20,35] alive; 5s [0,-24,42] alive; 7s [0,-11,18] alive; 8s [0,11,-15] alive; 9s [0,34,-66] alive; 10s [7756,-41587,5152]; 11s [7776,-41729,4656]; 12s [7892,-41640,3582]; 13s [8275,-41763,3316]; 14s [8716,-41761,3050]; 16s [9241,-41694,2527]; 17s [9603,-41778,2100]; 18s [9780,-42279,1515]; 19s [9852,-42886,746]; 20s [9928,-43241,609]; 21s [9950,-43290,571]; 22s [9953,-43292,571]",
-      "run 2: B: server every 1 s: 1s [7346,-40801,6504]; 2s [7701,-40571,5560]; 3s [7679,-40617,4721]; 4s [7667,-40643,4240]; 5s [7658,-40645,4240]; 7s [7626,-40683,4240]; 8s [7644,-40725,4240]; 9s [7693,-40770,4266]; 10s [7975,-41864,5019]; 11s [8281,-43053,5838]; 12s [8691,-44535,6257]; 13s [8896,-45065,5218]; 14s [8896,-45065,5218]; 16s [8896,-45065,5218]; 17s [8896,-45065,5218]; 18s [8896,-45065,5218]; 19s [8896,-45065,5218]; 20s [8896,-45065,5218]; 21s [8896,-45065,5218]; 22s [8896,-45065,5218]",
-      "run 2: B: engine 1 at the end: body (no pelvis node, ref position) [9898,-45207,3153], ref position [9898,-45207,3153], dead true, loaded false, body 2300 units from the server's corpse position",
-      "run 2: B: engine 2 at the end: body (NPC Pelvis) [9953,-43292,571], ref position [9953,-43292,571], dead true, loaded true, body 5085 units from the server's corpse position",
-      "run 2: C: engine 1 corpse pose, node offsets from the dragon's position: {}",
-      "run 2: C: engine 2 corpse pose, node offsets from the dragon's position: {\"NPC Head\":[-127,458,156],\"NPC Pelvis\":[0,0,0],\"NPC Spine1\":[-7,32,14],\"NPC Tail1\":[3,-24,-21]}",
-      "run 2: D: after both players stood next to the corpse for 4 s: engine 1 body [9898,-45207,3153], dead true, loaded false, 2300 units from the server's position [8896,-45065,5218]",
-      "run 2: D: after both players stood next to the corpse for 4 s: engine 2 body [10007,-43326,559], dead true, loaded true, 5096 units from the server's position [8896,-45065,5218]",
-      "run 3: A: party formed; the server enabled Mirmulnir 5a6ca; after 6 s: server {\"pos\":[5246,-41489,7556],\"cell\":\"3c:Skyrim.esm\",\"hoster\":4278190080,\"dead\":false} (hoster ff000000), engine 1 {\"pos\":[5390,-41500,7622],\"ref\":[5465,-41504,7648],\"node\":\"NPC Pelvis\",\"loaded\":true,\"dead\":false}, engine 2 {\"pos\":[7796,-37462,4538],\"ref\":[7796,-37462,4538],\"node\":\"NPC Pelvis\",\"loaded\":true,\"dead\":false}; leader ff000000, member ff000001",
-      "run 3: B: the server killed the dragon at [5541,-41507,7669] in 3c:Skyrim.esm (hoster ff000000); the server's position stayed within 50 units for 8 s 58 s after the kill, at [6162,-45266,5503] (hoster 0, 4383 units from the kill point)",
-      "run 3: B: engine 1 every 1 s: 1s [7318,-40788,6470] alive; 2s [7840,-40629,5551] alive; 3s [7700,-40630,4746] alive; 4s [7683,-40627,4221] alive; 5s [7683,-40634,4233] alive; 7s [7684,-40649,4256] alive; 8s [7685,-40661,4275] alive; 9s [7678,-40669,4283] alive; 10s [7532,-40586,4444] alive; 11s [6389,-39830,5192] alive; 12s [5358,-39150,6070] alive; 13s [3918,-38818,5909] alive; 14s [4948,-40386,6807] alive; 15s [4312,-42974,7156] alive; 16s [6344,-43878,6494] alive; 18s [8867,-43148,5553] alive; 19s [11662,-42281,4462] alive; 20s [11459,-40468,4177] alive; 21s [9340,-40262,4558] alive; 22s [8737,-40097,4520] alive; 23s [8746,-40104,4538] alive; 24s [8745,-40103,4535] alive; 25s [8736,-40096,4515] alive; 26s [8699,-40067,4449] alive; 28s [8101,-39589,4942] alive; 29s [7169,-38828,5578] alive; 30s [6347,-38189,6499] alive; 31s [4723,-36748,6086] alive; 32s [4610,-34577,5942] alive; 33s [6662,-35482,7262] alive; 34s [7387,-37846,7101] alive; 35s [7886,-40635,6174] alive; 36s [7814,-41112,5631] alive; 38s [7913,-40809,4842] alive; 39s [7893,-40672,4172] alive; 40s [7873,-40670,4104] alive; 41s [7833,-40717,4082] alive; 42s [7868,-40782,4071] alive; 43s [7874,-40776,4083] alive; 44s [7879,-40764,4103] alive; 45s [7757,-41039,4402] alive; 47s [7148,-42389,5078] alive; 48s [6668,-43497,6082] alive; 49s [6175,-45203,5549] alive; 50s [6182,-47126,3930] alive unloaded; 51s [6182,-47126,3930] unloaded; 52s [6182,-47126,3930] unloaded; 54s [6182,-47126,3930] unloaded; 55s [6182,-47126,3930] unloaded; 56s [6182,-47126,3930] unloaded; 57s [6182,-47126,3930] unloaded; 58s [6182,-47126,3930] unloaded",
-      "run 3: B: engine 2 every 1 s: 1s [7795,-37462,4538] alive; 2s [5268,-25186,2991] alive; 3s [1473,-7053,951] alive; 4s [0,-22,40] alive; 5s [0,-24,42] alive; 7s [0,-15,26] alive; 8s [0,-1,2] alive; 9s [0,16,-22] alive; 10s [0,121,169] alive; 11s [6626,-40094,5035]; 12s [6691,-40157,4526]; 13s [7077,-40255,4079]; 14s [7495,-40416,3791]; 15s [7690,-40530,3693]; 16s [7722,-40473,3646]; 18s [7739,-40423,3630]; 19s [7734,-40418,3619]; 20s [7731,-40421,3615]; 21s [7730,-40421,3616]; 22s [7730,-40421,3615]; 23s [7730,-40421,3616]; 24s [8728,-40089,4496]; 25s [8728,-40089,4496]; 26s [8728,-40089,4496]; 28s [8728,-40089,4496]; 29s [8728,-40089,4496]; 30s [8728,-40089,4496]; 31s [8728,-40089,4496]; 32s [8728,-40089,4496]; 33s [8728,-40089,4496]; 34s [8728,-40089,4496]; 35s [8728,-40089,4496]; 36s [8728,-40090,4496]; 38s [8728,-40090,4495]; 39s [8728,-40090,4495]; 40s [8728,-40090,4495]; 41s [8728,-40090,4495]; 42s [8729,-40090,4495]; 43s [8729,-40090,4495]; 44s [7883,-40755,4112]; 45s [7883,-40755,4112]; 47s [7883,-40755,4112]; 48s [7883,-40755,4112]; 49s [7883,-40755,4112]; 50s [7883,-40755,4112]; 51s [7883,-40755,4112]; 52s [7883,-40756,4112]; 54s [7883,-40756,4112]; 55s [7883,-40756,4112]; 56s [7883,-40756,4112]; 57s [7883,-40756,4112]; 58s [7884,-40756,4112]",
-      "run 3: B: server every 1 s: 1s [7372,-40758,6429]; 2s [7732,-40576,5561]; 3s [7704,-40613,4813]; 4s [7684,-40642,4240]; 5s [7684,-40642,4240]; 7s [7684,-40642,4240]; 8s [7684,-40642,4240]; 9s [7667,-40647,4240]; 10s [7441,-40525,4407]; 11s [6418,-39850,5224]; 12s [5294,-39108,6121]; 13s [3948,-38863,5847]; 14s [4948,-40439,6845]; 15s [4313,-42895,7175]; 16s [6483,-43844,6454]; 18s [8914,-43133,5514]; 19s [11626,-42293,4458]; 20s [10513,-41447,4473]; 21s [9222,-40467,4490]; 22s [8728,-40089,4496]; 23s [8728,-40089,4496]; 24s [8728,-40089,4496]; 25s [8728,-40089,4496]; 26s [8676,-40048,4540]; 28s [7960,-39476,5151]; 29s [7097,-38788,5887]; 30s [6295,-38148,6572]; 31s [4770,-36800,6115]; 32s [4756,-34571,6002]; 33s [6732,-35612,7317]; 34s [7396,-37878,7110]; 35s [7861,-40471,6229]; 36s [7903,-40756,5494]; 38s [7898,-40710,4775]; 39s [7892,-40670,4135]; 40s [7876,-40675,4112]; 41s [7855,-40715,4112]; 42s [7882,-40755,4112]; 43s [7883,-40755,4112]; 44s [7883,-40755,4112]; 45s [7673,-41228,4457]; 47s [7176,-42350,5274]; 48s [6631,-43581,6172]; 49s [6162,-45266,5503]; 50s [6162,-45266,5503]; 51s [6162,-45266,5503]; 52s [6162,-45266,5503]; 54s [6162,-45266,5503]; 55s [6162,-45266,5503]; 56s [6162,-45266,5503]; 57s [6162,-45266,5503]; 58s [6162,-45266,5503]",
-      "run 3: B: engine 1 at the end: body (no pelvis node, ref position) [6182,-47126,3930], ref position [6182,-47126,3930], dead true, loaded false, body 2436 units from the server's corpse position",
-      "run 3: B: engine 2 at the end: body (NPC Pelvis) [7884,-40756,4112], ref position [8001,-40489,4135], dead true, loaded true, body 5024 units from the server's corpse position",
-      "run 3: C: engine 1 corpse pose, node offsets from the dragon's position: {}",
-      "run 3: C: engine 2 corpse pose, node offsets from the dragon's position: {\"NPC Head\":[209,66,-166],\"NPC Pelvis\":[-117,-267,-24],\"NPC Spine1\":[-92,-250,-42],\"NPC Tail1\":[-138,-289,-14]}",
-      "run 3: D: after both players stood next to the corpse for 4 s: engine 1 body [6182,-47126,3930], dead true, loaded false, 2436 units from the server's position [6162,-45266,5503]",
-      "run 3: D: after both players stood next to the corpse for 4 s: engine 2 body [7884,-40756,4111], dead true, loaded true, 5024 units from the server's position [6162,-45266,5503]"
+      "run 1: A: party formed; the server enabled Mirmulnir 5a6ca; after 6 s: server {\"pos\":[5274,-41442,7512],\"cell\":\"3c:Skyrim.esm\",\"hoster\":4278190081,\"dead\":false} (hoster ff000001), engine 1 {\"pos\":[7794,-37462,4587],\"ref\":[7796,-37462,4587],\"node\":\"NPC Pelvis\",\"loaded\":true,\"dead\":false}, engine 2 {\"pos\":[5453,-41443,7655],\"ref\":[5513,-41442,7700],\"node\":\"NPC Pelvis\",\"loaded\":true,\"dead\":false}; leader ff000000, member ff000001",
+      "run 1: B: the server killed the dragon at [5513,-41442,7700] in 3c:Skyrim.esm (hoster ff000001); the server's position stayed within 50 units for 8 s 26 s after the kill, at [8015,-40490,3491] (hoster ff000001, 4988 units from the kill point)",
+      "run 1: B: engine 1 every 1 s: 1s [5963,-41373,7958]; 2s [5910,-41312,7401]; 3s [5959,-41358,6051]; 4s [6429,-41374,5418]; 5s [6966,-41331,4340]; 7s [7135,-41295,3823]; 8s [7226,-41288,3750]; 9s [7245,-41283,3738]; 10s [7259,-41285,3710]; 11s [7271,-41272,3694]; 12s [7270,-41269,3697]; 13s [7270,-41269,3696]; 14s [7270,-41268,3696]; 15s [7269,-41268,3696]; 17s [7270,-41268,3696]; 18s [7269,-41268,3696]; 19s [8016,-40488,3492]; 20s [8016,-40488,3492]; 21s [8016,-40488,3492]; 22s [8016,-40488,3492]; 23s [8016,-40488,3492]; 24s [8016,-40487,3492]; 25s [8015,-40487,3492]",
+      "run 1: B: engine 2 every 1 s: 1s [5618,-41431,7906]; 2s [5633,-41494,7251]; 3s [5633,-41428,6397]; 4s [5787,-41523,6256]; 5s [6017,-41517,5826]; 7s [6354,-41255,5168]; 8s [6791,-40954,4449]; 9s [7333,-40707,3838]; 10s [7693,-40512,3720]; 11s [7705,-40506,3688]; 12s [7698,-40550,3710]; 13s [7824,-40511,3645]; 14s [7927,-40464,3561]; 15s [7975,-40503,3521]; 17s [8005,-40488,3491]; 18s [8013,-40489,3491]; 19s [8014,-40489,3491]; 20s [8016,-40488,3492]; 21s [8014,-40491,3491]; 22s [8016,-40488,3492]; 23s [8016,-40489,3491]; 24s [8016,-40489,3491]; 25s [8015,-40490,3491]",
+      "run 1: B: server every 1 s: 1s [5616,-41425,7912]; 2s [5638,-41497,7330]; 3s [5630,-41423,6395]; 4s [5780,-41523,6271]; 5s [5995,-41519,5890]; 7s [6316,-41282,5253]; 8s [6762,-40969,4491]; 9s [7280,-40750,3825]; 10s [7690,-40513,3719]; 11s [7708,-40504,3690]; 12s [7693,-40551,3710]; 13s [7827,-40509,3645]; 14s [7924,-40460,3561]; 15s [7973,-40502,3524]; 17s [8005,-40488,3491]; 18s [8013,-40488,3491]; 19s [8014,-40489,3491]; 20s [8016,-40488,3492]; 21s [8014,-40490,3491]; 22s [8016,-40488,3492]; 23s [8016,-40489,3491]; 24s [8016,-40489,3491]; 25s [8015,-40490,3491]",
+      "run 1: B: engine 1 at the end: body (NPC Pelvis) [8015,-40487,3492], ref position [8001,-40448,3781], dead true, loaded true, body 3 units from the server's corpse position",
+      "run 1: B: engine 2 at the end: body (NPC Pelvis) [8015,-40490,3491], ref position [8015,-40490,3491], dead true, loaded true, body 0 units from the server's corpse position",
+      "run 1: C: engine 1 corpse pose, node offsets from the dragon's position: {\"NPC Head\":[-121,-195,153],\"NPC Pelvis\":[15,-39,-289],\"NPC Spine1\":[3,-59,-263],\"NPC Tail1\":[23,-29,-318]}",
+      "run 1: C: engine 2 corpse pose, node offsets from the dragon's position: {\"NPC Head\":[259,-353,-227],\"NPC Pelvis\":[0,0,0],\"NPC Spine1\":[15,-31,-11],\"NPC Tail1\":[-21,23,6]}",
+      "run 1: D: after both players stood next to the corpse for 4 s: engine 1 body [8015,-40487,3492], dead true, loaded true, 2 units from the server's position [8016,-40489,3491]",
+      "run 1: D: after both players stood next to the corpse for 4 s: engine 2 body [8016,-40489,3491], dead true, loaded true, 0 units from the server's position [8016,-40489,3491]"
     ],
     "shots": [
       "runs/F1/1/F1-engine1.png",
-      "runs/F1/1/F1-engine2.png",
-      "runs/F1/2/F1-engine1.png",
-      "runs/F1/2/F1-engine2.png",
-      "runs/F1/3/F1-engine1.png",
-      "runs/F1/3/F1-engine2.png"
+      "runs/F1/1/F1-engine2.png"
     ],
     "rtt": {
       "1": {
         "median": 54,
-        "calls": 60
+        "calls": 31
       },
       "2": {
-        "median": 43,
-        "calls": 60
+        "median": 45,
+        "calls": 31
       }
     },
-    "at": "2026-10-16T02:39:26.436Z"
+    "at": "2026-10-16T11:44:01.561Z"
   }
 }

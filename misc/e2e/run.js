@@ -426,6 +426,20 @@ const runOnce = async (id, check, n, attempt) => {
       await ctx.waitFor(() => !procs("node.exe").includes(ctx.serverPid), 15000, "the server exits", Env);
       await startServer(check, ctx, true);
     };
+    ctx.relog = async (engine = 1) => {
+      const pid = ctx.gamePids[engine];
+      const quitAt = Date.now();
+      ctx.drv("sp.Debug.quitGame(); return 0;", engine).catch(() => {});
+      const quit = await ctx.waitFor(() => !procs("SkyrimSE.exe").includes(pid), 30000, `engine ${engine} quits`).then(() => true).catch(() => false);
+      if (!quit) spawnSync("taskkill", ["/PID", String(pid), "/T", "/F"]);
+      await ctx.waitFor(() => !procs("SkyrimSE.exe").includes(pid), 30000, `engine ${engine} exits`, Env);
+      const profile = profileId(engine);
+      await ctx.waitFor(() => ctx.probe(`return !mp.getActorsByProfileId(${profile}).some((a) => mp.get(a, "isOnline"));`), 120000, `the server sees profile ${profile} offline`, Env);
+      ctx.log(`engine ${engine} relog: ${quit ? "quit" : "killed after 30 s"}, the server saw the profile offline ${((Date.now() - quitAt) / 1000).toFixed(1)} s after the quit`);
+      await sleep(5000);
+      await startGame(engine, ctx);
+      return ctx.ready(engine);
+    };
     if (check.server !== false) await startServer(check, ctx);
     if (check.setup) await check.setup(ctx);
     for (let e = 1; e <= engines; e++) await startGame(e, ctx);

@@ -17,15 +17,15 @@ const ms13 = [
   field("ALST", 1), field("ALUA", ARVEL_NPC), { type: "ALED", data: new Uint8Array(0) },
   field("ALST", 16), field("ALCO", JOURNAL), field("ALCA", 0x80000001), { type: "ALED", data: new Uint8Array(0) },
   field("ALST", 10), field("ALFR", 0x1fc43), { type: "ALED", data: new Uint8Array(0) },
-  field("ALST", 11), field("ALCO", CLAW), field("ALCA", 0x80000001), { type: "ALED", data: new Uint8Array(0) },
+  field("ALST", 11), field("FNAM", 0x4), field("ALCO", CLAW), field("ALCA", 0x80000001), { type: "ALED", data: new Uint8Array(0) },
   field("ALST", 19), field("ALCO", 0x12345), field("ALCA", 0x00000001), { type: "ALED", data: new Uint8Array(0) },
 ];
 
 test("create-in items and their holder aliases are parsed, create-at items are not", () => {
   const items = parseQuestItems(ms13);
   assert.deepEqual(items.created, [
-    { alias: 16, item: JOURNAL, holderAlias: 1 },
-    { alias: 11, item: CLAW, holderAlias: 1 },
+    { alias: 16, item: JOURNAL, holderAlias: 1, questObject: false },
+    { alias: 11, item: CLAW, holderAlias: 1, questObject: true },
   ]);
   assert.deepEqual(items.holders.get(1), { npc: ARVEL_NPC });
   assert.deepEqual(items.holders.get(10), { ref: 0x1fc43 });

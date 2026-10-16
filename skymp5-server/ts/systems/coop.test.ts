@@ -191,3 +191,128 @@ test("a dragon death sends its soul to the party members near it", async () => {
   onDeath(DRAGON, 0);
   assert.deepEqual(souls(), [0, 1, 0]);
 });
+
+test("followers are kept and sent back with the login replay", () => {
+  const PLAYER = 0xff000000;
+  const LYDIA = 0xa2c94;
+  const DOOR = 0x1a6f4;
+  const records: Record<number, unknown> = { [LYDIA]: { type: "ACHR", fields: [] }, [DOOR]: { type: "REFR", fields: [] } };
+  const props = new Map<string, unknown>();
+  const sent: Record<string, unknown>[] = [];
+  const svr = {
+    getUserActor: (userId: number) => PLAYER + userId,
+    getUserByActor: (actor: number) => actor - PLAYER,
+    isConnected: () => true,
+    getActorName: () => "player",
+    getActorCellOrWorld: () => 0x3c,
+    getActorPos: () => [0, 0, 0],
+    sendCustomPacket: (_userId: number, json: string) => sent.push(JSON.parse(json)),
+    get: (id: number, name: string) => props.get(`${id}:${name}`),
+    set: (id: number, name: string, value: unknown) => props.set(`${id}:${name}`, value),
+    lookupEspmRecordById: (id: number) => ({ record: records[id] }),
+  };
+  const ctx = { svr, gm: new EventEmitter() } as unknown as SystemContext;
+  const coop = new Coop(() => {}, 4);
+  const replay = () => sent.filter((c) => c.customPacketType === "questApply").pop()?.followers;
+  coop.customPacket(0, "questLogRequest", {}, ctx);
+  assert.deepEqual(replay(), [0, 0]);
+  coop.customPacket(0, "followers", { refs: [LYDIA, 0] }, ctx);
+  coop.customPacket(0, "followers", { refs: [LYDIA] }, ctx);
+  assert.deepEqual(props.get(`${PLAYER}:private.coopFollowers`), [LYDIA, 0]);
+  coop.customPacket(0, "followers", { refs: [LYDIA, 0xff000005] }, ctx);
+  assert.deepEqual(props.get(`${PLAYER}:private.coopFollowers`), [LYDIA, 0]);
+  coop.customPacket(0, "followers", { refs: [DOOR, 0] }, ctx);
+  assert.deepEqual(props.get(`${PLAYER}:private.coopFollowers`), [0, 0]);
+  coop.customPacket(0, "followers", { refs: [LYDIA, 0] }, ctx);
+  const fresh = new Coop(() => {}, 4);
+  fresh.customPacket(0, "questLogRequest", {}, ctx);
+  assert.deepEqual(replay(), [LYDIA, 0]);
+});
+
+test("a player who goes offline stays in the party, and an offline leader is replaced after the grace", (t) => {
+  t.mock.timers.enable({ apis: ["Date"], now: 1_000_000 });
+  const LEADER = 0xff000000;
+  const MEMBER = 0xff000001;
+  const online = new Set([0, 1]);
+  const sent: [number, Record<string, unknown>][] = [];
+  const svr = {
+    getUserActor: (userId: number) => LEADER + userId,
+    getUserByActor: (actor: number) => actor - LEADER,
+    isConnected: (userId: number) => online.has(userId),
+    getActorName: () => "player",
+    getActorCellOrWorld: () => 0x3c,
+    getActorPos: () => [0, 0, 0],
+    sendCustomPacket: (userId: number, json: string) => sent.push([userId, JSON.parse(json)]),
+    get: (): unknown => undefined,
+    set: () => {},
+    lookupEspmRecordById: (): { record?: unknown } => ({}),
+  };
+  const ctx = { svr, gm: new EventEmitter() } as unknown as SystemContext;
+  const coop = new Coop(() => {}, 4);
+  const replace = (coop as unknown as { replaceOfflineLeader: (c: SystemContext, p: unknown) => void }).replaceOfflineLeader.bind(coop);
+  const party = () => (coop as unknown as { parties: { partyOf: (a: number) => { leader: number; members: number[] } | undefined } }).parties.partyOf(MEMBER);
+  coop.customPacket(0, "partyInvite", { target: MEMBER }, ctx);
+  coop.customPacket(1, "partyAccept", { inviter: LEADER }, ctx);
+  coop.disconnect(0, ctx);
+  online.delete(0);
+  assert.deepEqual(party()?.members, [LEADER, MEMBER]);
+  t.mock.timers.tick(60_000);
+  replace(ctx, party());
+  assert.equal(party()?.leader, LEADER);
+  online.add(0);
+  coop.customPacket(0, "questLogRequest", {}, ctx);
+  const state = sent.filter(([userId, c]) => userId === 0 && c.customPacketType === "partyState").pop()?.[1] as { party: { leader: number } };
+  assert.equal(state.party.leader, LEADER);
+  coop.disconnect(0, ctx);
+  online.delete(0);
+  t.mock.timers.tick(6 * 60_000);
+  replace(ctx, party());
+  assert.equal(party()?.leader, MEMBER);
+  coop.disconnect(1, ctx);
+  online.delete(1);
+  const kept = party();
+  t.mock.timers.tick(6 * 60_000);
+  replace(ctx, kept);
+  assert.equal(party(), undefined);
+});
+
+test("a holder's quest item count is answered once per replay, only where the server created it", (t) => {
+  t.mock.timers.enable({ apis: ["Date"], now: 1_000_000 });
+  const PLAYER = 0xff000000;
+  const STONE = 0xdf202;
+  const BOSS = 0x9bcd6;
+  const OTHER = 0x1a67e;
+  const records: Record<number, unknown> = { [STONE]: { type: "MISC", fields: [] } };
+  const props = new Map<string, unknown>([[`${PLAYER}:private.questLog`, [[MQ103, 10]]], [`${BOSS}:private.coopCreated`, [[MQ103, 18]]]]);
+  const sent: Record<string, unknown>[] = [];
+  const svr = {
+    getUserActor: (userId: number) => PLAYER + userId,
+    getUserByActor: (actor: number) => actor - PLAYER,
+    isConnected: () => true,
+    getActorName: () => "player",
+    sendCustomPacket: (_userId: number, json: string) => sent.push(JSON.parse(json)),
+    get: (id: number, name: string) => props.get(`${id}:${name}`),
+    set: (id: number, name: string, value: unknown) => props.set(`${id}:${name}`, value),
+    lookupEspmRecordById: (id: number) => ({ record: records[id] }),
+  };
+  const ctx = { svr, gm: new EventEmitter() } as unknown as SystemContext;
+  const coop = new Coop(() => {}, 4);
+  (coop as unknown as { questInfos: Map<number, unknown> }).questInfos.set(MQ103, { stages: new Set([10]), runOnce: false, repeatStages: false, items: { created: [{ alias: 18, item: STONE, holderAlias: 52, questObject: true }], holders: new Map() } });
+  const counts = () => sent.filter((c) => c.customPacketType === "questItemCounts").map((c) => c.counts);
+  coop.customPacket(0, "questItemHolders", { holders: [[MQ103, 18, BOSS]] }, ctx);
+  assert.deepEqual(counts(), []);
+  coop.customPacket(0, "questLogRequest", {}, ctx);
+  assert.deepEqual(sent.filter((c) => c.customPacketType === "questApply").pop()?.questItems, [[MQ103, 18, STONE, 52, 0]]);
+  coop.customPacket(0, "questItemHolders", { holders: [[MQ103, 18, OTHER], [MQ103, 18, BOSS]] }, ctx);
+  coop.customPacket(0, "questItemHolders", { holders: [[MQ103, 18, BOSS]] }, ctx);
+  assert.deepEqual(counts(), [[]]);
+  t.mock.timers.tick(5000);
+  coop.customPacket(0, "questLogRequest", {}, ctx);
+  coop.customPacket(0, "questItemHolders", { holders: [[MQ103, 18, BOSS], [MQ103, 18, 0x14]] }, ctx);
+  assert.deepEqual(counts(), [[], [[MQ103, 18, BOSS, 0]]]);
+  t.mock.timers.tick(5000);
+  coop.customPacket(0, "questLogRequest", {}, ctx);
+  t.mock.timers.tick(200_000);
+  coop.customPacket(0, "questItemHolders", { holders: [[MQ103, 18, BOSS]] }, ctx);
+  assert.equal(counts().length, 2);
+});

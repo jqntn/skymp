@@ -705,9 +705,10 @@ Napi::Value ScampServer::CreateBot(const Napi::CallbackInfo& info)
   jBot.Set(
     "getUserId",
     Napi::Function::New(
-      info.Env(), [bot, pair, serverCombined](const Napi::CallbackInfo& info) {
+      info.Env(),
+      [bot, realUserId = pair.second,
+       serverCombined](const Napi::CallbackInfo& info) {
         try {
-          Networking::UserId realUserId = pair.second;
           return Napi::Number::New(
             info.Env(),
             serverCombined->GetCombinedUserId(kMockServerIdx, realUserId));

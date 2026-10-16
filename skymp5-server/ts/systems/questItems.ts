@@ -7,6 +7,7 @@ export interface CreatedItem {
   alias: number;
   item: number;
   holderAlias: number;
+  questObject: boolean;
 }
 
 export interface AliasHolder {
@@ -20,6 +21,7 @@ export interface QuestItems {
 }
 
 const CREATE_IN = 0x8000;
+const ALIAS_QUEST_OBJECT = 0x4;
 
 const u32 = (f: EspField) => new DataView(f.data.buffer, f.data.byteOffset, f.data.byteLength).getUint32(0, true);
 
@@ -28,14 +30,18 @@ export const parseQuestItems = (fields: EspField[]): QuestItems => {
   const holders = new Map<number, AliasHolder>();
   let alias: number | null = null;
   let item = 0;
+  let flags = 0;
   for (const f of fields) {
     if (f.type === "ALST" || f.type === "ALLS") {
       alias = f.data.byteLength >= 4 ? u32(f) : null;
       item = 0;
+      flags = 0;
     } else if (f.type === "ALED") {
       alias = null;
     } else if (alias === null || f.data.byteLength < 4) {
       continue;
+    } else if (f.type === "FNAM") {
+      flags = u32(f);
     } else if (f.type === "ALFR") {
       holders.set(alias, { ...holders.get(alias), ref: u32(f) });
     } else if (f.type === "ALUA") {
@@ -45,7 +51,7 @@ export const parseQuestItems = (fields: EspField[]): QuestItems => {
     } else if (f.type === "ALCA" && item) {
       const value = u32(f);
       if ((value >>> 16) & CREATE_IN) {
-        created.push({ alias, item, holderAlias: value & 0xffff });
+        created.push({ alias, item, holderAlias: value & 0xffff, questObject: (flags & ALIAS_QUEST_OBJECT) !== 0 });
       }
     }
   }

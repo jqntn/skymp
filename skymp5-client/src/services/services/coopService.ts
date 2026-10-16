@@ -1,4 +1,4 @@
-import { Actor, Cell, Debug, DxScanCode, Game, GlobalVariable, ObjectReference, Quest, QuestStageEvent, QuestStartStopEvent, TESModPlatform, Utility, WorldSpace } from "skyrimPlatform";
+import { Actor, Cell, Debug, DxScanCode, Faction, Game, GlobalVariable, ObjectReference, Quest, QuestStageEvent, QuestStartStopEvent, ReferenceAlias, TESModPlatform, Utility, WorldSpace } from "skyrimPlatform";
 import { logError, logTrace } from "../../logging";
 import { ObjectReferenceEx } from "../../extensions/objectReferenceEx";
 import { ConnectionMessage } from "../events/connectionMessage";
@@ -23,6 +23,15 @@ const PARTY_KEY = DxScanCode.F7;
 const MQ104 = 0x2610c;
 const MQ104_SOUL_STAGE = 90;
 const DRAGONS_ABSORBED_GLOBAL = 0x1c0f2;
+const DIALOGUE_FOLLOWER = 0x750ba;
+const DISMISSED_FOLLOWER_FACTION = 0x5c84c;
+const FOLLOWER_SLOTS = [
+  { alias: 0, countGlobal: 0xbcc98, canDoFavor: true },
+  { alias: 1, countGlobal: 0x5c84a, canDoFavor: false },
+];
+const FOLLOWERS_INTERVAL_MS = 1000;
+const QUEST_ITEM_WAIT_STEPS = 20;
+const QUEST_ITEM_WAIT_STEP_SECONDS = 0.5;
 
 type QuestLogEntry = [quest: number, stage: number];
 
@@ -61,6 +70,7 @@ export class CoopService extends ClientListener {
     this.questLogRequestAt = Date.now() + QUEST_LOG_REQUEST_DELAY_MS;
     this.reporting = false;
     this.applyQueue = [];
+    this.followersKey = this.followersKeyOf(FOLLOWER_SLOTS.map(() => 0));
     this.loadCount++;
     this.trackedQuests.clear();
     this.controller.lookupListener(WorldCleanerService).pauseUntil(Date.now() + MAX_WORLD_CLEANER_PAUSE_MS);
@@ -101,6 +111,7 @@ export class CoopService extends ClientListener {
 
   private onUpdate() {
     this.updateCompass();
+    this.reportFollowers();
     if (this.questLogRequestAt && Date.now() >= this.questLogRequestAt) {
       this.questLogRequestAt = 0;
       GlobalVariable.from(Game.getFormEx(MQ_QUICKSTART_GLOBAL))?.setValue(-1);
@@ -118,9 +129,9 @@ export class CoopService extends ClientListener {
     }
   }
 
-  private async applyQuestLog(batches: { entries: QuestLogEntry[], replay: boolean }[]) {
+  private async applyQuestLog(batches: { entries: QuestLogEntry[], replay: boolean, followers?: unknown, questItems?: unknown }[]) {
     const loadCount = this.loadCount;
-    for (const { entries, replay } of batches) {
+    for (const { entries, replay, followers, questItems } of batches) {
       const before = replay ? this.getLocation(Game.getPlayer()!) : undefined;
       if (replay) {
         this.reporting = false;
@@ -137,9 +148,11 @@ export class CoopService extends ClientListener {
           }
         }
         if (before) {
+          await this.relinkQuestItems(questItems);
           await Utility.wait(REPLAY_SETTLE_SECONDS);
           if (loadCount === this.loadCount) {
             this.restoreLocation(Game.getPlayer()!, before);
+            this.applyFollowers(followers);
           }
         }
       } finally {
@@ -234,7 +247,7 @@ export class CoopService extends ClientListener {
     switch (content["customPacketType"]) {
       case "questApply":
         if (Array.isArray(content["entries"])) {
-          this.applyQueue.push({ entries: content["entries"] as QuestLogEntry[], replay: content["replay"] === true });
+          this.applyQueue.push({ entries: content["entries"] as QuestLogEntry[], replay: content["replay"] === true, followers: content["followers"], questItems: content["questItems"] });
         }
         break;
       case "partyState": {
@@ -259,6 +272,9 @@ export class CoopService extends ClientListener {
         if (typeof content["text"] === "string") {
           this.notify(content["text"]);
         }
+        break;
+      case "questItemCounts":
+        this.controller.once("update", () => this.removeStrayQuestItems(content["counts"]));
         break;
       case "dragonSoul":
         this.controller.once("update", () => this.absorbDragonSoul());
@@ -351,6 +367,122 @@ export class CoopService extends ClientListener {
     if (this.isQuestAuthority && mq104?.isRunning() && !mq104.isStageDone(MQ104_SOUL_STAGE)) {
       mq104.setCurrentStageID(MQ104_SOUL_STAGE);
     }
+  }
+
+  private async relinkQuestItems(items: unknown) {
+    if (!Array.isArray(items)) {
+      return;
+    }
+    const strays = new Array<number[]>();
+    for (const item of items) {
+      if (!Array.isArray(item) || item.length !== 5 || !item.every((x) => typeof x === "number")) {
+        continue;
+      }
+      const [questId, aliasId, baseId, holderAliasId, held] = item as number[];
+      for (let i = 0; held && i < QUEST_ITEM_WAIT_STEPS; i++) {
+        const waitBase = Game.getFormEx(baseId);
+        if (!waitBase || (Game.getPlayer()?.getItemCount(waitBase) ?? 0) >= 1) {
+          break;
+        }
+        await Utility.wait(QUEST_ITEM_WAIT_STEP_SECONDS);
+      }
+      const player = Game.getPlayer();
+      const current = this.sp.getQuestAliasReference(questId, aliasId);
+      const base = Game.getFormEx(baseId);
+      const holder = ObjectReference.from(Game.getFormEx(this.sp.getQuestAliasReference(questId, holderAliasId)));
+      const inHolder = !!holder && !!current && this.sp.getInventoryReferences(holder.getFormID()).some((l) => l.ref === current);
+      if (!player) {
+        return;
+      }
+      if (!held) {
+        if (inHolder) {
+          strays.push([questId, aliasId, holder!.getFormID()]);
+        }
+        continue;
+      }
+      if (current && this.sp.getInventoryReferences(player.getFormID()).some((l) => l.ref === current)) {
+        continue;
+      }
+      if (!base || !holder || !inHolder || player.getItemCount(base) < 1) {
+        logTrace(this, "Quest item not relinked", questId.toString(16), aliasId, baseId.toString(16), "holder", holder?.getFormID().toString(16), "in holder", inHolder);
+        continue;
+      }
+      player.removeItem(base, 1, true, null);
+      holder.removeItem(base, 1, true, player);
+      const relinked = this.sp.getInventoryReferences(player.getFormID()).some((l) => l.ref === current);
+      if (!relinked) {
+        player.addItem(base, 1, true);
+      }
+      logTrace(this, relinked ? "Quest item relinked" : "Quest item relink failed, the plain copy is back", questId.toString(16), aliasId, baseId.toString(16));
+    }
+    if (strays.length) {
+      this.questItemHoldersLoad = this.loadCount;
+      this.send({ customPacketType: "questItemHolders", holders: strays });
+    }
+  }
+
+  private removeStrayQuestItems(counts: unknown) {
+    if (!Array.isArray(counts) || this.questItemHoldersLoad !== this.loadCount) {
+      return;
+    }
+    for (const entry of counts) {
+      if (!Array.isArray(entry) || entry.length !== 4 || !entry.every((x) => typeof x === "number") || entry[3] !== 0) {
+        continue;
+      }
+      const [questId, aliasId, holderId] = entry as number[];
+      const current = this.sp.getQuestAliasReference(questId, aliasId);
+      const holder = ObjectReference.from(Game.getFormEx(holderId));
+      const base = current ? ObjectReference.from(Game.getFormEx(current))?.getBaseObject() : null;
+      if (holder && base && this.sp.getInventoryReferences(holderId).some((l) => l.ref === current)) {
+        holder.removeItem(base, 1, true, null);
+        logTrace(this, "Stray quest item removed", questId.toString(16), aliasId, holderId.toString(16));
+      }
+    }
+  }
+
+  private followersKeyOf(refs: number[]) {
+    return refs.join(",");
+  }
+
+  private reportFollowers() {
+    const now = Date.now();
+    if (!this.reporting || now - this.followersAt < FOLLOWERS_INTERVAL_MS) {
+      return;
+    }
+    this.followersAt = now;
+    const refs = FOLLOWER_SLOTS.map((slot) => this.sp.getQuestAliasReference(DIALOGUE_FOLLOWER, slot.alias) || 0);
+    const key = this.followersKeyOf(refs);
+    if (key !== this.followersKey) {
+      this.followersKey = key;
+      this.send({ customPacketType: "followers", refs });
+    }
+  }
+
+  private applyFollowers(refs: unknown) {
+    const quest = Quest.from(Game.getFormEx(DIALOGUE_FOLLOWER));
+    const player = Game.getPlayer();
+    if (!Array.isArray(refs) || !quest || !player) {
+      return;
+    }
+    FOLLOWER_SLOTS.forEach((slot, i) => {
+      const ref = refs[i];
+      const actor = typeof ref === "number" && ref ? Actor.from(Game.getFormEx(ref)) : null;
+      const alias = ReferenceAlias.from(quest.getAlias(slot.alias));
+      if (!actor || !alias || actor.isDead()) {
+        return;
+      }
+      actor.removeFromFaction(Faction.from(Game.getFormEx(DISMISSED_FOLLOWER_FACTION)));
+      const rank = actor.getRelationshipRank(player);
+      if (rank >= 0 && rank < 3) {
+        actor.setRelationshipRank(player, 3);
+      }
+      actor.setPlayerTeammate(true, slot.canDoFavor);
+      alias.forceRefTo(actor);
+      actor.evaluatePackage();
+      GlobalVariable.from(Game.getFormEx(slot.countGlobal))?.setValue(1);
+    });
+    this.followersKey = this.followersKeyOf(FOLLOWER_SLOTS.map((slot) => this.sp.getQuestAliasReference(DIALOGUE_FOLLOWER, slot.alias) || 0));
+    logTrace(this, "Followers applied", JSON.stringify(refs), "now", this.followersKey);
   }
 
   private setQuestAuthority(isAuthority: boolean) {
@@ -446,7 +578,10 @@ export class CoopService extends ClientListener {
   private questLogRequestAt = 0;
   private reporting = false;
   private applying = false;
-  private applyQueue = new Array<{ entries: QuestLogEntry[], replay: boolean }>();
+  private applyQueue = new Array<{ entries: QuestLogEntry[], replay: boolean, followers?: unknown, questItems?: unknown }>();
+  private followersAt = 0;
+  private followersKey = "";
+  private questItemHoldersLoad = -1;
   private isQuestAuthority: boolean | undefined;
   private partyState: PartyState | undefined;
   private partyPositions = new Array<PartyPosition>();
