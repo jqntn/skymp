@@ -150,12 +150,13 @@ void Networking::MockServer::Send(UserId targetUserId, PacketData data,
 
 void Networking::MockServer::Tick(OnPacket onPacket, void* state)
 {
-  for (auto& pair : pImpl->packets) {
+  auto packets = std::move(pImpl->packets);
+  pImpl->packets.clear();
+  for (auto& pair : packets) {
     auto& p = pair.second;
     onPacket(state, pair.first, p->type,
              p->data.empty() ? nullptr : &p->data[0], p->data.size());
   }
-  pImpl->packets.clear();
 }
 
 std::string Networking::MockServer::GetIp(UserId userId) const
