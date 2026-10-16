@@ -503,8 +503,8 @@ nlohmann::json Movement(uint32_t idx, uint32_t cell, NiPoint3 pos,
 }
 }
 
-TEST_CASE("An NPC that moves up to 16 cells from its hoster stays hosted, a "
-          "hoster that moves 2 cells away loses it",
+TEST_CASE("An NPC that moves up to 16 cells from its hoster stays hosted and "
+          "seen by players, a hoster that moves 2 cells away loses it",
           "[NpcHost][espm][F5]")
 {
   auto& partOne = GetNpcHostPartOne();
@@ -524,11 +524,18 @@ TEST_CASE("An NPC that moves up to 16 cells from its hoster stays hosted, a "
   };
 
   HostAlvor(partOne, alvor);
+  DoConnect(partOne, 1);
+  partOne.CreateActor(kOtherPlayer, spot, 0, kTamriel);
+  partOne.SetUserActor(1, kOtherPlayer);
+  auto& other = partOne.worldState.GetFormAt<MpActor>(kOtherPlayer);
   partOne.Messages().clear();
   DoMessage(partOne, 0,
             Movement(alvor.GetIdx(), kTamriel,
                      { spot.x + 16 * 4096.f, spot.y, spot.z }));
   REQUIRE(partOne.worldState.hosters[kAlvor] == kClaimer);
+  REQUIRE(alvor.GetListeners().count(&other) == 1);
+  partOne.DestroyActor(kOtherPlayer);
+  DoDisconnect(partOne, 1);
   REQUIRE(hostStops() == 0);
   DoMessage(partOne, 0,
             Movement(alvor.GetIdx(), kTamriel,

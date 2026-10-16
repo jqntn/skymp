@@ -713,10 +713,10 @@ void MpObjectReference::ForceSubscriptionsUpdate()
   auto& now =
     worldState->GetNeighborsByPosition(worldOrCell, pos.first, pos.second);
 
-  auto keepsHost = [&](MpObjectReference* other) {
+  auto keepsPlayer = [&](MpObjectReference* other) {
     auto hoster = worldState->hosters.find(GetFormId());
-    if (hoster == worldState->hosters.end() ||
-        hoster->second != other->GetFormId() ||
+    if (hoster == worldState->hosters.end() || hoster->second == 0 ||
+        !other->AsActor() || !other->AsActor()->IsCreatedAsPlayer() ||
         !(other->GetCellOrWorld() == GetCellOrWorld())) {
       return false;
     }
@@ -729,7 +729,7 @@ void MpObjectReference::ForceSubscriptionsUpdate()
   std::set_difference(was.begin(), was.end(), now.begin(), now.end(),
                       std::inserter(toRemove, toRemove.begin()));
   for (auto listener : toRemove) {
-    if (keepsHost(listener)) {
+    if (keepsPlayer(listener)) {
       continue;
     }
     Unsubscribe(this, listener);
