@@ -51,10 +51,13 @@ First non-PASS in plan order: G1.7
 | 2B.5 | PASS | 30 | 2026-10-15 23:33 | 1/1 runs PASS |
 | G2.1 | PASS | 126 | 2026-10-15 23:42 | 3/3 runs PASS |
 | G2.2 | PASS | 185 | 2026-10-16 00:04 | 3/3 runs PASS |
-| G2.3 | FAIL | 0 | 2026-10-12 16:53 | no check script |
+| G2.3 | PASS | 252 | 2026-10-16 00:57 | 5/5 runs PASS |
+| F1 | FAIL | 0 | - | not run |
 | G2.4 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | G2.5 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | G2.6 | FAIL | 0 | 2026-10-12 16:53 | no check script |
+| F2 | FAIL | 0 | - | not run |
+| F3 | FAIL | 0 | - | not run |
 | P1 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | P2 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | P3 | FAIL | 0 | 2026-10-12 16:53 | no check script |
@@ -473,6 +476,32 @@ First non-PASS in plan order: G1.7
 - ![G2.2](runs/G2_2/1/G2_2-clawdoor.png)
 - ![G2.2](runs/G2_2/2/G2_2-clawdoor.png)
 - ![G2.2](runs/G2_2/3/G2_2-clawdoor.png)
+### G2.3
+- run 1: A: leader ff000000, bot member ff000001 in the party; MQ103 stage 10 on the leader, the member's server quest log for MQ103 [10]; boss 9bcd6 in 371dd:Skyrim.esm: Dragonstone count on the leader's client 1, on the server 1; dragonStone alias ref ff000d1f; server: "Coop: quest d0800 alias 18 created df202 in 9bcd6"
+- run 1: B: boss dead: MQ103 stage 10 (180 done false), boss holds 1 Dragonstone, the leader 0; loot menu open true, it showed 1 Dragonstone (taken by script, removeItem to the player, while the menu is open); after the loot: MQ103 stage 180 (180 done true), the leader holds 1, dragonStone alias ref ff000d1f; server: boss 0, leader 1; the member's server quest log for MQ103 [10,180,20,60]
+- run 1: C: Farengar 1a67e in 165a3:Skyrim.esm; before the talk MQ103 190 done false, the leader held 1 Dragonstone; dialogue: 0 topic picks (), MQ103 stages 180 -> 190, last line "Ah ! La Pierre de dragon du Tertre des chutes tourmentées ! Vous n'êtes pas comme ces brutes que le jarl a l'habitude de m'envoyer."; after: 190 done true, the leader holds 0 Dragonstone, MQ104 stage 10; server: leader 0 Dragonstone; the member's server quest log for MQ103 [10,180,20,60,190,185]
+- run 2: A: leader ff000000, bot member ff000001 in the party; MQ103 stage 10 on the leader, the member's server quest log for MQ103 [10]; boss 9bcd6 in 371dd:Skyrim.esm: Dragonstone count on the leader's client 1, on the server 1; dragonStone alias ref ff000d1f; server: "Coop: quest d0800 alias 18 created df202 in 9bcd6"
+- run 2: B: boss dead: MQ103 stage 10 (180 done false), boss holds 1 Dragonstone, the leader 0; loot menu open true, it showed 1 Dragonstone (taken by script, removeItem to the player, while the menu is open); after the loot: MQ103 stage 180 (180 done true), the leader holds 1, dragonStone alias ref ff000d1f; server: boss 0, leader 1; the member's server quest log for MQ103 [10,180,20,60]
+- run 2: C: Farengar 1a67e in 165a3:Skyrim.esm; before the talk MQ103 190 done false, the leader held 1 Dragonstone; dialogue: 0 topic picks (), MQ103 stages 180 -> 190, last line "Ah ! La Pierre de dragon du Tertre des chutes tourmentées ! Vous n'êtes pas comme ces brutes que le jarl a l'habitude de m'envoyer."; after: 190 done true, the leader holds 0 Dragonstone, MQ104 stage 10; server: leader 0 Dragonstone; the member's server quest log for MQ103 [10,180,20,60,190,185]
+- run 3: A: leader ff000000, bot member ff000001 in the party; MQ103 stage 10 on the leader, the member's server quest log for MQ103 [10]; boss 9bcd6 in 371dd:Skyrim.esm: Dragonstone count on the leader's client 1, on the server 1; dragonStone alias ref ff000d1f; server: "Coop: quest d0800 alias 18 created df202 in 9bcd6"
+- run 3: B: boss dead: MQ103 stage 10 (180 done false), boss holds 1 Dragonstone, the leader 0; loot menu open true, it showed 1 Dragonstone (taken by script, removeItem to the player, while the menu is open); after the loot: MQ103 stage 180 (180 done true), the leader holds 1, dragonStone alias ref ff000d1f; server: boss 0, leader 1; the member's server quest log for MQ103 [10,180,20,60]
+- run 3: C: Farengar 1a67e in 165a3:Skyrim.esm; before the talk MQ103 190 done false, the leader held 1 Dragonstone; dialogue: 0 topic picks (), MQ103 stages 180 -> 190, last line "Ah ! La Pierre de dragon du Tertre des chutes tourmentées ! Vous n'êtes pas comme ces brutes que le jarl a l'habitude de m'envoyer."; after: 190 done true, the leader holds 0 Dragonstone, MQ104 stage 10; server: leader 0 Dragonstone; the member's server quest log for MQ103 [10,180,20,60,190,185]
+- run 4: A: leader ff000000, bot member ff000001 in the party; MQ103 stage 10 on the leader, the member's server quest log for MQ103 [10]; boss 9bcd6 in 371dd:Skyrim.esm: Dragonstone count on the leader's client 1, on the server 1; dragonStone alias ref ff000d1f; server: "Coop: quest d0800 alias 18 created df202 in 9bcd6"
+- run 4: B: boss dead: MQ103 stage 10 (180 done false), boss holds 1 Dragonstone, the leader 0; loot menu open true, it showed 1 Dragonstone (taken by script, removeItem to the player, while the menu is open); after the loot: MQ103 stage 180 (180 done true), the leader holds 1, dragonStone alias ref ff000d1f; server: boss 0, leader 1; the member's server quest log for MQ103 [10,180,20,60]
+- run 4: C: Farengar 1a67e in 165a3:Skyrim.esm; before the talk MQ103 190 done false, the leader held 1 Dragonstone; dialogue: 0 topic picks (), MQ103 stages 180 -> 190, last line "Ah ! La Pierre de dragon du Tertre des chutes tourmentées ! Vous n'êtes pas comme ces brutes que le jarl a l'habitude de m'envoyer."; after: 190 done true, the leader holds 0 Dragonstone, MQ104 stage 10; server: leader 0 Dragonstone; the member's server quest log for MQ103 [10,180,20,60,190,185]
+- run 5: A: leader ff000000, bot member ff000001 in the party; MQ103 stage 10 on the leader, the member's server quest log for MQ103 [10]; boss 9bcd6 in 371dd:Skyrim.esm: Dragonstone count on the leader's client 1, on the server 1; dragonStone alias ref ff000d1f; server: "Coop: quest d0800 alias 18 created df202 in 9bcd6"
+- run 5: B: boss dead: MQ103 stage 10 (180 done false), boss holds 1 Dragonstone, the leader 0; loot menu open true, it showed 1 Dragonstone (taken by script, removeItem to the player, while the menu is open); after the loot: MQ103 stage 180 (180 done true), the leader holds 1, dragonStone alias ref ff000d1f; server: boss 0, leader 1; the member's server quest log for MQ103 [10,180,20,60]
+- run 5: C: Farengar 1a67e in 165a3:Skyrim.esm; before the talk MQ103 190 done false, the leader held 1 Dragonstone; dialogue: 0 topic picks (), MQ103 stages 180 -> 190, last line "Ah ! La Pierre de dragon du Tertre des chutes tourmentées ! Vous n'êtes pas comme ces brutes que le jarl a l'habitude de m'envoyer."; after: 190 done true, the leader holds 0 Dragonstone, MQ104 stage 10; server: leader 0 Dragonstone; the member's server quest log for MQ103 [10,180,20,60,190,185]
+- ![G2.3](runs/G2_3/1/G2_3-loot.png)
+- ![G2.3](runs/G2_3/1/G2_3-farengar.png)
+- ![G2.3](runs/G2_3/2/G2_3-loot.png)
+- ![G2.3](runs/G2_3/2/G2_3-farengar.png)
+- ![G2.3](runs/G2_3/3/G2_3-loot.png)
+- ![G2.3](runs/G2_3/3/G2_3-farengar.png)
+- ![G2.3](runs/G2_3/4/G2_3-loot.png)
+- ![G2.3](runs/G2_3/4/G2_3-farengar.png)
+- ![G2.3](runs/G2_3/5/G2_3-loot.png)
+- ![G2.3](runs/G2_3/5/G2_3-farengar.png)
 ### P8
 - run 1: 115 client log lines, 2 [Exception] lines
 - run 1: exception: [Exception] failed to get key 'data': failed to call custom Serialize for type struct Equipment: failed to get key 'inv': failed to call cus.
