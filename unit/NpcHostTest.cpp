@@ -503,6 +503,51 @@ nlohmann::json Movement(uint32_t idx, uint32_t cell, NiPoint3 pos,
 }
 }
 
+TEST_CASE("An NPC that moves up to 4 cells from its hoster stays hosted, a "
+          "hoster that moves 2 cells away loses it",
+          "[NpcHost][espm][F5]")
+{
+  auto& partOne = GetNpcHostPartOne();
+  auto& alvor = partOne.worldState.GetFormAt<MpActor>(kAlvor);
+  const auto cell = CellOf(partOne, alvor);
+  const auto start = alvor.GetPos();
+  const NiPoint3 spot = { 22528.f, -45138.f, -81.f };
+  alvor.SetCellOrWorld(
+    FormDesc::FromFormId(kTamriel, partOne.worldState.espmFiles));
+  alvor.SetPos(spot);
+  auto hostStops = [&] {
+    return std::count_if(
+      partOne.Messages().begin(), partOne.Messages().end(), [](auto& m) {
+        return m.userId == 0 && m.j["t"] == MsgType::HostStop &&
+          m.j["target"] == 0x100000000 + kAlvor;
+      });
+  };
+
+  HostAlvor(partOne, alvor);
+  partOne.Messages().clear();
+  DoMessage(partOne, 0,
+            Movement(alvor.GetIdx(), kTamriel,
+                     { spot.x + 4 * 4096.f, spot.y, spot.z }));
+  REQUIRE(partOne.worldState.hosters[kAlvor] == kClaimer);
+  REQUIRE(hostStops() == 0);
+  DoMessage(partOne, 0,
+            Movement(alvor.GetIdx(), kTamriel,
+                     { spot.x + 5 * 4096.f, spot.y, spot.z }));
+  REQUIRE(partOne.worldState.hosters[kAlvor] == 0);
+  REQUIRE(hostStops() == 1);
+  DisconnectClaimer(partOne);
+
+  alvor.SetPos(spot);
+  HostAlvor(partOne, alvor);
+  partOne.Messages().clear();
+  auto& claimer = partOne.worldState.GetFormAt<MpActor>(kClaimer);
+  claimer.SetPos({ spot.x, spot.y + 2 * 4096.f, spot.z });
+  REQUIRE(partOne.worldState.hosters[kAlvor] == 0);
+  REQUIRE(hostStops() == 1);
+
+  ReleaseAlvor(partOne, alvor, cell, start);
+}
+
 TEST_CASE("A hoster's movement moves an NPC to another cell and far away",
           "[NpcHost][espm][1A.4]")
 {

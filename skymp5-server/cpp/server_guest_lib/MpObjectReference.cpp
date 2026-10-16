@@ -148,6 +148,8 @@ private:
 };
 
 namespace {
+constexpr int kHostedGridRadius = 4;
+
 std::pair<int16_t, int16_t> GetGridPos(const NiPoint3& pos) noexcept
 {
   return { int16_t(pos.x / 4096), int16_t(pos.y / 4096) };
@@ -711,10 +713,25 @@ void MpObjectReference::ForceSubscriptionsUpdate()
   auto& now =
     worldState->GetNeighborsByPosition(worldOrCell, pos.first, pos.second);
 
+  auto keepsHost = [&](MpObjectReference* other) {
+    auto hoster = worldState->hosters.find(GetFormId());
+    if (hoster == worldState->hosters.end() ||
+        hoster->second != other->GetFormId() ||
+        !(other->GetCellOrWorld() == GetCellOrWorld())) {
+      return false;
+    }
+    auto otherPos = GetGridPos(other->GetPos());
+    return std::abs(otherPos.first - pos.first) <= kHostedGridRadius &&
+      std::abs(otherPos.second - pos.second) <= kHostedGridRadius;
+  };
+
   std::vector<MpObjectReference*> toRemove;
   std::set_difference(was.begin(), was.end(), now.begin(), now.end(),
                       std::inserter(toRemove, toRemove.begin()));
   for (auto listener : toRemove) {
+    if (keepsHost(listener)) {
+      continue;
+    }
     Unsubscribe(this, listener);
     // Unsubscribe from self is NEEDED. See comment below
     if (this != listener)
