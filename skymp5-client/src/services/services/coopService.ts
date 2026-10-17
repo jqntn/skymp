@@ -43,7 +43,7 @@ interface PartyPosition {
 
 interface PartyState {
   you: number;
-  party: { leader: number, members: { actor: number, name: string }[] } | null;
+  party: { leader: number, members: { actor: number, name: string, followers?: number[] }[] } | null;
   invites: { inviter: number, name: string }[];
 }
 
@@ -87,8 +87,12 @@ export class CoopService extends ClientListener {
     return this.reporting;
   }
 
-  yieldsToLeader(actor: Actor): boolean {
+  yieldsHost(actor: Actor): boolean {
     const party = this.partyState?.party;
+    const owner = party?.members.find((m) => m.followers?.includes(actor.getFormID()))?.actor;
+    if (owner !== undefined) {
+      return owner !== this.partyState?.you;
+    }
     if (!party || party.leader === this.partyState?.you || !this.isQuestActor(actor)) {
       return false;
     }

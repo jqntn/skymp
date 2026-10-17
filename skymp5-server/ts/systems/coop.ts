@@ -344,6 +344,7 @@ export class Coop implements System {
     }
     const kept = refs.map((ref) => (isNpcRef(ref) ? (ref as number) : 0));
     ctx.svr.set(actor, FOLLOWERS_PROPERTY, kept);
+    this.parties.partyOf(actor)?.members.forEach((m) => this.sendState(ctx, m));
     this.log(`Coop: followers of ${hex(actor)}: ${kept.map(hex).join(", ")}${kept.some((ref, i) => ref !== refs[i]) ? ` (from ${JSON.stringify(refs)})` : ""}`);
   }
 
@@ -613,7 +614,7 @@ export class Coop implements System {
       customPacketType: "partyState",
       you: actor,
       party: party
-        ? { leader: party.leader, members: party.members.map((m) => ({ actor: m, name: this.name(ctx, m) })) }
+        ? { leader: party.leader, members: party.members.map((m) => ({ actor: m, name: this.name(ctx, m), followers: this.followers(ctx, m).filter((ref) => ref) })) }
         : null,
       invites: this.parties.invitesOf(actor, Date.now()).map((inviter) => ({ inviter, name: this.name(ctx, inviter) })),
     });

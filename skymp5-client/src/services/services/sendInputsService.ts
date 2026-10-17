@@ -383,7 +383,7 @@ export class SendInputsService extends ClientListener {
             || actor.getDistance(player) > 4096
             || Date.now() - (this.yieldedAt.get(remoteId) ?? 0) < 10000
             || teleportingHosts.has(remoteId)
-            || this.controller.lookupListener(CoopService).yieldsToLeader(actor)
+            || this.controller.lookupListener(CoopService).yieldsHost(actor)
         ) {
             return;
         }
@@ -408,7 +408,7 @@ export class SendInputsService extends ClientListener {
         const now = Date.now();
         hosted.filter((remoteId: number) => remoteId >= espActorIdOffset).forEach((remoteId: number) => {
             const actor = this.getInputOwner(remoteId);
-            const yields = !!actor && this.controller.lookupListener(CoopService).yieldsToLeader(actor);
+            const yields = !!actor && this.controller.lookupListener(CoopService).yieldsHost(actor);
             if (actor && actor.is3DLoaded() && !actor.isDisabled() && !yields) {
                 this.lostHostSince.delete(remoteId);
                 return;
