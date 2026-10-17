@@ -134,36 +134,6 @@ module.exports = {
         await ctx.probe(`mp.set(${a}, "locationalData", ${JSON.stringify({ ...loc, pos: [loc.pos[0] + dx + k * 40, loc.pos[1] + dy, loc.pos[2] + 30] })}); return 0;`);
       }
     };
-    const talk = async (npc, until, prefer, label) => {
-      const state = () => ctx.drv(`const open = sp.Ui.isMenuOpen("${M}"); const t = []; let sub = "";
-        if (open) { for (let i = 0; i < 8; i++) { let s = ""; try { s = sp.Ui.getString("${M}", "${R}.TopicList.entryList." + i + ".text"); } catch (e) {} if (!s) break; t.push(s); } try { sub = (sp.Ui.getString("${M}", "${R}.SubtitleText.text") || "").trim(); } catch (e) {} }
-        return { open, t, sub, msg: sp.Ui.isMenuOpen("MessageBoxMenu"), stage: ${quest}.getCurrentStageID() };`);
-      const clicked = [];
-      const dismissed = [];
-      let s = await state();
-      const ok = await ctx.waitFor(async () => {
-        s = await state();
-        if (await until()) return true;
-        if (s.msg) {
-          dismissed.push(s.stage);
-          await answerBox(1);
-          await ctx.sleep(1500);
-        } else if (s.open && !s.sub && s.t.length) {
-          const fresh = s.t.map((x, i) => [x, i]).filter(([x]) => !clicked.includes(x));
-          const [x, i] = fresh.find(([t]) => prefer.test(t)) || fresh[0] || [s.t[0], 0];
-          clicked.push(x);
-          await ctx.drv(`sp.Ui.setInt("${M}", "${R}.TopicList.selectedIndex", ${i}); sp.Ui.invokeBool("${M}", "${R}.onSelectionClick", true); return 0;`);
-          await ctx.sleep(2500);
-        } else if (!s.open) {
-          await ctx.sleep(2000);
-          if (!(await state()).open) await ctx.drv(`sp.Actor.from(sp.Game.getFormEx(${npc})).activate(sp.Game.getPlayer(), false); return 0;`);
-          await ctx.sleep(3000);
-        }
-        return false;
-      }, 8 * 60000, label).then(() => true).catch(() => false);
-      if ((await state()).open) await ctx.drv(`sp.TESModPlatform.closeMenu("${M}"); return 0;`).catch(() => {});
-      return { ok, picks: clicked.length, topics: [...new Set(clicked)], last: s.sub, dismissed };
-    };
 
     await moveBoth({ cellOrWorldDesc: "3c:Skyrim.esm", pos: SPOT, rot: [0, 0, 0] }, 0, 0);
     for (const n of [1, 2]) await inWorld(n);
@@ -209,9 +179,9 @@ module.exports = {
     const br = bLoc.rot[2] * Math.PI / 180;
     await moveBoth(bLoc, 200 * Math.sin(br), 200 * Math.cos(br));
     await ctx.waitFor(() => ctx.drv(`const a = sp.Actor.from(sp.Game.getFormEx(${BALGRUUF})); return !sp.Ui.isMenuOpen("Loading Menu") && !!a && a.is3DLoaded();`).catch(() => false), 120000, "Balgruuf is loaded");
-    const reward = await talk(BALGRUUF, () => done(REWARD_STAGE), /thane|récompense|reward/i, `MQ104 stage ${REWARD_STAGE} is done`);
+    const reward = await ctx.talk(BALGRUUF, () => done(REWARD_STAGE), /thane|récompense|reward/i, `MQ104 stage ${REWARD_STAGE} is done`, { quest: MQ104 });
     const member160 = await ctx.waitFor(async () => (await done(REWARD_STAGE, 2)) && (await memberLog()).includes(REWARD_STAGE), 30000, "MQ104 160 reaches the member").then(() => true).catch(() => false);
-    ctx.evidence.push(`E: Balgruuf: ${reward.picks} topic picks (${reward.topics.map((x) => `"${x}"`).join(", ")}), last line "${reward.last}", message boxes answered at MQ104 stages ${JSON.stringify(reward.dismissed)}; 160 done on the leader ${reward.ok}, on the member's client and log ${member160}`);
+    ctx.evidence.push(`E: Balgruuf: ${reward.picks} topic picks, ${reward.stalls} stalled menus closed (${reward.topics.map((x) => `"${x}"`).join(", ")}), last line "${reward.last}", message boxes answered at MQ104 stages ${JSON.stringify(reward.dismissed)}; 160 done on the leader ${reward.ok}, on the member's client and log ${member160}`);
     if (!reward.ok) fails.push(`E: MQ104 stage ${REWARD_STAGE} (Balgruuf's reward, Lydia enabled) is not done on the leader`);
     if (!member160) fails.push(`E: MQ104 stage ${REWARD_STAGE} did not reach the member's client and log`);
 
@@ -231,7 +201,7 @@ module.exports = {
     }
     const follower = () => ctx.drv(`const a = sp.Actor.from(sp.Game.getFormEx(${LYDIA})); const f = sp.Faction.from(sp.Game.getFormEx(${FOLLOWER_FACTION})); return { teammate: a.isPlayerTeammate(), rank: a.getFactionRank(f) };`);
     const lydiaBefore = lydiaHere ? await follower() : null;
-    const follow = lydiaHere ? await talk(LYDIA, async () => { const f = await follower(); return f.teammate && f.rank >= 0; }, /suis|suiv|follow|accompagn/i, "Lydia follows the leader") : { ok: false, picks: 0, topics: [], last: "", dismissed: [] };
+    const follow = lydiaHere ? await ctx.talk(LYDIA, async () => { const f = await follower(); return f.teammate && f.rank >= 0; }, /suis|suiv|follow|accompagn/i, "Lydia follows the leader", { quest: MQ104 }) : { ok: false, picks: 0, topics: [], last: "", dismissed: [] };
     const lydiaAfter = lydiaHere ? await follower() : null;
     await ctx.waitFor(async () => (await serverRef(LYDIA)).hoster === leader, 30000, "the leader hosts Lydia").catch(() => {});
     const lydiaServer = await serverRef(LYDIA);

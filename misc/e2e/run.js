@@ -337,6 +337,51 @@ const makeCtx = (id, dir) => {
       ctx.assert.ok(r.status === 0 && /All tests passed/.test(out), `unit ${spec} failed: ${summary || "no summary"}`);
     },
     own: (pid) => own(pid, "SkyrimSE.exe"),
+    talk: async (npc, until, prefer, label, { engine = 1, quest = 0 } = {}) => {
+      const M = "Dialogue Menu";
+      const R = "_root.DialogueMenu_mc";
+      const state = () => ctx.drv(`const open = sp.Ui.isMenuOpen("${M}"); const t = []; let sub = "";
+        if (open) { for (let i = 0; i < 8; i++) { let s = ""; try { s = sp.Ui.getString("${M}", "${R}.TopicList.entryList." + i + ".text"); } catch (e) {} if (!s) break; t.push(s); } try { sub = (sp.Ui.getString("${M}", "${R}.SubtitleText.text") || "").trim(); } catch (e) {} }
+        const q = ${quest} ? sp.Quest.from(sp.Game.getFormEx(${quest})) : null;
+        return { open, t, sub, msg: sp.Ui.isMenuOpen("MessageBoxMenu"), stage: q ? q.getCurrentStageID() : -1 };`, engine);
+      const clicked = [];
+      const dismissed = [];
+      const stages = [];
+      let stalls = 0;
+      let idleSince = Date.now();
+      let s = await state();
+      const ok = await ctx.waitFor(async () => {
+        s = await state();
+        if (stages[stages.length - 1] !== s.stage) stages.push(s.stage);
+        if (await until()) return true;
+        if (s.msg) {
+          dismissed.push(s.stage);
+          await ctx.drv(`sp.Ui.invokeInt("MessageBoxMenu", "_root.MessageMenu.ClickCallback", 0); return 0;`, engine);
+          await sleep(1500);
+          idleSince = Date.now();
+        } else if (s.open && !s.sub && s.t.length) {
+          const fresh = s.t.map((x, i) => [x, i]).filter(([x]) => !clicked.includes(x));
+          const [x, i] = fresh.find(([t]) => prefer.test(t)) || fresh[0] || [s.t[0], 0];
+          clicked.push(x);
+          await ctx.drv(`sp.Ui.setInt("${M}", "${R}.TopicList.selectedIndex", ${i}); sp.Ui.invokeBool("${M}", "${R}.onSelectionClick", true); return 0;`, engine);
+          await sleep(2500);
+          idleSince = Date.now();
+        } else if (!s.open) {
+          await sleep(2000);
+          if (!(await state()).open) await ctx.drv(`sp.Actor.from(sp.Game.getFormEx(${npc})).activate(sp.Game.getPlayer(), false); return 0;`, engine);
+          await sleep(3000);
+          idleSince = Date.now();
+        } else if (Date.now() - idleSince > 15000) {
+          stalls++;
+          await ctx.drv(`sp.TESModPlatform.closeMenu("${M}"); return 0;`, engine).catch(() => {});
+          await sleep(2000);
+          idleSince = Date.now();
+        }
+        return false;
+      }, 8 * 60000, label).then(() => true).catch(() => false);
+      if ((await state()).open) await ctx.drv(`sp.TESModPlatform.closeMenu("${M}"); return 0;`, engine).catch(() => {});
+      return { ok, picks: clicked.length, topics: [...new Set(clicked)], stages, last: s.sub, dismissed, stalls };
+    },
     waitFor: async (fn, ms, what, Err = Error, every = 500) => {
       const end = Date.now() + ms;
       for (;;) {
@@ -459,7 +504,7 @@ const runOnce = async (id, check, n, attempt) => {
     restore();
   }
   const rtt = Object.fromEntries(Object.keys(ctx.rtt).map((e) => [e, { median: ctx.driverRtt(Number(e)), calls: ctx.rtt[e].length }]));
-  const slow = Object.entries(rtt).find(([, r]) => r.median > SLOW_ENGINE_MS);
+  const slow = Object.entries(rtt).find(([, r]) => r.calls >= 10 && r.median > SLOW_ENGINE_MS);
   if (result === "FAIL" && slow) {
     result = "ENV";
     reason = `slow engine ${slow[0]} (median driver round trip ${slow[1].median} ms): ${reason}`;
@@ -492,8 +537,9 @@ const runCheck = async (id, opts, envStreak) => {
       log(`${id} run ${n}: ${r.result} ${r.reason}`);
       fs.appendFileSync(path.join(OUT, "attempts.jsonl"), `${JSON.stringify({ id: checkName, run: n, attempt, result: r.result, reason: r.reason, secs: r.secs, evidence: r.evidence, rtt: r.rtt, freeGB: +(os.freemem() / 2 ** 30).toFixed(1), build, at: new Date().toISOString() })}\n`);
       envStreak.n = r.result === "ENV" ? envStreak.n + 1 : 0;
-      if (r.result !== "ENV" || envStreak.n >= 3 || (attempt > 0 && r.reason === prevReason)) break;
-      prevReason = r.reason;
+      const shape = r.reason.replace(/\d+/g, "#");
+      if (r.result !== "ENV" || envStreak.n >= 3 || (attempt > 0 && shape === prevReason)) break;
+      prevReason = shape;
     }
     results.push(r);
     if (r.result !== "PASS" && r.result !== "ACCEPTED" && !opts.keepGoing) break;
