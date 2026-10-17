@@ -9,7 +9,7 @@ First non-PASS in plan order: L1
 | S0 | PASS | 26 | 2026-10-14 17:25 | 1/1 runs PASS |
 | S0b | PASS | 161 | 2026-10-13 15:25 | 1/1 runs PASS |
 | S0c | PASS | 30 | 2026-10-13 15:25 | 1/1 runs PASS |
-| S1.1 | PASS | 83 | 2026-10-16 21:45 | 1/1 runs PASS |
+| S1.1 | ENV | 270 | 2026-10-17 20:36 | 1 of 1 runs not PASS; run 1/1: timeout after 240 s: engine 1 loads into the world |
 | S1.2 | PASS | 77 | 2026-10-16 16:50 | 1/1 runs PASS |
 | S1.4 | PASS | 67 | 2026-10-16 16:51 | 1/1 runs PASS |
 | S1.3 | PASS | 44 | 2026-10-16 00:21 | 2/2 runs PASS |
@@ -51,9 +51,9 @@ First non-PASS in plan order: L1
 | 2B.5 | PASS | 30 | 2026-10-16 11:43 | 1/1 runs PASS |
 | G2.1 | PASS | 40 | 2026-10-16 02:26 | 1/1 runs PASS |
 | G2.2 | PASS | 63 | 2026-10-16 21:49 | 1/1 runs PASS |
-| G2.3 | PASS | 50 | 2026-10-16 02:27 | 1/1 runs PASS |
+| G2.3 | ENV | 270 | 2026-10-17 19:49 | 1 of 1 runs not PASS; run 1/1: timeout after 240 s: engine 1 loads into the world |
 | F1 | PASS | 66 | 2026-10-17 16:03 | 1/1 runs PASS |
-| G2.4 | PASS | 230 | 2026-10-17 19:16 | 2/2 runs PASS |
+| G2.4 | ENV | 290 | 2026-10-17 19:38 | 1 of 1 runs not PASS; run 1/1: timeout after 240 s: engine 1 loads into the world |
 | G2.5 | PASS | 773 | 2026-10-16 22:04 | 1/1 runs PASS |
 | F4 | PASS | 74 | 2026-10-17 17:58 | 1/1 runs PASS |
 | F5 | PASS | 148 | 2026-10-17 18:01 | 1/1 runs PASS |
@@ -94,16 +94,6 @@ First non-PASS in plan order: L1
 - run 1: engine 1 (pid 60884) still runs and answers 10 s later, player at 12156,-71991
 - run 1: server online players ff000000, connect events in server.log: 1
 - ![S0c](runs/S0c/1/S0c-engine1.png)
-### S1.1
-- run 1: Alvor (13482): hoster engine 2 translates it 200 units to 20789,-44989,-81, NPC path on the hoster 200 units, 52 puppet samples on engine 1, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
-- run 1: Gerdur (13489): hoster engine 2 translates it 200 units to -946,-77,2, NPC path on the hoster 200 units, 51 puppet samples on engine 1, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
-- run 1: Hadvar (2bfa2): hoster engine 1 translates it 200 units to 22928,-95299,13930, NPC path on the hoster 200 units, 51 puppet samples on engine 2, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
-- ![S1.1](runs/S1_1/1/S1_1-Alvor-engine2.png)
-- ![S1.1](runs/S1_1/1/S1_1-Alvor-engine1.png)
-- ![S1.1](runs/S1_1/1/S1_1-Gerdur-engine2.png)
-- ![S1.1](runs/S1_1/1/S1_1-Gerdur-engine1.png)
-- ![S1.1](runs/S1_1/1/S1_1-Hadvar-engine1.png)
-- ![S1.1](runs/S1_1/1/S1_1-Hadvar-engine2.png)
 ### S1.2
 - run 1: Orgnar: the hoster engine 1 makes him use furniture 6deb4; sit state engine 1 3, engine 2 3
 - run 1: Orgnar (13486) on engine 2 (puppet), approach spot 0 deg from its facing, 1 activation(s): Dialogue Menu open and in dialogue with the player: true
@@ -396,12 +386,6 @@ First non-PASS in plan order: L1
 - run 1: A: the member turned the pillars 1, 2, 3, then 1, 2 (bot activations to the server): server pillar states position01, position03, position01 -> position03, position02, position02; the member pulled the lever: gate events on the leader ["Open"], gate height -768 -> -594; gate server script after the pull: busy, then back to waiting true
 - run 1: B: the leader, given the claw by the server, turned each ring twice: server ring states {"large":"position02","medium":"position03","small":"position01"}; used the keyhole: keyhole server state done, door node DoorBase on the leader -171 -> -229; MS13 on the leader 50, in the member's server quest log [50]
 - ![G2.2](runs/G2_2/1/G2_2-clawdoor.png)
-### G2.3
-- run 1: A: leader ff000000, bot member ff000001 in the party; MQ103 stage 10 on the leader, the member's server quest log for MQ103 [10]; boss 9bcd6 in 371dd:Skyrim.esm: Dragonstone count on the leader's client 1, on the server 1; dragonStone alias ref ff000d1f; server: "Coop: quest d0800 alias 18 created df202 in 9bcd6"
-- run 1: B: boss dead: MQ103 stage 10 (180 done false), boss holds 1 Dragonstone, the leader 0; loot menu open true, it showed 1 Dragonstone (taken by script, removeItem to the player, while the menu is open); after the loot: MQ103 stage 180 (180 done true), the leader holds 1, dragonStone alias ref ff000d1f; server: boss 0, leader 1; the member's server quest log for MQ103 [10,180,20,60]
-- run 1: C: Farengar 1a67e in 165a3:Skyrim.esm; before the talk MQ103 190 done false, the leader held 1 Dragonstone; dialogue: 0 topic picks (), MQ103 stages 180 -> 190, last line "Ah ! La Pierre de dragon du Tertre des chutes tourmentées ! Vous n'êtes pas comme ces brutes que le jarl a l'habitude de m'envoyer."; after: 190 done true, the leader holds 0 Dragonstone, MQ104 stage 10; server: leader 0 Dragonstone; the member's server quest log for MQ103 [10,180,20,60,190,185]
-- ![G2.3](runs/G2_3/1/G2_3-loot.png)
-- ![G2.3](runs/G2_3/1/G2_3-farengar.png)
 ### F1
 - run 1: A: party formed; the server enabled Mirmulnir 5a6ca; after 6 s: server {"pos":[5160,-41513,7358],"cell":"3c:Skyrim.esm","hoster":4278190080,"dead":false} (hoster ff000000), engine 1 {"pos":[5460,-41535,7461],"ref":[5537,-41538,7475],"node":"NPC Pelvis","loaded":true,"dead":false}, engine 2 {"pos":[5161,-41514,7359],"ref":[5160,-41513,7358],"node":"NPC Pelvis","loaded":true,"dead":false}; leader ff000000, member ff000001
 - run 1: B: the server killed the dragon at [5460,-41535,7460] in 3c:Skyrim.esm (hoster ff000000); the server's position stayed within 50 units for 8 s 20 s after the kill, at [7293,-41078,3690] (hoster ff000000, 4217 units from the kill point)
@@ -417,16 +401,7 @@ First non-PASS in plan order: L1
 - ![F1](runs/F1/1/F1-engine1.png)
 - ![F1](runs/F1/1/F1-engine2.png)
 ### G2.4
-- run 1: A: leader ff000000, bot member ff000001 in the party at the Western Watchtower; the leader set MQ104 to 60 by script (its fragment enables Mirmulnir): MQ104 stage 65; Mirmulnir 5a6ca on the server {"cell":"3c:Skyrim.esm","pos":[7760,-37463,5697],"disabled":false,"dead":false,"hoster":4278190080} (hoster ff000000); the member's MQ104 log [60,65]; the leader before: {"souls":0,"absorbed":0,"fus":false}
-- run 1: B: the server killed Mirmulnir; 3.6 s later: MQ104 stage 90 (90 done true); the leader {"souls":0,"absorbed":0,"fus":false} -> {"souls":0,"absorbed":1,"fus":true}; server soul lines ["dragon 5a6ca gives its soul to ff000000","dragon 5a6ca gives its soul to ff000001"]; the member's MQ104 log [60,65,90,85,80]
-- run 1: C: Balgruuf: message boxes answered (first button) at MQ104 stages [90]; 7 topic picks, 0 stalled menus closed ("J'ai tué le dragon. Ça mérite bien une récompense, non ?", "La tour de guet a été détruite, mais nous avons tué le dragon.", "Il s'avère que je pourrais être "Enfant de dragon".", "À la mort du dragon, j'ai absorbé une partie de son pouvoir.", "Les hommes m'ont donné ce nom, c'est tout.", "Que me veulent les Grises-barbes ?"), MQ104 stages 90 -> 150 -> 160, last line "En mon droit de jarl, je vous nomme thane de Blancherive. C'est le plus grand honneur que je puisse vous accorder."; 160 done true
-- run 1: C: Lydia a2c94 enabled and loaded on the leader true; before the talk {"teammate":false,"rank":-1}; message boxes answered []; 1 topic picks ("Suivez-moi, j'ai besoin de votre aide."), last line ""; after: {"teammate":true,"rank":0} (CurrentFollowerFaction rank, player teammate); server {"cell":"165a3:Skyrim.esm","pos":[-349,-287,-318],"disabled":false,"dead":false,"hoster":4278190080} (hoster ff000000)
-- run 2: A: leader ff000000, bot member ff000001 in the party at the Western Watchtower; the leader set MQ104 to 60 by script (its fragment enables Mirmulnir): MQ104 stage 65; Mirmulnir 5a6ca on the server {"cell":"3c:Skyrim.esm","pos":[7796,-37462,5697],"disabled":false,"dead":false,"hoster":4278190080} (hoster ff000000); the member's MQ104 log [60,65]; the leader before: {"souls":0,"absorbed":0,"fus":false}
-- run 2: B: the server killed Mirmulnir; 3.7 s later: MQ104 stage 90 (90 done true); the leader {"souls":0,"absorbed":0,"fus":false} -> {"souls":0,"absorbed":1,"fus":true}; server soul lines ["dragon 5a6ca gives its soul to ff000000","dragon 5a6ca gives its soul to ff000001"]; the member's MQ104 log [60,65,90,85,80]
-- run 2: C: Balgruuf: message boxes answered (first button) at MQ104 stages [90]; 8 topic picks, 0 stalled menus closed ("J'ai tué le dragon. Ça mérite bien une récompense, non ?", "La tour de guet a été détruite, mais nous avons tué le dragon.", "Il s'avère que je pourrais être "Enfant de dragon".", "À la mort du dragon, j'ai absorbé une partie de son pouvoir.", "Les hommes m'ont donné ce nom, c'est tout.", "Que me veulent les Grises-barbes ?"), MQ104 stages 90 -> 150 -> 160, last line "En mon droit de jarl, je vous nomme thane de Blancherive. C'est le plus grand honneur que je puisse vous accorder."; 160 done true
-- run 2: C: Lydia a2c94 enabled and loaded on the leader true; before the talk {"teammate":false,"rank":-1}; message boxes answered []; 1 topic picks ("Suivez-moi, j'ai besoin de votre aide."), last line ""; after: {"teammate":true,"rank":0} (CurrentFollowerFaction rank, player teammate); server {"cell":"165a3:Skyrim.esm","pos":[-349,-287,-318],"disabled":false,"dead":false,"hoster":4278190080} (hoster ff000000)
-- ![G2.4](runs/G2_4/1/G2_4-lydia.png)
-- ![G2.4](runs/G2_4/2/G2_4-lydia.png)
+- run 1: engine 1 relaunched after an early exit
 ### G2.5
 - run 1: S1 start after the relog, at Arvel: Arvel holds 1 claw on the client, 1 on the server
 - run 1: S1 (G2.1's step): MS13 40; the claw 39647: client 1, server 1; 10 s later client 1, server 1; the member's MS13 log [10,40]

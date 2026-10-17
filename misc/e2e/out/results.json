@@ -48,33 +48,13 @@
     "at": "2026-10-13T15:25:15.348Z"
   },
   "S1.1": {
-    "result": "PASS",
-    "reason": "1/1 runs PASS",
-    "secs": 83,
-    "evidence": [
-      "run 1: Alvor (13482): hoster engine 2 translates it 200 units to 20789,-44989,-81, NPC path on the hoster 200 units, 52 puppet samples on engine 1, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {\"ai\":true,\"combat\":false,\"disabled\":false}, puppet {\"ai\":false,\"combat\":false,\"disabled\":false}",
-      "run 1: Gerdur (13489): hoster engine 2 translates it 200 units to -946,-77,2, NPC path on the hoster 200 units, 51 puppet samples on engine 1, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {\"ai\":true,\"combat\":false,\"disabled\":false}, puppet {\"ai\":false,\"combat\":false,\"disabled\":false}",
-      "run 1: Hadvar (2bfa2): hoster engine 1 translates it 200 units to 22928,-95299,13930, NPC path on the hoster 200 units, 51 puppet samples on engine 2, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {\"ai\":true,\"combat\":false,\"disabled\":false}, puppet {\"ai\":false,\"combat\":false,\"disabled\":false}"
-    ],
-    "shots": [
-      "runs/S1_1/1/S1_1-Alvor-engine2.png",
-      "runs/S1_1/1/S1_1-Alvor-engine1.png",
-      "runs/S1_1/1/S1_1-Gerdur-engine2.png",
-      "runs/S1_1/1/S1_1-Gerdur-engine1.png",
-      "runs/S1_1/1/S1_1-Hadvar-engine1.png",
-      "runs/S1_1/1/S1_1-Hadvar-engine2.png"
-    ],
-    "rtt": {
-      "1": {
-        "median": 49,
-        "calls": 191
-      },
-      "2": {
-        "median": 48,
-        "calls": 186
-      }
-    },
-    "at": "2026-10-16T21:45:03.325Z"
+    "result": "ENV",
+    "reason": "1 of 1 runs not PASS; run 1/1: timeout after 240 s: engine 1 loads into the world",
+    "secs": 270,
+    "evidence": [],
+    "shots": [],
+    "rtt": {},
+    "at": "2026-10-17T20:36:47.640Z"
   },
   "S1.2": {
     "result": "PASS",
@@ -849,51 +829,24 @@
     "at": "2026-10-16T21:49:57.284Z"
   },
   "G2.3": {
-    "result": "PASS",
-    "reason": "1/1 runs PASS",
-    "secs": 50,
-    "evidence": [
-      "run 1: A: leader ff000000, bot member ff000001 in the party; MQ103 stage 10 on the leader, the member's server quest log for MQ103 [10]; boss 9bcd6 in 371dd:Skyrim.esm: Dragonstone count on the leader's client 1, on the server 1; dragonStone alias ref ff000d1f; server: \"Coop: quest d0800 alias 18 created df202 in 9bcd6\"",
-      "run 1: B: boss dead: MQ103 stage 10 (180 done false), boss holds 1 Dragonstone, the leader 0; loot menu open true, it showed 1 Dragonstone (taken by script, removeItem to the player, while the menu is open); after the loot: MQ103 stage 180 (180 done true), the leader holds 1, dragonStone alias ref ff000d1f; server: boss 0, leader 1; the member's server quest log for MQ103 [10,180,20,60]",
-      "run 1: C: Farengar 1a67e in 165a3:Skyrim.esm; before the talk MQ103 190 done false, the leader held 1 Dragonstone; dialogue: 0 topic picks (), MQ103 stages 180 -> 190, last line \"Ah ! La Pierre de dragon du Tertre des chutes tourmentées ! Vous n'êtes pas comme ces brutes que le jarl a l'habitude de m'envoyer.\"; after: 190 done true, the leader holds 0 Dragonstone, MQ104 stage 10; server: leader 0 Dragonstone; the member's server quest log for MQ103 [10,180,20,60,190,185]"
-    ],
-    "shots": [
-      "runs/G2_3/1/G2_3-loot.png",
-      "runs/G2_3/1/G2_3-farengar.png"
-    ],
-    "rtt": {
-      "1": {
-        "median": 35,
-        "calls": 38
-      }
-    },
-    "at": "2026-10-16T02:27:36.115Z"
+    "result": "ENV",
+    "reason": "1 of 1 runs not PASS; run 1/1: timeout after 240 s: engine 1 loads into the world",
+    "secs": 270,
+    "evidence": [],
+    "shots": [],
+    "rtt": {},
+    "at": "2026-10-17T19:49:27.454Z"
   },
   "G2.4": {
-    "result": "PASS",
-    "reason": "2/2 runs PASS",
-    "secs": 230,
+    "result": "ENV",
+    "reason": "1 of 1 runs not PASS; run 1/1: timeout after 240 s: engine 1 loads into the world",
+    "secs": 290,
     "evidence": [
-      "run 1: A: leader ff000000, bot member ff000001 in the party at the Western Watchtower; the leader set MQ104 to 60 by script (its fragment enables Mirmulnir): MQ104 stage 65; Mirmulnir 5a6ca on the server {\"cell\":\"3c:Skyrim.esm\",\"pos\":[7760,-37463,5697],\"disabled\":false,\"dead\":false,\"hoster\":4278190080} (hoster ff000000); the member's MQ104 log [60,65]; the leader before: {\"souls\":0,\"absorbed\":0,\"fus\":false}",
-      "run 1: B: the server killed Mirmulnir; 3.6 s later: MQ104 stage 90 (90 done true); the leader {\"souls\":0,\"absorbed\":0,\"fus\":false} -> {\"souls\":0,\"absorbed\":1,\"fus\":true}; server soul lines [\"dragon 5a6ca gives its soul to ff000000\",\"dragon 5a6ca gives its soul to ff000001\"]; the member's MQ104 log [60,65,90,85,80]",
-      "run 1: C: Balgruuf: message boxes answered (first button) at MQ104 stages [90]; 7 topic picks, 0 stalled menus closed (\"J'ai tué le dragon. Ça mérite bien une récompense, non ?\", \"La tour de guet a été détruite, mais nous avons tué le dragon.\", \"Il s'avère que je pourrais être \"Enfant de dragon\".\", \"À la mort du dragon, j'ai absorbé une partie de son pouvoir.\", \"Les hommes m'ont donné ce nom, c'est tout.\", \"Que me veulent les Grises-barbes ?\"), MQ104 stages 90 -> 150 -> 160, last line \"En mon droit de jarl, je vous nomme thane de Blancherive. C'est le plus grand honneur que je puisse vous accorder.\"; 160 done true",
-      "run 1: C: Lydia a2c94 enabled and loaded on the leader true; before the talk {\"teammate\":false,\"rank\":-1}; message boxes answered []; 1 topic picks (\"Suivez-moi, j'ai besoin de votre aide.\"), last line \"\"; after: {\"teammate\":true,\"rank\":0} (CurrentFollowerFaction rank, player teammate); server {\"cell\":\"165a3:Skyrim.esm\",\"pos\":[-349,-287,-318],\"disabled\":false,\"dead\":false,\"hoster\":4278190080} (hoster ff000000)",
-      "run 2: A: leader ff000000, bot member ff000001 in the party at the Western Watchtower; the leader set MQ104 to 60 by script (its fragment enables Mirmulnir): MQ104 stage 65; Mirmulnir 5a6ca on the server {\"cell\":\"3c:Skyrim.esm\",\"pos\":[7796,-37462,5697],\"disabled\":false,\"dead\":false,\"hoster\":4278190080} (hoster ff000000); the member's MQ104 log [60,65]; the leader before: {\"souls\":0,\"absorbed\":0,\"fus\":false}",
-      "run 2: B: the server killed Mirmulnir; 3.7 s later: MQ104 stage 90 (90 done true); the leader {\"souls\":0,\"absorbed\":0,\"fus\":false} -> {\"souls\":0,\"absorbed\":1,\"fus\":true}; server soul lines [\"dragon 5a6ca gives its soul to ff000000\",\"dragon 5a6ca gives its soul to ff000001\"]; the member's MQ104 log [60,65,90,85,80]",
-      "run 2: C: Balgruuf: message boxes answered (first button) at MQ104 stages [90]; 8 topic picks, 0 stalled menus closed (\"J'ai tué le dragon. Ça mérite bien une récompense, non ?\", \"La tour de guet a été détruite, mais nous avons tué le dragon.\", \"Il s'avère que je pourrais être \"Enfant de dragon\".\", \"À la mort du dragon, j'ai absorbé une partie de son pouvoir.\", \"Les hommes m'ont donné ce nom, c'est tout.\", \"Que me veulent les Grises-barbes ?\"), MQ104 stages 90 -> 150 -> 160, last line \"En mon droit de jarl, je vous nomme thane de Blancherive. C'est le plus grand honneur que je puisse vous accorder.\"; 160 done true",
-      "run 2: C: Lydia a2c94 enabled and loaded on the leader true; before the talk {\"teammate\":false,\"rank\":-1}; message boxes answered []; 1 topic picks (\"Suivez-moi, j'ai besoin de votre aide.\"), last line \"\"; after: {\"teammate\":true,\"rank\":0} (CurrentFollowerFaction rank, player teammate); server {\"cell\":\"165a3:Skyrim.esm\",\"pos\":[-349,-287,-318],\"disabled\":false,\"dead\":false,\"hoster\":4278190080} (hoster ff000000)"
+      "run 1: engine 1 relaunched after an early exit"
     ],
-    "shots": [
-      "runs/G2_4/1/G2_4-lydia.png",
-      "runs/G2_4/2/G2_4-lydia.png"
-    ],
-    "rtt": {
-      "1": {
-        "median": 51,
-        "calls": 185
-      }
-    },
-    "at": "2026-10-17T19:16:47.984Z"
+    "shots": [],
+    "rtt": {},
+    "at": "2026-10-17T19:38:04.786Z"
   },
   "G2.5": {
     "result": "PASS",
