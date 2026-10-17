@@ -35,6 +35,7 @@ const allowedIdles = new Array<[number, string]>();
 const lastAnimEvents = new Map<number, string>();
 
 export const standAnimEventName = "SkympStand";
+export const flyAnimEventName = "SkympFly";
 export const speakAnimPrefix = "SkympSpeak:";
 
 export const isFurnitureIdle = (animEventName: string | undefined): boolean =>
@@ -189,6 +190,13 @@ export const applyAnimation = (
     return;
   }
 
+  if (anim.animEventName === flyAnimEventName) {
+    if (ac && !ac.isDead() && ac.getFlyingState() === 0) {
+      Debug.sendAnimationEvent(ac, "FlyStartCruise");
+    }
+    return;
+  }
+
   if (anim.animEventName === "Ragdoll") {
     if (ac) {
       if (storage["animationFunc1Set"] === true) {
@@ -275,6 +283,10 @@ export class AnimationSource {
 
   addStand(): void {
     this.onSendAnimationEvent(standAnimEventName);
+  }
+
+  addFly(): void {
+    this.onSendAnimationEvent(flyAnimEventName);
   }
 
   addSpeak(voiceFile: string): void {

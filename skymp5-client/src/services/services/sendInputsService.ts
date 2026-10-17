@@ -281,6 +281,10 @@ export class SendInputsService extends ClientListener {
                 animSource.addStand();
             }
             this.lastSitState.set(refrIdStr, sitState);
+            if (!owner.isDead() && owner.getFlyingState() !== 0 && Date.now() - (this.lastFlySent.get(refrIdStr) ?? 0) > 3000) {
+                animSource.addFly();
+                this.lastFlySent.set(refrIdStr, Date.now());
+            }
         }
         for (const anim of _refrId ? animSource.drain() : [animSource.getAnimation()]) {
             const lastAnimationSent = this.lastAnimationSent.get(refrIdStr);
@@ -487,6 +491,7 @@ export class SendInputsService extends ClientListener {
     private lastSendMovementMoment = new Map<string, number>();
     private lastAnimationSent = new Map<string, Animation>();
     private lastSitState = new Map<string, number>();
+    private lastFlySent = new Map<string, number>();
     private actorValuesNeedUpdate = false;
     private isRaceSexMenuShown = false;
     private equipmentChanged = false;

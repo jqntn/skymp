@@ -24,6 +24,7 @@ module.exports = {
     const server = () => ctx.probe(`const d = mp.get(${DRAGON}, "locationalData"); return { pos: d.pos.map(Math.round), hoster: mp.get(${DRAGON}, "hoster") || 0, dead: !!mp.get(${DRAGON}, "isDead") };`);
     const local = (n) => ctx.drv(`const a = sp.Actor.from(sp.Game.getFormEx(${DRAGON})); if (!a) return null; return { pos: [a.getPositionX(), a.getPositionY(), a.getPositionZ()].map(Math.round), loaded: a.is3DLoaded(), flying: a.isFlying(), state: a.getFlyingState(), dead: a.isDead() };`, n);
     const dist = (a, b) => Math.round(Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]));
+    const heal = () => ctx.probe(`for (const a of [${leader}, ${member}]) { if (!mp.get(a, "isDead")) mp.set(a, "percentages", { health: 1, magicka: 1, stamina: 1 }); } return 0;`);
     const fails = [];
 
     await send(1, { customPacketType: "partyInvite", target: member });
@@ -51,6 +52,7 @@ module.exports = {
     const samples = [];
     while (Date.now() - loadedAt < SAMPLE_S * 1000) {
       const t = Math.round((Date.now() - loadedAt) / 100) / 10;
+      await heal();
       const [s, l1, l2] = [await server(), await local(1), await local(2)];
       samples.push({ t, s, l1, l2, d: l2 ? dist(l2.pos, s.pos) : -1 });
       await ctx.sleep(1000);
