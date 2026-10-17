@@ -582,7 +582,7 @@ export class FormView {
       const deadOnServer = !!model.isDead || !!model.movement?.isDead;
       const serverPos = !this.hostedHere ? model.movement?.pos : undefined;
       if (!deadOnServer) {
-        this.flyingDeathReloads = 0;
+        this.deathReloads = 0;
         this.corpseTarget = undefined;
       }
       const holdFlight = !wantAI && !!model.isHostedByOther && !deadOnServer && !ac.isDead() && ac.isFlying();
@@ -590,8 +590,11 @@ export class FormView {
         this.flightHeld = holdFlight;
         ac.setDontMove(holdFlight);
       }
-      if (deadOnServer && !ac.isDead() && ac.isFlying() && this.flyingDeathReloads < 3 && !this.enableAt) {
-        this.flyingDeathReloads++;
+      this.hosterDeadAt = !this.hostedHere && !!model.movement?.isDead && !ac.isDead() ? this.hosterDeadAt || Date.now() : 0;
+      const deathStuck = !!this.hosterDeadAt && Date.now() - this.hosterDeadAt > 1000;
+      if (deadOnServer && !ac.isDead() && (ac.isFlying() || deathStuck) && this.deathReloads < 3 && !this.enableAt) {
+        this.deathReloads++;
+        this.hosterDeadAt = this.hosterDeadAt && Date.now();
         ac.disableNoWait(false);
         if (serverPos) {
           ac.setPosition(serverPos[0], serverPos[1], serverPos[2]);
@@ -884,7 +887,8 @@ export class FormView {
   }
 
   private refrId = 0;
-  private flyingDeathReloads = 0;
+  private deathReloads = 0;
+  private hosterDeadAt = 0;
   private corpseMovedAt = 0;
   private flightHeld = false;
   private corpseTarget?: number[];

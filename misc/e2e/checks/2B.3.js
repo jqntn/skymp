@@ -11,6 +11,7 @@ const FAR = { cellOrWorldDesc: "1a26f:Skyrim.esm", pos: [26691, 1678, -1404], ro
 const SETTLE_MS = 8000;
 const WAIT_MS = 15000;
 const CORPSE_MS = 10000;
+const DEATH_MS = 15000;
 
 module.exports = {
   engines: 2,
@@ -53,6 +54,13 @@ module.exports = {
     ctx.evidence.push(`A: party formed, the server enabled the dragon and it is loaded on both engines, MQ104 not running (engine 1 ${await stage(1)}, engine 2 ${await stage(2)}); dragon ${hex(DRAGON)} server dead ${!!(await ctx.probe(`return mp.get(${DRAGON}, "isDead");`))}, distance to the leader ${near[0]}, to the member ${near[1]}; before: engine 1 ${JSON.stringify(before[1])}, engine 2 ${JSON.stringify(before[2])}`);
     await kill(false);
     const killedAt = Date.now();
+    const deadBy = {};
+    const deathWatch = ctx.waitFor(async () => {
+      for (const n of [1, 2]) {
+        if (!deadBy[n] && await ctx.drv(`const a = sp.Actor.from(sp.Game.getFormEx(${DRAGON})); return !!a && a.isDead();`, n)) deadBy[n] = ((Date.now() - killedAt) / 1000).toFixed(1);
+      }
+      return deadBy[1] && deadBy[2];
+    }, DEATH_MS, "the dragon dies on both clients", Error, 250).catch(() => {});
     await ctx.waitFor(async () => (await souls(1)).souls > before[1].souls && (await souls(2)).souls > before[2].souls, WAIT_MS, "both players gain a dragon soul").catch(() => {});
     const firstAt = Date.now() - killedAt;
     await ctx.sleep(SETTLE_MS);
@@ -62,8 +70,9 @@ module.exports = {
       const g = gained(before[n], after[n]);
       if (g.souls !== 1 || g.absorbed !== 1) fails.push(`A: engine ${n} gained ${g.souls} dragon souls and ${g.absorbed} DragonsAbsorbed for one dragon death near it (expected 1 and 1)`);
     }
-    const localDead = await Promise.all([1, 2].map((n) => ctx.drv(`const a = sp.Actor.from(sp.Game.getFormEx(${DRAGON})); return a ? a.isDead() : null;`, n)));
-    if (!localDead.every((d) => d === true)) fails.push(`A: the dragon is not dead on both clients (engine 1 ${localDead[0]}, engine 2 ${localDead[1]})`);
+    await deathWatch;
+    const localDead = [1, 2].map((n) => deadBy[n] ? `true (at ${deadBy[n]} s)` : false);
+    if (!deadBy[1] || !deadBy[2]) fails.push(`A: the dragon is not dead on both clients within ${DEATH_MS / 1000} s of the kill (engine 1 ${localDead[0]}, engine 2 ${localDead[1]})`);
     const tries = { 1: [], 2: [] };
     for (const n of [1, 2]) {
       for (let k = 0; k < 4; k++) {
@@ -78,8 +87,10 @@ module.exports = {
     ctx.evidence.push(`A: moves next to the corpse: ${JSON.stringify(tries)}`);
     await ctx.sleep(CORPSE_MS);
     const corpse = await Promise.all([1, 2].map((n) => ctx.drv(`const p = sp.Game.getPlayer(); const a = sp.Actor.from(sp.Game.getFormEx(${DRAGON})); return Math.round(p.getDistance(a));`, n)));
+    const stillDead = await Promise.all([1, 2].map((n) => ctx.drv(`const a = sp.Actor.from(sp.Game.getFormEx(${DRAGON})); return !!a && a.isDead();`, n)));
+    if (!stillDead.every(Boolean)) fails.push(`A: the dragon is not dead on both clients after the ${CORPSE_MS / 1000} s next to the corpse (engine 1 ${stillDead[0]}, engine 2 ${stillDead[1]})`);
     const atCorpse = { 1: await souls(1), 2: await souls(2) };
-    ctx.evidence.push(`A: the dragon is dead on engine 1 ${localDead[0]}, on engine 2 ${localDead[1]}; both players then stood next to the corpse for ${CORPSE_MS / 1000} s (distance ${corpse.join(" and ")}): engine 1 ${JSON.stringify(atCorpse[1])}, engine 2 ${JSON.stringify(atCorpse[2])}`);
+    ctx.evidence.push(`A: the dragon is dead on engine 1 ${localDead[0]}, on engine 2 ${localDead[1]} after the kill, still dead after the corpse wait ${stillDead.join(" and ")}; both players then stood next to the corpse for ${CORPSE_MS / 1000} s (distance ${corpse.join(" and ")}): engine 1 ${JSON.stringify(atCorpse[1])}, engine 2 ${JSON.stringify(atCorpse[2])}`);
     for (const n of [1, 2]) {
       const g = gained(after[n], atCorpse[n]);
       if (g.souls !== 0 || g.absorbed !== 0) fails.push(`A: engine ${n} gained ${g.souls} more souls and ${g.absorbed} more DragonsAbsorbed next to the corpse (expected 0: the dragon's own death script must not absorb on a client)`);

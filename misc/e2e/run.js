@@ -122,7 +122,7 @@ const memGB = (image) => {
 
 const hostProblem = (engines) => {
   if (!procs("steam.exe").length) return Object.assign(new Env("Steam is not running: each game launch would hang on steam://run"), { stop: true });
-  if (os.freemem() / 2 ** 30 < 3 * engines + 2 && memGB("steamwebhelper.exe") > STEAMWEBHELPER_MAX_GB) {
+  if (memGB("steamwebhelper.exe") > STEAMWEBHELPER_MAX_GB) {
     log(`steamwebhelper uses ${memGB("steamwebhelper.exe").toFixed(1)} GB, killing it`);
     spawnSync("taskkill", ["/F", "/IM", "steamwebhelper.exe"]);
     spawnSync("powershell", ["-NoProfile", "-Command", "Start-Sleep -Seconds 5"]);

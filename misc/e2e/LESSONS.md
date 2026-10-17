@@ -180,3 +180,4 @@ Facts about the engine, the server, and the harness. Add one after each ENV, eac
 - The server's cells are `int16_t(pos / 4096)` (truncation toward zero), not floor; cell 0 is twice as wide.
 - Start a quest NPC the way the game does: Mirmulnir enabled by a server script fights at the tower, while MQ104 stage 60 sends him on a patrol 5 to 8 cells away first. F5's check used the server enable and passed a fix that the vanilla flow broke (reopened from G2.6).
 - A per-second diagnostic of every copy (server, each client) found in one run what three G2.6 failures hid: the dragon left, the hoster dropped, the member was unsubscribed. Write it before the second guess.
+- A single read at a fixed delay after an event races the engine's own timing (2B.3 read the death 8.3 s after the kill, the hoster's own death moment): poll from the event with a bound, and log when the state was first seen.
