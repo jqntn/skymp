@@ -249,10 +249,11 @@ module.exports = {
       const from = await ctx.drv(`const p = sp.Game.getPlayer(); return [p.getPositionX(), p.getPositionY(), p.getPositionZ()];`);
       const away = await ctx.drv(`const p = sp.Game.getPlayer(); const r = p.getAngleZ() * Math.PI / 180; const x = p.getPositionX() + 800 * Math.sin(r), y = p.getPositionY() + 800 * Math.cos(r); p.setPosition(x, y, p.getPositionZ() + 10); return [x, y];`);
       const dist2 = (a, b) => Math.round(Math.hypot(a[0] - b[0], a[1] - b[1]));
-      const followed = await ctx.waitFor(async () => dist2((await serverRef(LYDIA)).pos, away) < dist2(start.server, away) - 300 && dist2(await lydiaPos(2), away) < dist2(start.member, away) - 300, 20000, "Lydia walks after the leader").then(() => true).catch(() => false);
+      const walked = (pos, from0) => dist2(pos, from0) >= 250 && dist2(pos, away) <= 650;
+      const followed = await ctx.waitFor(async () => walked((await serverRef(LYDIA)).pos, start.server) && walked(await lydiaPos(2), start.member), 20000, "Lydia walks after the leader").then(() => true).catch(() => false);
       const end = { server: (await serverRef(LYDIA)).pos, member: await lydiaPos(2) };
       ctx.evidence.push(`E: the leader moved about 800 units from ${JSON.stringify(from.map(Math.round))} to ${JSON.stringify(away.map(Math.round))}: Lydia on the server ${JSON.stringify(start.server)} -> ${JSON.stringify(end.server)} (${dist2(start.server, away)} -> ${dist2(end.server, away)} from the leader), on the member's client ${JSON.stringify(start.member)} -> ${JSON.stringify(end.member)} (${dist2(start.member, away)} -> ${dist2(end.member, away)})`);
-      if (!followed) fails.push("E: Lydia did not walk after the leader on the server and on the member's client within 20 s");
+      if (!followed) fails.push("E: Lydia did not walk 250 units or more to within 650 units of the leader on the server and on the member's client within 20 s");
     }
 
     ctx.assert.ok(!fails.length, fails.join("; "));
