@@ -706,6 +706,13 @@ void MpObjectReference::ForceSubscriptionsUpdate()
   auto worldOrCell = GetCellOrWorld().ToFormId(worldState->espmFiles);
 
   auto& gridInfo = worldState->grids[worldOrCell];
+  std::optional<std::pair<int16_t, int16_t>> oldPos;
+  if (AsActor() && AsActor()->IsCreatedAsPlayer()) {
+    try {
+      oldPos = gridInfo.grid->GetPos(this);
+    } catch (std::logic_error&) {
+    }
+  }
   MoveOnGrid(*gridInfo.grid);
 
   auto& was = *this->listeners;
@@ -725,11 +732,25 @@ void MpObjectReference::ForceSubscriptionsUpdate()
       std::abs(otherPos.second - pos.second) <= kHostedGridRadius;
   };
 
+  auto keepsHosted = [&](MpObjectReference* other) {
+    auto hoster = worldState->hosters.find(other->GetFormId());
+    if (!oldPos || hoster == worldState->hosters.end() || hoster->second == 0 ||
+        !(other->GetCellOrWorld() == GetCellOrWorld())) {
+      return false;
+    }
+    auto otherPos = GetGridPos(other->GetPos());
+    bool wasOutside = std::abs(otherPos.first - oldPos->first) > 1 ||
+      std::abs(otherPos.second - oldPos->second) > 1;
+    return wasOutside &&
+      std::abs(otherPos.first - pos.first) <= kHostedGridRadius &&
+      std::abs(otherPos.second - pos.second) <= kHostedGridRadius;
+  };
+
   std::vector<MpObjectReference*> toRemove;
   std::set_difference(was.begin(), was.end(), now.begin(), now.end(),
                       std::inserter(toRemove, toRemove.begin()));
   for (auto listener : toRemove) {
-    if (keepsPlayer(listener)) {
+    if (keepsPlayer(listener) || keepsHosted(listener)) {
       continue;
     }
     Unsubscribe(this, listener);

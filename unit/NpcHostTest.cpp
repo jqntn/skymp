@@ -548,6 +548,17 @@ TEST_CASE("An NPC that moves up to 16 cells from its hoster stays hosted and "
   HostAlvor(partOne, alvor);
   partOne.Messages().clear();
   auto& claimer = partOne.worldState.GetFormAt<MpActor>(kClaimer);
+  const auto claimerStart = claimer.GetPos();
+  DoMessage(partOne, 0,
+            Movement(alvor.GetIdx(), kTamriel,
+                     { spot.x + 3 * 4096.f, spot.y, spot.z }));
+  claimer.SetPos({ claimerStart.x, claimerStart.y + 4096.f, claimerStart.z });
+  REQUIRE(partOne.worldState.hosters[kAlvor] == kClaimer);
+  REQUIRE(alvor.GetListeners().count(&claimer) == 1);
+  REQUIRE(hostStops() == 0);
+  claimer.SetPos(claimerStart);
+  DoMessage(partOne, 0, Movement(alvor.GetIdx(), kTamriel, spot));
+  partOne.Messages().clear();
   claimer.SetPos({ spot.x, spot.y + 2 * 4096.f, spot.z });
   REQUIRE(partOne.worldState.hosters[kAlvor] == 0);
   REQUIRE(hostStops() == 1);
