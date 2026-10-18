@@ -64,7 +64,7 @@ First non-PASS in plan order: L1
 | F3 | FAIL | 60 | 2026-10-18 16:38 | 1 of 1 runs not PASS; run 1/1: B: after the refused take MS13 is at stage 40 on the member's client; B: after the refused take the server logged MS13 40 for the member true, the leader false |
 | P1 | PASS | 387 | 2026-10-18 20:56 | 1/1 runs PASS |
 | P2 | FAIL | 77 | 2026-10-18 21:02 | 1 of 1 runs not PASS; run 1/1: the hoster closes the game in combat: the server cleared the hoster not within 30 s, not within 5 s |
-| P3 | FAIL | 0 | 2026-10-12 16:53 | no check script |
+| P3 | FAIL | 63 | 2026-10-18 21:35 | 1 of 1 runs not PASS; run 1/1: the hoster closes the game in combat: engine 1's player took the NPC not within 30 s, not within 5 s; the hoster closes the game in combat: engine 1 does not drive the NPC (shown true, AI false) |
 | P4 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | P5 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | P6 | FAIL | 0 | 2026-10-12 16:53 | no check script |
@@ -509,6 +509,12 @@ First non-PASS in plan order: L1
 - run 1: cell change: before {"hoster":4278190080,"dead":false,"health":0.5,"cell":"3c:Skyrim.esm","pos":[7261,-41444,3615]}; hoster cleared 0.0 s after, then {"hoster":0,"dead":false,"health":0.5,"cell":"3c:Skyrim.esm","pos":[7261,-41444,3615]}; 10 s later {"hoster":0,"dead":false,"health":0.5,"cell":"3c:Skyrim.esm","pos":[7261,-41444,3615]} (moved 0 from before, 0 from the clear)
 - run 1: the bandit fights the hoster true
 - run 1: the hoster closes the game in combat: before {"hoster":4278190080,"dead":false,"health":0.25,"cell":"3c:Skyrim.esm","pos":[7457,-41386,3536]}; hoster cleared never in 30 s after, then {"hoster":4278190080,"dead":false,"health":0.25,"cell":"3c:Skyrim.esm","pos":[7457,-41386,3536]}; 10 s later {"hoster":4278190080,"dead":false,"health":0.25,"cell":"3c:Skyrim.esm","pos":[7457,-41386,3536]} (moved 0 from before, 0 from the clear)
+### P3
+- run 1: before "the hoster changes cell": the NPC shown on engine 2 after 1.6 s
+- run 1: the hoster changes cell: hoster ff000000 at 7264,-41450,3609; engine 2's player took it 0.3 s after; largest step between samples 9 at 4.7 s on the server, 10 at 0.3 s on engine 2; server dead false; on engine 2 before {"ids":["1ebf6","1ebf0","1eba1"],"name":"bandit","dead":false,"ai":false,"shown":true}, after {"ids":["1ebf0","1ebf6","1eba1"],"name":"bandit","dead":false,"ai":true,"shown":true}
+- run 1: the bandit fights on engine 2 before the quit true
+- run 1: before "the hoster closes the game in combat": the NPC shown on engine 1 after 0.2 s
+- run 1: the hoster closes the game in combat: hoster ff000001 at 7259,-41444,3615; engine 2 exited 1.9 s after the quit; engine 1's player took it never in 30 s; largest step between samples 1 at 0.5 s on the server, 40 at 2.4 s on engine 1; server dead false; on engine 1 before {"ids":["1ebf6","1eba1","1ebf0"],"name":"bandit","dead":false,"ai":false,"shown":true}, after {"ids":["1ebf0","1eba1","1ebf6"],"name":"bandit","dead":false,"ai":false,"shown":true}
 ### P8
 - run 1: 115 client log lines, 2 [Exception] lines
 - run 1: exception: [Exception] failed to get key 'data': failed to call custom Serialize for type struct Equipment: failed to get key 'inv': failed to call cus.
