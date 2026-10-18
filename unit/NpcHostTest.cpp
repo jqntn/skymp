@@ -584,6 +584,27 @@ TEST_CASE("A hoster's movement moves an NPC to another cell and far away",
   ReleaseAlvor(partOne, alvor, cell, start);
 }
 
+TEST_CASE("A hoster that stops sending movement loses the host",
+          "[NpcHost][espm][P2]")
+{
+  auto& partOne = GetNpcHostPartOne();
+  auto& alvor = partOne.worldState.GetFormAt<MpActor>(kAlvor);
+  const auto cell = CellOf(partOne, alvor);
+  const auto start = alvor.GetPos();
+  HostAlvor(partOne, alvor);
+
+  partOne.Tick();
+  REQUIRE(partOne.worldState.hosters[kAlvor] == kClaimer);
+
+  partOne.worldState.lastMovUpdateByIdx[alvor.GetIdx()] =
+    std::chrono::system_clock::now() - std::chrono::seconds(10);
+  partOne.Tick();
+  REQUIRE(partOne.worldState.hosters[kAlvor] == 0);
+  REQUIRE((alvor.GetPos() - start).Length() < 1.f);
+
+  ReleaseAlvor(partOne, alvor, cell, start);
+}
+
 TEST_CASE("A player's own movement is still validated",
           "[NpcHost][espm][1A.4]")
 {

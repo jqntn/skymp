@@ -153,6 +153,7 @@ private:
 
   void TickPacketHistoryPlaybacks();
   void TickDeferredMessages();
+  void TickStaleHosters();
 
   std::string SignJavaScriptSources(const std::string& src) const;
 

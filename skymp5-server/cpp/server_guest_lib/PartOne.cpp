@@ -147,7 +147,32 @@ void PartOne::Tick()
 {
   TickPacketHistoryPlaybacks();
   TickDeferredMessages();
+  TickStaleHosters();
   worldState.Tick();
+}
+
+void PartOne::TickStaleHosters()
+{
+  constexpr auto kStaleHosterTimeout = std::chrono::seconds(3);
+  const auto now = std::chrono::system_clock::now();
+  for (auto& [npcId, hosterId] : worldState.hosters) {
+    if (hosterId == 0) {
+      continue;
+    }
+    auto& npc = worldState.LookupFormByIdNoLoad(npcId);
+    auto refr = npc ? npc->AsObjectReference() : nullptr;
+    if (!refr) {
+      continue;
+    }
+    const auto idx = refr->GetIdx();
+    const auto& updates = worldState.lastMovUpdateByIdx;
+    if (updates.size() > idx && updates[idx] &&
+        now - *updates[idx] < kStaleHosterTimeout) {
+      continue;
+    }
+    hosterId = 0;
+    refr->UpdateHoster(0);
+  }
 }
 
 uint32_t PartOne::CreateActor(uint32_t formId, const NiPoint3& pos,

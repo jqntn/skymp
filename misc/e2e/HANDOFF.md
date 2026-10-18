@@ -71,6 +71,7 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 - `fix(coop): report quests the game starts during a login replay once the settle ends (F2)`: see the F2 log line of 2026-10-18 16:03 and the F2 check, fix and review bullets in PLAN.
 - `test(e2e): take quest items through the container menu and check a refused member take (F3)`: no product change, see the F3 log line of 2026-10-18 16:39 and the F3 bullets in PLAN.
 - `fix(coop): keep parties, quest items and disabled actors across a server crash (P1)`: see the P1 log line of 2026-10-18 20:10 and the P1 check, findings, red and review bullets in PLAN.
+- `fix(coop): clear a hoster that stops sending movement (P2)`: see the P2 log line of 2026-10-18 21:03; P2 is BLOCKED on the party case (user decision in PLAN).
 
 ## What the last commit holds (G1.2)
 
@@ -88,6 +89,8 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 - misc/e2e/checks/P8.js: red (client Equipment serialize exception at login). Stays uncommitted until P8 is reached in plan order.
 
 ## User decisions (2026-10-12)
+
+- PENDING 2026-10-18: P2 "the hoster leaves the party": options (a) clear his hosts of quest-alias actors of the party's shared quests, (b) clear all his hosts, (c) not a hoster loss. P2 reports BLOCKED until then.
 
 - 2026-10-16: new id F6 (follower ownership: the last party member who asks a follower to follow owns and hosts her; the previous owner loses her, also across relogs). In run.js ORDER after G2.6.
 
@@ -135,7 +138,7 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
    - F2 (2026-10-18): quest starts before the quest log request and quest stops in the replay window are still dropped; radiant quests the game starts at a login are now relayed to the party at every login.
    - F6 (2026-10-18): two players who each stored a follower before forming a party both dismiss her when they join; a party state between a local recruit and the server storing it dismisses the new follower; the dismissal does not reset WaitingForPlayer. The build helper now greps `ERROR` too (webpack prints TS errors as `[tsl] ERROR`).
  escapes), then (5) S1.6 and (6) G2.5 from the retro 3 tasks, then F6 in plan order.
-   - Retro 3 tasks (2026-10-17, ranked; do them before the next FAIL): (1) done 19:26: F4 hang not reproduced in 20 diagnostic runs (watch); (2) done 2026-10-18 12:38 (mutation reds F4, G2.4, G2.3); (3) done 18:05 (F5 player-side keep); (4) done 19:25 (`ctx.talk`, G2.4 box rule; G2.5 keeps its own copy for now); (5) and (6) done 2026-10-18 12:54 except S1.6 Hadvar moving first and G2.5 from a saved state (deferred); F6 done 2026-10-18 15:28 (pass 2 since retro 3); F2 done 16:03 (pass 3); F3 done 16:39 (pass 4, no product change); P1 done 20:10 (pass 5); next in plan order: P2; (7) and (8) done 19:25 (run `node misc/e2e/flakes.js --since <ISO>` after a batch).
+   - Retro 3 tasks (2026-10-17, ranked; do them before the next FAIL): (1) done 19:26: F4 hang not reproduced in 20 diagnostic runs (watch); (2) done 2026-10-18 12:38 (mutation reds F4, G2.4, G2.3); (3) done 18:05 (F5 player-side keep); (4) done 19:25 (`ctx.talk`, G2.4 box rule; G2.5 keeps its own copy for now); (5) and (6) done 2026-10-18 12:54 except S1.6 Hadvar moving first and G2.5 from a saved state (deferred); F6 done 2026-10-18 15:28 (pass 2 since retro 3); F2 done 16:03 (pass 3); F3 done 16:39 (pass 4, no product change); P1 done 20:10 (pass 5); P2 cell change and closing the game fixed 21:03, BLOCKED on the party case (ask the user: options in the P2 bullets of PLAN); next in plan order: P3; (7) and (8) done 19:25 (run `node misc/e2e/flakes.js --since <ISO>` after a batch).
    - F5 reopened and fixed again (2026-10-16): MQ104 stage 60 sends Mirmulnir on a patrol 5 to 8 cells away; the keep radius is 16 cells; G2.6 risks: no attack while patrolling, a member hoster leaves MQ104 at 60 (stage 65 not reported), a moving hoster releases him at 5-8 cells.
    - F5 limits (for G2.6): a hoster that crosses any cell line while the dragon is outside his new 3x3 releases him, even moving toward him (unit-confirmed; fix if G2.6 hits it: keep the pair on the player side when it was already kept); a member who is not the hoster loses the dragon at 2 cells (his copy stays frozen); at 3-4 cells, if the hoster's copy unloads, the client releases him (the stashed client part is the start of a fix); F5 heals the players, so G2.6 must show a real fight. 2B.3 failed once in 15 runs on the F5 server change (a dragon killed in the air stays alive on one client, the F4-era shape); S1.6 "moved only" and G1.2 (Alvor moved to his house) each failed once and passed on rerun.
    - F4: the handover diagnostic (scratchpad diag-f4handover.js: the leader leaves mid-flight) found that the member never takes the dragon; open under P3, log the member's distance to the dragon. A view destroyed after its actor is gone leaves a held flier held (rare). A held flier's landing was never seen in a run. Puppet fliers move in steps at the packet rate. The drift fix is client-only; F5 is the server grid.
