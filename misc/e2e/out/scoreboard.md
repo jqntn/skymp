@@ -14,7 +14,7 @@ First non-PASS in plan order: L1
 | S1.4 | PASS | 67 | 2026-10-16 16:51 | 1/1 runs PASS |
 | S1.3 | PASS | 44 | 2026-10-16 00:21 | 2/2 runs PASS |
 | S1.5 | PASS | 52 | 2026-10-15 21:36 | 1/1 runs PASS |
-| S1.6 | PASS | 61 | 2026-10-17 17:23 | 1/1 runs PASS |
+| S1.6 | PASS | 114 | 2026-10-18 12:40 | 2/2 runs PASS |
 | S2 | PASS | 117 | 2026-10-14 17:33 | 1/1 runs PASS |
 | S3.1 | PASS | 25 | 2026-10-14 17:34 | 1/1 runs PASS |
 | S3.2 | PASS | 49 | 2026-10-14 17:34 | 1/1 runs PASS |
@@ -54,7 +54,7 @@ First non-PASS in plan order: L1
 | G2.3 | FAIL | 584 | 2026-10-18 12:26 | 1 of 1 runs not PASS; run 1/1: A: the server did not create the Dragonstone in the boss; B: with the loot menu open the boss holds 0 Dragonstone; B: MQ103 stage 10 after the kill and 10 after the loot (the dragonStone alias script sets 180 when the player takes the stone); B: the leader holds 0 Dragonstone, alias ref ff000d1f (before ff000d1f); B: the server has 0 Dragonstone in the boss and 0 in the leader; B: the member's server quest log has no MQ103 180; C: MQ103 stage 190 is not done on the leader after the dialogue (stage 10); C: the member's server quest log has no MQ103 190 |
 | F1 | PASS | 66 | 2026-10-17 16:03 | 1/1 runs PASS |
 | G2.4 | FAIL | 607 | 2026-10-18 12:36 | 1 of 1 runs not PASS; run 1/1: B: MQ104 stage 90 is not done on the leader after Mirmulnir died; B: the leader's DragonsAbsorbed went 0 -> 0 (expected +1); B: the leader's Fus unlocked false -> false (stage 90 teaches it); B: the server gave no soul to ff000000; B: the server gave no soul to ff000001; B: the member's log has no MQ104 90; C: MQ104 stage 160 (Balgruuf's reward, Lydia enabled) is not done; C: Lydia is not enabled and loaded on the leader after stage 160; C: on the server Lydia is disabled true, hoster 0 (expected enabled, hosted by the leader) |
-| G2.5 | PASS | 773 | 2026-10-16 22:04 | 1/1 runs PASS |
+| G2.5 | PASS | 722 | 2026-10-18 12:52 | 1/1 runs PASS |
 | F4 | FAIL | 68 | 2026-10-18 12:37 | 1 of 1 runs not PASS; run 1/1: the member's copy of the flying dragon was over 1000 units from the server's position in 35 of 36 samples: 0s 1133, 1.1s 2387, 2.2s 4707, 3.4s 5165, 4.5s 3881 |
 | F5 | PASS | 148 | 2026-10-17 18:01 | 1/1 runs PASS |
 | F7 | PASS | 81 | 2026-10-17 17:30 | 1/1 runs PASS |
@@ -140,12 +140,19 @@ First non-PASS in plan order: L1
 - ![S1.5](runs/S1_5/1/S1_5-follow.png)
 ### S1.6
 - run 1: Hadvar on the hoster after the moves: {"ai":true,"combat":false,"pkg":"4679f","sit":0,"scene":0,"dialogue":false}; puppet AI on: false
-- run 1: hoster engine 1, Hadvar walked 2482 units on the hoster and 2493 on the puppet; 26 samples with hoster Speed > 20 for 500 ms, puppet Speed > 20 in 26; 29 samples with hoster Speed < 1 for 500 ms, puppet Speed < 20 in 29
-- run 1: foot swing (mean change of the left foot minus the right foot along the heading between consecutive samples) per moving stretch: 20 samples: hoster 48.9, puppet 70.8; 6 samples: hoster 89.2, puppet 105.7; per standing stretch: 8 samples: hoster 0.1, puppet 0.8; 21 samples: hoster 4.0, puppet 3.4
-- run 1: foot stride pairs (hoster/puppet): 34/-46 4/27 32/-9 -2/52 -6/-48 -14/64 40/-70 -35/54 -18/-58 5/62 17/-50 -34/27 50/-16 -76/-25 66/32 -58/-19 16/4 5/27 13/-36 10/17 -40/-17 -5/27 12/7 13/13 13/13 13/13 13/13 13/13 13/13 13/13 13/13 11/13 32/18 -23/53 19/-73 -62/64 67/-63 -71/39 35/-33 12/24 25/25 24/23 26/35 40/40 31/31 31/31 31/31 31/31 31/31 31/31 31/31 42/41 41/41 39/39 34/32 20/19 12/12 13/13 13/13 13/13
-- run 1: Speed pairs (hoster/puppet): 80/104 185/156 184/278 194/266 300/312 361/361 309/361 123/226 240/225 361/361 361/361 361/361 361/361 361/361 166/305 91/226 302/200 307/336 48/265 152/274 54/80 0/80 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 155/0 299/361 361/361 260/288 361/361 360/361 214/315 0/73 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0
-- run 1: Hadvar's server hoster during the samples: ff000000
+- run 1: hoster engine 2, Hadvar walked 4387 units on the hoster and 4431 on the puppet; 29 samples with hoster Speed > 20 for 500 ms, puppet Speed > 20 in 29; 20 samples with hoster Speed < 1 for 500 ms, puppet Speed < 20 in 20
+- run 1: foot swing (mean change of the left foot minus the right foot along the heading between consecutive samples) per moving stretch: 26 samples: hoster 62.1, puppet 65.0; per standing stretch: 17 samples: hoster 0.2, puppet 0.1
+- run 1: foot stride pairs (hoster/puppet): 0/0 -2/13 -2/23 -6/15 -5/44 -2/-16 -2/-41 28/29 -53/-1 68/-37 -72/49 55/-74 -44/72 7/-67 5/46 -49/-13 61/-24 -76/33 64/-68 -36/70 4/-62 4/48 -24/37 -9/4 43/-38 -6/28 -25/26 43/33 31/44 -40/26 0/-36 4/13 13/44 -18/-38 45/43 45/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 11/43 32/-34 34/5 34/29 43/48 43/48 43/48 43/13 32/13
+- run 1: Speed pairs (hoster/puppet): 0/0 0/0 0/0 42/0 44/75 52/77 312/207 349/361 361/359 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 338/361 78/88 80/91 80/91 80/91 80/91 9900/81 9999/9999 10000/9999 9903/9901 0/0 0/0 137/284 0/69 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 80/102 80/115 68/115 0/0 0/0 0/0 624/624 618/348 0/648
+- run 1: Hadvar's server hoster during the samples: ff000001
+- run 2: Hadvar on the hoster after the moves: {"ai":true,"combat":false,"pkg":"4679f","sit":0,"scene":0,"dialogue":false}; puppet AI on: false
+- run 2: hoster engine 1, Hadvar walked 2172 units on the hoster and 5966 on the puppet; 26 samples with hoster Speed > 20 for 500 ms, puppet Speed > 20 in 26; 26 samples with hoster Speed < 1 for 500 ms, puppet Speed < 20 in 26
+- run 2: foot swing (mean change of the left foot minus the right foot along the heading between consecutive samples) per moving stretch: 24 samples: hoster 57.5, puppet 64.1; per standing stretch: 25 samples: hoster 1.9, puppet 1.3
+- run 2: foot stride pairs (hoster/puppet): 0/0 -2/13 -2/13 2/42 2/-13 2/10 -2/-44 -2/-4 -42/16 9/10 4/-36 -31/43 37/-70 -66/69 71/-70 -73/51 56/-29 -35/-7 -2/26 23/-61 -57/68 43/-63 -36/53 -40/1 41/13 25/26 -59/9 -71/10 -4/13 -1/13 0/13 1/13 0/21 -20/-12 34/29 45/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 7/43 11/13 14/13
+- run 2: Speed pairs (hoster/puppet): 0/0 0/0 6/0 56/83 56/78 56/79 55/79 222/184 349/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 349/361 217/289 98/243 24/60 565/560 565/565 565/565 565/565 0/0 0/0 0/0 104/0 349/235 94/213 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0
+- run 2: Hadvar's server hoster during the samples: ff000000
 - ![S1.6](runs/S1_6/1/S1_6-puppet.png)
+- ![S1.6](runs/S1_6/2/S1_6-puppet.png)
 ### S2
 - run 1: bot actor ff000000 in BleakFallsBarrow01; pillar states position01, position03, position01
 - run 1: control, lever before the pillars are solved: dart traps activated 39fdd, 3720f, 2ad49, 2ad43, gate opening false
@@ -427,8 +434,8 @@ First non-PASS in plan order: L1
 - run 1: S1 (G2.1's step): MS13 40; the claw 39647: client 1, server 1; 10 s later client 1, server 1; the member's MS13 log [10,40]
 - run 1: S1 after the relog: MS13 40, the claw client 1, server 1
 - run 1: S1 after the relog: Arvel (the claw) holds 0 on the client, 0 on the server
-- run 1: S2 (G2.2's step): the claw door DoorBase -171 -> -229, MS13 50, the keyhole's server state done, the member's MS13 log [10,40,50]
-- run 1: S2 after the relog: MS13 50, the claw door DoorBase -373 (closed -171), the claw held 1
+- run 1: S2 (G2.2's step): the claw door DoorBase -171 -> -226, MS13 50, the keyhole's server state done, the member's MS13 log [10,40,50]
+- run 1: S2 after the relog: MS13 50, the claw door DoorBase -370 (closed -171), the claw held 1
 - run 1: S2 after the relog: Arvel (the claw) holds 0 on the client, 0 on the server
 - run 1: S3 (G2.3's loot): MQ103 180 (180 done true); 10 s after the loot the Dragonstone: client 1, server 1; the member's MQ103 log [10,180,20,60]
 - run 1: S3 after the relog: MQ103 180 done true, the Dragonstone client 1, server 1
@@ -438,18 +445,18 @@ First non-PASS in plan order: L1
 - run 1: S4 after the relog: MQ103 190 done true, the Dragonstone client 0, server 0
 - run 1: S4 after the relog: Arvel (the claw) holds 0 on the client, 0 on the server
 - run 1: S4 after the relog: the boss (the Dragonstone) holds 0 on the client, 0 on the server
-- run 1: S5 (G2.4's step): MQ104 90 done true, 160 done true (8 topic picks, 0 boxes); Fus true; the leader gained ["896ba"], the reward weapon 896ba 10 s later: client 1, server 1
-- run 1: S5: the leader equipped 896ba: client right hand 896ba, server worn ["12e46","12e49","12e4b","12e4d","896ba"]
+- run 1: S5 (G2.4's step): MQ104 90 done true, 160 done true (7 topic picks, 0 boxes); Fus true; the leader gained ["896d2"], the reward weapon 896d2 10 s later: client 1, server 1
+- run 1: S5: the leader equipped 896d2: client right hand 896d2, server worn ["12e46","12e49","12e4b","12e4d","896d2"]
 - run 1: S5: Lydia follows the leader true ({"teammate":true,"rank":0}); the server's stored followers [666772,0]; the member's MQ104 log [10,60,65,90,85,80,150,108,160]
-- run 1: S5 after the relog: {"souls":0,"soulsBefore":0,"done160":true,"fus":true,"axe":1,"serverAxe":1,"equipped":"896ba","worn":["12e46","12e49","12e4b","12e4d","896ba"],"lydia":{"teammate":true,"rank":0}}
+- run 1: S5 after the relog: {"souls":0,"soulsBefore":0,"done160":true,"fus":true,"axe":1,"serverAxe":1,"equipped":"896d2","worn":["12e46","12e49","12e4b","12e4d","896d2"],"lydia":{"teammate":true,"rank":0}}
 - run 1: S5 after the relog: Arvel (the claw) holds 0 on the client, 0 on the server
 - run 1: S5 after the relog: the boss (the Dragonstone) holds 0 on the client, 0 on the server
-- run 1: relog S1 start: the leader and the bot logged in again; 0 message boxes answered; state back 0.7 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)
+- run 1: relog S1 start: the leader and the bot logged in again; 0 message boxes answered; state back 1.3 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)
 - run 1: relog S1: the leader and the bot logged in again; 0 message boxes answered; state back 2.7 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)
 - run 1: relog S2: the leader and the bot logged in again; 0 message boxes answered; state back 3.3 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)
-- run 1: relog S3: the leader and the bot logged in again; 0 message boxes answered; state back 2.1 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [["1ceee",0],["1ceee",1]] (relayed from the leader)
+- run 1: relog S3: the leader and the bot logged in again; 0 message boxes answered; state back 2.6 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [["1ceee",0],["1ceee",1]] (relayed from the leader)
 - run 1: relog S4: the leader and the bot logged in again; 0 message boxes answered; state back 3.2 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)
-- run 1: relog S5: the leader and the bot logged in again; 1 message boxes answered; state back 10.9 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)
+- run 1: relog S5: the leader and the bot logged in again; 1 message boxes answered; state back 11.2 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)
 - run 1: the leader client's stray removals and failed relinks: ["Stray quest item removed d0800 18 9bcd6","Stray quest item removed d0800 18 9bcd6"]
 - ![G2.5](runs/G2_5/1/G2_5-relog.png)
 ### F4

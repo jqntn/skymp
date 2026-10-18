@@ -154,6 +154,7 @@ module.exports = {
     const arvel0 = await holderCount(ARVEL, CLAW);
     ctx.evidence.push(`S1 start after the relog, at Arvel: Arvel holds ${arvel0.client} claw on the client, ${arvel0.server} on the server`);
     if (arvel0.client !== 1 || arvel0.server !== 1) fails.push(`S1 start after the relog: Arvel holds ${arvel0.client} claw on the client and ${arvel0.server} on the server (expected 1, 1: nobody took it yet)`);
+    ctx.assert.ok(!fails.length, fails.join("; "));
     await ctx.drv(`sp.Actor.from(sp.Game.getFormEx(${ARVEL})).kill(sp.Game.getPlayer()); return 0;`);
     await ctx.waitFor(() => ctx.probe(`return !!mp.get(${ARVEL}, "isDead");`), 15000, "the server has Arvel dead").catch(() => {});
     await ctx.sleep(3000);
@@ -167,6 +168,7 @@ module.exports = {
     const r1 = { stage: await stageOf(MS13), held: await held(CLAW), server: await serverHeld(leader, CLAW) };
     ctx.evidence.push(`S1 after the relog: MS13 ${r1.stage}, the claw client ${r1.held}, server ${r1.server}`);
     if (!b1 || r1.held !== 1 || r1.server !== 1) fails.push(`S1 after the relog: MS13 ${r1.stage}, the claw client ${r1.held}, server ${r1.server} (expected 40 done, 1, 1)`);
+    ctx.assert.ok(!fails.length, fails.join("; "));
     await holdersEmpty("S1 after the relog", [ARVEL_CLAW]);
 
     await moveBoth({ cellOrWorldDesc: `${hex(BFB02)}:Skyrim.esm`, pos: [128, -470, -280], rot: [0, 0, 0] });
@@ -186,6 +188,7 @@ module.exports = {
     const r2 = { stage: await stageOf(MS13), z: await doorZ(), claw: await held(CLAW) };
     ctx.evidence.push(`S2 after the relog: MS13 ${r2.stage}, the claw door ${DOOR_NODE} ${r2.z} (closed ${closed}), the claw held ${r2.claw}`);
     if (!b2) fails.push(`S2 after the relog: MS13 ${r2.stage} or the claw door at ${r2.z} (closed ${closed}) is not back`);
+    ctx.assert.ok(!fails.length, fails.join("; "));
     await holdersEmpty("S2 after the relog", [ARVEL_CLAW]);
 
     await ctx.drv(`return ${q(MQ103)}.setCurrentStageID(10);`);
@@ -209,6 +212,7 @@ module.exports = {
     ctx.evidence.push(`S3 after the relog: MQ103 180 done ${r3.done180}, the Dragonstone client ${r3.held}, server ${r3.server}`);
     await holdersEmpty("S3 after the relog", [ARVEL_CLAW, BOSS_STONE]);
     if (!b3 || r3.held !== 1 || r3.server !== 1) fails.push(`S3 after the relog: MQ103 180 done ${r3.done180}, the Dragonstone client ${r3.held}, server ${r3.server}`);
+    ctx.assert.ok(!fails.length, fails.join("; "));
 
     const fLoc = await ctx.npcLocation(FARENGAR);
     const [fx, fy] = inFront(fLoc, 150);
@@ -225,6 +229,7 @@ module.exports = {
     ctx.evidence.push(`S4 after the relog: MQ103 190 done ${r4.done190}, the Dragonstone client ${r4.held}, server ${r4.server}`);
     await holdersEmpty("S4 after the relog", [ARVEL_CLAW, BOSS_STONE]);
     if (!b4 || r4.held !== 0 || r4.server !== 0) fails.push(`S4 after the relog: MQ103 190 done ${r4.done190}, the Dragonstone client ${r4.held}, server ${r4.server}`);
+    ctx.assert.ok(!fails.length, fails.join("; "));
 
     await moveBoth({ cellOrWorldDesc: "3c:Skyrim.esm", pos: SPOT, rot: [0, 0, 0] });
     await ctx.waitFor(() => ctx.drv(`const p = sp.Game.getPlayer(); return !sp.Ui.isMenuOpen("Loading Menu") && !!p.getWorldSpace() && p.getWorldSpace().getFormID() === 0x3c;`).catch(() => false), 120000, "the leader is at the Western Watchtower");

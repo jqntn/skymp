@@ -102,7 +102,7 @@ module.exports = {
     ctx.assert.ok(moving.length >= 10, `only ${moving.length} moving samples`);
     ctx.assert.ok(animated.length >= 0.8 * moving.length, `puppet animated in ${animated.length} of ${moving.length} moving samples`);
     const measured = legs.filter((l) => l.host >= MIN_HOSTER_SWING);
-    ctx.assert.ok(measured.length > 0, `no moving stretch of ${MIN_STRETCH} samples where the hoster's feet swing ${MIN_HOSTER_SWING} or more, so the foot measure does not work: ${fmt(legs)}`);
+    ctx.assert.ok(measured.length > 0, `not exercised: no moving stretch of ${MIN_STRETCH} samples where the hoster's feet swing ${MIN_HOSTER_SWING} or more, so the foot measure does not work: ${fmt(legs).replace(/;/g, ",")}`);
     const sliding = measured.filter((l) => l.puppet < SWING_RATIO * l.host);
     ctx.assert.ok(!sliding.length, `the puppet does not play the moving animation in ${sliding.length} of ${measured.length} moving stretches: ${fmt(sliding)}`);
     ctx.assert.ok(standing.length >= 10, `only ${standing.length} standing samples`);
