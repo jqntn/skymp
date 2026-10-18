@@ -259,6 +259,7 @@ export class CoopService extends ClientListener {
         const newInvite = (state.invites?.length ?? 0) > (this.partyState?.invites?.length ?? 0);
         this.partyState = state;
         this.setQuestAuthority(!state.party || state.party.leader === state.you);
+        this.controller.once("update", () => this.dismissLostFollowers());
         if (newInvite) {
           this.notify("F7: accept the invite. Shift+F7: decline.");
         }
@@ -487,6 +488,27 @@ export class CoopService extends ClientListener {
     });
     this.followersKey = this.followersKeyOf(FOLLOWER_SLOTS.map((slot) => this.sp.getQuestAliasReference(DIALOGUE_FOLLOWER, slot.alias) || 0));
     logTrace(this, "Followers applied", JSON.stringify(refs), "now", this.followersKey);
+  }
+
+  private dismissLostFollowers() {
+    const party = this.partyState?.party;
+    const quest = Quest.from(Game.getFormEx(DIALOGUE_FOLLOWER));
+    if (!party || !quest) {
+      return;
+    }
+    FOLLOWER_SLOTS.forEach((slot) => {
+      const ref = this.sp.getQuestAliasReference(DIALOGUE_FOLLOWER, slot.alias);
+      if (!ref || !party.members.some((m) => m.actor !== this.partyState?.you && m.followers?.includes(ref))) {
+        return;
+      }
+      const actor = Actor.from(Game.getFormEx(ref));
+      actor?.setPlayerTeammate(false, false);
+      actor?.setFactionRank(Faction.from(Game.getFormEx(DISMISSED_FOLLOWER_FACTION)), 0);
+      ReferenceAlias.from(quest.getAlias(slot.alias))?.clear();
+      GlobalVariable.from(Game.getFormEx(slot.countGlobal))?.setValue(0);
+      actor?.evaluatePackage();
+      logTrace(this, "Follower dismissed, another member owns it", ref.toString(16));
+    });
   }
 
   private setQuestAuthority(isAuthority: boolean) {

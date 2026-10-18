@@ -229,6 +229,38 @@ test("followers are kept and sent back with the login replay", () => {
   assert.deepEqual(replay(), [LYDIA, 0]);
 });
 
+test("the last party member who asks a follower to follow owns her", () => {
+  const LEADER = 0xff000000;
+  const MEMBER = 0xff000001;
+  const LYDIA = 0xa2c94;
+  const props = new Map<string, unknown>();
+  const svr = {
+    getUserActor: (userId: number) => LEADER + userId,
+    getUserByActor: (actor: number) => actor - LEADER,
+    isConnected: () => true,
+    getActorName: () => "player",
+    getActorCellOrWorld: () => 0x3c,
+    getActorPos: () => [0, 0, 0],
+    sendCustomPacket: () => {},
+    get: (id: number, name: string) => props.get(`${id}:${name}`),
+    set: (id: number, name: string, value: unknown) => props.set(`${id}:${name}`, value),
+    lookupEspmRecordById: () => ({ record: { type: "ACHR", fields: [] as unknown[] } }),
+  };
+  const ctx = { svr, gm: new EventEmitter() } as unknown as SystemContext;
+  const coop = new Coop(() => {}, 4);
+  const stored = (actor: number) => props.get(`${actor}:private.coopFollowers`);
+  coop.customPacket(0, "followers", { refs: [LYDIA, 0] }, ctx);
+  coop.customPacket(1, "followers", { refs: [LYDIA, 0] }, ctx);
+  assert.deepEqual(stored(LEADER), [LYDIA, 0]);
+  coop.customPacket(0, "partyInvite", { target: MEMBER }, ctx);
+  coop.customPacket(1, "partyAccept", { inviter: LEADER }, ctx);
+  coop.customPacket(1, "followers", { refs: [0, LYDIA] }, ctx);
+  assert.deepEqual(stored(LEADER), [0, 0]);
+  assert.deepEqual(stored(MEMBER), [0, LYDIA]);
+  coop.customPacket(0, "followers", { refs: [LYDIA, 0] }, ctx);
+  assert.deepEqual(stored(MEMBER), [0, 0]);
+});
+
 test("a player who goes offline stays in the party, and an offline leader is replaced after the grace", (t) => {
   t.mock.timers.enable({ apis: ["Date"], now: 1_000_000 });
   const LEADER = 0xff000000;

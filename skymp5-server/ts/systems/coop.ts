@@ -344,6 +344,14 @@ export class Coop implements System {
     }
     const kept = refs.map((ref) => (isNpcRef(ref) ? (ref as number) : 0));
     ctx.svr.set(actor, FOLLOWERS_PROPERTY, kept);
+    for (const other of this.parties.partyOf(actor)?.members.filter((m) => m !== actor) ?? []) {
+      const theirs = this.followers(ctx, other);
+      const lost = theirs.filter((ref) => ref && kept.includes(ref));
+      if (lost.length) {
+        ctx.svr.set(other, FOLLOWERS_PROPERTY, theirs.map((ref) => (lost.includes(ref) ? 0 : ref)));
+        this.log(`Coop: followers of ${hex(other)} lose ${lost.map(hex).join(", ")} to ${hex(actor)}`);
+      }
+    }
     this.parties.partyOf(actor)?.members.forEach((m) => this.sendState(ctx, m));
     this.log(`Coop: followers of ${hex(actor)}: ${kept.map(hex).join(", ")}${kept.some((ref, i) => ref !== refs[i]) ? ` (from ${JSON.stringify(refs)})` : ""}`);
   }

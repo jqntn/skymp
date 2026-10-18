@@ -870,37 +870,37 @@
     "at": "2026-10-18T12:26:09.874Z"
   },
   "G2.4": {
-    "result": "FAIL",
-    "reason": "1 of 1 runs not PASS; run 1/1: B: MQ104 stage 90 is not done on the leader after Mirmulnir died; B: the leader's DragonsAbsorbed went 0 -> 0 (expected +1); B: the leader's Fus unlocked false -> false (stage 90 teaches it); B: the server gave no soul to ff000000; B: the server gave no soul to ff000001; B: the member's log has no MQ104 90; C: MQ104 stage 160 (Balgruuf's reward, Lydia enabled) is not done; C: Lydia is not enabled and loaded on the leader after stage 160; C: on the server Lydia is disabled true, hoster 0 (expected enabled, hosted by the leader)",
-    "secs": 607,
+    "result": "PASS",
+    "reason": "1/1 runs PASS",
+    "secs": 129,
     "evidence": [
-      "run 1: A: leader ff000000, bot member ff000001 in the party at the Western Watchtower; the leader set MQ104 to 60 by script (its fragment enables Mirmulnir): MQ104 stage 65; Mirmulnir 5a6ca on the server {\"cell\":\"3c:Skyrim.esm\",\"pos\":[7790,-37462,5697],\"disabled\":false,\"dead\":false,\"hoster\":4278190080} (hoster ff000000); the member's MQ104 log [60,65]; the leader before: {\"souls\":0,\"absorbed\":0,\"fus\":false}",
-      "run 1: B: the server killed Mirmulnir; 33.9 s later: MQ104 stage 80 (90 done false); the leader {\"souls\":0,\"absorbed\":0,\"fus\":false} -> {\"souls\":0,\"absorbed\":0,\"fus\":false}; server soul lines []; the member's MQ104 log [60,65,80]",
-      "run 1: C: Balgruuf: message boxes answered (first button) at MQ104 stages []; 22 topic picks, 16 stalled menus closed (\"Dans quel camp êtes-vous ?\", \"Pourquoi pensez-vous qu'Ulfric a tué le haut-roi ?\", \"Le dragon est mort.\", \"Comment pouvez-vous protéger Blancherive contre les dragons ?\"), MQ104 stages 80, last line \"\"; 160 done false",
-      "run 1: C: Lydia a2c94 enabled and loaded on the leader false; before the talk null; message boxes answered []; 0 topic picks (), last line \"\"; after: null (CurrentFollowerFaction rank, player teammate); server {\"cell\":\"165a8:Skyrim.esm\",\"pos\":[-803,386,317],\"disabled\":true,\"dead\":false,\"hoster\":0} (hoster 0)"
+      "run 1: A: leader ff000000, bot member ff000001 in the party at the Western Watchtower; the leader set MQ104 to 60 by script (its fragment enables Mirmulnir): MQ104 stage 60; Mirmulnir 5a6ca on the server {\"cell\":\"3c:Skyrim.esm\",\"pos\":[7796,-37462,5697],\"disabled\":false,\"dead\":false,\"hoster\":4278190080} (hoster ff000000); the member's MQ104 log [60]; the leader before: {\"souls\":0,\"absorbed\":0,\"fus\":false}",
+      "run 1: B: the server killed Mirmulnir; 3.6 s later: MQ104 stage 90 (90 done true); the leader {\"souls\":0,\"absorbed\":0,\"fus\":false} -> {\"souls\":0,\"absorbed\":1,\"fus\":true}; server soul lines [\"dragon 5a6ca gives its soul to ff000000\",\"dragon 5a6ca gives its soul to ff000001\"]; the member's MQ104 log [60,65,90,85,80]",
+      "run 1: C: Balgruuf: message boxes answered (first button) at MQ104 stages [90]; 11 topic picks, 0 stalled menus closed (\"J'ai tué le dragon. Ça mérite bien une récompense, non ?\", \"La tour de guet a été détruite, mais nous avons tué le dragon.\", \"Il s'avère que je pourrais être \"Enfant de dragon\".\", \"À la mort du dragon, j'ai absorbé une partie de son pouvoir.\", \"Les hommes m'ont donné ce nom, c'est tout.\", \"Les Grises-barbes ?\", \"Que me veulent les Grises-barbes ?\"), MQ104 stages 90 -> 150 -> 160, last line \"En mon droit de jarl, je vous nomme thane de Blancherive. C'est le plus grand honneur que je puisse vous accorder.\"; 160 done true",
+      "run 1: C: Lydia a2c94 enabled and loaded on the leader true; before the talk {\"teammate\":false,\"rank\":-1}; message boxes answered []; 1 topic picks (\"Suivez-moi, j'ai besoin de votre aide.\"), last line \"\"; after: {\"teammate\":true,\"rank\":0} (CurrentFollowerFaction rank, player teammate); server {\"cell\":\"165a3:Skyrim.esm\",\"pos\":[-349,-289,-318],\"disabled\":false,\"dead\":false,\"hoster\":4278190080} (hoster ff000000)"
     ],
     "shots": [
       "runs/G2_4/1/G2_4-lydia.png"
     ],
     "rtt": {
       "1": {
-        "median": 56,
-        "calls": 1247
+        "median": 45,
+        "calls": 203
       }
     },
-    "at": "2026-10-18T12:36:16.668Z"
+    "at": "2026-10-18T14:59:07.787Z"
   },
   "G2.5": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 722,
+    "secs": 748,
     "evidence": [
       "run 1: S1 start after the relog, at Arvel: Arvel holds 1 claw on the client, 1 on the server",
       "run 1: S1 (G2.1's step): MS13 40; the claw 39647: client 1, server 1; 10 s later client 1, server 1; the member's MS13 log [10,40]",
       "run 1: S1 after the relog: MS13 40, the claw client 1, server 1",
       "run 1: S1 after the relog: Arvel (the claw) holds 0 on the client, 0 on the server",
-      "run 1: S2 (G2.2's step): the claw door DoorBase -171 -> -226, MS13 50, the keyhole's server state done, the member's MS13 log [10,40,50]",
-      "run 1: S2 after the relog: MS13 50, the claw door DoorBase -370 (closed -171), the claw held 1",
+      "run 1: S2 (G2.2's step): the claw door DoorBase -171 -> -227, MS13 50, the keyhole's server state done, the member's MS13 log [10,40,50]",
+      "run 1: S2 after the relog: MS13 50, the claw door DoorBase -369 (closed -171), the claw held 1",
       "run 1: S2 after the relog: Arvel (the claw) holds 0 on the client, 0 on the server",
       "run 1: S3 (G2.3's loot): MQ103 180 (180 done true); 10 s after the loot the Dragonstone: client 1, server 1; the member's MQ103 log [10,180,20,60]",
       "run 1: S3 after the relog: MQ103 180 done true, the Dragonstone client 1, server 1",
@@ -910,18 +910,18 @@
       "run 1: S4 after the relog: MQ103 190 done true, the Dragonstone client 0, server 0",
       "run 1: S4 after the relog: Arvel (the claw) holds 0 on the client, 0 on the server",
       "run 1: S4 after the relog: the boss (the Dragonstone) holds 0 on the client, 0 on the server",
-      "run 1: S5 (G2.4's step): MQ104 90 done true, 160 done true (7 topic picks, 0 boxes); Fus true; the leader gained [\"896d2\"], the reward weapon 896d2 10 s later: client 1, server 1",
-      "run 1: S5: the leader equipped 896d2: client right hand 896d2, server worn [\"12e46\",\"12e49\",\"12e4b\",\"12e4d\",\"896d2\"]",
+      "run 1: S5 (G2.4's step): MQ104 90 done true, 160 done true (9 topic picks, 0 boxes); Fus true; the leader gained [\"89717\"], the reward weapon 89717 10 s later: client 1, server 1",
+      "run 1: S5: the leader equipped 89717: client right hand 89717, server worn [\"12e46\",\"12e49\",\"12e4b\",\"12e4d\",\"89717\"]",
       "run 1: S5: Lydia follows the leader true ({\"teammate\":true,\"rank\":0}); the server's stored followers [666772,0]; the member's MQ104 log [10,60,65,90,85,80,150,108,160]",
-      "run 1: S5 after the relog: {\"souls\":0,\"soulsBefore\":0,\"done160\":true,\"fus\":true,\"axe\":1,\"serverAxe\":1,\"equipped\":\"896d2\",\"worn\":[\"12e46\",\"12e49\",\"12e4b\",\"12e4d\",\"896d2\"],\"lydia\":{\"teammate\":true,\"rank\":0}}",
+      "run 1: S5 after the relog: {\"souls\":0,\"soulsBefore\":0,\"done160\":true,\"fus\":true,\"axe\":1,\"serverAxe\":1,\"equipped\":\"89717\",\"worn\":[\"12e46\",\"12e49\",\"12e4b\",\"12e4d\",\"89717\"],\"lydia\":{\"teammate\":true,\"rank\":0}}",
       "run 1: S5 after the relog: Arvel (the claw) holds 0 on the client, 0 on the server",
       "run 1: S5 after the relog: the boss (the Dragonstone) holds 0 on the client, 0 on the server",
       "run 1: relog S1 start: the leader and the bot logged in again; 0 message boxes answered; state back 1.3 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)",
       "run 1: relog S1: the leader and the bot logged in again; 0 message boxes answered; state back 2.7 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)",
       "run 1: relog S2: the leader and the bot logged in again; 0 message boxes answered; state back 3.3 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)",
-      "run 1: relog S3: the leader and the bot logged in again; 0 message boxes answered; state back 2.6 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [[\"1ceee\",0],[\"1ceee\",1]] (relayed from the leader)",
-      "run 1: relog S4: the leader and the bot logged in again; 0 message boxes answered; state back 3.2 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)",
-      "run 1: relog S5: the leader and the bot logged in again; 1 message boxes answered; state back 11.2 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)",
+      "run 1: relog S3: the leader and the bot logged in again; 0 message boxes answered; state back 2.6 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)",
+      "run 1: relog S4: the leader and the bot logged in again; 0 message boxes answered; state back 3.1 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)",
+      "run 1: relog S5: the leader and the bot logged in again; 1 message boxes answered; state back 10.6 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)",
       "run 1: the leader client's stray removals and failed relinks: [\"Stray quest item removed d0800 18 9bcd6\",\"Stray quest item removed d0800 18 9bcd6\"]"
     ],
     "shots": [
@@ -929,61 +929,46 @@
     ],
     "rtt": {
       "1": {
-        "median": 46,
-        "calls": 458
+        "median": 42,
+        "calls": 524
       }
     },
-    "at": "2026-10-18T12:52:36.407Z"
+    "at": "2026-10-18T15:11:35.926Z"
   },
   "G2.6": {
     "result": "PASS",
-    "reason": "2/2 runs PASS",
-    "secs": 335,
+    "reason": "1/1 runs PASS",
+    "secs": 158,
     "evidence": [
       "run 1: A: party joined in Bleak Falls Barrow; server script states: pillars position01, position03, position01, gate waiting; gate node RuinsGate01 height on engine 1 -768, on engine 2 -768",
       "run 1: A: control, engine 2 pulled the lever before the pillars were solved: lever activations in the server log 1, lever server state Waiting, gate server state waiting, gate animation events on engine 1 [], on engine 2 [], gate height -768, -768",
       "run 1: A: before the second pull (19 s after the control pull): lever server state Waiting, gate animation events on engine 1 [], on engine 2 [], gate height -768, -768",
-      "run 1: A: engine 2 (member) turned the pillars 1, 2, 3, then 1, 2: server pillar states position03, position02, position02; engine 2 pulled the lever: gate server state busy, gate animation events on engine 1 [\"Open\"], on engine 2 [\"Open\"]; gate height on engine 1 -768 -> -579, on engine 2 -768 -> -573",
+      "run 1: A: engine 2 (member) turned the pillars 1, 2, 3, then 1, 2: server pillar states position03, position02, position02; engine 2 pulled the lever: gate server state busy, gate animation events on engine 1 [\"Open\"], on engine 2 [\"Open\"]; gate height on engine 1 -768 -> -576, on engine 2 -768 -> -573",
       "run 1: A: gate server state after the opening: waiting",
       "run 1: A: gate server states seen after the pull: [\"waiting\",\"busy\"]",
       "run 1: B: engine 1 (leader, with the claw) turned each ring twice: server ring states {\"large\":\"position02\",\"medium\":\"position03\",\"small\":\"position01\"}; engine 1 used the keyhole: keyhole server state done, door node DoorBase height on engine 1 -171 -> -231, on engine 2 -171 -> -234; MS13 stage on engine 1 50, on engine 2 50",
-      "run 1: C: both players at the Western Watchtower; the leader set MQ104 to 60 by script: MQ104 stage on the leader 65, on the member 65; Mirmulnir on the server {\"pos\":[7702,-37464,5697],\"disabled\":false,\"dead\":false,\"hoster\":4278190080} (hoster ff000000), shown on the member true; the member's MQ104 log [60,65]; before: leader {\"souls\":0,\"absorbed\":0,\"fus\":false}, member {\"souls\":0,\"absorbed\":0,\"fus\":false}",
-      "run 1: D: the server killed Mirmulnir; 4.2 s later: MQ104 stage on the leader 90, on the member 90 (90 done on both true); dead on the leader true, on the member true (waited up to 30 s more); message boxes answered: leader 1, member 1; leader {\"souls\":0,\"absorbed\":0,\"fus\":false} -> {\"souls\":0,\"absorbed\":1,\"fus\":true}; member {\"souls\":0,\"absorbed\":0,\"fus\":false} -> {\"souls\":0,\"absorbed\":1,\"fus\":true}; server soul lines [\"dragon 5a6ca gives its soul to ff000000\",\"dragon 5a6ca gives its soul to ff000001\"]; the member's MQ104 log [60,65,90,85,80]",
+      "run 1: C: both players at the Western Watchtower; the leader set MQ104 to 60 by script: MQ104 stage on the leader 60, on the member 60; Mirmulnir on the server {\"pos\":[7748,-37463,5697],\"disabled\":false,\"dead\":false,\"hoster\":4278190081} (hoster ff000001), shown on the member true; the member's MQ104 log [60]; before: leader {\"souls\":0,\"absorbed\":0,\"fus\":false}, member {\"souls\":0,\"absorbed\":0,\"fus\":false}",
+      "run 1: D: the server killed Mirmulnir; 3.6 s later: MQ104 stage on the leader 90, on the member 90 (90 done on both true); dead on the leader true, on the member true (waited up to 30 s more); message boxes answered: leader 1, member 1; leader {\"souls\":0,\"absorbed\":0,\"fus\":false} -> {\"souls\":0,\"absorbed\":1,\"fus\":true}; member {\"souls\":0,\"absorbed\":0,\"fus\":false} -> {\"souls\":0,\"absorbed\":1,\"fus\":true}; server soul lines [\"dragon 5a6ca gives its soul to ff000000\",\"dragon 5a6ca gives its soul to ff000001\"]; the member's MQ104 log [60,90,85,80]",
       "run 1: E: Balgruuf: 7 topic picks, 0 stalled menus closed (\"J'ai tué le dragon. Ça mérite bien une récompense, non ?\", \"La tour de guet a été détruite, mais nous avons tué le dragon.\", \"Il s'avère que je pourrais être \"Enfant de dragon\".\", \"À la mort du dragon, j'ai absorbé une partie de son pouvoir.\", \"Les hommes m'ont donné ce nom, c'est tout.\", \"Que me veulent les Grises-barbes ?\"), last line \"En mon droit de jarl, je vous nomme thane de Blancherive. C'est le plus grand honneur que je puisse vous accorder.\", message boxes answered at MQ104 stages []; 160 done on the leader true, on the member's client and log true",
       "run 1: E: the leader went outside and came back: the member hosted Lydia meanwhile true; Lydia's server hoster before the talk ff000001",
-      "run 1: E: Lydia enabled and loaded on the leader true; before the talk {\"teammate\":false,\"rank\":-1}; 1 topic picks (\"Suivez-moi, j'ai besoin de votre aide.\"), last line \"\"; after {\"teammate\":true,\"rank\":0}; server {\"pos\":[-228,-76,-318],\"disabled\":false,\"dead\":false,\"hoster\":4278190080} (hoster ff000000); on the member's client {\"loaded\":true,\"disabled\":false}",
-      "run 1: E: the leader moved about 800 units from [-202,-36,-318] to [-662,-691]: Lydia on the server [-228,-76,-318] -> [-640,-258,-321] (753 -> 433 from the leader), on the member's client [-228,-76,-318] -> [-576,-230,-321] (753 -> 469)",
-      "run 2: A: party joined in Bleak Falls Barrow; server script states: pillars position01, position03, position01, gate waiting; gate node RuinsGate01 height on engine 1 -768, on engine 2 -768",
-      "run 2: A: control, engine 2 pulled the lever before the pillars were solved: lever activations in the server log 1, lever server state Waiting, gate server state waiting, gate animation events on engine 1 [], on engine 2 [], gate height -768, -768",
-      "run 2: A: before the second pull (19 s after the control pull): lever server state Waiting, gate animation events on engine 1 [], on engine 2 [], gate height -768, -768",
-      "run 2: A: engine 2 (member) turned the pillars 1, 2, 3, then 1, 2: server pillar states position03, position02, position02; engine 2 pulled the lever: gate server state busy, gate animation events on engine 1 [\"Open\"], on engine 2 [\"Open\"]; gate height on engine 1 -768 -> -576, on engine 2 -768 -> -571",
-      "run 2: A: gate server state after the opening: waiting",
-      "run 2: A: gate server states seen after the pull: [\"waiting\",\"busy\"]",
-      "run 2: B: engine 1 (leader, with the claw) turned each ring twice: server ring states {\"large\":\"position02\",\"medium\":\"position03\",\"small\":\"position01\"}; engine 1 used the keyhole: keyhole server state done, door node DoorBase height on engine 1 -171 -> -231, on engine 2 -171 -> -233; MS13 stage on engine 1 50, on engine 2 50",
-      "run 2: C: both players at the Western Watchtower; the leader set MQ104 to 60 by script: MQ104 stage on the leader 65, on the member 65; Mirmulnir on the server {\"pos\":[7734,-37463,5697],\"disabled\":false,\"dead\":false,\"hoster\":4278190080} (hoster ff000000), shown on the member true; the member's MQ104 log [60,65]; before: leader {\"souls\":0,\"absorbed\":0,\"fus\":false}, member {\"souls\":0,\"absorbed\":0,\"fus\":false}",
-      "run 2: D: the server killed Mirmulnir; 3.6 s later: MQ104 stage on the leader 90, on the member 90 (90 done on both true); dead on the leader true, on the member true (waited up to 30 s more); message boxes answered: leader 1, member 1; leader {\"souls\":0,\"absorbed\":0,\"fus\":false} -> {\"souls\":0,\"absorbed\":1,\"fus\":true}; member {\"souls\":0,\"absorbed\":0,\"fus\":false} -> {\"souls\":0,\"absorbed\":1,\"fus\":true}; server soul lines [\"dragon 5a6ca gives its soul to ff000000\",\"dragon 5a6ca gives its soul to ff000001\"]; the member's MQ104 log [60,65,90,85,80]",
-      "run 2: E: Balgruuf: 8 topic picks, 0 stalled menus closed (\"J'ai tué le dragon. Ça mérite bien une récompense, non ?\", \"La tour de guet a été détruite, mais nous avons tué le dragon.\", \"Il s'avère que je pourrais être \"Enfant de dragon\".\", \"À la mort du dragon, j'ai absorbé une partie de son pouvoir.\", \"Les hommes m'ont donné ce nom, c'est tout.\", \"Que me veulent les Grises-barbes ?\"), last line \"En mon droit de jarl, je vous nomme thane de Blancherive. C'est le plus grand honneur que je puisse vous accorder.\", message boxes answered at MQ104 stages []; 160 done on the leader true, on the member's client and log true",
-      "run 2: E: the leader went outside and came back: the member hosted Lydia meanwhile true; Lydia's server hoster before the talk ff000001",
-      "run 2: E: Lydia enabled and loaded on the leader true; before the talk {\"teammate\":false,\"rank\":-1}; 1 topic picks (\"Suivez-moi, j'ai besoin de votre aide.\"), last line \"\"; after {\"teammate\":true,\"rank\":0}; server {\"pos\":[-377,72,-318],\"disabled\":false,\"dead\":false,\"hoster\":4278190080} (hoster ff000000); on the member's client {\"loaded\":true,\"disabled\":false}",
-      "run 2: E: the leader moved about 800 units from [-365,192,-318] to [-443,-604]: Lydia on the server [-377,72,-318] -> [-429,-290,-320] (680 -> 315 from the leader), on the member's client [-377,72,-320] -> [-423,-249,-320] (680 -> 356)"
+      "run 1: E: Lydia enabled and loaded on the leader true; before the talk {\"teammate\":false,\"rank\":-1}; 1 topic picks (\"Suivez-moi, j'ai besoin de votre aide.\"), last line \"\"; after {\"teammate\":true,\"rank\":0}; server {\"pos\":[-228,-75,-318],\"disabled\":false,\"dead\":false,\"hoster\":4278190080} (hoster ff000000); on the member's client {\"loaded\":true,\"disabled\":false}",
+      "run 1: E: the leader moved about 800 units from [-201,-29,-318] to [-627,-706]: Lydia on the server [-228,-75,-318] -> [-639,-258,-321] (746 -> 448 from the leader), on the member's client [-228,-75,-318] -> [-576,-230,-321] (746 -> 478)"
     ],
     "shots": [
       "runs/G2_6/1/clawdoor-engine2.png",
-      "runs/G2_6/1/G2_6-lydia-member.png",
-      "runs/G2_6/2/clawdoor-engine2.png",
-      "runs/G2_6/2/G2_6-lydia-member.png"
+      "runs/G2_6/1/G2_6-lydia-member.png"
     ],
     "rtt": {
       "1": {
-        "median": 54,
-        "calls": 224
+        "median": 53,
+        "calls": 216
       },
       "2": {
         "median": 41,
-        "calls": 45
+        "calls": 44
       }
     },
-    "at": "2026-10-17T19:22:23.299Z"
+    "at": "2026-10-18T15:16:39.800Z"
   },
   "P1": {
     "result": "FAIL",
@@ -1275,28 +1260,28 @@
     "at": "2026-10-17T16:03:30.191Z"
   },
   "F4": {
-    "result": "FAIL",
-    "reason": "1 of 1 runs not PASS; run 1/1: the member's copy of the flying dragon was over 1000 units from the server's position in 35 of 36 samples: 0s 1133, 1.1s 2387, 2.2s 4707, 3.4s 5165, 4.5s 3881",
+    "result": "PASS",
+    "reason": "1/1 runs PASS",
     "secs": 68,
     "evidence": [
       "run 1: A: party formed; the member started 33221 units away; the server enabled Mirmulnir 5a6ca, hosted by the leader ff000000; the server moved the member ff000001 next to the leader, and the dragon loaded on the member's client",
-      "run 1: B: every 1 s for 40 s after the load: 0s server [7087,-37540,4816] flying, leader [7020,-37561,4835] state 2, member [7796,-37462,5696] state 2 1133; 1.1s server [5589,-38258,5258] flying, leader [5421,-38347,5304] state 2, member [7796,-37462,5696] state 2 2387; 2.2s server [3674,-39731,5815] flying, leader [3672,-40141,5920] state 2, member [7796,-37462,5696] state 2 4707; 3.4s server [5052,-41489,7408] flying, leader [5239,-41523,7553] state 2, member [7796,-37462,5696] state 2 5165; 4.5s server [6970,-41065,6879] flying, leader [7209,-40897,6641] state 2, member [7796,-37462,5696] state 2 3881; 5.6s server [7709,-40562,5673] flying, leader [7707,-40566,5604] state 3, member [7796,-37462,5696] state 3 3101; 6.8s server [7684,-40609,4837] flying, leader [7683,-40612,4790] state 3, member [7796,-37462,5696] state 3 3264; 7.9s server [7668,-40643,4240] flying, leader [7668,-40643,4240] state 3, member [7796,-37462,5696] state 3 3501; 9.1s server [7668,-40643,4240] flying, leader [7668,-40643,4240] state 3, member [7796,-37462,5696] state 3 3501; 10.2s server [7668,-40643,4240] flying, leader [7668,-40643,4240] state 3, member [7796,-37462,5696] state 3 3501; 11.3s server [7668,-40643,4240] flying, leader [7668,-40643,4240] state 3, member [7796,-37462,5696] state 3 3501; 12.5s server [7668,-40643,4240] flying, leader [7668,-40643,4240] state 3, member [7796,-37462,5696] state 3 3501; 13.6s server [7668,-40641,4241] flying, leader [7665,-40604,4266] state 3, member [7796,-37462,5696] state 3 3498; 14.8s server [7594,-39477,5019] flying, leader [7589,-39400,5070] state 3, member [7796,-37462,5696] state 3 2135; 15.9s server [7515,-38253,5837] flying, leader [7506,-38100,5939] state 3, member [7796,-37462,5696] state 3 851; 17s server [7415,-36725,6830] flying, leader [7399,-36533,6939] state 2, member [7796,-37462,5696] state 2 1405; 18.2s server [6958,-34610,7937] flying, leader [6714,-34293,8047] state 2, member [7796,-37462,5696] state 2 3723; 19.3s server [5172,-35054,7236] flying, leader [5135,-35264,7139] state 2, member [7796,-37462,5696] state 2 3880; 20.5s server [6073,-37114,6583] flying, leader [6303,-37397,6493] state 2, member [7796,-37462,5696] state 2 1969; 21.6s server [8061,-39601,5710] flying, leader [8243,-39835,5626] state 2, member [7796,-37462,5696] state 2 2155; 22.7s server [10309,-42365,4730] flying, leader [10661,-42795,4578] state 2, member [7796,-37462,5696] state 2 5594; 23.9s server [10243,-42316,4469] flying, leader [10163,-42221,4470] state 3, member [7796,-37462,5696] state 3 5573; 25s server [9388,-41304,4482] flying, leader [9255,-41146,4485] state 3, member [7796,-37462,5696] state 3 4332; 26.1s server [8531,-40295,4496] flying, leader [8531,-40295,4496] state 3, member [7796,-37462,5696] state 3 3163; 27.3s server [8518,-40315,4496] flying, leader [8517,-40321,4496] state 3, member [7796,-37462,5696] state 3 3178; 28.4s server [8528,-40360,4496] flying, leader [8531,-40363,4496] state 3, member [7796,-37462,5696] state 3 3221; 29.5s server [8531,-40362,4496] flying, leader [8528,-40359,4496] state 3, member [7796,-37462,5696] state 3 3223; 30.7s server [8518,-40316,4496] flying, leader [8518,-40315,4496] state 3, member [7796,-37462,5696] state 3 3179; 31.8s server [7884,-40099,4943] flying, leader [7738,-40049,5045] state 3, member [7796,-37462,5696] state 3 2744; 32.9s server [6577,-39654,5863] flying, leader [6505,-39629,5914] state 3, member [7796,-37462,5696] state 3 2514; 34.1s server [5442,-39267,6665] flying, leader [5263,-39199,6761] state 2, member [7796,-37462,5696] state 2 3121; 35.2s server [3993,-38128,5748] flying, leader [3790,-37837,5497] state 2, member [7796,-37462,5696] state 2 3861; 36.3s server [4205,-36022,5429] flying, leader [4453,-36025,5665] state 2, member [7796,-37462,5696] state 2 3878; 37.5s server [6477,-36891,6426] flying, leader [6577,-37004,6389] state 2, member [7796,-37462,5696] state 2 1612; 38.6s server [7653,-38859,5705] flying, leader [7799,-39146,5620] state 2, member [7796,-37462,5696] state 2 1404; 39.7s server [9213,-41831,4800] flying, leader [9307,-42019,4740] state 2, member [7796,-37462,5696] state 2 4680",
-      "run 1: C: 36 samples flying and hosted by the leader; the server's dragon travelled 50014 units in them; 2 hover starts (state 2 to 3) among them; the member's copy was over 1000 units from the server's position in 35 (max 5594); hosters seen [\"ff000000\"] (a hoster other than the leader is F5's, those samples do not count)"
+      "run 1: B: every 1 s for 40 s after the load: 0s server [7208,-37510,4753] flying, leader [7023,-37560,4809] state 2, member [7090,-37539,4788] state 2 126; 1.1s server [5600,-38253,5251] flying, leader [5436,-38339,5296] state 2, member [5600,-38253,5251] state 2 0; 2.2s server [3650,-39631,5848] flying, leader [3604,-39940,5933] state 2, member [3650,-39631,5848] state 2 0; 3.4s server [4907,-41419,7139] flying, leader [5029,-41434,7227] state 2, member [4667,-41369,6960] state 2 304; 4.5s server [6561,-40740,6543] flying, leader [6682,-40543,6329] state 2, member [6561,-40740,6543] state 2 0; 5.6s server [7450,-39216,4924] flying, leader [7499,-39136,4839] state 2, member [7355,-39376,5096] state 2 253; 6.8s server [8337,-37847,5429] flying, leader [8464,-37659,5662] state 2, member [8337,-37847,5429] state 2 0; 7.9s server [9430,-36236,7263] flying, leader [9605,-35978,7501] state 2, member [9430,-36236,7263] state 2 0; 9s server [11412,-35795,8758] flying, leader [11584,-35955,8838] state 2, member [11412,-35795,8758] state 2 0; 10.2s server [11955,-38024,8234] flying, leader [11884,-38336,8021] state 2, member [11955,-38024,8234] state 2 0; 11.3s server [11314,-40220,6731] flying, leader [11252,-40435,6589] state 2, member [11314,-40220,6731] state 2 0; 12.4s server [10507,-42698,5026] flying, leader [10379,-43077,4763] state 2, member [10507,-42698,5026] state 2 0; 13.6s server [9682,-42707,4426] flying, leader [9614,-42590,4429] state 3, member [9682,-42707,4426] state 3 0; 14.7s server [8960,-41461,4464] flying, leader [8847,-41267,4470] state 3, member [8960,-41461,4464] state 3 0; 15.8s server [8355,-40422,4496] flying, leader [8355,-40422,4496] state 3, member [8355,-40422,4496] state 3 0; 17s server [8336,-40448,4496] flying, leader [8334,-40455,4496] state 3, member [8336,-40448,4496] state 3 0; 18.1s server [8348,-40493,4496] flying, leader [8348,-40493,4496] state 3, member [8347,-40492,4496] state 3 1; 19.2s server [8348,-40493,4496] flying, leader [8348,-40493,4496] state 3, member [8347,-40492,4496] state 3 1; 20.4s server [8348,-40493,4496] flying, leader [8348,-40493,4496] state 3, member [8347,-40492,4496] state 3 1; 21.5s server [8348,-40493,4496] flying, leader [8348,-40493,4496] state 3, member [8347,-40492,4496] state 3 1; 22.6s server [8220,-40621,4617] flying, leader [8145,-40696,4688] state 3, member [8220,-40621,4617] state 3 0; 23.8s server [7360,-41483,5428] flying, leader [7224,-41618,5556] state 3, member [7360,-41483,5428] state 3 0; 24.9s server [6408,-42436,6326] flying, leader [6327,-42517,6403] state 2, member [6408,-42436,6326] state 2 0; 26s server [5523,-43300,7751] flying, leader [5309,-43502,7781] state 2, member [5523,-43300,7751] state 2 0; 27.2s server [4396,-44312,5886] flying, leader [4304,-44378,5770] state 2, member [4477,-44248,6171] state 2 303; 28.3s server [3104,-42670,6340] flying, leader [3214,-42393,6467] state 2, member [3104,-42670,6340] state 2 0; 29.4s server [4938,-41358,7132] flying, leader [5305,-41288,7145] state 2, member [4938,-41358,7132] state 2 0; 30.5s server [7633,-40975,6325] flying, leader [7865,-40948,6226] state 2, member [7633,-40975,6325] state 2 0; 31.7s server [10093,-40715,5284] flying, leader [10538,-40670,5096] state 2, member [10093,-40715,5284] state 2 0; 32.8s server [12162,-40512,4358] flying, leader [12041,-40535,4359] state 3, member [12162,-40512,4358] state 3 0; 33.9s server [10877,-40756,4368] flying, leader [10676,-40794,4370] state 3, member [10877,-40756,4368] state 3 0; 35.1s server [9433,-41028,4379] flying, leader [9313,-41051,4380] state 3, member [9433,-41028,4379] state 3 0; 36.2s server [8737,-41162,4384] flying, leader [8737,-41162,4384] state 3, member [8737,-41162,4384] state 3 0; 37.3s server [8737,-41162,4384] flying, leader [8737,-41162,4384] state 3, member [8737,-41162,4384] state 3 0; 38.5s server [8737,-41162,4384] flying, leader [8737,-41162,4384] state 3, member [8737,-41162,4384] state 3 0; 39.6s server [8737,-41162,4384] flying, leader [8737,-41162,4384] state 3, member [8737,-41162,4384] state 3 0",
+      "run 1: C: 36 samples flying and hosted by the leader; the server's dragon travelled 53373 units in them; 2 hover starts (state 2 to 3) among them; the member's copy was over 1000 units from the server's position in 0 (max 304); hosters seen [\"ff000000\"] (a hoster other than the leader is F5's, those samples do not count)"
     ],
     "shots": [
       "runs/F4/1/F4-member.png"
     ],
     "rtt": {
       "1": {
-        "median": 50,
+        "median": 52,
         "calls": 38
       },
       "2": {
         "median": 56,
-        "calls": 45
+        "calls": 46
       }
     },
-    "at": "2026-10-18T12:37:24.367Z"
+    "at": "2026-10-18T15:12:44.408Z"
   },
   "F5": {
     "result": "PASS",
@@ -1326,25 +1311,56 @@
   "F7": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 81,
+    "secs": 77,
     "evidence": [
       "run 1: A: party formed; the member started 33221 units away; the server enabled Mirmulnir 5a6ca, hosted by the leader ff000000, who took off; 8 s later the server moved the member ff000001 next to the leader, and the dragon loaded on the member's client",
-      "run 1: B: every 1 s for 40 s after the load: 0s server [9742,-35616,7774] flying, leader [9889,-35396,7984] state 2, member [7796,-37462,5694] state 2 3394; 1.1s server [11497,-36130,8842] flying, leader [11488,-36541,8811] state 2, member [11497,-36130,8842] state 2 0; 2.3s server [10057,-38040,7749] flying, leader [9904,-38105,7596] state 2, member [10057,-38040,7749] state 2 0; 3.4s server [8548,-38712,6086] flying, leader [8364,-38790,5886] state 2, member [8548,-38712,6086] state 2 0; 4.5s server [6992,-39368,4983] flying, leader [6784,-39460,5250] state 2, member [6992,-39368,4983] state 2 0; 5.6s server [4786,-40364,6230] flying, leader [4629,-40435,6198] state 2, member [5105,-40219,6268] state 2 352; 6.7s server [3064,-41839,6157] flying, leader [3179,-42020,6299] state 2, member [3064,-41839,6157] state 2 0; 7.8s server [4925,-42737,7605] flying, leader [5210,-42638,7715] state 2, member [4925,-42737,7605] state 2 0; 8.9s server [6670,-41309,7252] flying, leader [6760,-41048,6997] state 2, member [6670,-41309,7252] state 2 0; 10s server [7282,-39680,5598] flying, leader [7312,-39593,5512] state 2, member [7218,-39855,5772] state 2 255; 11.1s server [7828,-38163,5042] flying, leader [7906,-37978,5213] state 2, member [7828,-38163,5042] state 2 0; 12.2s server [8607,-36356,6585] flying, leader [8738,-36053,6812] state 2, member [8607,-36356,6585] state 2 0; 13.3s server [10076,-34682,8061] flying, leader [10352,-34890,8183] state 2, member [10076,-34682,8061] state 2 0; 14.5s server [11299,-37272,8190] flying, leader [11300,-37420,8117] state 2, member [11286,-36966,8324] state 2 334; 15.6s server [11165,-39443,6836] flying, leader [11160,-39708,6672] state 2, member [11165,-39443,6836] state 2 0; 16.7s server [11000,-41943,5191] flying, leader [10970,-42280,4962] state 2, member [11000,-41943,5191] state 2 0; 17.8s server [10474,-42528,4464] flying, leader [10417,-42461,4465] state 3, member [10589,-42661,4462] state 3 176; 18.9s server [9561,-41460,4479] flying, leader [9475,-41360,4481] state 3, member [9561,-41460,4479] state 3 0; 20s server [8647,-40394,4494] flying, leader [8547,-40279,4496] state 3, member [8647,-40394,4494] state 3 0; 21.2s server [8536,-40294,4496] flying, leader [8535,-40297,4496] state 3, member [8539,-40289,4496] state 3 6; 22.3s server [8532,-40313,4496] flying, leader [8532,-40313,4496] state 3, member [8532,-40312,4496] state 3 1; 23.4s server [8532,-40313,4496] flying, leader [8532,-40313,4496] state 3, member [8532,-40312,4496] state 3 1; 24.5s server [8532,-40313,4496] flying, leader [8532,-40313,4496] state 3, member [8532,-40312,4496] state 3 1; 25.6s server [8477,-40313,4533] flying, leader [8382,-40314,4596] state 3, member [8477,-40313,4533] state 3 0; 26.7s server [7325,-40315,5301] flying, leader [7133,-40315,5428] state 3, member [7325,-40315,5301] state 3 0; 27.8s server [5945,-40317,6221] flying, leader [5868,-40317,6272] state 3, member [6098,-40317,6119] state 3 184; 28.9s server [4538,-40110,6526] flying, leader [4377,-40018,6399] state 2, member [4538,-40110,6526] state 2 0; 30s server [3262,-38713,5232] flying, leader [3237,-38370,5136] state 2, member [3262,-38713,5232] state 2 0; 31.2s server [4744,-36877,6168] flying, leader [4943,-36798,6280] state 2, member [4744,-36877,6168] state 2 0; 32.3s server [6791,-37373,5980] flying, leader [6977,-37585,5816] state 2, member [6791,-37373,5980] state 2 0; 33.4s server [7674,-39130,4845] flying, leader [7711,-39231,4785] state 2, member [7601,-38927,4965] state 2 247; 34.5s server [8465,-40918,4956] flying, leader [8571,-41123,5050] state 2, member [8465,-40918,4956] state 2 0; 35.6s server [9708,-42989,5878] flying, leader [9919,-43205,5966] state 2, member [9708,-42989,5878] state 2 0; 36.7s server [11277,-42282,5736] flying, leader [11271,-41877,5684] state 2, member [11277,-42282,5736] state 2 0; 37.8s server [9771,-40251,5337] flying, leader [9608,-40147,5304] state 2, member [9771,-40251,5337] state 2 0; 39s server [8054,-39206,4980] flying, leader [7846,-39080,4935] state 2, member [8054,-39206,4980] state 2 0",
-      "run 1: C: 27 samples flying and hosted by the leader from 10 s; the server's dragon travelled 44002 units in them; 1 hover starts (state 2 to 3) among them; the member's copy was not flying in 0 and over 1000 units from the server's position in 0 (max 334); the member's copy at the load: state 2; hosters seen [\"ff000000\"]"
+      "run 1: B: every 1 s for 40 s after the load: 0s server [9305,-36091,7263] flying, leader [9475,-35797,7454] state 2, member [8014,-37412,5797] state 2 2358; 1.1s server [11312,-35449,8744] flying, leader [11485,-35559,8872] state 2, member [11312,-35449,8744] state 2 0; 2.2s server [12213,-37526,8737] flying, leader [12171,-37792,8596] state 2, member [12213,-37526,8737] state 2 0; 3.4s server [11675,-39805,7092] flying, leader [11636,-39960,6972] state 2, member [11748,-39510,7319] state 2 379; 4.5s server [10991,-42270,5145] flying, leader [10899,-42599,4885] state 2, member [10991,-42270,5145] state 2 0; 5.6s server [10105,-42377,4445] flying, leader [10050,-42306,4447] state 3, member [10215,-42519,4442] state 3 180; 6.7s server [9224,-41241,4474] flying, leader [9114,-41099,4477] state 3, member [9224,-41241,4474] state 3 0; 7.9s server [8505,-40316,4496] flying, leader [8505,-40316,4496] state 3, member [8505,-40316,4496] state 3 0; 9s server [8505,-40316,4496] flying, leader [8505,-40316,4496] state 3, member [8505,-40316,4496] state 3 0; 10.1s server [8505,-40316,4496] flying, leader [8505,-40316,4496] state 3, member [8505,-40316,4496] state 3 0; 11.3s server [8505,-40316,4496] flying, leader [8505,-40316,4496] state 3, member [8505,-40316,4496] state 3 0; 12.4s server [8505,-40316,4496] flying, leader [8505,-40315,4496] state 3, member [8505,-40316,4496] state 3 0; 13.5s server [7962,-39646,5071] flying, leader [7865,-39527,5173] state 3, member [7962,-39646,5071] state 3 0; 14.7s server [7092,-38575,5991] flying, leader [7044,-38515,6042] state 3, member [7189,-38694,5888] state 3 185; 15.8s server [6302,-37601,6771] flying, leader [6153,-37415,6719] state 2, member [6302,-37601,6771] state 2 0; 17s server [5031,-35679,5539] flying, leader [4985,-35538,5465] state 2, member [5144,-35947,5697] state 2 331; 18.1s server [5956,-34145,5998] flying, leader [6127,-34254,6249] state 2, member [5956,-34145,5998] state 2 0; 19.2s server [7219,-35529,7460] flying, leader [7369,-35867,7494] state 2, member [7219,-35529,7460] state 2 0; 20.3s server [7670,-38032,7054] flying, leader [7682,-38420,6930] state 2, member [7670,-38032,7054] state 2 0; 21.4s server [7804,-40763,6243] flying, leader [7804,-40760,6202] state 3, member [7804,-40763,6243] state 3 0; 22.6s server [7803,-40720,5616] flying, leader [7803,-40713,5515] state 3, member [7803,-40720,5616] state 3 0; 23.7s server [7804,-40670,4889] flying, leader [7804,-40666,4828] state 3, member [7804,-40676,4970] state 3 81; 24.8s server [7803,-40628,4242] flying, leader [7803,-40628,4240] state 3, member [7804,-40633,4323] state 3 81; 26s server [7781,-40638,4240] flying, leader [7778,-40641,4240] state 3, member [7781,-40638,4240] state 3 0; 27.1s server [7771,-40651,4240] flying, leader [7771,-40651,4240] state 3, member [7773,-40647,4240] state 3 4; 28.2s server [7771,-40651,4240] flying, leader [7771,-40651,4240] state 3, member [7773,-40647,4240] state 3 4; 29.3s server [7771,-40651,4240] flying, leader [7762,-40646,4246] state 3, member [7773,-40647,4240] state 3 4; 30.5s server [6889,-40148,4917] flying, leader [6789,-40091,4994] state 3, member [6889,-40148,4917] state 3 0; 31.6s server [5823,-39539,5735] flying, leader [5657,-39444,5863] state 3, member [5823,-39539,5735] state 3 0; 32.8s server [4529,-38853,6386] flying, leader [4403,-38819,6225] state 2, member [4529,-38853,6386] state 2 0; 33.9s server [3504,-39629,4982] flying, leader [3538,-39979,5096] state 2, member [3504,-39629,4982] state 2 0; 35s server [4031,-41916,6579] flying, leader [4085,-42128,6682] state 2, member [4031,-41916,6579] state 2 0; 36.2s server [5672,-42787,7753] flying, leader [6041,-42586,7736] state 2, member [5672,-42787,7753] state 2 0; 37.3s server [7411,-40636,7022] flying, leader [7540,-40448,6970] state 2, member [7411,-40636,7022] state 2 0; 38.4s server [8158,-39448,6394] flying, leader [8156,-39452,6312] state 3, member [8160,-39444,6477] state 3 83; 39.5s server [8139,-39484,5652] flying, leader [8138,-39486,5611] state 3, member [8143,-39476,5817] state 3 165",
+      "run 1: C: 27 samples flying and hosted by the leader from 10 s; the server's dragon travelled 34864 units in them; 2 hover starts (state 2 to 3) among them; the member's copy was not flying in 0 and over 1000 units from the server's position in 0 (max 331); the member's copy at the load: state 2; hosters seen [\"ff000000\"]"
     ],
     "shots": [
       "runs/F7/1/F7-member.png"
     ],
     "rtt": {
       "1": {
-        "median": 49,
+        "median": 53,
         "calls": 39
       },
       "2": {
-        "median": 36,
-        "calls": 47
+        "median": 48,
+        "calls": 46
       }
     },
-    "at": "2026-10-17T17:30:45.932Z"
+    "at": "2026-10-18T15:14:01.273Z"
+  },
+  "F6": {
+    "result": "PASS",
+    "reason": "3/3 runs PASS",
+    "secs": 636,
+    "evidence": [
+      "run 1: A: party formed; the leader set MQ104 to 10, then 160, the server enabled Lydia a2c94, and both moved next to her ([-371,-319,-317] in 165a3:Skyrim.esm, server {\"disabled\":false,\"pos\":[-351,-286,-318]} 20 s later): Lydia enabled and loaded on the leader true, on the member true; {\"leader\":{\"teammate\":false,\"rank\":-1},\"member\":{\"teammate\":false,\"rank\":-1},\"storedLeader\":[],\"storedMember\":[],\"hoster\":\"ff000000\",\"seenLeader\":{\"loaded\":true,\"disabled\":false,\"cell\":\"165a3\",\"playerCell\":\"165a3\",\"dist\":110,\"hosted\":false},\"seenMember\":{\"loaded\":true,\"disabled\":false,\"cell\":\"165a3\",\"playerCell\":\"165a3\",\"dist\":151,\"hosted\":false},\"server\":{\"lydia\":\"165a3:Skyrim.esm -351 -286 -318\",\"leader\":\"165a3:Skyrim.esm -251 -239 -318\",\"member\":\"165a3:Skyrim.esm -491 -239 -318\"}}",
+      "run 1: B: the leader asked Lydia to follow (1 topic picks: \"Suivez-moi, j'ai besoin de votre aide.\"): {\"leader\":{\"teammate\":true,\"rank\":0},\"member\":{\"teammate\":false,\"rank\":-1},\"storedLeader\":[\"a2c94\",\"0\"],\"storedMember\":[],\"hoster\":\"ff000000\",\"seenLeader\":{\"loaded\":true,\"disabled\":false,\"cell\":\"165a3\",\"playerCell\":\"165a3\",\"dist\":110,\"hosted\":false},\"seenMember\":{\"loaded\":true,\"disabled\":false,\"cell\":\"165a3\",\"playerCell\":\"165a3\",\"dist\":148,\"hosted\":false},\"server\":{\"lydia\":\"165a3:Skyrim.esm -351 -286 -318\",\"leader\":\"165a3:Skyrim.esm -251 -239 -318\",\"member\":\"165a3:Skyrim.esm -491 -239 -318\"}}",
+      "run 1: C: the member asked Lydia to follow (1 topic picks: \"Suivez-moi, j'ai besoin de votre aide.\"): {\"leader\":{\"teammate\":false,\"rank\":-2},\"member\":{\"teammate\":true,\"rank\":0},\"storedLeader\":[\"0\",\"0\"],\"storedMember\":[\"a2c94\",\"0\"],\"hoster\":\"ff000001\",\"seenLeader\":{\"loaded\":true,\"disabled\":false,\"cell\":\"165a3\",\"playerCell\":\"165a3\",\"dist\":110,\"hosted\":false},\"seenMember\":{\"loaded\":true,\"disabled\":false,\"cell\":\"165a3\",\"playerCell\":\"165a3\",\"dist\":148,\"hosted\":false},\"server\":{\"lydia\":\"165a3:Skyrim.esm -351 -286 -318\",\"leader\":\"165a3:Skyrim.esm -251 -239 -318\",\"member\":\"165a3:Skyrim.esm -491 -239 -318\"}}",
+      "run 1: D: both players logged in again: {\"leader\":{\"teammate\":false,\"rank\":-1},\"member\":{\"teammate\":true,\"rank\":0},\"storedLeader\":[\"0\",\"0\"],\"storedMember\":[\"a2c94\",\"0\"],\"hoster\":\"ff000001\",\"seenLeader\":{\"loaded\":true,\"disabled\":false,\"cell\":\"165a3\",\"playerCell\":\"165a3\",\"dist\":138,\"hosted\":false},\"seenMember\":{\"loaded\":true,\"disabled\":false,\"cell\":\"165a3\",\"playerCell\":\"165a3\",\"dist\":144,\"hosted\":false},\"server\":{\"lydia\":\"165a3:Skyrim.esm -371 -319 -320\",\"leader\":\"165a3:Skyrim.esm -251 -239 -318\",\"member\":\"165a3:Skyrim.esm -491 -240 -318\"}}",
+      "run 2: A: party formed; the leader set MQ104 to 10, then 160, the server enabled Lydia a2c94, and both moved next to her ([-371,-319,-317] in 165a3:Skyrim.esm, server {\"disabled\":false,\"pos\":[-349,-286,-318]} 20 s later): Lydia enabled and loaded on the leader true, on the member true; {\"leader\":{\"teammate\":false,\"rank\":-1},\"member\":{\"teammate\":false,\"rank\":-1},\"storedLeader\":[],\"storedMember\":[],\"hoster\":\"ff000001\",\"seenLeader\":{\"loaded\":true,\"disabled\":false,\"cell\":\"165a3\",\"playerCell\":\"165a3\",\"dist\":112,\"hosted\":false},\"seenMember\":{\"loaded\":true,\"disabled\":false,\"cell\":\"165a3\",\"playerCell\":\"165a3\",\"dist\":149,\"hosted\":false},\"server\":{\"lydia\":\"165a3:Skyrim.esm -349 -286 -318\",\"leader\":\"165a3:Skyrim.esm -251 -239 -318\",\"member\":\"165a3:Skyrim.esm -491 -239 -318\"}}",
+      "run 2: B: the leader asked Lydia to follow (1 topic picks: \"Suivez-moi, j'ai besoin de votre aide.\"): {\"leader\":{\"teammate\":true,\"rank\":0},\"member\":{\"teammate\":false,\"rank\":-1},\"storedLeader\":[\"a2c94\",\"0\"],\"storedMember\":[],\"hoster\":\"ff000000\",\"seenLeader\":{\"loaded\":true,\"disabled\":false,\"cell\":\"165a3\",\"playerCell\":\"165a3\",\"dist\":411,\"hosted\":false},\"seenMember\":{\"loaded\":true,\"disabled\":false,\"cell\":\"165a3\",\"playerCell\":\"165a3\",\"dist\":449,\"hosted\":false},\"server\":{\"lydia\":\"165a3:Skyrim.esm -303 169 -320\",\"leader\":\"165a3:Skyrim.esm -251 -239 -318\",\"member\":\"165a3:Skyrim.esm -491 -239 -318\"}}",
+      "run 2: C: the member asked Lydia to follow (1 topic picks: \"Suivez-moi, j'ai besoin de votre aide.\"): {\"leader\":{\"teammate\":false,\"rank\":-2},\"member\":{\"teammate\":true,\"rank\":0},\"storedLeader\":[\"0\",\"0\"],\"storedMember\":[\"a2c94\",\"0\"],\"hoster\":\"ff000001\",\"seenLeader\":{\"loaded\":true,\"disabled\":false,\"cell\":\"165a3\",\"playerCell\":\"165a3\",\"dist\":307,\"hosted\":false},\"seenMember\":{\"loaded\":true,\"disabled\":false,\"cell\":\"165a3\",\"playerCell\":\"165a3\",\"dist\":387,\"hosted\":false},\"server\":{\"lydia\":\"165a3:Skyrim.esm -277 84 -318\",\"leader\":\"165a3:Skyrim.esm -251 -239 -318\",\"member\":\"165a3:Skyrim.esm -491 -239 -318\"}}",
+      "run 2: D: both players logged in again: {\"leader\":{\"teammate\":false,\"rank\":-1},\"member\":{\"teammate\":true,\"rank\":0},\"storedLeader\":[\"0\",\"0\"],\"storedMember\":[\"a2c94\",\"0\"],\"hoster\":\"ff000001\",\"seenLeader\":{\"loaded\":true,\"disabled\":false,\"cell\":\"165a3\",\"playerCell\":\"165a3\",\"dist\":116,\"hosted\":false},\"seenMember\":{\"loaded\":true,\"disabled\":false,\"cell\":\"165a3\",\"playerCell\":\"165a3\",\"dist\":144,\"hosted\":false},\"server\":{\"lydia\":\"165a3:Skyrim.esm -371 -319 -320\",\"leader\":\"165a3:Skyrim.esm -251 -239 -318\",\"member\":\"165a3:Skyrim.esm -491 -239 -318\"}}",
+      "run 3: A: party formed; the leader set MQ104 to 10, then 160, the server enabled Lydia a2c94, and both moved next to her ([-371,-319,-317] in 165a3:Skyrim.esm, server {\"disabled\":false,\"pos\":[-347,-280,-320]} 20 s later): Lydia enabled and loaded on the leader true, on the member true; {\"leader\":{\"teammate\":false,\"rank\":-1},\"member\":{\"teammate\":false,\"rank\":-1},\"storedLeader\":[],\"storedMember\":[],\"hoster\":\"ff000000\",\"seenLeader\":{\"loaded\":true,\"disabled\":false,\"cell\":\"165a3\",\"playerCell\":\"165a3\",\"dist\":105,\"hosted\":false},\"seenMember\":{\"loaded\":true,\"disabled\":false,\"cell\":\"165a3\",\"playerCell\":\"165a3\",\"dist\":149,\"hosted\":false},\"server\":{\"lydia\":\"165a3:Skyrim.esm -347 -280 -320\",\"leader\":\"165a3:Skyrim.esm -251 -239 -318\",\"member\":\"165a3:Skyrim.esm -491 -239 -318\"}}",
+      "run 3: B: the leader asked Lydia to follow (1 topic picks: \"Suivez-moi, j'ai besoin de votre aide.\"): {\"leader\":{\"teammate\":true,\"rank\":0},\"member\":{\"teammate\":false,\"rank\":-1},\"storedLeader\":[\"a2c94\",\"0\"],\"storedMember\":[],\"hoster\":\"ff000000\",\"seenLeader\":{\"loaded\":true,\"disabled\":false,\"cell\":\"165a3\",\"playerCell\":\"165a3\",\"dist\":105,\"hosted\":false},\"seenMember\":{\"loaded\":true,\"disabled\":false,\"cell\":\"165a3\",\"playerCell\":\"165a3\",\"dist\":149,\"hosted\":false},\"server\":{\"lydia\":\"165a3:Skyrim.esm -347 -280 -318\",\"leader\":\"165a3:Skyrim.esm -251 -239 -318\",\"member\":\"165a3:Skyrim.esm -491 -239 -318\"}}",
+      "run 3: C: the member asked Lydia to follow (1 topic picks: \"Suivez-moi, j'ai besoin de votre aide.\"): {\"leader\":{\"teammate\":false,\"rank\":-2},\"member\":{\"teammate\":true,\"rank\":0},\"storedLeader\":[\"0\",\"0\"],\"storedMember\":[\"a2c94\",\"0\"],\"hoster\":\"ff000001\",\"seenLeader\":{\"loaded\":true,\"disabled\":false,\"cell\":\"165a3\",\"playerCell\":\"165a3\",\"dist\":99,\"hosted\":false},\"seenMember\":{\"loaded\":true,\"disabled\":false,\"cell\":\"165a3\",\"playerCell\":\"165a3\",\"dist\":148,\"hosted\":false},\"server\":{\"lydia\":\"165a3:Skyrim.esm -348 -279 -318\",\"leader\":\"165a3:Skyrim.esm -251 -239 -318\",\"member\":\"165a3:Skyrim.esm -491 -239 -318\"}}",
+      "run 3: D: both players logged in again: {\"leader\":{\"teammate\":false,\"rank\":-1},\"member\":{\"teammate\":true,\"rank\":0},\"storedLeader\":[\"0\",\"0\"],\"storedMember\":[\"a2c94\",\"0\"],\"hoster\":\"ff000001\",\"seenLeader\":{\"loaded\":true,\"disabled\":false,\"cell\":\"165a3\",\"playerCell\":\"165a3\",\"dist\":139,\"hosted\":false},\"seenMember\":{\"loaded\":true,\"disabled\":false,\"cell\":\"165a3\",\"playerCell\":\"165a3\",\"dist\":144,\"hosted\":false},\"server\":{\"lydia\":\"165a3:Skyrim.esm -371 -319 -320\",\"leader\":\"165a3:Skyrim.esm -251 -239 -318\",\"member\":\"165a3:Skyrim.esm -492 -241 -318\"}}"
+    ],
+    "shots": [],
+    "rtt": {
+      "1": {
+        "median": 43,
+        "calls": 46
+      },
+      "2": {
+        "median": 48,
+        "calls": 51
+      }
+    },
+    "at": "2026-10-18T15:27:52.595Z"
   }
 }
