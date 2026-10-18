@@ -226,7 +226,7 @@
   "S3.4": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 42,
+    "secs": 45,
     "evidence": [
       "run 1: MS13 stage 10; Arvel 39655 in 371de:Skyrim.esm holds 1 Golden Claw on the client, 1 on the server; GoldenClaw alias ref ff000d51 (alias quests [\"39645\"], deleted true, in Arvel's inventory true, in the player's false)",
       "run 1: Arvel dead: the client corpse holds 1 claw, the server 1; GoldenClaw alias ref ff000d51 (alias quests [\"39645\"], deleted true, in Arvel's inventory true, in the player's false); MS13 stage 10",
@@ -237,11 +237,11 @@
     ],
     "rtt": {
       "1": {
-        "median": 33,
+        "median": 44,
         "calls": 24
       }
     },
-    "at": "2026-10-16T11:39:23.646Z"
+    "at": "2026-10-18T15:38:49.988Z"
   },
   "1A.1": {
     "result": "PASS",
@@ -447,25 +447,25 @@
   "G1.1": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 217,
+    "secs": 227,
     "evidence": [
       "run 1: start log from settings.ts: [[0x2610a, 0], [0x2610a, 5], [0x4e50d, 15], [0x2610a, 30]]",
       "run 1: start: server Ralof 3c:Skyrim.esm at 19841,-79532,8451, hoster 0, 32952 units from the Riverwood marker",
-      "run 1: end: server Ralof 3c:Skyrim.esm at 17853,-47132,-143, hoster ff000000, 1413 units from the marker; server path 52293 units in 346 samples; player moved to Ralof 144 times",
-      "run 1: local Ralof: loaded true, world 3c, at 17883,-47124,-144, combat false; packages seen 956b8,d1d3d,9251e,de1aa,54219,3e08f,3e088; scenes seen ac133,27e56; MQ102B stage 35, MQ102 stage 17",
-      "run 1: walk from the first hosted sample: 332 samples, longest step 241 units (to 10202,-52832)",
-      "run 1: server positions every 10th sample: 3c@19841,-79532 3c@19841,-79532 3c@11740,-71734 3c@11760,-71735 3c@11550,-71648 3c@11123,-71426 3c@10425,-71035 3c@9118,-70597 3c@8045,-69851 3c@7631,-68466 3c@6995,-67252 3c@6072,-66255 3c@5819,-64789 3c@5540,-63407 3c@4808,-62188 3c@4444,-61344 3c@5099,-59994 3c@5494,-58779 3c@4382,-58659 3c@3065,-58628 3c@4049,-57611 3c@5240,-56754 3c@6454,-55858 3c@7075,-54518 3c@7981,-53665 3c@9391,-53330 3c@10606,-52579 3c@11011,-52641 3c@11487,-52087 3c@12768,-51485 3c@13753,-50494 3c@14089,-49066 3c@14466,-47791 3c@15601,-46979 3c@17106,-47099"
+      "run 1: end: server Ralof 3c:Skyrim.esm at 17768,-47147,-142, hoster ff000000, 1497 units from the marker; server path 52475 units in 366 samples; player moved to Ralof 147 times",
+      "run 1: local Ralof: loaded true, world 3c, at 17802,-47142,-143, combat false; packages seen 956b8,ad243,d1d3d,9251e,de1aa,54219,3e08f,3e088; scenes seen ac133,27e56; MQ102B stage 35, MQ102 stage 15",
+      "run 1: walk from the first hosted sample: 350 samples, longest step 265 units (to 10069,-52902)",
+      "run 1: server positions every 10th sample: 3c@19841,-79532 3c@19841,-79532 3c@11894,-71809 3c@11761,-71735 3c@11542,-71645 3c@11140,-71435 3c@10402,-71023 3c@9056,-70585 3c@8026,-69805 3c@7611,-68400 3c@6946,-67222 3c@6064,-66226 3c@5812,-64750 3c@5515,-63358 3c@4777,-62128 3c@4468,-61293 3c@5102,-59988 3c@5493,-58757 3c@4464,-58651 3c@3066,-58707 3c@3990,-57655 3c@5141,-56826 3c@6371,-55935 3c@7022,-54634 3c@7898,-53685 3c@9318,-53348 3c@9909,-53269 3c@9769,-53103 3c@10384,-52801 3c@10359,-52580 3c@11636,-51994 3c@12889,-51423 3c@13773,-50430 3c@14095,-49045 3c@14502,-47711 3c@15575,-46978 3c@17053,-47092"
     ],
     "shots": [
       "runs/G1_1/1/G1_1-end.png"
     ],
     "rtt": {
       "1": {
-        "median": 26,
-        "calls": 694
+        "median": 27,
+        "calls": 734
       }
     },
-    "at": "2026-10-16T16:58:08.172Z"
+    "at": "2026-10-18T15:42:37.021Z"
   },
   "G1.2": {
     "result": "PASS",
@@ -652,7 +652,7 @@
   "2A.4": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 66,
+    "secs": 62,
     "evidence": [
       "run 1: A: FreeformIvarstead02 on engine 1 at login {\"running\":true,\"stage\":10}; the server has 1 necklace in the satchel d9b78 (created true)",
       "run 1: A: at login FreeformRiften20 runs on engine 1 false, its note in Sarthis's satchel on the server 0; MS13 runs true, its claw in Arvel on the server 1",
@@ -664,7 +664,7 @@
     "shots": [],
     "rtt": {
       "1": {
-        "median": 40,
+        "median": 34,
         "calls": 38
       },
       "2": {
@@ -672,12 +672,12 @@
         "calls": 14
       }
     },
-    "at": "2026-10-16T17:03:55.262Z"
+    "at": "2026-10-18T15:43:39.010Z"
   },
   "2A.5": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 74,
+    "secs": 70,
     "evidence": [
       "run 1: party joined; MS13 on engine 1 {\"running\":true,\"stage\":0}, on engine 2 {\"running\":true,\"stage\":0}; before stage 100: engine 1 claw server 1 local 1, gold server 140 local 140; engine 2 claw server 0 local 0, gold server 140 local 140",
       "run 1: script item reports before the stage: none",
@@ -689,15 +689,15 @@
     "shots": [],
     "rtt": {
       "1": {
-        "median": 47,
-        "calls": 62
+        "median": 57,
+        "calls": 60
       },
       "2": {
-        "median": 40,
-        "calls": 33
+        "median": 57,
+        "calls": 32
       }
     },
-    "at": "2026-10-15T22:20:13.033Z"
+    "at": "2026-10-18T15:44:49.289Z"
   },
   "2B.1": {
     "result": "PASS",
@@ -777,21 +777,21 @@
   "2B.4": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 34,
+    "secs": 41,
     "evidence": [
-      "run 1: A: client stages [MQ102B, MQ102, MQ104] by seconds after the replay line: 0.3:1/0/0 0.6:10/5/0 1.7:10/15/0 2.4:30/15/0 3.2:30/15/10 5.4:30/15/12",
+      "run 1: A: client stages [MQ102B, MQ102, MQ104] by seconds after the replay line: 0.5:10/5/0 1.6:10/15/0 2.4:30/15/0 3.5:30/15/10 5.3:30/15/12",
       "run 1: B: after the replay, 50 of 148 ESP refs in the player's cell are known to the server; disabled state differs on none, open state differs on none",
       "run 1: C: 15.2 s after the replay line the client started FreeformRiften20 (85d40) at stage 10: server logged it true",
-      "run 1: A: replay of 5 entries at 13:42:13.250; client stages after it: MQ102B 30, MQ102 15, MQ104 12 (the MQ104 stage 10 fragment moves on to 12); server lines from this client from the replay line until the last entry plus the settle time (5.7 s): none"
+      "run 1: A: replay of 5 entries at 17:37:24.945; client stages after it: MQ102B 30, MQ102 15, MQ104 12 (the MQ104 stage 10 fragment moves on to 12); server lines from this client from the replay line until the last entry plus the settle time (6.0 s): none"
     ],
     "shots": [],
     "rtt": {
       "1": {
-        "median": 57,
-        "calls": 47
+        "median": 60,
+        "calls": 46
       }
     },
-    "at": "2026-10-16T11:42:32.307Z"
+    "at": "2026-10-18T15:37:43.627Z"
   },
   "2B.5": {
     "result": "PASS",
@@ -849,13 +849,13 @@
     "at": "2026-10-16T21:49:57.284Z"
   },
   "G2.3": {
-    "result": "FAIL",
-    "reason": "1 of 1 runs not PASS; run 1/1: A: the server did not create the Dragonstone in the boss; B: with the loot menu open the boss holds 0 Dragonstone; B: MQ103 stage 10 after the kill and 10 after the loot (the dragonStone alias script sets 180 when the player takes the stone); B: the leader holds 0 Dragonstone, alias ref ff000d1f (before ff000d1f); B: the server has 0 Dragonstone in the boss and 0 in the leader; B: the member's server quest log has no MQ103 180; C: MQ103 stage 190 is not done on the leader after the dialogue (stage 10); C: the member's server quest log has no MQ103 190",
-    "secs": 584,
+    "result": "PASS",
+    "reason": "1/1 runs PASS",
+    "secs": 49,
     "evidence": [
-      "run 1: A: leader ff000000, bot member ff000001 in the party; MQ103 stage 10 on the leader, the member's server quest log for MQ103 [10]; boss 9bcd6 in 371dd:Skyrim.esm: Dragonstone count on the leader's client 1, on the server 0; dragonStone alias ref ff000d1f; server: \"no line\"",
-      "run 1: B: boss dead: MQ103 stage 10 (180 done false), boss holds 0 Dragonstone, the leader 0; loot menu open true, it showed 0 Dragonstone (taken by script, removeItem to the player, while the menu is open); after the loot: MQ103 stage 10 (180 done false), the leader holds 0, dragonStone alias ref ff000d1f; server: boss 0, leader 0; the member's server quest log for MQ103 [10]",
-      "run 1: C: Farengar 1a67e in 165a3:Skyrim.esm; before the talk MQ103 190 done false, the leader held 0 Dragonstone; dialogue: 147 topic picks (\"Le jarl m'a dit que vous aviez besoin d'aide pour l'un de vos projets.\", \"Ce n'est pas grave, je vais attendre le jarl Balgruuf.\", \"Comment enchantez-vous les armes et les armures ?\", \"Qu'est-ce que vous avez à vendre ?\", \"Vous êtes le seul mage de Blancherive ?\", \"Où puis-je en apprendre davantage sur la magie ?\", \"Est-ce que vous avez fait allégeance aux Impériaux ?\", \"Quelles sont les obligations du mage de la cour ?\", \"Vous avez déjà croisé des dragons ?\"), MQ103 stages 10, last line \"\"; after: 190 done false, the leader holds 0 Dragonstone, MQ104 stage 0; server: leader 0 Dragonstone; the member's server quest log for MQ103 [10]"
+      "run 1: A: leader ff000000, bot member ff000001 in the party; MQ103 stage 10 on the leader, the member's server quest log for MQ103 [10]; boss 9bcd6 in 371dd:Skyrim.esm: Dragonstone count on the leader's client 1, on the server 1; dragonStone alias ref ff000d1f; server: \"Coop: quest d0800 alias 18 created df202 in 9bcd6\"",
+      "run 1: B: boss dead: MQ103 stage 10 (180 done false), boss holds 1 Dragonstone, the leader 0; loot menu open true, it showed 1 Dragonstone (taken by script, removeItem to the player, while the menu is open); after the loot: MQ103 stage 180 (180 done true), the leader holds 1, dragonStone alias ref ff000d1f; server: boss 0, leader 1; the member's server quest log for MQ103 [10,180,20,60]",
+      "run 1: C: Farengar 1a67e in 165a3:Skyrim.esm; before the talk MQ103 190 done false, the leader held 1 Dragonstone; dialogue: 0 topic picks (), MQ103 stages 180 -> 190, last line \"Ah ! La Pierre de dragon du Tertre des chutes tourmentées ! Vous n'êtes pas comme ces brutes que le jarl a l'habitude de m'envoyer.\"; after: 190 done true, the leader holds 0 Dragonstone, MQ104 stage 10; server: leader 0 Dragonstone; the member's server quest log for MQ103 [10,180,20,60,190,185]"
     ],
     "shots": [
       "runs/G2_3/1/G2_3-loot.png",
@@ -863,44 +863,44 @@
     ],
     "rtt": {
       "1": {
-        "median": 33,
-        "calls": 393
+        "median": 51,
+        "calls": 38
       }
     },
-    "at": "2026-10-18T12:26:09.874Z"
+    "at": "2026-10-18T15:45:38.400Z"
   },
   "G2.4": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 129,
+    "secs": 111,
     "evidence": [
       "run 1: A: leader ff000000, bot member ff000001 in the party at the Western Watchtower; the leader set MQ104 to 60 by script (its fragment enables Mirmulnir): MQ104 stage 60; Mirmulnir 5a6ca on the server {\"cell\":\"3c:Skyrim.esm\",\"pos\":[7796,-37462,5697],\"disabled\":false,\"dead\":false,\"hoster\":4278190080} (hoster ff000000); the member's MQ104 log [60]; the leader before: {\"souls\":0,\"absorbed\":0,\"fus\":false}",
-      "run 1: B: the server killed Mirmulnir; 3.6 s later: MQ104 stage 90 (90 done true); the leader {\"souls\":0,\"absorbed\":0,\"fus\":false} -> {\"souls\":0,\"absorbed\":1,\"fus\":true}; server soul lines [\"dragon 5a6ca gives its soul to ff000000\",\"dragon 5a6ca gives its soul to ff000001\"]; the member's MQ104 log [60,65,90,85,80]",
-      "run 1: C: Balgruuf: message boxes answered (first button) at MQ104 stages [90]; 11 topic picks, 0 stalled menus closed (\"J'ai tué le dragon. Ça mérite bien une récompense, non ?\", \"La tour de guet a été détruite, mais nous avons tué le dragon.\", \"Il s'avère que je pourrais être \"Enfant de dragon\".\", \"À la mort du dragon, j'ai absorbé une partie de son pouvoir.\", \"Les hommes m'ont donné ce nom, c'est tout.\", \"Les Grises-barbes ?\", \"Que me veulent les Grises-barbes ?\"), MQ104 stages 90 -> 150 -> 160, last line \"En mon droit de jarl, je vous nomme thane de Blancherive. C'est le plus grand honneur que je puisse vous accorder.\"; 160 done true",
-      "run 1: C: Lydia a2c94 enabled and loaded on the leader true; before the talk {\"teammate\":false,\"rank\":-1}; message boxes answered []; 1 topic picks (\"Suivez-moi, j'ai besoin de votre aide.\"), last line \"\"; after: {\"teammate\":true,\"rank\":0} (CurrentFollowerFaction rank, player teammate); server {\"cell\":\"165a3:Skyrim.esm\",\"pos\":[-349,-289,-318],\"disabled\":false,\"dead\":false,\"hoster\":4278190080} (hoster ff000000)"
+      "run 1: B: the server killed Mirmulnir; 3.7 s later: MQ104 stage 90 (90 done true); the leader {\"souls\":0,\"absorbed\":0,\"fus\":false} -> {\"souls\":0,\"absorbed\":1,\"fus\":true}; server soul lines [\"dragon 5a6ca gives its soul to ff000000\",\"dragon 5a6ca gives its soul to ff000001\"]; the member's MQ104 log [60,65,90,85,80]",
+      "run 1: C: Balgruuf: message boxes answered (first button) at MQ104 stages [90]; 8 topic picks, 0 stalled menus closed (\"J'ai tué le dragon. Ça mérite bien une récompense, non ?\", \"La tour de guet a été détruite, mais nous avons tué le dragon.\", \"Il s'avère que je pourrais être \"Enfant de dragon\".\", \"À la mort du dragon, j'ai absorbé une partie de son pouvoir.\", \"Les hommes m'ont donné ce nom, c'est tout.\", \"Que me veulent les Grises-barbes ?\"), MQ104 stages 90 -> 150 -> 160, last line \"En mon droit de jarl, je vous nomme thane de Blancherive. C'est le plus grand honneur que je puisse vous accorder.\"; 160 done true",
+      "run 1: C: Lydia a2c94 enabled and loaded on the leader true; before the talk {\"teammate\":false,\"rank\":-1}; message boxes answered []; 1 topic picks (\"Suivez-moi, j'ai besoin de votre aide.\"), last line \"\"; after: {\"teammate\":true,\"rank\":0} (CurrentFollowerFaction rank, player teammate); server {\"cell\":\"165a3:Skyrim.esm\",\"pos\":[-349,-287,-318],\"disabled\":false,\"dead\":false,\"hoster\":4278190080} (hoster ff000000)"
     ],
     "shots": [
       "runs/G2_4/1/G2_4-lydia.png"
     ],
     "rtt": {
       "1": {
-        "median": 45,
-        "calls": 203
+        "median": 50,
+        "calls": 172
       }
     },
-    "at": "2026-10-18T14:59:07.787Z"
+    "at": "2026-10-18T15:47:29.035Z"
   },
   "G2.5": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 748,
+    "secs": 762,
     "evidence": [
       "run 1: S1 start after the relog, at Arvel: Arvel holds 1 claw on the client, 1 on the server",
       "run 1: S1 (G2.1's step): MS13 40; the claw 39647: client 1, server 1; 10 s later client 1, server 1; the member's MS13 log [10,40]",
       "run 1: S1 after the relog: MS13 40, the claw client 1, server 1",
       "run 1: S1 after the relog: Arvel (the claw) holds 0 on the client, 0 on the server",
-      "run 1: S2 (G2.2's step): the claw door DoorBase -171 -> -227, MS13 50, the keyhole's server state done, the member's MS13 log [10,40,50]",
-      "run 1: S2 after the relog: MS13 50, the claw door DoorBase -369 (closed -171), the claw held 1",
+      "run 1: S2 (G2.2's step): the claw door DoorBase -171 -> -229, MS13 50, the keyhole's server state done, the member's MS13 log [10,40,50]",
+      "run 1: S2 after the relog: MS13 50, the claw door DoorBase -370 (closed -171), the claw held 1",
       "run 1: S2 after the relog: Arvel (the claw) holds 0 on the client, 0 on the server",
       "run 1: S3 (G2.3's loot): MQ103 180 (180 done true); 10 s after the loot the Dragonstone: client 1, server 1; the member's MQ103 log [10,180,20,60]",
       "run 1: S3 after the relog: MQ103 180 done true, the Dragonstone client 1, server 1",
@@ -910,18 +910,18 @@
       "run 1: S4 after the relog: MQ103 190 done true, the Dragonstone client 0, server 0",
       "run 1: S4 after the relog: Arvel (the claw) holds 0 on the client, 0 on the server",
       "run 1: S4 after the relog: the boss (the Dragonstone) holds 0 on the client, 0 on the server",
-      "run 1: S5 (G2.4's step): MQ104 90 done true, 160 done true (9 topic picks, 0 boxes); Fus true; the leader gained [\"89717\"], the reward weapon 89717 10 s later: client 1, server 1",
-      "run 1: S5: the leader equipped 89717: client right hand 89717, server worn [\"12e46\",\"12e49\",\"12e4b\",\"12e4d\",\"89717\"]",
+      "run 1: S5 (G2.4's step): MQ104 90 done true, 160 done true (11 topic picks, 0 boxes); Fus true; the leader gained [\"4b158\"], the reward weapon 4b158 10 s later: client 1, server 1",
+      "run 1: S5: the leader equipped 4b158: client right hand 4b158, server worn [\"12e46\",\"12e49\",\"12e4b\",\"12e4d\",\"4b158\"]",
       "run 1: S5: Lydia follows the leader true ({\"teammate\":true,\"rank\":0}); the server's stored followers [666772,0]; the member's MQ104 log [10,60,65,90,85,80,150,108,160]",
-      "run 1: S5 after the relog: {\"souls\":0,\"soulsBefore\":0,\"done160\":true,\"fus\":true,\"axe\":1,\"serverAxe\":1,\"equipped\":\"89717\",\"worn\":[\"12e46\",\"12e49\",\"12e4b\",\"12e4d\",\"89717\"],\"lydia\":{\"teammate\":true,\"rank\":0}}",
+      "run 1: S5 after the relog: {\"souls\":0,\"soulsBefore\":0,\"done160\":true,\"fus\":true,\"axe\":1,\"serverAxe\":1,\"equipped\":\"4b158\",\"worn\":[\"12e46\",\"12e49\",\"12e4b\",\"12e4d\",\"4b158\"],\"lydia\":{\"teammate\":true,\"rank\":0}}",
       "run 1: S5 after the relog: Arvel (the claw) holds 0 on the client, 0 on the server",
       "run 1: S5 after the relog: the boss (the Dragonstone) holds 0 on the client, 0 on the server",
-      "run 1: relog S1 start: the leader and the bot logged in again; 0 message boxes answered; state back 1.3 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)",
-      "run 1: relog S1: the leader and the bot logged in again; 0 message boxes answered; state back 2.7 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)",
-      "run 1: relog S2: the leader and the bot logged in again; 0 message boxes answered; state back 3.3 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)",
-      "run 1: relog S3: the leader and the bot logged in again; 0 message boxes answered; state back 2.6 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)",
-      "run 1: relog S4: the leader and the bot logged in again; 0 message boxes answered; state back 3.1 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)",
-      "run 1: relog S5: the leader and the bot logged in again; 1 message boxes answered; state back 10.6 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)",
+      "run 1: relog S1 start: the leader and the bot logged in again; 0 message boxes answered; state back 0.7 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)",
+      "run 1: relog S1: the leader and the bot logged in again; 0 message boxes answered; state back 2.6 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)",
+      "run 1: relog S2: the leader and the bot logged in again; 0 message boxes answered; state back 2.8 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)",
+      "run 1: relog S3: the leader and the bot logged in again; 0 message boxes answered; state back 2.0 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [[\"1ceee\",0],[\"1ceee\",1]] (relayed from the leader)",
+      "run 1: relog S4: the leader and the bot logged in again; 0 message boxes answered; state back 3.2 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)",
+      "run 1: relog S5: the leader and the bot logged in again; 1 message boxes answered; state back 11.2 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)",
       "run 1: the leader client's stray removals and failed relinks: [\"Stray quest item removed d0800 18 9bcd6\",\"Stray quest item removed d0800 18 9bcd6\"]"
     ],
     "shots": [
@@ -929,11 +929,11 @@
     ],
     "rtt": {
       "1": {
-        "median": 42,
-        "calls": 524
+        "median": 43,
+        "calls": 612
       }
     },
-    "at": "2026-10-18T15:11:35.926Z"
+    "at": "2026-10-18T16:00:10.922Z"
   },
   "G2.6": {
     "result": "PASS",
@@ -1362,5 +1362,21 @@
       }
     },
     "at": "2026-10-18T15:27:52.595Z"
+  },
+  "F2": {
+    "result": "FAIL",
+    "reason": "1 of 1 runs not PASS; run 1/1: the replay's own quests were reported back after the settle: Coop: quest 2610a stage 1 from ff000000, logged for ff000000 | Coop: quest 2610a stage 10 from ff000000, logged for ff000000 | Coop: quest 4e50d stage 5 from ff000000, logged for ff000000 | Coop: quest 4e50d stage 14 from ff000000, logged for ff000000 | Coop: quest 2610a stage 20 from ff000000, logged for ff000000 | Coop: quest 4e50d stage 10 from ff000000, logged for ff000000 | Coop: quest 2610c stage 12 from ff000000, logged for ff000000",
+    "secs": 26,
+    "evidence": [
+      "run 1: the client applied the last replayed entry (MQ104 10) and 0.4 s later, inside the 3 s settle, FreeformRiften20 (85d40) went from stage 0 to 10; the server's quest log of ff000000 has it 0.4 s after the earliest settle end; server lines from this client since the last entry: Coop: quest 2610a stage 1 from ff000000, logged for ff000000 | Coop: quest 2610a stage 10 from ff000000, logged for ff000000 | Coop: quest 4e50d stage 5 from ff000000, logged for ff000000 | Coop: quest 5f596 stage 20 from ff000000, logged for ff000000 | Coop: quest 4e50d stage 14 from ff000000, logged for ff000000 | Coop: quest 2610a stage 20 from ff000000, logged for ff000000 | Coop: quest 4e50d stage 10 from ff000000, logged for ff000000 | Coop: quest 85d40 stage 10 from ff000000, logged for ff000000 | Coop: quest 2610c stage 12 from ff000000, logged for ff000000 | Coop: quest 2522f stage 0 from ff000000, logged for ff000000 | Coop: quest 2522f stage 1 from ff000000, logged for ff000000 | Coop: quest 4b2d9 stage 1 from ff000000, logged for ff000000 | Coop: quest 25251 stage 0 from ff000000, logged for ff000000 | Coop: quest 25251 stage 1 from ff000000, logged for ff000000 | Coop: quest c18e1 stage 0 from ff000000, logged for ff000000 | Coop: quest c18e1 stage 1 from ff000000, logged for ff000000 | Coop: quest 25231 stage 0 from ff000000, logged for ff000000 | Coop: quest 25250 stage 0 from ff000000, logged for ff000000"
+    ],
+    "shots": [],
+    "rtt": {
+      "1": {
+        "median": 57,
+        "calls": 22
+      }
+    },
+    "at": "2026-10-18T16:02:36.506Z"
   }
 }

@@ -70,6 +70,7 @@ export class CoopService extends ClientListener {
     this.questLogRequestAt = Date.now() + QUEST_LOG_REQUEST_DELAY_MS;
     this.reporting = false;
     this.applyQueue = [];
+    this.unreported = [];
     this.followersKey = this.followersKeyOf(FOLLOWER_SLOTS.map(() => 0));
     this.loadCount++;
     this.trackedQuests.clear();
@@ -162,6 +163,7 @@ export class CoopService extends ClientListener {
       } finally {
         if (replay && loadCount === this.loadCount) {
           this.reporting = true;
+          this.reportUnreported(entries);
           this.controller.lookupListener(WorldCleanerService).pauseUntil(0);
         }
       }
@@ -228,10 +230,27 @@ export class CoopService extends ClientListener {
   }
 
   private onQuestStage(e: QuestStageEvent) {
-    if (this.reporting && e.quest && !this.isEcho(e.quest.getFormID(), e.stage)) {
-      this.track(e.quest.getFormID(), e.stage);
-      this.send({ customPacketType: "questStage", quest: e.quest.getFormID(), stage: e.stage });
+    if (!e.quest) {
+      return;
     }
+    if (!this.reporting) {
+      if (this.applying) {
+        this.unreported.push([e.quest.getFormID(), e.stage]);
+      }
+    } else if (!this.isEcho(e.quest.getFormID(), e.stage)) {
+      this.reportStage(e.quest.getFormID(), e.stage);
+    }
+  }
+
+  private reportStage(quest: number, stage: number) {
+    this.track(quest, stage);
+    this.send({ customPacketType: "questStage", quest, stage });
+  }
+
+  private reportUnreported(replayed: QuestLogEntry[]) {
+    const unreported = this.unreported;
+    this.unreported = [];
+    unreported.filter(([quest]) => !replayed.some(([q]) => q === quest)).forEach(([quest, stage]) => this.reportStage(quest, stage));
   }
 
   private onQuestStop(e: QuestStartStopEvent) {
@@ -603,6 +622,7 @@ export class CoopService extends ClientListener {
 
   private questLogRequestAt = 0;
   private reporting = false;
+  private unreported = new Array<QuestLogEntry>();
   private applying = false;
   private applyQueue = new Array<{ entries: QuestLogEntry[], replay: boolean, followers?: unknown, questItems?: unknown }>();
   private followersAt = 0;
