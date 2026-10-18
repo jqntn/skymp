@@ -90,6 +90,15 @@ export class Parties {
     return party;
   }
 
+  restore(leader: number, members: number[]): Party | undefined {
+    if (members.length < 2 || members.length > this.maxSize || !members.includes(leader) || members.some((m) => this.byActor.has(m))) {
+      return undefined;
+    }
+    const party = { id: this.nextId++, leader, members: [...members], outOfSync: new Map() };
+    members.forEach((m) => this.byActor.set(m, party));
+    return party;
+  }
+
   decline(invitee: number, inviter: number): boolean {
     return this.invites.get(invitee)?.delete(inviter) ?? false;
   }

@@ -9,19 +9,19 @@ First non-PASS in plan order: L1
 | S0 | PASS | 26 | 2026-10-14 17:25 | 1/1 runs PASS |
 | S0b | PASS | 161 | 2026-10-13 15:25 | 1/1 runs PASS |
 | S0c | PASS | 30 | 2026-10-13 15:25 | 1/1 runs PASS |
-| S1.1 | PASS | 76 | 2026-10-18 12:15 | 1/1 runs PASS |
+| S1.1 | PASS | 71 | 2026-10-18 20:08 | 1/1 runs PASS |
 | S1.2 | PASS | 77 | 2026-10-16 16:50 | 1/1 runs PASS |
 | S1.4 | PASS | 67 | 2026-10-16 16:51 | 1/1 runs PASS |
 | S1.3 | PASS | 44 | 2026-10-16 00:21 | 2/2 runs PASS |
 | S1.5 | PASS | 52 | 2026-10-15 21:36 | 1/1 runs PASS |
 | S1.6 | PASS | 114 | 2026-10-18 12:40 | 2/2 runs PASS |
-| S2 | PASS | 117 | 2026-10-14 17:33 | 1/1 runs PASS |
+| S2 | PASS | 116 | 2026-10-18 20:10 | 1/1 runs PASS |
 | S3.1 | PASS | 25 | 2026-10-14 17:34 | 1/1 runs PASS |
 | S3.2 | PASS | 49 | 2026-10-14 17:34 | 1/1 runs PASS |
 | S3.3 | PASS | 53 | 2026-10-14 17:35 | 1/1 runs PASS |
 | S3.4 | PASS | 45 | 2026-10-18 15:38 | 1/1 runs PASS |
 | 1A.1 | PASS | 3 | 2026-10-14 17:36 | 1/1 runs PASS |
-| 1A.2 | PASS | 3 | 2026-10-14 17:36 | 1/1 runs PASS |
+| 1A.2 | PASS | 3 | 2026-10-18 20:10 | 1/1 runs PASS |
 | 1A.3 | PASS | 3 | 2026-10-14 17:36 | 1/1 runs PASS |
 | 1A.4 | PASS | 3 | 2026-10-14 17:36 | 1/1 runs PASS |
 | 1A.5 | PASS | 58 | 2026-10-16 16:52 | 1/1 runs PASS |
@@ -33,36 +33,36 @@ First non-PASS in plan order: L1
 | G1.1 | PASS | 227 | 2026-10-18 15:42 | 1/1 runs PASS |
 | G1.2 | PASS | 68 | 2026-10-16 21:08 | 1/1 runs PASS |
 | G1.3 | PASS | 71 | 2026-10-15 20:13 | 1/1 runs PASS |
-| G1.4 | PASS | 130 | 2026-10-17 00:16 | 1/1 runs PASS |
+| G1.4 | PASS | 126 | 2026-10-18 20:12 | 1/1 runs PASS |
 | G1.5 | PASS | 119 | 2026-10-15 20:17 | 1/1 runs PASS |
 | G1.6 | PASS | 110 | 2026-10-17 16:01 | 1/1 runs PASS |
 | G1.7 | FAIL | 201 | 2026-10-14 05:10 | run 1/3: Sven: 5 activations of the crosshair NPC opened no dialogue on engine 1 (sit state on engine 2 0, on engine 1 0; NPC {"ai":false,"sit":0,"target":0,"pkg":"ea072","x":20629,"y":-46000,"events":[]}) |
 | G1.8 | PASS | 92 | 2026-10-15 20:18 | 1/1 runs PASS |
 | 2A.1 | PASS | 54 | 2026-10-17 00:17 | 1/1 runs PASS |
-| 2A.2 | PASS | 47 | 2026-10-16 19:25 | 1/1 runs PASS |
+| 2A.2 | PASS | 41 | 2026-10-18 20:13 | 1/1 runs PASS |
 | 2A.3 | PASS | 64 | 2026-10-14 18:00 | 1/1 runs PASS |
 | 2A.4 | PASS | 62 | 2026-10-18 15:43 | 1/1 runs PASS |
 | 2A.5 | PASS | 70 | 2026-10-18 15:44 | 1/1 runs PASS |
 | G1.9 | PASS | 88 | 2026-10-14 18:04 | 1/1 runs PASS |
 | 2B.1 | PASS | 32 | 2026-10-15 22:20 | 1/1 runs PASS |
-| 2B.2 | PASS | 68 | 2026-10-16 21:47 | 1/1 runs PASS |
+| 2B.2 | PASS | 62 | 2026-10-18 20:14 | 1/1 runs PASS |
 | 2B.3 | PASS | 73 | 2026-10-17 17:26 | 1/1 runs PASS |
 | 2B.4 | PASS | 41 | 2026-10-18 15:37 | 1/1 runs PASS |
 | 2B.5 | PASS | 30 | 2026-10-16 11:43 | 1/1 runs PASS |
 | G2.1 | PASS | 40 | 2026-10-16 02:26 | 1/1 runs PASS |
 | G2.2 | PASS | 63 | 2026-10-16 21:49 | 1/1 runs PASS |
-| G2.3 | PASS | 49 | 2026-10-18 15:45 | 1/1 runs PASS |
+| G2.3 | PASS | 50 | 2026-10-18 20:15 | 1/1 runs PASS |
 | F1 | PASS | 66 | 2026-10-17 16:03 | 1/1 runs PASS |
 | G2.4 | PASS | 111 | 2026-10-18 15:47 | 1/1 runs PASS |
-| G2.5 | PASS | 762 | 2026-10-18 16:00 | 1/1 runs PASS |
+| G2.5 | PASS | 724 | 2026-10-18 20:27 | 1/1 runs PASS |
 | F4 | PASS | 68 | 2026-10-18 15:12 | 1/1 runs PASS |
 | F5 | PASS | 148 | 2026-10-17 18:01 | 1/1 runs PASS |
 | F7 | PASS | 77 | 2026-10-18 15:14 | 1/1 runs PASS |
 | G2.6 | PASS | 158 | 2026-10-18 15:16 | 1/1 runs PASS |
-| F6 | PASS | 636 | 2026-10-18 15:27 | 3/3 runs PASS |
-| F2 | FAIL | 26 | 2026-10-18 16:02 | 1 of 1 runs not PASS; run 1/1: the replay's own quests were reported back after the settle: Coop: quest 2610a stage 1 from ff000000, logged for ff000000 / Coop: quest 2610a stage 10 from ff000000, logged for ff000000 / Coop: quest 4e50d stage 5 from ff000000, logged for ff000000 / Coop: quest 4e50d stage 14 from ff000000, logged for ff000000 / Coop: quest 2610a stage 20 from ff000000, logged for ff000000 / Coop: quest 4e50d stage 10 from ff000000, logged for ff000000 / Coop: quest 2610c stage 12 from ff000000, logged for ff000000 |
+| F6 | PASS | 211 | 2026-10-18 20:30 | 1/1 runs PASS |
+| F2 | PASS | 24 | 2026-10-18 20:31 | 1/1 runs PASS |
 | F3 | FAIL | 60 | 2026-10-18 16:38 | 1 of 1 runs not PASS; run 1/1: B: after the refused take MS13 is at stage 40 on the member's client; B: after the refused take the server logged MS13 40 for the member true, the leader false |
-| P1 | FAIL | 0 | 2026-10-12 16:53 | no check script |
+| P1 | PASS | 1164 | 2026-10-18 20:06 | 3/3 runs PASS |
 | P2 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | P3 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | P4 | FAIL | 0 | 2026-10-12 16:53 | no check script |
@@ -95,11 +95,11 @@ First non-PASS in plan order: L1
 - run 1: server online players ff000000, connect events in server.log: 1
 - ![S0c](runs/S0c/1/S0c-engine1.png)
 ### S1.1
-- run 1: Alvor (13482): hoster engine 2 translates it 200 units to 20575,-45067,-80, NPC path on the hoster 200 units, 53 puppet samples on engine 1, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
-- run 1: Gerdur (13489): hoster engine 2 translates it 200 units to 157,-325,2, NPC path on the hoster 200 units, 52 puppet samples on engine 1, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
+- run 1: Alvor (13482): hoster engine 1 translates it 200 units to 20575,-45067,-80, NPC path on the hoster 200 units, 51 puppet samples on engine 2, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
+- run 1: Gerdur (13489): hoster engine 2 translates it 200 units to -946,-77,2, NPC path on the hoster 200 units, 50 puppet samples on engine 1, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
 - run 1: Hadvar (2bfa2): hoster engine 2 translates it 200 units to 22928,-95299,13930, NPC path on the hoster 200 units, 51 puppet samples on engine 1, worst distance to the hoster path of the last 1000 ms: 0.0; after the samples, hoster {"ai":true,"combat":false,"disabled":false}, puppet {"ai":false,"combat":false,"disabled":false}
-- ![S1.1](runs/S1_1/1/S1_1-Alvor-engine2.png)
 - ![S1.1](runs/S1_1/1/S1_1-Alvor-engine1.png)
+- ![S1.1](runs/S1_1/1/S1_1-Alvor-engine2.png)
 - ![S1.1](runs/S1_1/1/S1_1-Gerdur-engine2.png)
 - ![S1.1](runs/S1_1/1/S1_1-Gerdur-engine1.png)
 - ![S1.1](runs/S1_1/1/S1_1-Hadvar-engine2.png)
@@ -325,14 +325,14 @@ First non-PASS in plan order: L1
 - ![2A.1](runs/2A_1/1/2A_1-open.png)
 - ![2A.1](runs/2A_1/1/2A_1-engine2.png)
 ### 2A.2
-- run 1: barrel 20570 before: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}; NPC 1a67c hosted by engine 1 (ff000000), engine 2 shows a puppet; before: {"loaded":true,"disabled":false} / {"loaded":true,"disabled":false}
+- run 1: barrel 20570 before: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}; NPC cdd73 hosted by engine 2 (ff000001), engine 1 shows a puppet; before: {"loaded":true,"disabled":false} / {"loaded":true,"disabled":false}
 - run 1: barrel 20570: server isDisabled true; within 5 s of the server disable: engine 1 {"loaded":false,"disabled":true}, engine 2 {"loaded":false,"disabled":true}
 - run 1: barrel 20570: server isDisabled false; within 5 s of the server enable: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}
-- run 1: NPC 1a67c on the server before the disable: {"hoster":4278190080,"listeners":[4278190080,4278190081],"at":["1a26f:Skyrim.esm",20669,-7728,-3636]}
-- run 1: NPC 1a67c: server isDisabled true; within 5 s of the server disable: engine 1 {"loaded":false,"disabled":true}, engine 2 {"loaded":false,"disabled":true}
-- run 1: NPC 1a67c: server isDisabled false; within 5 s of the server enable: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}
-- run 1: NPC 1a67c on the server after the enable: {"hoster":0,"listeners":[4278190080,4278190081],"at":["1a26f:Skyrim.esm",20669,-7728,-3636]}
-- run 1: NPC 1a67c hoster within 30 s of the enable (not asserted): ff000000
+- run 1: NPC cdd73 on the server before the disable: {"hoster":4278190081,"listeners":[4278190080,4278190081],"at":["1a26f:Skyrim.esm",23483,-8305,-3381]}
+- run 1: NPC cdd73: server isDisabled true; within 5 s of the server disable: engine 1 {"loaded":false,"disabled":true}, engine 2 {"loaded":false,"disabled":true}
+- run 1: NPC cdd73: server isDisabled false; within 5 s of the server enable: engine 1 {"loaded":true,"disabled":false}, engine 2 {"loaded":true,"disabled":false}
+- run 1: NPC cdd73 on the server after the enable: {"hoster":0,"listeners":[4278190080,4278190081],"at":["1a26f:Skyrim.esm",23483,-8305,-3381]}
+- run 1: NPC cdd73 hoster within 30 s of the enable (not asserted): ff000000
 - run 1: barrel 20570 disabled while engine 1's player is away; players the server streams the barrel to at the disable: ["ff000001"]
 - run 1: barrel 20570 disabled on the server while engine 1's player was away: engine 1 {"loaded":false,"disabled":true} after the return
 ### 2A.3
@@ -371,9 +371,9 @@ First non-PASS in plan order: L1
 - run 1: A: party joined in Bleak Falls Barrow; server script states: pillars position01, position03, position01, gate waiting; gate node RuinsGate01 height on engine 1 -768, on engine 2 -768
 - run 1: A: control, engine 2 pulled the lever before the pillars were solved: lever activations in the server log 1, lever server state Waiting, gate server state waiting, gate animation events on engine 1 [], on engine 2 [], gate height -768, -768
 - run 1: A: before the second pull (19 s after the control pull): lever server state Waiting, gate animation events on engine 1 [], on engine 2 [], gate height -768, -768
-- run 1: A: engine 2 (member) turned the pillars 1, 2, 3, then 1, 2: server pillar states position03, position02, position02; engine 2 pulled the lever: gate server state busy, gate animation events on engine 1 ["Open"], on engine 2 ["Open"]; gate height on engine 1 -768 -> -579, on engine 2 -768 -> -573
+- run 1: A: engine 2 (member) turned the pillars 1, 2, 3, then 1, 2: server pillar states position03, position02, position02; engine 2 pulled the lever: gate server state busy, gate animation events on engine 1 ["Open"], on engine 2 ["Open"]; gate height on engine 1 -768 -> -583, on engine 2 -768 -> -576
 - run 1: A: gate server state after the opening: waiting
-- run 1: B: engine 1 (leader, with the claw) turned each ring twice: server ring states {"large":"position02","medium":"position03","small":"position01"}; engine 1 used the keyhole: keyhole server state done, door node DoorBase height on engine 1 -171 -> -231, on engine 2 -171 -> -234; MS13 stage on engine 1 50, on engine 2 50
+- run 1: B: engine 1 (leader, with the claw) turned each ring twice: server ring states {"large":"position02","medium":"position03","small":"position01"}; engine 1 used the keyhole: keyhole server state done, door node DoorBase height on engine 1 -171 -> -234, on engine 2 -171 -> -235; MS13 stage on engine 1 50, on engine 2 50
 - ![2B.2](runs/2B_2/1/clawdoor-engine2.png)
 ### 2B.3
 - run 1: A: party formed, the server enabled the dragon and it is loaded on both engines, MQ104 not running (engine 1 -1, engine 2 -1); dragon 5a6ca server dead false, distance to the leader 2553, to the member 2543; before: engine 1 {"souls":0,"absorbed":0}, engine 2 {"souls":0,"absorbed":0}
@@ -434,7 +434,7 @@ First non-PASS in plan order: L1
 - run 1: S1 (G2.1's step): MS13 40; the claw 39647: client 1, server 1; 10 s later client 1, server 1; the member's MS13 log [10,40]
 - run 1: S1 after the relog: MS13 40, the claw client 1, server 1
 - run 1: S1 after the relog: Arvel (the claw) holds 0 on the client, 0 on the server
-- run 1: S2 (G2.2's step): the claw door DoorBase -171 -> -229, MS13 50, the keyhole's server state done, the member's MS13 log [10,40,50]
+- run 1: S2 (G2.2's step): the claw door DoorBase -171 -> -228, MS13 50, the keyhole's server state done, the member's MS13 log [10,40,50]
 - run 1: S2 after the relog: MS13 50, the claw door DoorBase -370 (closed -171), the claw held 1
 - run 1: S2 after the relog: Arvel (the claw) holds 0 on the client, 0 on the server
 - run 1: S3 (G2.3's loot): MQ103 180 (180 done true); 10 s after the loot the Dragonstone: client 1, server 1; the member's MQ103 log [10,180,20,60]
@@ -445,18 +445,18 @@ First non-PASS in plan order: L1
 - run 1: S4 after the relog: MQ103 190 done true, the Dragonstone client 0, server 0
 - run 1: S4 after the relog: Arvel (the claw) holds 0 on the client, 0 on the server
 - run 1: S4 after the relog: the boss (the Dragonstone) holds 0 on the client, 0 on the server
-- run 1: S5 (G2.4's step): MQ104 90 done true, 160 done true (11 topic picks, 0 boxes); Fus true; the leader gained ["4b158"], the reward weapon 4b158 10 s later: client 1, server 1
-- run 1: S5: the leader equipped 4b158: client right hand 4b158, server worn ["12e46","12e49","12e4b","12e4d","4b158"]
+- run 1: S5 (G2.4's step): MQ104 90 done true, 160 done true (7 topic picks, 0 boxes); Fus true; the leader gained ["896e7"], the reward weapon 896e7 10 s later: client 1, server 1
+- run 1: S5: the leader equipped 896e7: client right hand 896e7, server worn ["12e46","12e49","12e4b","12e4d","896e7"]
 - run 1: S5: Lydia follows the leader true ({"teammate":true,"rank":0}); the server's stored followers [666772,0]; the member's MQ104 log [10,60,65,90,85,80,150,108,160]
-- run 1: S5 after the relog: {"souls":0,"soulsBefore":0,"done160":true,"fus":true,"axe":1,"serverAxe":1,"equipped":"4b158","worn":["12e46","12e49","12e4b","12e4d","4b158"],"lydia":{"teammate":true,"rank":0}}
+- run 1: S5 after the relog: {"souls":0,"soulsBefore":0,"done160":true,"fus":true,"axe":1,"serverAxe":1,"equipped":"896e7","worn":["12e46","12e49","12e4b","12e4d","896e7"],"lydia":{"teammate":true,"rank":0}}
 - run 1: S5 after the relog: Arvel (the claw) holds 0 on the client, 0 on the server
 - run 1: S5 after the relog: the boss (the Dragonstone) holds 0 on the client, 0 on the server
 - run 1: relog S1 start: the leader and the bot logged in again; 0 message boxes answered; state back 0.7 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)
-- run 1: relog S1: the leader and the bot logged in again; 0 message boxes answered; state back 2.6 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)
-- run 1: relog S2: the leader and the bot logged in again; 0 message boxes answered; state back 2.8 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)
+- run 1: relog S1: the leader and the bot logged in again; 0 message boxes answered; state back 2.7 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)
+- run 1: relog S2: the leader and the bot logged in again; 0 message boxes answered; state back 3.3 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)
 - run 1: relog S3: the leader and the bot logged in again; 0 message boxes answered; state back 2.0 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [["1ceee",0],["1ceee",1]] (relayed from the leader)
-- run 1: relog S4: the leader and the bot logged in again; 0 message boxes answered; state back 3.2 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)
-- run 1: relog S5: the leader and the bot logged in again; 1 message boxes answered; state back 11.2 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)
+- run 1: relog S4: the leader and the bot logged in again; 0 message boxes answered; state back 3.1 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)
+- run 1: relog S5: the leader and the bot logged in again; 1 message boxes answered; state back 11.1 s after the login; the bot came back as ff000001 (was ff000001), its quest log lost [] and gained [] (relayed from the leader)
 - run 1: the leader client's stray removals and failed relinks: ["Stray quest item removed d0800 18 9bcd6","Stray quest item removed d0800 18 9bcd6"]
 - ![G2.5](runs/G2_5/1/G2_5-relog.png)
 ### F4
@@ -492,25 +492,42 @@ First non-PASS in plan order: L1
 - ![G2.6](runs/G2_6/1/clawdoor-engine2.png)
 - ![G2.6](runs/G2_6/1/G2_6-lydia-member.png)
 ### F6
-- run 1: A: party formed; the leader set MQ104 to 10, then 160, the server enabled Lydia a2c94, and both moved next to her ([-371,-319,-317] in 165a3:Skyrim.esm, server {"disabled":false,"pos":[-351,-286,-318]} 20 s later): Lydia enabled and loaded on the leader true, on the member true; {"leader":{"teammate":false,"rank":-1},"member":{"teammate":false,"rank":-1},"storedLeader":[],"storedMember":[],"hoster":"ff000000","seenLeader":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":110,"hosted":false},"seenMember":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":151,"hosted":false},"server":{"lydia":"165a3:Skyrim.esm -351 -286 -318","leader":"165a3:Skyrim.esm -251 -239 -318","member":"165a3:Skyrim.esm -491 -239 -318"}}
-- run 1: B: the leader asked Lydia to follow (1 topic picks: "Suivez-moi, j'ai besoin de votre aide."): {"leader":{"teammate":true,"rank":0},"member":{"teammate":false,"rank":-1},"storedLeader":["a2c94","0"],"storedMember":[],"hoster":"ff000000","seenLeader":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":110,"hosted":false},"seenMember":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":148,"hosted":false},"server":{"lydia":"165a3:Skyrim.esm -351 -286 -318","leader":"165a3:Skyrim.esm -251 -239 -318","member":"165a3:Skyrim.esm -491 -239 -318"}}
-- run 1: C: the member asked Lydia to follow (1 topic picks: "Suivez-moi, j'ai besoin de votre aide."): {"leader":{"teammate":false,"rank":-2},"member":{"teammate":true,"rank":0},"storedLeader":["0","0"],"storedMember":["a2c94","0"],"hoster":"ff000001","seenLeader":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":110,"hosted":false},"seenMember":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":148,"hosted":false},"server":{"lydia":"165a3:Skyrim.esm -351 -286 -318","leader":"165a3:Skyrim.esm -251 -239 -318","member":"165a3:Skyrim.esm -491 -239 -318"}}
-- run 1: D: both players logged in again: {"leader":{"teammate":false,"rank":-1},"member":{"teammate":true,"rank":0},"storedLeader":["0","0"],"storedMember":["a2c94","0"],"hoster":"ff000001","seenLeader":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":138,"hosted":false},"seenMember":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":144,"hosted":false},"server":{"lydia":"165a3:Skyrim.esm -371 -319 -320","leader":"165a3:Skyrim.esm -251 -239 -318","member":"165a3:Skyrim.esm -491 -240 -318"}}
-- run 2: A: party formed; the leader set MQ104 to 10, then 160, the server enabled Lydia a2c94, and both moved next to her ([-371,-319,-317] in 165a3:Skyrim.esm, server {"disabled":false,"pos":[-349,-286,-318]} 20 s later): Lydia enabled and loaded on the leader true, on the member true; {"leader":{"teammate":false,"rank":-1},"member":{"teammate":false,"rank":-1},"storedLeader":[],"storedMember":[],"hoster":"ff000001","seenLeader":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":112,"hosted":false},"seenMember":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":149,"hosted":false},"server":{"lydia":"165a3:Skyrim.esm -349 -286 -318","leader":"165a3:Skyrim.esm -251 -239 -318","member":"165a3:Skyrim.esm -491 -239 -318"}}
-- run 2: B: the leader asked Lydia to follow (1 topic picks: "Suivez-moi, j'ai besoin de votre aide."): {"leader":{"teammate":true,"rank":0},"member":{"teammate":false,"rank":-1},"storedLeader":["a2c94","0"],"storedMember":[],"hoster":"ff000000","seenLeader":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":411,"hosted":false},"seenMember":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":449,"hosted":false},"server":{"lydia":"165a3:Skyrim.esm -303 169 -320","leader":"165a3:Skyrim.esm -251 -239 -318","member":"165a3:Skyrim.esm -491 -239 -318"}}
-- run 2: C: the member asked Lydia to follow (1 topic picks: "Suivez-moi, j'ai besoin de votre aide."): {"leader":{"teammate":false,"rank":-2},"member":{"teammate":true,"rank":0},"storedLeader":["0","0"],"storedMember":["a2c94","0"],"hoster":"ff000001","seenLeader":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":307,"hosted":false},"seenMember":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":387,"hosted":false},"server":{"lydia":"165a3:Skyrim.esm -277 84 -318","leader":"165a3:Skyrim.esm -251 -239 -318","member":"165a3:Skyrim.esm -491 -239 -318"}}
-- run 2: D: both players logged in again: {"leader":{"teammate":false,"rank":-1},"member":{"teammate":true,"rank":0},"storedLeader":["0","0"],"storedMember":["a2c94","0"],"hoster":"ff000001","seenLeader":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":116,"hosted":false},"seenMember":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":144,"hosted":false},"server":{"lydia":"165a3:Skyrim.esm -371 -319 -320","leader":"165a3:Skyrim.esm -251 -239 -318","member":"165a3:Skyrim.esm -491 -239 -318"}}
-- run 3: A: party formed; the leader set MQ104 to 10, then 160, the server enabled Lydia a2c94, and both moved next to her ([-371,-319,-317] in 165a3:Skyrim.esm, server {"disabled":false,"pos":[-347,-280,-320]} 20 s later): Lydia enabled and loaded on the leader true, on the member true; {"leader":{"teammate":false,"rank":-1},"member":{"teammate":false,"rank":-1},"storedLeader":[],"storedMember":[],"hoster":"ff000000","seenLeader":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":105,"hosted":false},"seenMember":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":149,"hosted":false},"server":{"lydia":"165a3:Skyrim.esm -347 -280 -320","leader":"165a3:Skyrim.esm -251 -239 -318","member":"165a3:Skyrim.esm -491 -239 -318"}}
-- run 3: B: the leader asked Lydia to follow (1 topic picks: "Suivez-moi, j'ai besoin de votre aide."): {"leader":{"teammate":true,"rank":0},"member":{"teammate":false,"rank":-1},"storedLeader":["a2c94","0"],"storedMember":[],"hoster":"ff000000","seenLeader":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":105,"hosted":false},"seenMember":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":149,"hosted":false},"server":{"lydia":"165a3:Skyrim.esm -347 -280 -318","leader":"165a3:Skyrim.esm -251 -239 -318","member":"165a3:Skyrim.esm -491 -239 -318"}}
-- run 3: C: the member asked Lydia to follow (1 topic picks: "Suivez-moi, j'ai besoin de votre aide."): {"leader":{"teammate":false,"rank":-2},"member":{"teammate":true,"rank":0},"storedLeader":["0","0"],"storedMember":["a2c94","0"],"hoster":"ff000001","seenLeader":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":99,"hosted":false},"seenMember":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":148,"hosted":false},"server":{"lydia":"165a3:Skyrim.esm -348 -279 -318","leader":"165a3:Skyrim.esm -251 -239 -318","member":"165a3:Skyrim.esm -491 -239 -318"}}
-- run 3: D: both players logged in again: {"leader":{"teammate":false,"rank":-1},"member":{"teammate":true,"rank":0},"storedLeader":["0","0"],"storedMember":["a2c94","0"],"hoster":"ff000001","seenLeader":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":139,"hosted":false},"seenMember":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":144,"hosted":false},"server":{"lydia":"165a3:Skyrim.esm -371 -319 -320","leader":"165a3:Skyrim.esm -251 -239 -318","member":"165a3:Skyrim.esm -492 -241 -318"}}
+- run 1: A: party formed; the leader set MQ104 to 10, then 160, the server enabled Lydia a2c94, and both moved next to her ([-371,-319,-317] in 165a3:Skyrim.esm, server {"disabled":false,"pos":[-351,-285,-318]} 20 s later): Lydia enabled and loaded on the leader true, on the member true; {"leader":{"teammate":false,"rank":-1},"member":{"teammate":false,"rank":-1},"storedLeader":[],"storedMember":[],"hoster":"ff000000","seenLeader":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":111,"hosted":false},"seenMember":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":150,"hosted":false},"server":{"lydia":"165a3:Skyrim.esm -351 -285 -318","leader":"165a3:Skyrim.esm -251 -239 -318","member":"165a3:Skyrim.esm -491 -239 -318"}}
+- run 1: B: the leader asked Lydia to follow (1 topic picks: "Suivez-moi, j'ai besoin de votre aide."): {"leader":{"teammate":true,"rank":0},"member":{"teammate":false,"rank":-1},"storedLeader":["a2c94","0"],"storedMember":[],"hoster":"ff000000","seenLeader":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":111,"hosted":false},"seenMember":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":147,"hosted":false},"server":{"lydia":"165a3:Skyrim.esm -351 -285 -318","leader":"165a3:Skyrim.esm -251 -239 -318","member":"165a3:Skyrim.esm -491 -239 -318"}}
+- run 1: C: the member asked Lydia to follow (1 topic picks: "Suivez-moi, j'ai besoin de votre aide."): {"leader":{"teammate":false,"rank":-2},"member":{"teammate":true,"rank":0},"storedLeader":["0","0"],"storedMember":["a2c94","0"],"hoster":"ff000001","seenLeader":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":114,"hosted":false},"seenMember":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":147,"hosted":false},"server":{"lydia":"165a3:Skyrim.esm -351 -285 -318","leader":"165a3:Skyrim.esm -251 -239 -318","member":"165a3:Skyrim.esm -491 -239 -318"}}
+- run 1: D: both players logged in again: {"leader":{"teammate":false,"rank":-1},"member":{"teammate":true,"rank":0},"storedLeader":["0","0"],"storedMember":["a2c94","0"],"hoster":"ff000001","seenLeader":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":100,"hosted":false},"seenMember":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":170,"hosted":false},"server":{"lydia":"165a3:Skyrim.esm -326 -256 -319","leader":"165a3:Skyrim.esm -251 -239 -318","member":"165a3:Skyrim.esm -494 -236 -318"}}
 ### F2
-- run 1: the client applied the last replayed entry (MQ104 10) and 0.4 s later, inside the 3 s settle, FreeformRiften20 (85d40) went from stage 0 to 10; the server's quest log of ff000000 has it 0.4 s after the earliest settle end; server lines from this client since the last entry: Coop: quest 2610a stage 1 from ff000000, logged for ff000000 | Coop: quest 2610a stage 10 from ff000000, logged for ff000000 | Coop: quest 4e50d stage 5 from ff000000, logged for ff000000 | Coop: quest 5f596 stage 20 from ff000000, logged for ff000000 | Coop: quest 4e50d stage 14 from ff000000, logged for ff000000 | Coop: quest 2610a stage 20 from ff000000, logged for ff000000 | Coop: quest 4e50d stage 10 from ff000000, logged for ff000000 | Coop: quest 85d40 stage 10 from ff000000, logged for ff000000 | Coop: quest 2610c stage 12 from ff000000, logged for ff000000 | Coop: quest 2522f stage 0 from ff000000, logged for ff000000 | Coop: quest 2522f stage 1 from ff000000, logged for ff000000 | Coop: quest 4b2d9 stage 1 from ff000000, logged for ff000000 | Coop: quest 25251 stage 0 from ff000000, logged for ff000000 | Coop: quest 25251 stage 1 from ff000000, logged for ff000000 | Coop: quest c18e1 stage 0 from ff000000, logged for ff000000 | Coop: quest c18e1 stage 1 from ff000000, logged for ff000000 | Coop: quest 25231 stage 0 from ff000000, logged for ff000000 | Coop: quest 25250 stage 0 from ff000000, logged for ff000000
+- run 1: the client applied the last replayed entry (MQ104 10) and 0.4 s later, inside the 3 s settle, FreeformRiften20 (85d40) went from stage 0 to 10; the server's quest log of ff000000 has it 0.3 s after the earliest settle end; server lines from this client since the last entry: Coop: quest 5f596 stage 20 from ff000000, logged for ff000000 | Coop: quest 85d40 stage 10 from ff000000, logged for ff000000 | Coop: quest 25185 stage 0 from ff000000, logged for ff000000 | Coop: quest 2522f stage 0 from ff000000, logged for ff000000 | Coop: quest 25185 stage 1 from ff000000, logged for ff000000 | Coop: quest 2522f stage 1 from ff000000, logged for ff000000 | Coop: quest 25251 stage 0 from ff000000, logged for ff000000 | Coop: quest 4b2d9 stage 1 from ff000000, logged for ff000000 | Coop: quest c18e1 stage 0 from ff000000, logged for ff000000 | Coop: quest 25251 stage 1 from ff000000, logged for ff000000 | Coop: quest c18e1 stage 1 from ff000000, logged for ff000000 | Coop: quest 25231 stage 0 from ff000000, logged for ff000000 | Coop: quest 25250 stage 0 from ff000000, logged for ff000000
 ### F3
 - run 1: A: party joined; the leader set MS13 10; Arvel hosted by ff000001, killed on engine 2; MS13 on the leader 10, on the member 8; the server corpse holds 1 claw, the member's corpse 1, the member's claw alias in its corpse true
 - run 1: A: server: ff000001 joined party 1, leader ff000000, out of sync: 39645
 - run 1: B: the member opens the corpse true, takes the claw in the container menu true; 8 s later MS13 on the member 40, on the leader 10; stage 40 in the server log of the member true, of the leader false; claw: server corpse 1, the member on the server 0, locally 0
 - run 1: C: the leader opens the corpse true, takes true; MS13 on the leader 40, on the member 40; the leader holds 1 claw on the server
+### P1
+- run 1: S1 party: server killed and restarted, both clients reconnected and got their quest log replay true; race menu open [false,false]; changed: nothing; new quest log entries (quests new to the log) leader 25185:0 2522f:0 25185:1 2522f:1 25231:0 25251:0 4b2d9:1 c18e1:0 25251:1 c18e1:1 25250:0, member 25185:0 2522f:0 25185:1 2522f:1 25231:0 25251:0 4b2d9:1 c18e1:0 25251:1 c18e1:1 25250:0; the leader's 85d40 stage 10 relayed to the member's log true
+- run 1: S2 quest stages: server killed and restarted, both clients reconnected and got their quest log replay true; race menu open [false,false]; changed: nothing; new quest log entries (quests new to the log) leader none, member none; the leader's d9b64 stage 30 relayed to the member's log true
+- run 1: S2: MQ104 on the clients after the restart: leader 160, member 160
+- run 1: S3 follower: server killed and restarted, both clients reconnected and got their quest log replay true; race menu open [false,false]; changed: nothing; new quest log entries (quests new to the log) leader none, member none; the leader's d0800 stage 10 relayed to the member's log true
+- run 1: S3: after the restart Lydia follows the member on his client true, hoster 0
+- run 1: S4: the leader took the Golden Claw from Arvel in the menu true; the server has it in the leader true; MS13 on the leader 40
+- run 1: S4 quest item: server killed and restarted, both clients reconnected and got their quest log replay true; race menu open [false,false]; changed: nothing; new quest log entries (quests new to the log) leader none, member none; the leader's d9b64 stage 40 relayed to the member's log true
+- run 1: S4: after the restart the leader's client holds 1 claw, MS13 40
+- run 2: S1 party: server killed and restarted, both clients reconnected and got their quest log replay true; race menu open [false,false]; changed: nothing; new quest log entries (quests new to the log) leader 25185:0 25185:1 2522f:0 2522f:1 4b2d9:1 25251:0 25250:0 25251:1 25231:0 c18e1:0 c18e1:1, member 25185:0 25185:1 2522f:0 2522f:1 4b2d9:1 25251:0 25250:0 25251:1 25231:0 c18e1:0 c18e1:1; the leader's 85d40 stage 10 relayed to the member's log true
+- run 2: S2 quest stages: server killed and restarted, both clients reconnected and got their quest log replay true; race menu open [false,false]; changed: nothing; new quest log entries (quests new to the log) leader none, member none; the leader's d9b64 stage 30 relayed to the member's log true
+- run 2: S2: MQ104 on the clients after the restart: leader 160, member 160
+- run 2: S3 follower: server killed and restarted, both clients reconnected and got their quest log replay true; race menu open [false,false]; changed: nothing; new quest log entries (quests new to the log) leader none, member none; the leader's d0800 stage 10 relayed to the member's log true
+- run 2: S3: after the restart Lydia follows the member on his client true, hoster 0
+- run 2: S4: the leader took the Golden Claw from Arvel in the menu true; the server has it in the leader true; MS13 on the leader 40
+- run 2: S4 quest item: server killed and restarted, both clients reconnected and got their quest log replay true; race menu open [false,false]; changed: nothing; new quest log entries (quests new to the log) leader none, member none; the leader's d9b64 stage 40 relayed to the member's log true
+- run 2: S4: after the restart the leader's client holds 1 claw, MS13 40
+- run 3: S1 party: server killed and restarted, both clients reconnected and got their quest log replay true; race menu open [false,false]; changed: nothing; new quest log entries (quests new to the log) leader 25185:0 2522f:0 25185:1 2522f:1 4b2d9:1 25251:0 c18e1:0 25251:1 c18e1:1, member 25185:0 2522f:0 25185:1 2522f:1 4b2d9:1 25251:0 c18e1:0 25251:1 c18e1:1; the leader's 85d40 stage 10 relayed to the member's log true
+- run 3: S2 quest stages: server killed and restarted, both clients reconnected and got their quest log replay true; race menu open [false,false]; changed: nothing; new quest log entries (quests new to the log) leader none, member none; the leader's d9b64 stage 30 relayed to the member's log true
+- run 3: S2: MQ104 on the clients after the restart: leader 160, member 160
+- run 3: S3 follower: server killed and restarted, both clients reconnected and got their quest log replay true; race menu open [false,false]; changed: nothing; new quest log entries (quests new to the log) leader none, member none; the leader's d0800 stage 10 relayed to the member's log true
+- run 3: S3: after the restart Lydia follows the member on his client true, hoster 0
+- run 3: S4: the leader took the Golden Claw from Arvel in the menu true; the server has it in the leader true; MS13 on the leader 40
+- run 3: S4 quest item: server killed and restarted, both clients reconnected and got their quest log replay true; race menu open [false,false]; changed: nothing; new quest log entries (quests new to the log) leader none, member none; the leader's d9b64 stage 40 relayed to the member's log true
+- run 3: S4: after the restart the leader's client holds 1 claw, MS13 40
 ### P8
 - run 1: 115 client log lines, 2 [Exception] lines
 - run 1: exception: [Exception] failed to get key 'data': failed to call custom Serialize for type struct Equipment: failed to get key 'inv': failed to call cus.

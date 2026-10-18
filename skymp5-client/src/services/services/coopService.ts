@@ -54,6 +54,7 @@ export class CoopService extends ClientListener {
     this.controller.emitter.on("customPacketMessage", (e) => this.onCustomPacketMessage(e));
     this.controller.emitter.on("gameLoad", (e) => this.onGameLoad(e));
     this.controller.emitter.on("connectionDisconnect", () => this.onDisconnect());
+    this.controller.emitter.on("connectionAccepted", () => this.onConnectionAccepted());
     this.controller.emitter.on("queryKeyCodeBindings", (e) => this.onQueryKeyCodeBindings(e));
     this.controller.on("questStage", (e) => this.onQuestStage(e));
     this.controller.on("questStop", (e) => this.onQuestStop(e));
@@ -112,6 +113,16 @@ export class CoopService extends ClientListener {
   private onDisconnect() {
     this.partyState = undefined;
     this.setQuestAuthority(true);
+    this.reconnecting = true;
+  }
+
+  private onConnectionAccepted() {
+    if (!this.reconnecting) {
+      return;
+    }
+    this.reconnecting = false;
+    this.reporting = false;
+    this.questLogRequestAt = Date.now() + QUEST_LOG_REQUEST_DELAY_MS;
   }
 
   private onUpdate() {
@@ -622,6 +633,7 @@ export class CoopService extends ClientListener {
 
   private questLogRequestAt = 0;
   private reporting = false;
+  private reconnecting = false;
   private unreported = new Array<QuestLogEntry>();
   private applying = false;
   private applyQueue = new Array<{ entries: QuestLogEntry[], replay: boolean, followers?: unknown, questItems?: unknown }>();

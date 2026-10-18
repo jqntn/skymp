@@ -608,15 +608,13 @@ bool WorldState::AttachEspmRecord(const espm::CombineBrowser& br,
     form.reset(
       new MpActor(formLocationalData, formCallbacksFactory(), baseId));
   }
-  auto refrRawPtr = form->AsObjectReference();
-  AddForm(std::move(form), formId, true, changeForm);
-
-  refrRawPtr->EditChangeFormNoSave([&](MpChangeForm& f) {
+  form->AsObjectReference()->EditChangeFormNoSave([&](MpChangeForm& f) {
     f.isDisabled = initiallyDisabled;
     if (isNpc && !isUniqueNpc) {
       f.spawnDelay = kEspmNpcSpawnDelay;
     }
   });
+  AddForm(std::move(form), formId, true, changeForm);
 
   // Do not TriggerFormInitEvent here, doing it later after changeForm apply
 
@@ -632,6 +630,10 @@ bool WorldState::LoadForm(uint32_t formId, std::stringstream* optionalOutTrace,
 {
   ANTIGO_CONTEXT_INIT(ctx);
   ctx.AddUnsigned(formId);
+
+  if (forms.find(formId) != forms.end()) {
+    return true;
+  }
 
   auto& br = GetEspm().GetBrowser();
 

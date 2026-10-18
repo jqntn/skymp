@@ -31,6 +31,7 @@ interface QuestInfo {
 type Handler = (ctx: SystemContext, actor: number, content: Content, userId: number) => void;
 
 const FOLLOWERS_PROPERTY = "private.coopFollowers";
+const PARTY_PROPERTY = "private.coopParty";
 const FOLLOWER_SLOTS = 2;
 const isFormId = (x: unknown): x is number => Number.isInteger(x) && (x as number) > 0 && (x as number) <= 0xffffffff;
 const hex = (x: number) => x.toString(16);
@@ -89,6 +90,7 @@ export class Coop implements System {
         this.parties.leave(m);
         this.offlineSince.delete(m);
       });
+      members.forEach((m) => this.saveParty(ctx, m));
       this.log(`Coop: party ${party.id} ended, nobody in it was online for ${LEADER_GRACE_MS / 1000} s`);
       return;
     }
@@ -101,6 +103,7 @@ export class Coop implements System {
       return;
     }
     this.resync(ctx, party);
+    party.members.forEach((m) => this.saveParty(ctx, m));
     this.log(`Coop: ${hex(next)} leads party ${party.id}, the leader was offline for ${LEADER_GRACE_MS / 1000} s`);
     for (const member of party.members) {
       this.sendState(ctx, member);
@@ -191,6 +194,7 @@ export class Coop implements System {
       return this.notice(ctx, invitee, party);
     }
     party.outOfSync.set(invitee, outOfSyncQuests(this.questLog(ctx, invitee), this.questLog(ctx, party.leader)));
+    party.members.forEach((m) => this.saveParty(ctx, m));
     this.log(`Coop: ${hex(invitee)} joined party ${party.id}, leader ${hex(party.leader)}, out of sync: ${[...party.outOfSync.get(invitee)!].map(hex)}`);
     this.broadcast(ctx, party, `${this.name(ctx, invitee)} joined the party`);
   }
@@ -214,6 +218,7 @@ export class Coop implements System {
     const others = party.members.filter((m) => m !== actor);
     const oldLeader = party.leader;
     this.parties.leave(actor);
+    [actor, ...others].forEach((m) => this.saveParty(ctx, m));
     this.log(`Coop: ${hex(actor)} left party ${party.id}, leader ${party.members.length ? hex(party.leader) : "none"}`);
     if (party.leader !== oldLeader) {
       this.resync(ctx, party);
@@ -248,6 +253,7 @@ export class Coop implements System {
       return this.notice(ctx, leader, party);
     }
     this.resync(ctx, party);
+    party.members.forEach((m) => this.saveParty(ctx, m));
     this.log(`Coop: ${hex(target)} leads party ${party.id}`);
     this.broadcast(ctx, party, `${this.name(ctx, target)} is now the party leader`);
   }
@@ -269,6 +275,7 @@ export class Coop implements System {
     }
     this.lastQuestLogRequest.set(userId, now);
     this.replays.set(actor, now);
+    this.restoreParty(ctx, actor);
     const party = this.parties.partyOf(actor);
     if (this.offlineSince.delete(actor) && party) {
       this.log(`Coop: ${hex(actor)} is back in party ${party.id}`);
@@ -323,6 +330,36 @@ export class Coop implements System {
       }
     }
     this.send(ctx, actor, { customPacketType: "questItemCounts", counts });
+  }
+
+  private storedParty(ctx: SystemContext, actor: number): number[] {
+    try {
+      const stored = ctx.svr.get(actor, PARTY_PROPERTY);
+      return Array.isArray(stored) && stored.every(isFormId) ? (stored as number[]) : [];
+    } catch {
+      return [];
+    }
+  }
+
+  private saveParty(ctx: SystemContext, actor: number): void {
+    const party = this.parties.partyOf(actor);
+    ctx.svr.set(actor, PARTY_PROPERTY, party ? [party.leader, ...party.members.filter((m) => m !== party.leader)] : []);
+  }
+
+  private restoreParty(ctx: SystemContext, actor: number): void {
+    const stored = this.storedParty(ctx, actor);
+    if (!stored.length || this.parties.partyOf(actor)) {
+      return;
+    }
+    const members = stored.filter((m) => m === actor || (this.storedParty(ctx, m)[0] === stored[0] && this.storedParty(ctx, m).includes(actor)));
+    const party = this.parties.restore(stored[0], members);
+    if (!party) {
+      ctx.svr.set(actor, PARTY_PROPERTY, []);
+      return;
+    }
+    party.members.filter((m) => !this.isOnline(ctx, m)).forEach((m) => this.offlineSince.set(m, Date.now()));
+    this.resync(ctx, party);
+    this.log(`Coop: party ${party.id} restored at the login of ${hex(actor)}, leader ${hex(party.leader)}, members ${party.members.map(hex).join(", ")}`);
   }
 
   private followers(ctx: SystemContext, actor: number): number[] {

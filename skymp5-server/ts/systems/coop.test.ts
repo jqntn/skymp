@@ -261,6 +261,82 @@ test("the last party member who asks a follower to follow owns her", () => {
   assert.deepEqual(stored(MEMBER), [0, 0]);
 });
 
+test("a party survives a server restart", (t) => {
+  t.mock.timers.enable({ apis: ["Date"], now: 1_000_000 });
+  const LEADER = 0xff000000;
+  const MEMBER = 0xff000001;
+  const OTHER = 0xff000002;
+  const props = new Map<string, unknown>();
+  const online = new Set([0, 1, 2]);
+  const svr = {
+    getUserActor: (userId: number) => LEADER + userId,
+    getUserByActor: (actor: number) => (online.has(actor - LEADER) ? actor - LEADER : 65535),
+    isConnected: (userId: number) => online.has(userId),
+    getActorName: () => "player",
+    getActorCellOrWorld: () => 0x3c,
+    getActorPos: () => [0, 0, 0],
+    sendCustomPacket: () => {},
+    get: (id: number, name: string) => props.get(`${id}:${name}`),
+    set: (id: number, name: string, value: unknown) => props.set(`${id}:${name}`, value),
+    lookupEspmRecordById: (): { record?: unknown } => ({}),
+  };
+  const ctx = { svr, gm: new EventEmitter() } as unknown as SystemContext;
+  const partyOf = (coop: Coop, actor: number) => (coop as unknown as { parties: { partyOf: (a: number) => { leader: number; members: number[] } | undefined } }).parties.partyOf(actor);
+  const before = new Coop(() => {}, 4);
+  before.customPacket(0, "partyInvite", { target: MEMBER }, ctx);
+  before.customPacket(1, "partyAccept", { inviter: LEADER }, ctx);
+  online.clear();
+  const after = new Coop(() => {}, 4);
+  online.add(1);
+  after.customPacket(1, "questLogRequest", {}, ctx);
+  assert.equal(partyOf(after, MEMBER)?.leader, LEADER);
+  assert.deepEqual(partyOf(after, MEMBER)?.members, [LEADER, MEMBER]);
+  online.add(0);
+  after.customPacket(0, "questLogRequest", {}, ctx);
+  assert.equal(partyOf(after, LEADER), partyOf(after, MEMBER));
+  online.add(2);
+  after.customPacket(0, "partyInvite", { target: OTHER }, ctx);
+  after.customPacket(2, "partyAccept", { inviter: LEADER }, ctx);
+  after.customPacket(0, "partyKick", { target: OTHER }, ctx);
+  after.customPacket(0, "partyPromote", { target: MEMBER }, ctx);
+  online.clear();
+  const promoted = new Coop(() => {}, 4);
+  online.add(2);
+  promoted.customPacket(2, "questLogRequest", {}, ctx);
+  assert.equal(partyOf(promoted, OTHER), undefined);
+  online.add(0);
+  promoted.customPacket(0, "questLogRequest", {}, ctx);
+  assert.equal(partyOf(promoted, LEADER)?.leader, MEMBER);
+  assert.deepEqual(partyOf(promoted, LEADER)?.members, [MEMBER, LEADER]);
+  const replace = (coop: Coop) => (coop as unknown as { replaceOfflineLeader: (c: SystemContext, p: unknown) => void }).replaceOfflineLeader.bind(coop)(ctx, partyOf(coop, LEADER));
+  t.mock.timers.tick(6 * 60_000);
+  replace(promoted);
+  assert.equal(partyOf(promoted, LEADER)?.leader, LEADER);
+  online.clear();
+  const replaced = new Coop(() => {}, 4);
+  online.add(1);
+  replaced.customPacket(1, "questLogRequest", {}, ctx);
+  assert.equal(partyOf(replaced, MEMBER)?.leader, LEADER);
+  replaced.customPacket(1, "partyLeave", {}, ctx);
+  online.clear();
+  const left = new Coop(() => {}, 4);
+  online.add(0);
+  left.customPacket(0, "questLogRequest", {}, ctx);
+  assert.equal(partyOf(left, LEADER), undefined);
+  online.add(1);
+  left.customPacket(0, "partyInvite", { target: MEMBER }, ctx);
+  left.customPacket(1, "partyAccept", { inviter: LEADER }, ctx);
+  left.disconnect(0, ctx);
+  left.disconnect(1, ctx);
+  online.clear();
+  t.mock.timers.tick(6 * 60_000);
+  replace(left);
+  const ended = new Coop(() => {}, 4);
+  online.add(1);
+  ended.customPacket(1, "questLogRequest", {}, ctx);
+  assert.equal(partyOf(ended, MEMBER), undefined);
+});
+
 test("a player who goes offline stays in the party, and an offline leader is replaced after the grace", (t) => {
   t.mock.timers.enable({ apis: ["Date"], now: 1_000_000 });
   const LEADER = 0xff000000;
