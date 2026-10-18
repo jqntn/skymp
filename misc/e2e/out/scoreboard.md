@@ -61,7 +61,7 @@ First non-PASS in plan order: L1
 | G2.6 | PASS | 158 | 2026-10-18 15:16 | 1/1 runs PASS |
 | F6 | PASS | 636 | 2026-10-18 15:27 | 3/3 runs PASS |
 | F2 | FAIL | 26 | 2026-10-18 16:02 | 1 of 1 runs not PASS; run 1/1: the replay's own quests were reported back after the settle: Coop: quest 2610a stage 1 from ff000000, logged for ff000000 / Coop: quest 2610a stage 10 from ff000000, logged for ff000000 / Coop: quest 4e50d stage 5 from ff000000, logged for ff000000 / Coop: quest 4e50d stage 14 from ff000000, logged for ff000000 / Coop: quest 2610a stage 20 from ff000000, logged for ff000000 / Coop: quest 4e50d stage 10 from ff000000, logged for ff000000 / Coop: quest 2610c stage 12 from ff000000, logged for ff000000 |
-| F3 | FAIL | 0 | - | not run |
+| F3 | FAIL | 60 | 2026-10-18 16:38 | 1 of 1 runs not PASS; run 1/1: B: after the refused take MS13 is at stage 40 on the member's client; B: after the refused take the server logged MS13 40 for the member true, the leader false |
 | P1 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | P2 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | P3 | FAIL | 0 | 2026-10-12 16:53 | no check script |
@@ -506,6 +506,11 @@ First non-PASS in plan order: L1
 - run 3: D: both players logged in again: {"leader":{"teammate":false,"rank":-1},"member":{"teammate":true,"rank":0},"storedLeader":["0","0"],"storedMember":["a2c94","0"],"hoster":"ff000001","seenLeader":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":139,"hosted":false},"seenMember":{"loaded":true,"disabled":false,"cell":"165a3","playerCell":"165a3","dist":144,"hosted":false},"server":{"lydia":"165a3:Skyrim.esm -371 -319 -320","leader":"165a3:Skyrim.esm -251 -239 -318","member":"165a3:Skyrim.esm -492 -241 -318"}}
 ### F2
 - run 1: the client applied the last replayed entry (MQ104 10) and 0.4 s later, inside the 3 s settle, FreeformRiften20 (85d40) went from stage 0 to 10; the server's quest log of ff000000 has it 0.4 s after the earliest settle end; server lines from this client since the last entry: Coop: quest 2610a stage 1 from ff000000, logged for ff000000 | Coop: quest 2610a stage 10 from ff000000, logged for ff000000 | Coop: quest 4e50d stage 5 from ff000000, logged for ff000000 | Coop: quest 5f596 stage 20 from ff000000, logged for ff000000 | Coop: quest 4e50d stage 14 from ff000000, logged for ff000000 | Coop: quest 2610a stage 20 from ff000000, logged for ff000000 | Coop: quest 4e50d stage 10 from ff000000, logged for ff000000 | Coop: quest 85d40 stage 10 from ff000000, logged for ff000000 | Coop: quest 2610c stage 12 from ff000000, logged for ff000000 | Coop: quest 2522f stage 0 from ff000000, logged for ff000000 | Coop: quest 2522f stage 1 from ff000000, logged for ff000000 | Coop: quest 4b2d9 stage 1 from ff000000, logged for ff000000 | Coop: quest 25251 stage 0 from ff000000, logged for ff000000 | Coop: quest 25251 stage 1 from ff000000, logged for ff000000 | Coop: quest c18e1 stage 0 from ff000000, logged for ff000000 | Coop: quest c18e1 stage 1 from ff000000, logged for ff000000 | Coop: quest 25231 stage 0 from ff000000, logged for ff000000 | Coop: quest 25250 stage 0 from ff000000, logged for ff000000
+### F3
+- run 1: A: party joined; the leader set MS13 10; Arvel hosted by ff000001, killed on engine 2; MS13 on the leader 10, on the member 8; the server corpse holds 1 claw, the member's corpse 1, the member's claw alias in its corpse true
+- run 1: A: server: ff000001 joined party 1, leader ff000000, out of sync: 39645
+- run 1: B: the member opens the corpse true, takes the claw in the container menu true; 8 s later MS13 on the member 40, on the leader 10; stage 40 in the server log of the member true, of the leader false; claw: server corpse 1, the member on the server 0, locally 0
+- run 1: C: the leader opens the corpse true, takes true; MS13 on the leader 40, on the member 40; the leader holds 1 claw on the server
 ### P8
 - run 1: 115 client log lines, 2 [Exception] lines
 - run 1: exception: [Exception] failed to get key 'data': failed to call custom Serialize for type struct Equipment: failed to get key 'inv': failed to call cus.

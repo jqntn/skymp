@@ -1378,5 +1378,28 @@
       }
     },
     "at": "2026-10-18T16:02:36.506Z"
+  },
+  "F3": {
+    "result": "FAIL",
+    "reason": "1 of 1 runs not PASS; run 1/1: B: after the refused take MS13 is at stage 40 on the member's client; B: after the refused take the server logged MS13 40 for the member true, the leader false",
+    "secs": 60,
+    "evidence": [
+      "run 1: A: party joined; the leader set MS13 10; Arvel hosted by ff000001, killed on engine 2; MS13 on the leader 10, on the member 8; the server corpse holds 1 claw, the member's corpse 1, the member's claw alias in its corpse true",
+      "run 1: A: server: ff000001 joined party 1, leader ff000000, out of sync: 39645",
+      "run 1: B: the member opens the corpse true, takes the claw in the container menu true; 8 s later MS13 on the member 40, on the leader 10; stage 40 in the server log of the member true, of the leader false; claw: server corpse 1, the member on the server 0, locally 0",
+      "run 1: C: the leader opens the corpse true, takes true; MS13 on the leader 40, on the member 40; the leader holds 1 claw on the server"
+    ],
+    "shots": [],
+    "rtt": {
+      "1": {
+        "median": 37,
+        "calls": 22
+      },
+      "2": {
+        "median": 35,
+        "calls": 23
+      }
+    },
+    "at": "2026-10-18T16:38:46.054Z"
   }
 }
