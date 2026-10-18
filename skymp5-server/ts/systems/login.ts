@@ -86,9 +86,9 @@ export class Login implements System {
     type: string,
     content: Content,
     ctx: SystemContext,
-  ): void {
+  ): boolean {
     if (type !== "loginWithSkympIo") {
-      return;
+      return false;
     }
 
     const ip = ctx.svr.getUserIp(userId);
@@ -238,6 +238,7 @@ export class Login implements System {
     } else {
       this.log("No credentials found in gameData:", gameData);
     }
+    return true;
   }
 
   private postServerLoginToDiscord(eventLogChannelId: string, botToken: string, options: { userId: number, ipToPrint: string, actorIds: string[], profile: UserProfile }) {

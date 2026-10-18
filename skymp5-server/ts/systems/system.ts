@@ -19,7 +19,7 @@ export interface System {
     type: string,
     content: Content,
     ctx: SystemContext
-  ) => void;
+  ) => boolean | void;
 }
 
 export type Content = Record<string, any>;

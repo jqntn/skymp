@@ -718,6 +718,10 @@ void ActionListener::OnHostAttempt(const RawMessageData& rawMsgData,
 
   auto user = partOne.serverState.UserByActor(remote.AsActor());
   if (user != Networking::InvalidUserId) {
+    partOne.GetLogger().log(
+      msg.worldOrCell ? spdlog::level::warn : spdlog::level::debug,
+      "Rejected host claim on {:x} by {:x}: the target is a player", remoteId,
+      me->GetFormId());
     return;
   }
 
@@ -732,6 +736,17 @@ void ActionListener::OnHostAttempt(const RawMessageData& rawMsgData,
         remote.Disable();
       }
     }
+    return;
+  }
+
+  if (!msg.worldOrCell &&
+      (remoteId < 0xff000000 || !remote.GetListeners().count(me))) {
+    partOne.GetLogger().warn("Rejected host claim on {:x} by {:x}: no "
+                             "location, {}",
+                             remoteId, me->GetFormId(),
+                             remoteId < 0xff000000
+                               ? "and the target is an ESP form"
+                               : "and the claimer does not see the target");
     return;
   }
 

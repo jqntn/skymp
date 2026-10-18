@@ -286,13 +286,18 @@ const main = async () => {
     const type = `${content.customPacketType}`;
     delete content.customPacketType;
 
+    let handled = false;
     for (const system of systems) {
       try {
-        if (system.customPacket)
-          system.customPacket(userId, type, content, ctx);
+        if (system.customPacket?.(userId, type, content, ctx))
+          handled = true;
       } catch (e) {
+        handled = true;
         console.error(e);
       }
+    }
+    if (!handled) {
+      log(`Rejected custom packet ${JSON.stringify(type.slice(0, 64))} from user ${userId}: no handler`);
     }
   });
 

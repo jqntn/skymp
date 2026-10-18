@@ -131,16 +131,16 @@ export class Coop implements System {
     this.holderAnswers.delete(actor);
   }
 
-  customPacket(userId: number, type: string, content: Content, ctx: SystemContext): void {
+  customPacket(userId: number, type: string, content: Content, ctx: SystemContext): boolean {
     const handler = this.handlers[type];
     if (!handler) {
-      return;
+      return false;
     }
     const actor = ctx.svr.getUserActor(userId);
-    if (!actor) {
-      return;
+    if (actor) {
+      handler(ctx, actor, content, userId);
     }
-    handler(ctx, actor, content, userId);
+    return true;
   }
 
   private readonly handlers: Record<string, Handler> = {
