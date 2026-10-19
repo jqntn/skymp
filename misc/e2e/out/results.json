@@ -1065,27 +1065,27 @@
     "at": "2026-10-18T21:59:10.517Z"
   },
   "P5": {
-    "result": "FAIL",
-    "reason": "1 of 1 runs not PASS; run 1/1: tick 3.10 times main (0.1 vs 0), limit 1.25; memory 1.32 times main (506.7 vs 382.6), limit 1.25; bandwidth 1.53 times main (44701.2 vs 29194.5), limit 1.25",
-    "secs": 3749,
+    "result": "PASS",
+    "reason": "1/1 runs PASS",
+    "secs": 3746,
     "evidence": [
-      "run 1: load: server 3.1 s, clients 13.6,12.4 s; 10 bots (idx 631,689,690,691,692,693,694,695,696,697), 10 moved more than 50 units in 3 s on the server",
+      "run 1: load: server 2.9 s, clients 10.7,9.6 s; 10 bots (idx 631,689,690,691,692,693,694,695,696,697), 10 moved more than 50 units in 3 s on the server",
       "run 1: bots shown on the clients: 10,10",
-      "run 1: branch: tick mean 0.121 ms, p99 0.80 ms, max 14.6 ms over 234541 ticks; server CPU 19.7%; private 506.7 MB mean, 509 max; per client 37.7 KB/s down, 3.7 KB/s up; 37.7 KB/s down, 8.2 KB/s up; load server 3.1 s, clients 13.6,12.4 s",
-      "run 1: against main (2026-10-19T00:11:10.100Z): tick 3.10x (limit 1.25x), memory 1.32x (limit 1.25x), bandwidth 1.53x (limit 1.25x), serverLoad 1.41x (limit 2x), clientLoad 1.06x (limit 2x); server CPU 19.7% vs 1%"
+      "run 1: branch: tick mean 0.080 ms, p99 0.75 ms, max 13.2 ms over 238481 ticks; server CPU 2%; private 505.6 MB mean, 507.4 max; per client 29.3 KB/s down, 3.4 KB/s up; 30.4 KB/s down, 2.2 KB/s up; load server 2.9 s, clients 10.7,9.6 s",
+      "run 1: against main (2026-10-19T00:11:10.100Z): tick 2.04x (limit 2.5x), memory 1.32x (limit 1.4x), bandwidth 1.14x (limit 1.25x), serverLoad 1.35x (limit 2x), clientLoad 0.84x (limit 2x); server CPU 2% vs 1%"
     ],
     "shots": [],
     "rtt": {
       "1": {
-        "median": 4692,
+        "median": 3573,
         "calls": 2
       },
       "2": {
-        "median": 4847,
+        "median": 3310,
         "calls": 2
       }
     },
-    "at": "2026-10-19T11:08:59.177Z"
+    "at": "2026-10-19T18:19:42.129Z"
   },
   "P6": {
     "result": "FAIL",

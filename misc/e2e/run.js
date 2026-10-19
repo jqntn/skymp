@@ -290,11 +290,12 @@ const installClient = (dir) => {
   return files.length;
 };
 
-const startProxy = (ctx, { delayMs = 0, loss = 0 } = {}) => {
+const startProxy = async (ctx, { delayMs = 0, loss = 0 } = {}) => {
   const front = dgram.createSocket("udp4");
   const clients = new Map();
   const stats = {};
-  const later = (fn) => (delayMs ? setTimeout(fn, delayMs) : fn());
+  let closed = false;
+  const later = (fn) => (delayMs ? setTimeout(() => !closed && fn(), delayMs) : fn());
   front.on("message", (msg, from) => {
     const key = `${from.address}:${from.port}`;
     const st = (stats[key] = stats[key] || { up: 0, down: 0, upPackets: 0, downPackets: 0 });
@@ -303,7 +304,8 @@ const startProxy = (ctx, { delayMs = 0, loss = 0 } = {}) => {
     let back = clients.get(key);
     if (!back) {
       back = dgram.createSocket("udp4");
-      back.on("message", (m) => {
+      back.on("message", (m, rinfo) => {
+        if (rinfo.port !== PORT.server) return;
         st.down += m.length;
         st.downPackets++;
         if (Math.random() >= loss) later(() => front.send(m, from.port, from.address));
@@ -313,10 +315,14 @@ const startProxy = (ctx, { delayMs = 0, loss = 0 } = {}) => {
     }
     if (Math.random() >= loss) later(() => back.send(msg, PORT.server, "127.0.0.1"));
   });
+  await new Promise((resolve, reject) => {
+    front.once("error", (e) => reject(new Env(`the proxy cannot listen on ${PORT.proxy}: ${e.message}`)));
+    front.bind(PORT.proxy, "127.0.0.1", resolve);
+  });
   front.on("error", () => {});
-  front.bind(PORT.proxy, "127.0.0.1");
   ctx.proxyStats = () => JSON.parse(JSON.stringify(stats));
   return () => {
+    closed = true;
     for (const c of clients.values()) c.close();
     front.close();
   };
@@ -539,7 +545,7 @@ const runOnce = async (id, check, n, attempt) => {
       return ctx.ready(engine);
     };
     if (check.server !== false) await startServer(check, ctx);
-    if (check.proxy) stopProxy = startProxy(ctx, check.proxy === true ? {} : check.proxy);
+    if (check.proxy) stopProxy = await startProxy(ctx, check.proxy === true ? {} : check.proxy);
     if (ALT_CLIENT && engines) ctx.evidence.push(`client from ${ALT_CLIENT}: ${installClient(ALT_CLIENT)} files installed for this run`);
     if (check.setup) await check.setup(ctx);
     for (let e = 1; e <= engines; e++) await startGame(e, ctx);
@@ -647,6 +653,10 @@ const main = async () => {
   const arg = (name) => { const i = args.indexOf(name); return i >= 0 ? args[i + 1] : undefined; };
   const only = arg("--only")?.split(",");
   const opts = { runs: Number(arg("--runs")) || 0, adhoc: arg("--check"), final: args.includes("--final"), keepGoing: args.includes("--keep-going") };
+  if ((arg("--dist") || arg("--client") || arg("--tag")) && (!opts.adhoc || !args.includes("--no-l1"))) {
+    log("--dist, --client and --tag need --check and --no-l1");
+    process.exit(2);
+  }
   if (arg("--dist")) DIST = path.resolve(arg("--dist"));
   if (arg("--client")) ALT_CLIENT = path.resolve(arg("--client"));
   TAG = arg("--tag") || null;

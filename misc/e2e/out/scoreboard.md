@@ -66,7 +66,7 @@ First non-PASS in plan order: G1.7
 | P2 | BLOCKED | 48 | 2026-10-19 13:58 | 1 of 1 runs not PASS; run 1/1: the hoster leaves the party: a player who leaves a party is still in the world and near the NPC, so it is not clear which NPCs the server must take from him (the user decides: (a) the server clears his hosts of quest-alias actors of the party's shared quests, (b) it clears all his hosts, which he claims again at once since nobody yields to him, or (c) leaving the party is not a hoster loss) |
 | P3 | BLOCKED | 47 | 2026-10-19 14:24 | 1 of 1 runs not PASS; run 1/1: the hoster leaves the party: P2 has no rule yet for which NPCs a player who leaves the party loses (user decision pending in P2), so the takeover after it is not checked |
 | P4 | FAIL | 22 | 2026-10-18 21:59 | 1 of 1 runs not PASS; run 1/1: claim without a location from 300 units: 0 matching log lines for 1 packet(s) (/Rejected host claim on 1ebf6 by ff000000: no location, and the target is an ESP form/); claim without a location from 300 units: the packet changed the server state ({"grants":0,"bandit":{"hoster":0,"cell":"3c:Skyrim.esm","pos":[7358,-41431,3578],"disabled":false},"player":{"hoster":0,"cell":"3c:Skyrim.esm","pos":[7058,-41431,3578],"disabled":false},"sword":1,"gold":140} -> {"grants":1,"bandit":{"hoster":0,"cell":"3c:Skyrim.esm","pos":[7358,-41431,3578],"disabled":false},"player":{"hoster":0,"cell":"3c:Skyrim.esm","pos":[7058,-41431,3578],"disabled":false},"sword":1,"gold":140}) |
-| P5 | FAIL | 3749 | 2026-10-19 11:08 | 1 of 1 runs not PASS; run 1/1: tick 3.10 times main (0.1 vs 0), limit 1.25; memory 1.32 times main (506.7 vs 382.6), limit 1.25; bandwidth 1.53 times main (44701.2 vs 29194.5), limit 1.25 |
+| P5 | PASS | 3746 | 2026-10-19 18:19 | 1/1 runs PASS |
 | P6 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | P7 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | P8 | FAIL | 35 | 2026-10-12 16:54 | run 1/1: client exceptions: [Exception] failed to get key 'data': failed to call custom Serialize for type struct Equipment: failed to get key 'inv': failed to call cus. |
@@ -532,10 +532,10 @@ First non-PASS in plan order: G1.7
 - run 1: handled packets logged as rejected: 0
 - run 1: control: a valid claim: 1 packet(s), 1 matching log line(s)
 ### P5
-- run 1: load: server 3.1 s, clients 13.6,12.4 s; 10 bots (idx 631,689,690,691,692,693,694,695,696,697), 10 moved more than 50 units in 3 s on the server
+- run 1: load: server 2.9 s, clients 10.7,9.6 s; 10 bots (idx 631,689,690,691,692,693,694,695,696,697), 10 moved more than 50 units in 3 s on the server
 - run 1: bots shown on the clients: 10,10
-- run 1: branch: tick mean 0.121 ms, p99 0.80 ms, max 14.6 ms over 234541 ticks; server CPU 19.7%; private 506.7 MB mean, 509 max; per client 37.7 KB/s down, 3.7 KB/s up; 37.7 KB/s down, 8.2 KB/s up; load server 3.1 s, clients 13.6,12.4 s
-- run 1: against main (2026-10-19T00:11:10.100Z): tick 3.10x (limit 1.25x), memory 1.32x (limit 1.25x), bandwidth 1.53x (limit 1.25x), serverLoad 1.41x (limit 2x), clientLoad 1.06x (limit 2x); server CPU 19.7% vs 1%
+- run 1: branch: tick mean 0.080 ms, p99 0.75 ms, max 13.2 ms over 238481 ticks; server CPU 2%; private 505.6 MB mean, 507.4 max; per client 29.3 KB/s down, 3.4 KB/s up; 30.4 KB/s down, 2.2 KB/s up; load server 2.9 s, clients 10.7,9.6 s
+- run 1: against main (2026-10-19T00:11:10.100Z): tick 2.04x (limit 2.5x), memory 1.32x (limit 1.4x), bandwidth 1.14x (limit 1.25x), serverLoad 1.35x (limit 2x), clientLoad 0.84x (limit 2x); server CPU 2% vs 1%
 ### P8
 - run 1: 115 client log lines, 2 [Exception] lines
 - run 1: exception: [Exception] failed to get key 'data': failed to call custom Serialize for type struct Equipment: failed to get key 'inv': failed to call cus.

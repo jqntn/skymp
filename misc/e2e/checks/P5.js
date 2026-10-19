@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const { spawnSync } = require("child_process");
+const { execFile } = require("child_process");
 
 const MINUTES = Number(process.env.E2E_P5_MINUTES) || 60;
 const WARMUP_MS = 2 * 60000;
@@ -13,11 +13,10 @@ const LOAD_LIMIT = 2;
 const OUT = path.join(__dirname, "..", "out", "p5");
 const APPEARANCE = { isFemale: false, raceId: 0x13746, weight: 50, skinColor: -1, hairColor: -1, headpartIds: [], headTextureSetId: 0, options: new Array(19).fill(0), presets: new Array(4).fill(0), tints: [], name: "E2eLoad" };
 
-const processSample = (pid) => {
-  const r = spawnSync("powershell", ["-NoProfile", "-Command", `$p = Get-Process -Id ${pid}; "$($p.PrivateMemorySize64) $($p.WorkingSet64) $($p.TotalProcessorTime.TotalMilliseconds)"`], { encoding: "utf8" });
-  const [priv, ws, cpu] = r.stdout.trim().split(" ").map(Number);
-  return { at: Date.now(), privateMB: priv / 2 ** 20, workingSetMB: ws / 2 ** 20, cpuMs: cpu };
-};
+const processSample = (pid) => new Promise((resolve) => execFile("powershell", ["-NoProfile", "-Command", `$p = Get-Process -Id ${pid}; "$($p.PrivateMemorySize64) $($p.WorkingSet64) $($p.TotalProcessorTime.TotalMilliseconds)"`], { encoding: "utf8" }, (err, stdout) => {
+  const [priv, ws, cpu] = `${stdout || ""}`.trim().split(" ").map(Number);
+  resolve({ at: Date.now(), privateMB: priv / 2 ** 20, workingSetMB: ws / 2 ** 20, cpuMs: cpu });
+}));
 
 module.exports = {
   engines: 2,
@@ -66,16 +65,17 @@ module.exports = {
     ctx.assert.ok(moved === BOTS, `not exercised: only ${moved} of ${BOTS} bots move on the server (${JSON.stringify(p0)} -> ${JSON.stringify(p1)})`);
     const seen = await Promise.all([1, 2].map((n) => ctx.drv(`const p = sp.Game.getPlayer(); let c = 0; const seen = new Set(); for (let i = 0; i < 300; i++) { const r = sp.Game.findRandomActor(p.getPositionX(), p.getPositionY(), p.getPositionZ(), 3000); if (r && r.getFormID() !== 0x14 && !seen.has(r.getFormID()) && r.getDisplayName() === "E2eBot") { seen.add(r.getFormID()); c++; } } return c;`, n).catch((e) => e.message.slice(0, 60))));
     ctx.evidence.push(`bots shown on the clients: ${seen}`);
+    ctx.assert.ok(seen.every((c) => c === BOTS), `not exercised: the clients show ${seen} of ${BOTS} bots`);
 
     await ctx.sleep(WARMUP_MS);
     await ctx.probe(`const st = globalThis.p5tick; st.n = 0; st.sum = 0; st.max = 0; st.hist.fill(0); return 0;`);
     const proxy0 = ctx.proxyStats();
-    const samples = [processSample(ctx.serverPid)];
+    const samples = [await processSample(ctx.serverPid)];
     const end = Date.now() + MINUTES * 60000;
     while (Date.now() < end) {
       await ctx.sleep(Math.min(60000, end - Date.now()));
       ctx.alive();
-      samples.push(processSample(ctx.serverPid));
+      samples.push(await processSample(ctx.serverPid));
     }
     const proxy1 = ctx.proxyStats();
     const tick = await ctx.probe(`const st = globalThis.p5tick; let acc = 0, p99 = 0; for (let i = 0; i < st.hist.length; i++) { acc += st.hist[i]; if (acc >= st.n * 0.99) { p99 = (i + 1) * 0.05; break; } } return { n: st.n, meanMs: st.sum / st.n, p99Ms: p99, maxMs: st.max };`);
@@ -84,7 +84,8 @@ module.exports = {
     const secs = (samples[samples.length - 1].at - samples[0].at) / 1000;
     const mean = (k) => samples.reduce((s, x) => s + x[k], 0) / samples.length;
     const clients = Object.keys(proxy1).filter((k) => proxy1[k].down > 1e6);
-    const perClient = clients.map((k) => ({ client: k, downBps: (proxy1[k].down - (proxy0[k]?.down || 0)) / secs, upBps: (proxy1[k].up - (proxy0[k]?.up || 0)) / secs }));
+    const rate = (k, f) => (proxy1[k][f] - (proxy0[k]?.[f] || 0)) / secs;
+    const perClient = clients.map((k) => ({ client: k, downBps: rate(k, "down"), upBps: rate(k, "up"), downPps: rate(k, "downPackets"), upPps: rate(k, "upPackets") }));
     const result = {
       tag: ctx.tag || "branch", at: new Date().toISOString(), minutes: MINUTES, bots: BOTS,
       tick: { ...tick, ticksPerSec: tick.n / secs },
@@ -92,6 +93,7 @@ module.exports = {
       privateMB: { mean: mean("privateMB"), max: Math.max(...samples.map((x) => x.privateMB)) },
       workingSetMB: { mean: mean("workingSetMB"), max: Math.max(...samples.map((x) => x.workingSetMB)) },
       perClient, clientBps: perClient.reduce((s, c) => s + c.downBps + c.upBps, 0) / Math.max(1, perClient.length),
+      maxClientBps: Math.max(...perClient.map((c) => c.downBps + c.upBps)),
       load: { serverMs: ctx.serverLoadMs, clientMs: loads },
     };
     fs.mkdirSync(OUT, { recursive: true });
@@ -102,15 +104,19 @@ module.exports = {
     if (ctx.tag === "main") throw new ctx.Accepted(`baseline written to out/p5/main.json`);
 
     const base = JSON.parse(fs.readFileSync(path.join(OUT, "main.json"), "utf8"));
+    ctx.assert.ok(base.minutes === MINUTES && base.bots === BOTS, `the main baseline ran ${base.minutes} min with ${base.bots} bots, this run ${MINUTES} min with ${BOTS}`);
+    const baseMaxClientBps = base.maxClientBps ?? Math.max(...base.perClient.map((c) => c.downBps + c.upBps));
     const ratios = {
       tick: [result.tick.meanMs, base.tick.meanMs, LIMIT.tick],
       memory: [result.privateMB.mean, base.privateMB.mean, LIMIT.memory],
-      bandwidth: [result.clientBps, base.clientBps, LIMIT.bandwidth],
+      bandwidth: [result.maxClientBps, baseMaxClientBps, LIMIT.bandwidth],
       serverLoad: [result.load.serverMs, base.load.serverMs, LOAD_LIMIT],
       clientLoad: [Math.max(...result.load.clientMs), Math.max(...base.load.clientMs), LOAD_LIMIT],
     };
+    const bad = Object.entries(ratios).filter(([, [v, b]]) => !Number.isFinite(v) || !Number.isFinite(b) || b <= 0);
+    ctx.assert.ok(!bad.length, `not measured: ${bad.map(([k, [v, b]]) => `${k} ${v} vs ${b}`).join(", ")}`);
     const over = Object.entries(ratios).filter(([, [v, b, l]]) => v > b * l);
     ctx.evidence.push(`against main (${base.at}): ${Object.entries(ratios).map(([k, [v, b, l]]) => `${k} ${(v / b).toFixed(2)}x (limit ${l}x)`).join(", ")}; server CPU ${r1(result.cpuPct)}% vs ${r1(base.cpuPct)}%`);
-    ctx.assert.ok(!over.length, over.map(([k, [v, b, l]]) => `${k} ${(v / b).toFixed(2)} times main (${r1(v)} vs ${r1(b)}), limit ${l}`).join("; "));
+    ctx.assert.ok(!over.length, over.map(([k, [v, b, l]]) => `${k} ${(v / b).toFixed(2)} times main (${v.toFixed(3)} vs ${b.toFixed(3)}), limit ${l}`).join("; "));
   },
 };
