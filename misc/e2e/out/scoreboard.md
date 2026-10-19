@@ -67,7 +67,7 @@ First non-PASS in plan order: G1.7
 | P3 | BLOCKED | 47 | 2026-10-19 14:24 | 1 of 1 runs not PASS; run 1/1: the hoster leaves the party: P2 has no rule yet for which NPCs a player who leaves the party loses (user decision pending in P2), so the takeover after it is not checked |
 | P4 | FAIL | 22 | 2026-10-18 21:59 | 1 of 1 runs not PASS; run 1/1: claim without a location from 300 units: 0 matching log lines for 1 packet(s) (/Rejected host claim on 1ebf6 by ff000000: no location, and the target is an ESP form/); claim without a location from 300 units: the packet changed the server state ({"grants":0,"bandit":{"hoster":0,"cell":"3c:Skyrim.esm","pos":[7358,-41431,3578],"disabled":false},"player":{"hoster":0,"cell":"3c:Skyrim.esm","pos":[7058,-41431,3578],"disabled":false},"sword":1,"gold":140} -> {"grants":1,"bandit":{"hoster":0,"cell":"3c:Skyrim.esm","pos":[7358,-41431,3578],"disabled":false},"player":{"hoster":0,"cell":"3c:Skyrim.esm","pos":[7058,-41431,3578],"disabled":false},"sword":1,"gold":140}) |
 | P5 | PASS | 3746 | 2026-10-19 18:19 | 1/1 runs PASS |
-| P6 | FAIL | 0 | 2026-10-12 16:53 | no check script |
+| P6 | PASS | 1004 | 2026-10-19 19:24 | 3/3 runs PASS |
 | P7 | FAIL | 0 | 2026-10-12 16:53 | no check script |
 | P8 | FAIL | 35 | 2026-10-12 16:54 | run 1/1: client exceptions: [Exception] failed to get key 'data': failed to call custom Serialize for type struct Equipment: failed to get key 'inv': failed to call cus. |
 
@@ -536,6 +536,34 @@ First non-PASS in plan order: G1.7
 - run 1: bots shown on the clients: 10,10
 - run 1: branch: tick mean 0.080 ms, p99 0.75 ms, max 13.2 ms over 238481 ticks; server CPU 2%; private 505.6 MB mean, 507.4 max; per client 29.3 KB/s down, 3.4 KB/s up; 30.4 KB/s down, 2.2 KB/s up; load server 2.9 s, clients 10.7,9.6 s
 - run 1: against main (2026-10-19T00:11:10.100Z): tick 2.04x (limit 2.5x), memory 1.32x (limit 1.4x), bandwidth 1.14x (limit 1.25x), serverLoad 1.35x (limit 2x), clientLoad 0.84x (limit 2x); server CPU 2% vs 1%
+### P6
+- run 1: S1: solo player ff000000 with a stale party record of leader ff0000aa, quest log replay at login true, party record after the login []
+- run 1: S2: MQ104 10 set on the client, in the server quest log true, client stage 12
+- run 1: S2 quest stage: relogged, replay true; changed: nothing
+- run 1: S3: Lydia follows true, stored on the server true, hoster ff000000
+- run 1: S3 follower: relogged, replay true; changed: nothing
+- run 1: S3: after the relog Lydia follows true, hosted by the player true
+- run 1: S4: the server created the claw in Arvel true; the player hosts Arvel true; Arvel dead on the server true; Arvel opened true; menu take true; the server has it in the player true; MS13 40
+- run 1: S4 quest item: relogged, replay true; changed: nothing
+- run 1: S4: after the relog the client holds 1 claw, MS13 40
+- run 2: S1: solo player ff000000 with a stale party record of leader ff0000aa, quest log replay at login true, party record after the login []
+- run 2: S2: MQ104 10 set on the client, in the server quest log true, client stage 12
+- run 2: S2 quest stage: relogged, replay true; changed: nothing
+- run 2: S3: Lydia follows true, stored on the server true, hoster ff000000
+- run 2: S3 follower: relogged, replay true; changed: nothing
+- run 2: S3: after the relog Lydia follows true, hosted by the player true
+- run 2: S4: the server created the claw in Arvel true; the player hosts Arvel true; Arvel dead on the server true; Arvel opened true; menu take true; the server has it in the player true; MS13 40
+- run 2: S4 quest item: relogged, replay true; changed: nothing
+- run 2: S4: after the relog the client holds 1 claw, MS13 40
+- run 3: S1: solo player ff000000 with a stale party record of leader ff0000aa, quest log replay at login true, party record after the login []
+- run 3: S2: MQ104 10 set on the client, in the server quest log true, client stage 12
+- run 3: S2 quest stage: relogged, replay true; changed: nothing
+- run 3: S3: Lydia follows true, stored on the server true, hoster ff000000
+- run 3: S3 follower: relogged, replay true; changed: nothing
+- run 3: S3: after the relog Lydia follows true, hosted by the player true
+- run 3: S4: the server created the claw in Arvel true; the player hosts Arvel true; Arvel dead on the server true; Arvel opened true; menu take true; the server has it in the player true; MS13 40
+- run 3: S4 quest item: relogged, replay true; changed: nothing
+- run 3: S4: after the relog the client holds 1 claw, MS13 40
 ### P8
 - run 1: 115 client log lines, 2 [Exception] lines
 - run 1: exception: [Exception] failed to get key 'data': failed to call custom Serialize for type struct Equipment: failed to get key 'inv': failed to call cus.

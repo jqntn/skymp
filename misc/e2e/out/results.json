@@ -1088,12 +1088,46 @@
     "at": "2026-10-19T18:19:42.129Z"
   },
   "P6": {
-    "result": "FAIL",
-    "reason": "no check script",
-    "secs": 0,
-    "evidence": [],
+    "result": "PASS",
+    "reason": "3/3 runs PASS",
+    "secs": 1004,
+    "evidence": [
+      "run 1: S1: solo player ff000000 with a stale party record of leader ff0000aa, quest log replay at login true, party record after the login []",
+      "run 1: S2: MQ104 10 set on the client, in the server quest log true, client stage 12",
+      "run 1: S2 quest stage: relogged, replay true; changed: nothing",
+      "run 1: S3: Lydia follows true, stored on the server true, hoster ff000000",
+      "run 1: S3 follower: relogged, replay true; changed: nothing",
+      "run 1: S3: after the relog Lydia follows true, hosted by the player true",
+      "run 1: S4: the server created the claw in Arvel true; the player hosts Arvel true; Arvel dead on the server true; Arvel opened true; menu take true; the server has it in the player true; MS13 40",
+      "run 1: S4 quest item: relogged, replay true; changed: nothing",
+      "run 1: S4: after the relog the client holds 1 claw, MS13 40",
+      "run 2: S1: solo player ff000000 with a stale party record of leader ff0000aa, quest log replay at login true, party record after the login []",
+      "run 2: S2: MQ104 10 set on the client, in the server quest log true, client stage 12",
+      "run 2: S2 quest stage: relogged, replay true; changed: nothing",
+      "run 2: S3: Lydia follows true, stored on the server true, hoster ff000000",
+      "run 2: S3 follower: relogged, replay true; changed: nothing",
+      "run 2: S3: after the relog Lydia follows true, hosted by the player true",
+      "run 2: S4: the server created the claw in Arvel true; the player hosts Arvel true; Arvel dead on the server true; Arvel opened true; menu take true; the server has it in the player true; MS13 40",
+      "run 2: S4 quest item: relogged, replay true; changed: nothing",
+      "run 2: S4: after the relog the client holds 1 claw, MS13 40",
+      "run 3: S1: solo player ff000000 with a stale party record of leader ff0000aa, quest log replay at login true, party record after the login []",
+      "run 3: S2: MQ104 10 set on the client, in the server quest log true, client stage 12",
+      "run 3: S2 quest stage: relogged, replay true; changed: nothing",
+      "run 3: S3: Lydia follows true, stored on the server true, hoster ff000000",
+      "run 3: S3 follower: relogged, replay true; changed: nothing",
+      "run 3: S3: after the relog Lydia follows true, hosted by the player true",
+      "run 3: S4: the server created the claw in Arvel true; the player hosts Arvel true; Arvel dead on the server true; Arvel opened true; menu take true; the server has it in the player true; MS13 40",
+      "run 3: S4 quest item: relogged, replay true; changed: nothing",
+      "run 3: S4: after the relog the client holds 1 claw, MS13 40"
+    ],
     "shots": [],
-    "at": "2026-10-12T16:53:46.497Z"
+    "rtt": {
+      "1": {
+        "median": 39,
+        "calls": 48
+      }
+    },
+    "at": "2026-10-19T19:24:59.023Z"
   },
   "P7": {
     "result": "FAIL",
