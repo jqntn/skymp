@@ -75,6 +75,7 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 - `test(e2e): check that another client takes an NPC after a hoster loss (P3)`: no product change, see the P3 log line of 2026-10-18 21:37; BLOCKED on the same party case.
 - `fix(server): reject and log bad host claims and unhandled custom packets (P4)`: see the P4 log line of 2026-10-18 22:08 and the P4 bullets in PLAN.
 - `fix(server): cut hosted NPC saves, echoes and per-packet costs under load (P5)`: see the P5 log line of 2026-10-19 16:15 and the P5 bullets in PLAN; committed on the user's request before the 1 hour PASS run at the new limits.
+- `test(e2e): treat leaving the party as no hoster loss in P2 and P3`: user decision 2026-10-19; P2 and P3 PASS 2026-10-20 21:30 UTC (passes 9 and 10 since retro 3: retro 4 is due).
 - `test(e2e): check solo play without a party (P6)`: no product change, see the P6 log line of 2026-10-19 19:25 and the P6 bullets in PLAN.
 - `test(e2e): gate P5 bandwidth per client and harden the load runner (P5)`: P5 PASS 2026-10-19 18:20 UTC (pass 7 since retro 3); see the P5 log lines and bullets.
 
@@ -103,7 +104,7 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 
 - 2026-10-19: P5 limits: tick at most 2.5 times main, server memory at most 1.4 times main; bandwidth per client 1.25 times and load times 2 times stay. The P5 fixes are committed before the final run.
 
-- PENDING 2026-10-18: P2 "the hoster leaves the party": options (a) clear his hosts of quest-alias actors of the party's shared quests, (b) clear all his hosts, (c) not a hoster loss. P2 reports BLOCKED until then.
+- 2026-10-19: P2 "the hoster leaves the party": not a hoster loss; known limitation until phasing (a leader who leaves keeps the quest NPC he runs; the remaining party and he share one NPC for two quest states). P2 and P3 no longer report BLOCKED.
 
 - 2026-10-16: new id F6 (follower ownership: the last party member who asks a follower to follow owns and hosts her; the previous owner loses her, also across relogs). In run.js ORDER after G2.6.
 

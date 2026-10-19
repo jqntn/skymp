@@ -61,6 +61,5 @@ module.exports = {
     await loss("the hoster closes the game in combat", () => ctx.drv("sp.Debug.quitGame(); return 0;").catch(() => 0));
 
     ctx.assert.ok(!fails.length, fails.join("; "));
-    throw new ctx.Blocked("the hoster leaves the party: a player who leaves a party is still in the world and near the NPC, so it is not clear which NPCs the server must take from him (the user decides: (a) the server clears his hosts of quest-alias actors of the party's shared quests, (b) it clears all his hosts, which he claims again at once since nobody yields to him, or (c) leaving the party is not a hoster loss)");
   },
 };

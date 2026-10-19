@@ -89,6 +89,5 @@ module.exports = {
     await takeover("the hoster closes the game in combat", second, first, async () => void ctx.drv("sp.Debug.quitGame(); return 0;", second).catch(() => 0), true);
 
     ctx.assert.ok(!fails.length, fails.join("; "));
-    throw new ctx.Blocked("the hoster leaves the party: P2 has no rule yet for which NPCs a player who leaves the party loses (user decision pending in P2), so the takeover after it is not checked");
   },
 };
