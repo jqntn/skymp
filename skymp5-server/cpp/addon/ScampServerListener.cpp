@@ -49,9 +49,11 @@ bool ScampServerListener::OnMpApiEvent(const GameModeEvent& event)
   auto fValue = mp.Get(eventName);
   if (!fValue.IsFunction()) {
     // It's ok not to have a handler for an event
-    spdlog::trace("ScampServerListener::OnMpApiEvent {}: failed to get '{}' "
-                  "function from 'mp' object",
-                  event.GetDetailedNameForLogging(), eventName);
+    if (spdlog::should_log(spdlog::level::trace)) {
+      spdlog::trace("ScampServerListener::OnMpApiEvent {}: failed to get "
+                    "'{}' function from 'mp' object",
+                    event.GetDetailedNameForLogging(), eventName);
+    }
     return true;
   }
 

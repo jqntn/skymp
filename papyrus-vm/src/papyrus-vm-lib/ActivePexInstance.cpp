@@ -54,8 +54,8 @@ std::shared_ptr<ActivePexInstance> ActivePexInstance::FillParentInstance(
                                            this->sourcePex.source);
 }
 
-FunctionInfo ActivePexInstance::GetFunctionByName(const char* name,
-                                                  std::string stateName) const
+FunctionInfo ActivePexInstance::GetFunctionByName(
+  const char* name, const std::string& stateName) const
 {
   // static FunctionInfo kInvalidFunction;
   FunctionInfo function;

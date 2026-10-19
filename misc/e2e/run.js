@@ -3,6 +3,7 @@ const os = require("os");
 const path = require("path");
 const http = require("http");
 const { spawn, spawnSync } = require("child_process");
+const dgram = require("dgram");
 
 const REPO = path.resolve(__dirname, "../..");
 const OUT = path.join(__dirname, "out");
@@ -12,11 +13,13 @@ const MANIFEST = path.join(BACKUP, "manifest.json");
 const PIDS = path.join(OUT, "pids.json");
 const RESULTS = path.join(OUT, "results.json");
 const BUILD = path.join(REPO, "build");
-const DIST = path.join(BUILD, "dist", "server");
+let DIST = path.join(BUILD, "dist", "server");
+let ALT_CLIENT = null;
+let TAG = null;
 const SERVER = path.join(BUILD, "dist", "e2e-server");
 const GAME = fs.readFileSync(path.join(BUILD, "CMakeCache.txt"), "utf8").match(/^SKYRIM_DIR:\w+=(.*)$/m)[1].trim();
 const MYGAMES = path.join(os.homedir(), "Documents", "My Games", "Skyrim Special Edition");
-const PORT = { server: 7790, probe: 7792, runner: 7793 };
+const PORT = { server: 7790, probe: 7792, runner: 7793, proxy: 7794 };
 const SLOW_ENGINE_MS = 1000;
 const STEAMWEBHELPER_MAX_GB = 10;
 const SKYRIM_VERSION = "1.6.1170.0";
@@ -268,7 +271,55 @@ const startServer = async (check, ctx, keepWorld = false) => {
 `));
   own(child.pid, "node.exe");
   ctx.serverPid = child.pid;
-  await ctx.waitFor(() => ctx.probe("return 1").catch(() => 0), 90000, "the server probe", Env);
+  const startedAt = Date.now();
+  await ctx.waitFor(() => ctx.probe("return 1").catch(() => 0), 90000, "the server probe", Env, 100);
+  ctx.serverLoadMs = Date.now() - startedAt;
+};
+
+const installClient = (dir) => {
+  const files = [];
+  const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).forEach((e) => (e.isDirectory() ? walk(path.join(d, e.name)) : files.push(path.relative(dir, path.join(d, e.name)))));
+  walk(dir);
+  for (const rel of files.filter((f) => f !== path.join("Data", "Platform", "Plugins", "skymp5-client-settings.txt"))) {
+    const dst = path.join(GAME, rel);
+    backup(dst);
+    fs.mkdirSync(path.dirname(dst), { recursive: true });
+    fs.rmSync(dst, { force: true });
+    fs.copyFileSync(path.join(dir, rel), dst);
+  }
+  return files.length;
+};
+
+const startProxy = (ctx, { delayMs = 0, loss = 0 } = {}) => {
+  const front = dgram.createSocket("udp4");
+  const clients = new Map();
+  const stats = {};
+  const later = (fn) => (delayMs ? setTimeout(fn, delayMs) : fn());
+  front.on("message", (msg, from) => {
+    const key = `${from.address}:${from.port}`;
+    const st = (stats[key] = stats[key] || { up: 0, down: 0, upPackets: 0, downPackets: 0 });
+    st.up += msg.length;
+    st.upPackets++;
+    let back = clients.get(key);
+    if (!back) {
+      back = dgram.createSocket("udp4");
+      back.on("message", (m) => {
+        st.down += m.length;
+        st.downPackets++;
+        if (Math.random() >= loss) later(() => front.send(m, from.port, from.address));
+      });
+      back.on("error", () => {});
+      clients.set(key, back);
+    }
+    if (Math.random() >= loss) later(() => back.send(msg, PORT.server, "127.0.0.1"));
+  });
+  front.on("error", () => {});
+  front.bind(PORT.proxy, "127.0.0.1");
+  ctx.proxyStats = () => JSON.parse(JSON.stringify(stats));
+  return () => {
+    for (const c of clients.values()) c.close();
+    front.close();
+  };
 };
 
 const launchGame = (dir, n = 1) => {
@@ -285,7 +336,7 @@ const startGame = async (n, ctx) => {
   backup(settingsFile);
   const now = new Date();
   const hoursOffset = ((((ctx.gameHour - now.getUTCHours() - now.getUTCMinutes() / 60) % 24) + 24) % 24);
-  writeJson(settingsFile, { gameData: { profileId: profileId(n) }, master: "", "server-ip": "127.0.0.1", "server-master-key": null, "server-port": PORT.server, hoursOffset });
+  writeJson(settingsFile, { gameData: { profileId: profileId(n) }, master: "", "server-ip": "127.0.0.1", "server-master-key": null, "server-port": ctx.proxyStats ? PORT.proxy : PORT.server, hoursOffset });
   backup(dev);
   fs.mkdirSync(dev, { recursive: true });
   fs.copyFileSync(path.join(__dirname, "driver.js"), path.join(dev, "e2e-driver.js"));
@@ -293,6 +344,7 @@ const startGame = async (n, ctx) => {
 
   const before = new Set(procs("SkyrimSE.exe"));
   launchGame(dir, n);
+  ctx.launchedAt[n] = Date.now();
   let pid;
   await ctx.waitFor(() => (pid = procs("SkyrimSE.exe").find((p) => !before.has(p))), 60000, `SkyrimSE.exe of engine ${n}`, Env, 100);
   own(pid, "SkyrimSE.exe");
@@ -314,7 +366,7 @@ const lowCostMode = () => {
 
 const makeCtx = (id, dir) => {
   const ctx = {
-    id, dir, gamePids: {}, evidence: [], shots: [], rtt: {}, Env, Blocked, Accepted,
+    id, dir, gamePids: {}, launchedAt: {}, tag: TAG, evidence: [], shots: [], rtt: {}, Env, Blocked, Accepted,
     driverRtt: (engine = 1) => { const a = [...(ctx.rtt[engine] || [])].sort((x, y) => x - y); return a.length ? a[a.length >> 1] : 0; },
     assert: require("assert"),
     sleep,
@@ -457,6 +509,7 @@ const runOnce = async (id, check, n, attempt) => {
   const t = Date.now();
   let result = "PASS";
   let reason = "";
+  let stopProxy = null;
   try {
     const engines = check.engines || 0;
     if (engines) {
@@ -486,6 +539,8 @@ const runOnce = async (id, check, n, attempt) => {
       return ctx.ready(engine);
     };
     if (check.server !== false) await startServer(check, ctx);
+    if (check.proxy) stopProxy = startProxy(ctx, check.proxy === true ? {} : check.proxy);
+    if (ALT_CLIENT && engines) ctx.evidence.push(`client from ${ALT_CLIENT}: ${installClient(ALT_CLIENT)} files installed for this run`);
     if (check.setup) await check.setup(ctx);
     for (let e = 1; e <= engines; e++) await startGame(e, ctx);
     let timer;
@@ -499,6 +554,7 @@ const runOnce = async (id, check, n, attempt) => {
     ctx.log(`${result}: ${e.stack || e}`);
     if (e.stop) throw e;
   } finally {
+    if (stopProxy) stopProxy();
     killOwned();
     await sleep(2000);
     restore();
@@ -591,6 +647,9 @@ const main = async () => {
   const arg = (name) => { const i = args.indexOf(name); return i >= 0 ? args[i + 1] : undefined; };
   const only = arg("--only")?.split(",");
   const opts = { runs: Number(arg("--runs")) || 0, adhoc: arg("--check"), final: args.includes("--final"), keepGoing: args.includes("--keep-going") };
+  if (arg("--dist")) DIST = path.resolve(arg("--dist"));
+  if (arg("--client")) ALT_CLIENT = path.resolve(arg("--client"));
+  TAG = arg("--tag") || null;
   fs.mkdirSync(OUT, { recursive: true });
 
   await waitNoForeignSkyrim();

@@ -2,6 +2,7 @@
 #include <catch2/catch_all.hpp>
 #include <catch2/matchers/catch_matchers_string.hpp>
 #include "libespm/Loader.h"
+#include <thread>
 
 PartOne& GetPartOne();
 
@@ -598,6 +599,7 @@ TEST_CASE("A hoster that stops sending movement loses the host",
 
   partOne.worldState.lastMovUpdateByIdx[alvor.GetIdx()] =
     std::chrono::system_clock::now() - std::chrono::seconds(10);
+  std::this_thread::sleep_for(std::chrono::milliseconds(300));
   partOne.Tick();
   REQUIRE(partOne.worldState.hosters[kAlvor] == 0);
   REQUIRE((alvor.GetPos() - start).Length() < 1.f);
@@ -962,6 +964,39 @@ TEST_CASE("Disabling and enabling an ESP NPC or ref tells the listeners",
     REQUIRE(sent("false"));
     DisconnectClaimer(partOne);
   }
+}
+
+TEST_CASE("A hoster's NPC movement reaches the other players, not the hoster",
+          "[NpcHost][espm][P5]")
+{
+  auto& partOne = GetNpcHostPartOne();
+  auto& alvor = partOne.worldState.GetFormAt<MpActor>(kAlvor);
+  const auto cell = CellOf(partOne, alvor);
+  const auto start = alvor.GetPos();
+  HostAlvor(partOne, alvor);
+  DoConnect(partOne, 1);
+  partOne.CreateActor(kOtherPlayer, start, 0, cell);
+  partOne.SetUserActor(1, kOtherPlayer);
+  const auto sentTo = [&](Networking::UserId userId) {
+    return std::count_if(
+      partOne.Messages().begin(), partOne.Messages().end(),
+      [&](auto& m) { return m.userId == userId; });
+  };
+
+  partOne.Messages().clear();
+  DoMessage(partOne, 0, Movement(alvor.GetIdx(), cell, start));
+  REQUIRE(sentTo(0) == 0);
+  REQUIRE(sentTo(1) == 1);
+
+  partOne.Messages().clear();
+  auto& other = partOne.worldState.GetFormAt<MpActor>(kOtherPlayer);
+  DoMessage(partOne, 1, Movement(other.GetIdx(), cell, start));
+  REQUIRE(sentTo(1) == 1);
+  REQUIRE(sentTo(0) == 1);
+
+  partOne.DestroyActor(kOtherPlayer);
+  DoDisconnect(partOne, 1);
+  ReleaseAlvor(partOne, alvor, cell, start);
 }
 
 TEST_CASE("A claim without a location is rejected for an ESP NPC and from a "

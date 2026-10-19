@@ -184,8 +184,6 @@ void VirtualMachine::SendEvent(std::shared_ptr<IGameObject> self,
                                OnEnter enter)
 {
   for (auto& scriptInstance : self->ListActivePexInstances()) {
-    auto name = scriptInstance->GetActiveStateName();
-
     // TODO: const&
     auto fn = scriptInstance->GetFunctionByName(
       eventName, scriptInstance->GetActiveStateName());

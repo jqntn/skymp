@@ -32,8 +32,10 @@ bool GameModeEvent::Fire(WorldState* worldState)
     };
   }
 
-  spdlog::trace("GameModeEvent::Fire {} {} - isBlocked: {}", eventName,
-                GetArgumentsJsonArray(), isBlocked);
+  if (spdlog::should_log(spdlog::level::trace)) {
+    spdlog::trace("GameModeEvent::Fire {} {} - isBlocked: {}", eventName,
+                  GetArgumentsJsonArray(), isBlocked);
+  }
 
   if (isBlocked) {
     OnFireBlocked(worldState);

@@ -28,6 +28,7 @@ import { logTrace } from "../../logging";
 
 const playerFormId = 0x14;
 const espActorIdOffset = 0x100000000;
+const idleHostedMovementRateMs = 500;
 
 // TODO: split this service into EquipmentService, MovementService, AnimationService, ActorValueService, HostAttemptsService
 export class SendInputsService extends ClientListener {
@@ -188,16 +189,26 @@ export class SendInputsService extends ClientListener {
         const now = Date.now();
         const last = this.lastSendMovementMoment.get(refrIdStr);
         if (!last || now - last > sendMovementRateMs) {
+            this.lastSendMovementMoment.set(refrIdStr, now);
+            const data = getMovement(owner, form);
+            if (_refrId && form) {
+                form.movement = data;
+            }
+            const key = _refrId ? JSON.stringify(data, (k, v) => (typeof v === "number" && k !== "healthPercentage" ? Math.round(v * 10) / 10 : v)) : "";
+            const sent = this.lastSentMovement.get(refrIdStr);
+            if (_refrId && sent && sent.key === key && now - sent.at < idleHostedMovementRateMs) {
+                return;
+            }
             const message: MessageWithRefrId<UpdateMovementMessage> = {
                 t: MsgType.UpdateMovement,
-                data: getMovement(owner, form),
+                data,
                 _refrId
             };
             this.controller.emitter.emit("sendMessageWithRefrId", {
                 message,
                 reliability: "unreliable"
             });
-            this.lastSendMovementMoment.set(refrIdStr, now);
+            this.lastSentMovement.set(refrIdStr, { key, at: now });
         }
     }
 
@@ -489,6 +500,7 @@ export class SendInputsService extends ClientListener {
     }
 
     private lastSendMovementMoment = new Map<string, number>();
+    private lastSentMovement = new Map<string, { key: string, at: number }>();
     private lastAnimationSent = new Map<string, Animation>();
     private lastSitState = new Map<string, number>();
     private lastFlySent = new Map<string, number>();

@@ -62,7 +62,10 @@ public:
   double GetZ1() { return this->_z1; }
 
   std::vector<GeoFace> GetFaces() { return this->_Faces; }
-  std::vector<GeoPlane> GetFacePlanes() { return this->_FacePlanes; }
+  const std::vector<GeoPlane>& GetFacePlanes() const
+  {
+    return this->_FacePlanes;
+  }
   int GetNumberOfFaces() { return this->_NumberOfFaces; }
 
   double GetMaxDisError() { return this->_MaxDisError; }

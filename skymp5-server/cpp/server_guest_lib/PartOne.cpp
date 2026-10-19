@@ -82,6 +82,8 @@ struct PartOne::Impl
   std::shared_ptr<PacketParser> packetParser;
   std::shared_ptr<ActionListener> actionListener;
 
+  std::chrono::steady_clock::time_point lastStaleHosterSweep;
+
   std::shared_ptr<spdlog::logger> logger;
 
   std::unique_ptr<PartOneSendTargetWrapper> sendTarget;
@@ -154,6 +156,12 @@ void PartOne::Tick()
 void PartOne::TickStaleHosters()
 {
   constexpr auto kStaleHosterTimeout = std::chrono::seconds(3);
+  constexpr auto kStaleHosterSweepInterval = std::chrono::milliseconds(250);
+  const auto sweepAt = std::chrono::steady_clock::now();
+  if (sweepAt - pImpl->lastStaleHosterSweep < kStaleHosterSweepInterval) {
+    return;
+  }
+  pImpl->lastStaleHosterSweep = sweepAt;
   const auto now = std::chrono::system_clock::now();
   for (auto& [npcId, hosterId] : worldState.hosters) {
     if (hosterId == 0) {

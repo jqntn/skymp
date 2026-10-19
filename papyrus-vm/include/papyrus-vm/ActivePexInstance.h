@@ -31,7 +31,7 @@ public:
 
   // TODO(#xyz): return const&
   FunctionInfo GetFunctionByName(const char* name,
-                                 std::string stateName) const;
+                                 const std::string& stateName) const;
 
   VarValue& GetVariableValueByName(std::vector<Local>* optional,
                                    std::string name);

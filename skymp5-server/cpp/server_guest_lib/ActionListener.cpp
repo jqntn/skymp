@@ -89,7 +89,8 @@ MpActor* ActionListener::SendToNeighbours(uint32_t idx,
 
   for (auto listener : actor->GetActorListeners()) {
     auto targetuserId = partOne.serverState.UserByActor(listener);
-    if (targetuserId != Networking::InvalidUserId) {
+    if (targetuserId != Networking::InvalidUserId &&
+        (actor == myActor || targetuserId != userId)) {
       partOne.GetSendTarget().Send(targetuserId, data, length, reliable);
     }
   }
@@ -219,7 +220,8 @@ void ActionListener::OnUpdateMovement(const RawMessageData& rawMsgData,
             !actor->RespawnedWithin(std::chrono::seconds(3))) {
           actor->Kill();
         }
-      } else {
+      } else if (actor->GetActorValues().healthPercentage !=
+                 msg.data.healthPercentage) {
         actor->SetPercentage(espm::ActorValue::Health,
                              msg.data.healthPercentage);
       }
