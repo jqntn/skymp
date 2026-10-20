@@ -29,6 +29,8 @@ import { logTrace } from "../../logging";
 const playerFormId = 0x14;
 const espActorIdOffset = 0x100000000;
 const idleHostedMovementRateMs = 500;
+const idleHostedMovementAfterMs = 3000;
+const hostedSitResendMs = 3000;
 
 // TODO: split this service into EquipmentService, MovementService, AnimationService, ActorValueService, HostAttemptsService
 export class SendInputsService extends ClientListener {
@@ -71,6 +73,7 @@ export class SendInputsService extends ClientListener {
             }
             if (owner && remoteId >= espActorIdOffset) {
                 getAnimationSource(owner, true).restart(owner.getSitState() === 0);
+                this.lastSitSent.delete(owner.getFormID().toString(16));
             }
         });
         this.startedHosts.clear();
@@ -194,9 +197,10 @@ export class SendInputsService extends ClientListener {
             if (_refrId && form) {
                 form.movement = data;
             }
-            const key = _refrId ? JSON.stringify(data, (k, v) => (typeof v === "number" && k !== "healthPercentage" ? Math.round(v * 10) / 10 : v)) : "";
+            const key = _refrId ? JSON.stringify([owner.getSitState(), data], (k, v) => (typeof v === "number" && k !== "healthPercentage" ? Math.round(v * 10) / 10 : v)) : "";
             const sent = this.lastSentMovement.get(refrIdStr);
-            if (_refrId && sent && sent.key === key && now - sent.at < idleHostedMovementRateMs) {
+            const changedAt = sent && sent.key === key ? sent.changedAt : now;
+            if (_refrId && sent && sent.key === key && now - changedAt >= idleHostedMovementAfterMs && now - sent.at < idleHostedMovementRateMs) {
                 return;
             }
             const message: MessageWithRefrId<UpdateMovementMessage> = {
@@ -208,7 +212,7 @@ export class SendInputsService extends ClientListener {
                 message,
                 reliability: "unreliable"
             });
-            this.lastSentMovement.set(refrIdStr, { key, at: now });
+            this.lastSentMovement.set(refrIdStr, { key, at: now, changedAt });
         }
     }
 
@@ -290,6 +294,15 @@ export class SendInputsService extends ClientListener {
             const sitState = owner.getSitState();
             if (sitState === 0 && this.lastSitState.get(refrIdStr)) {
                 animSource.addStand();
+            }
+            if (sitState === 0) {
+                this.lastSitSent.delete(refrIdStr);
+            } else if (sitState === 3 && Date.now() - (this.lastSitSent.get(refrIdStr) ?? 0) > hostedSitResendMs) {
+                const furniture = owner.getFurnitureReference();
+                if (furniture) {
+                    animSource.addSit(furniture.getFormID());
+                    this.lastSitSent.set(refrIdStr, Date.now());
+                }
             }
             this.lastSitState.set(refrIdStr, sitState);
             if (!owner.isDead() && owner.getFlyingState() !== 0 && Date.now() - (this.lastFlySent.get(refrIdStr) ?? 0) > 3000) {
@@ -500,9 +513,10 @@ export class SendInputsService extends ClientListener {
     }
 
     private lastSendMovementMoment = new Map<string, number>();
-    private lastSentMovement = new Map<string, { key: string, at: number }>();
+    private lastSentMovement = new Map<string, { key: string, at: number, changedAt: number }>();
     private lastAnimationSent = new Map<string, Animation>();
     private lastSitState = new Map<string, number>();
+    private lastSitSent = new Map<string, number>();
     private lastFlySent = new Map<string, number>();
     private actorValuesNeedUpdate = false;
     private isRaceSexMenuShown = false;

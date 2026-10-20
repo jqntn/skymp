@@ -7,6 +7,7 @@ const PUPPET_MOVES = 0.5;
 const POSE_TOLERANCE = 12;
 const ARMS_DOWN = 25;
 const NOT_APOSE = 15;
+const RESEAT_MS = 12000;
 
 module.exports = {
   engines: 2,
@@ -45,6 +46,25 @@ module.exports = {
         settled: Math.max(...x.map((s) => s.hips)) - Math.min(...x.map((s) => s.hips)) <= POSE_TOLERANCE,
       };
       return { hoster: stats(t[h]), puppet: stats(t[p]) };
+    };
+    const sitOf = (id, n) => ctx.drv(`const a = sp.Actor.from(sp.Game.getFormEx(${id})); return a && a.is3DLoaded() ? a.getSitState() : -1;`, n).catch(() => -1);
+    const hipsOf = async (id, n) => { const b = await bones(id, n).catch(() => null); return b ? b.hips : null; };
+    const reseat = async (id, p, hosterHips) => {
+      await ctx.drv(`const a = sp.Actor.from(sp.Game.getFormEx(${id})); sp.Debug.sendAnimationEvent(a, "IdleForceDefaultState"); return 0;`, p);
+      const t0 = Date.now();
+      let up = false;
+      while (!up && Date.now() - t0 < 3000) {
+        const hips = await hipsOf(id, p);
+        up = (await sitOf(id, p)) === 0 || (hips !== null && hips - hosterHips > POSE_TOLERANCE);
+        if (!up) await ctx.sleep(200);
+      }
+      if (!up) return { up };
+      while (Date.now() - t0 < RESEAT_MS) {
+        const hips = await hipsOf(id, p);
+        if ((await sitOf(id, p)) !== 0 && hips !== null && Math.abs(hips - hosterHips) <= POSE_TOLERANCE) return { up, back: Date.now() - t0 };
+        await ctx.sleep(250);
+      }
+      return { up };
     };
     const round = (s) => s && `motion ${s.motion.toFixed(1)}, drop ${s.dz.toFixed(1)}, head ${s.head.toFixed(1)}, hips ${s.hips.toFixed(1)}`;
 
@@ -88,6 +108,11 @@ module.exports = {
           }
           if (Math.abs(w.hoster.hips - w.puppet.hips) > POSE_TOLERANCE) {
             fails.push(`${name} on engine ${p} does not hold the hoster's posture: hips ${w.puppet.hips.toFixed(1)} vs ${w.hoster.hips.toFixed(1)}`);
+          } else if (seated === 3 && (await sitOf(id, p)) === 3) {
+            const r = await reseat(id, p, w.hoster.hips);
+            const hosterStill = (await sitOf(id, h)) === 3;
+            ctx.evidence.push(`${name}: the puppet on engine ${p}, stood up by a script while the hoster sits, ${!r.up ? "did not stand up (not exercised)" : r.back !== undefined ? `sat again after ${(r.back / 1000).toFixed(1)} s` : `did not sit again within ${RESEAT_MS / 1000} s (hoster still seated ${hosterStill})`}`);
+            if (r.up && r.back === undefined && hosterStill) fails.push(`${name} on engine ${p}, stood up by a script, did not sit again within ${RESEAT_MS / 1000} s while the hoster stayed seated`);
           }
         }
       }

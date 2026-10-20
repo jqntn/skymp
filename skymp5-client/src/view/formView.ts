@@ -1,5 +1,5 @@
 import { Actor, ActorBase, createText, Debug, destroyText, Form, FormType, Game, isAnimationGraphReady, Keyword, NetImmerse, ObjectReference, once, printConsole, setTextPos, setTextSize, setTextString, storage, TESModPlatform, Utility, worldPointToScreenPoint } from "skyrimPlatform";
-import { setDefaultAnimsDisabled, applyAnimation, standUp, isFurnitureIdle } from "../sync/animation";
+import { setDefaultAnimsDisabled, applyAnimation, standUp, instantEnter } from "../sync/animation";
 import { Appearance, applyAppearance } from "../sync/appearance";
 import { isBadMenuShown, applyEquipment } from "../sync/equipment";
 import { RespawnNeededError } from "../lib/errors";
@@ -34,6 +34,7 @@ export const getScreenResolution = (): ScreenResolution => {
 }
 
 const espActorIdOffset = 0x100000000;
+const seatWaitMs = 4000;
 
 const pelvisNodes = ["NPC Pelvis [Pelv]", "NPC Pelvis"];
 
@@ -653,6 +654,11 @@ export class FormView {
       }
       if (puppet !== this.puppetMode) {
         if (puppet) {
+          this.animState.seatWaitFrom = Date.now();
+          this.animState.seat = undefined;
+          this.animState.ownSeat = false;
+          this.animState.seatTries = 0;
+          this.animState.standTries = 0;
           const damageMult = ac.getActorValue("attackDamageMult");
           if (damageMult > 0) {
             this.savedDamageMult = damageMult;
@@ -669,32 +675,43 @@ export class FormView {
 
     const animReady = refr.is3DLoaded() && (!this.realActor || isAnimationGraphReady(refr.getFormID()));
     if (animReady && Date.now() >= this.animState.applyAfter) {
-      const seatedPuppet = this.realActor && !this.hostedHere && !!model.isHostedByOther && !!ac && !ac.isDead() && !ac.isOnMount() && ac.getSitState() !== 0;
-      if (seatedPuppet && ac && this.animState.useAnimOverrides && !this.animState.spawnStood && !isFurnitureIdle(model.animation?.animEventName)) {
-        this.animState.spawnStood = true;
-        standUp(ac);
-        this.animState.applyAfter = Date.now() + 1000;
-      } else {
-        const queued = model.animationQueue?.splice(0) ?? [];
-        const lastNumChanges = this.animState.lastNumChanges;
-        if (model.animation && !this.hostedHere) {
-          for (const anim of queued.length ? queued : [model.animation]) {
-            applyAnimation(refr, anim, this.animState);
+      const otherHostedPuppet = this.realActor && !this.hostedHere && !!model.isHostedByOther && !!ac && !ac.isDead() && !ac.isOnMount() && !ac.isAIEnabled();
+      if (otherHostedPuppet && ac && Date.now() >= this.animState.postureAt) {
+        this.animState.postureAt = Date.now() + 1000;
+        const seat = this.animState.seat;
+        if (ac.getSitState() !== 0) {
+          const unknownTooLong = seat === undefined && Date.now() - this.animState.seatWaitFrom > seatWaitMs;
+          const otherFurniture = !!seat && ac.getFurnitureReference()?.getFormID() !== seat.furniture;
+          if ((seat === null || (!this.animState.ownSeat && (unknownTooLong || otherFurniture))) && this.animState.standTries < 3) {
+            this.animState.standTries++;
+            standUp(ac);
           }
+        } else if (seat && seat.enter && this.animState.seatTries < 3) {
+          this.animState.seatTries++;
+          this.animState.postureAt = Date.now() + 2000;
+          this.animState.ownSeat = true;
+          Debug.sendAnimationEvent(ac, instantEnter(seat.enter));
         }
-        if (this.animState.useAnimOverrides && this.animState.overriddenAnimEventName) {
-          this.animState.followUpAnimEventName = this.animState.overriddenAnimEventName;
-          this.animState.overriddenAnimEventName = undefined;
-          this.animState.applyAfter = Date.now() + 1000;
-        } else if (this.animState.followUpAnimEventName) {
-          if (this.animState.lastNumChanges === lastNumChanges && !this.hostedHere) {
-            Debug.sendAnimationEvent(refr, this.animState.followUpAnimEventName);
-          }
-          this.animState.followUpAnimEventName = undefined;
-        }
-        // Use them only once, for spawning actors with correct animations
-        this.animState.useAnimOverrides = false;
       }
+      const queued = model.animationQueue?.splice(0) ?? [];
+      const lastNumChanges = this.animState.lastNumChanges;
+      if (model.animation && !this.hostedHere) {
+        for (const anim of queued.length ? queued : [model.animation]) {
+          applyAnimation(refr, anim, this.animState);
+        }
+      }
+      if (this.animState.useAnimOverrides && this.animState.overriddenAnimEventName) {
+        this.animState.followUpAnimEventName = this.animState.overriddenAnimEventName;
+        this.animState.overriddenAnimEventName = undefined;
+        this.animState.applyAfter = Date.now() + 1000;
+      } else if (this.animState.followUpAnimEventName) {
+        if (this.animState.lastNumChanges === lastNumChanges && !this.hostedHere) {
+          Debug.sendAnimationEvent(refr, this.animState.followUpAnimEventName);
+        }
+        this.animState.followUpAnimEventName = undefined;
+      }
+      // Use them only once, for spawning actors with correct animations
+      this.animState.useAnimOverrides = false;
     }
 
 
@@ -859,7 +876,7 @@ export class FormView {
   };
 
   private getDefaultAnimState() {
-    return { lastNumChanges: 0, useAnimOverrides: true, spawnStood: false, applyAfter: 0, followUpAnimEventName: undefined as string | undefined, overriddenAnimEventName: undefined as string | undefined };
+    return { lastNumChanges: 0, useAnimOverrides: true, seat: undefined as { furniture: number, enter: string } | null | undefined, ownSeat: false, seatTries: 0, standTries: 0, postureAt: 0, seatWaitFrom: Date.now(), applyAfter: 0, followUpAnimEventName: undefined as string | undefined, overriddenAnimEventName: undefined as string | undefined };
   };
 
   private tryHostIfNeed(ac: Actor, remoteId: number) {

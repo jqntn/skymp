@@ -290,7 +290,10 @@ const installClient = (dir) => {
   return files.length;
 };
 
-const startProxy = async (ctx, { delayMs = 0, loss = 0 } = {}) => {
+const startProxy = async (ctx, settings = {}) => {
+  const unknown = Object.keys(settings).filter((k) => k !== "delayMs" && k !== "loss");
+  if (unknown.length) throw new Error(`unknown proxy settings: ${unknown.join(", ")}`);
+  const { delayMs = 0, loss = 0 } = settings;
   const front = dgram.createSocket("udp4");
   const clients = new Map();
   const stats = {};
@@ -298,7 +301,7 @@ const startProxy = async (ctx, { delayMs = 0, loss = 0 } = {}) => {
   const later = (fn) => (delayMs ? setTimeout(() => !closed && fn(), delayMs) : fn());
   front.on("message", (msg, from) => {
     const key = `${from.address}:${from.port}`;
-    const st = (stats[key] = stats[key] || { up: 0, down: 0, upPackets: 0, downPackets: 0 });
+    const st = (stats[key] = stats[key] || { up: 0, down: 0, upPackets: 0, downPackets: 0, upDropped: 0, downDropped: 0 });
     st.up += msg.length;
     st.upPackets++;
     let back = clients.get(key);
@@ -309,11 +312,13 @@ const startProxy = async (ctx, { delayMs = 0, loss = 0 } = {}) => {
         st.down += m.length;
         st.downPackets++;
         if (Math.random() >= loss) later(() => front.send(m, from.port, from.address));
+        else st.downDropped++;
       });
       back.on("error", () => {});
       clients.set(key, back);
     }
     if (Math.random() >= loss) later(() => back.send(msg, PORT.server, "127.0.0.1"));
+    else st.upDropped++;
   });
   await new Promise((resolve, reject) => {
     front.once("error", (e) => reject(new Env(`the proxy cannot listen on ${PORT.proxy}: ${e.message}`)));
@@ -366,6 +371,7 @@ const lowCostMode = () => {
     ...iniEntries(read(path.join(GAME, "Low.ini"))),
     ["Display", "iSize W", "640"], ["Display", "iSize H", "400"], ["Display", "bBorderless", "0"], ["Display", "bFull Screen", "0"],
     ["AudioMenu", "fAudioMasterVolume", "0.0000"],
+    ["MAIN", "bGamepadEnable", "0"],
   ]);
   editIni(path.join(GAME, "Data", "SKSE", "Plugins", "SSEDisplayTweaks.ini"), [["Render", "FramerateLimit", "30"], ["Render", "UIFramerateLimit", "30"], ["Window", "LockCursor", "false"]]);
 };
@@ -560,7 +566,15 @@ const runOnce = async (id, check, n, attempt) => {
     ctx.log(`${result}: ${e.stack || e}`);
     if (e.stop) throw e;
   } finally {
-    if (stopProxy) stopProxy();
+    if (stopProxy) {
+      const st = Object.values(ctx.proxyStats());
+      const sum = (k) => st.reduce((s, x) => s + x[k], 0);
+      ctx.proxyTraffic = sum("upPackets") + sum("downPackets");
+      ctx.proxyClients = st.length;
+      ctx.proxyDropRatio = ctx.proxyTraffic ? (sum("upDropped") + sum("downDropped")) / ctx.proxyTraffic : 0;
+      ctx.evidence.push(`proxy ${JSON.stringify(check.proxy)}: ${st.length} clients, ${sum("upPackets")} packets up (${sum("upDropped")} dropped), ${sum("downPackets")} down (${sum("downDropped")} dropped)`);
+      stopProxy();
+    }
     killOwned();
     await sleep(2000);
     restore();
@@ -571,14 +585,52 @@ const runOnce = async (id, check, n, attempt) => {
     result = "ENV";
     reason = `slow engine ${slow[0]} (median driver round trip ${slow[1].median} ms): ${reason}`;
   }
+  const loss = (check.proxy && check.proxy.loss) || 0;
+  if (check.proxy && check.engines && result === "PASS" && (!ctx.proxyTraffic || ctx.proxyClients < check.engines)) {
+    result = "FAIL";
+    reason = `not exercised: ${ctx.proxyClients || 0} clients went through the proxy for ${check.engines} engines`;
+  } else if (check.proxy && result === "PASS" && loss && ctx.proxyTraffic > 1000 && (ctx.proxyDropRatio < loss / 2 || ctx.proxyDropRatio > loss * 2)) {
+    result = "FAIL";
+    reason = `not exercised: the proxy dropped ${(ctx.proxyDropRatio * 100).toFixed(1)}% of the packets for a loss of ${loss * 100}%`;
+  }
   return { result, reason, secs: Math.round((Date.now() - t) / 1000), evidence: ctx.evidence, shots: ctx.shots, rtt };
 };
 
-const buildStamp = (checkFile) => {
-  const git = (...a) => (spawnSync("git", a, { cwd: REPO, encoding: "utf8" }).stdout || "").trim();
+const buildStamp = (checkFile, check) => {
+  const git = (...a) => (spawnSync("git", a, { cwd: REPO, encoding: "utf8", maxBuffer: 1 << 28 }).stdout || "").trim();
   const mtime = (f) => { try { return fs.statSync(f).mtime.toISOString(); } catch { return null; } };
-  const sha = (f) => { try { return require("crypto").createHash("sha1").update(fs.readFileSync(f)).digest("hex").slice(0, 12); } catch { return null; } };
-  return { head: git("rev-parse", "--short", "HEAD"), dirty: git("status", "--porcelain", "--untracked-files=no") !== "", client: mtime(path.join(GAME, "Data", "Platform", "Plugins", "skymp5-client.js")), server: mtime(path.join(DIST, "scam_native.node")), serverJs: sha(path.join(DIST, "dist_back", "skymp5-server.js")), check: sha(checkFile) };
+  const hash = (data) => require("crypto").createHash("sha1").update(data).digest("hex").slice(0, 12);
+  const sha = (f) => { try { return hash(fs.readFileSync(f)); } catch { return null; } };
+  return { head: git("rev-parse", "--short", "HEAD"), dirty: git("status", "--porcelain", "--untracked-files=no") !== "", diff: hash(git("diff", "HEAD", "--", ".", ":(exclude)misc/e2e/out", ":(exclude)*.md") + git("ls-files", "-o", "--exclude-standard").split("\n").map((f) => `${f}:${sha(path.join(REPO, f))}`).join()), runner: sha(__filename), client: mtime(path.join(GAME, "Data", "Platform", "Plugins", "skymp5-client.js")), server: mtime(path.join(DIST, "scam_native.node")), serverJs: sha(path.join(DIST, "dist_back", "skymp5-server.js")), check: sha(checkFile), ...(check.suite ? { suite: hash(check.suite.map((sub) => sha(path.join(CHECKS, `${sub}.js`))).join()) } : {}) };
+};
+
+const logAttempt = (id, n, attempt, r, build) => fs.appendFileSync(path.join(OUT, "attempts.jsonl"), `${JSON.stringify({ id, run: n, attempt, result: r.result, reason: r.reason, secs: r.secs, evidence: r.evidence, rtt: r.rtt, freeGB: +(os.freemem() / 2 ** 30).toFixed(1), build, at: new Date().toISOString() })}\n`);
+
+const runSuite = async (id, check, n, build) => {
+  const t = Date.now();
+  const parts = [];
+  for (const sub of check.suite) {
+    const file = path.join(CHECKS, `${sub}.js`);
+    delete require.cache[require.resolve(file)];
+    const subCheck = { ...require(file), proxy: check.proxy };
+    let r;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      r = await runOnce(`${id}-${sub}`, subCheck, n, attempt);
+      log(`${id} ${sub}: ${r.result} ${r.reason}`);
+      logAttempt(`${id}-${sub}`, n, attempt, r, build);
+      if (r.result !== "ENV" && !notExercised(r)) break;
+    }
+    parts.push([sub, r]);
+  }
+  const bad = parts.filter(([, r]) => r.result !== "PASS" && r.result !== "ACCEPTED");
+  return {
+    result: !bad.length ? (parts.some(([, r]) => r.result === "ACCEPTED") ? "ACCEPTED" : "PASS") : bad.some(([, r]) => r.result === "FAIL") ? "FAIL" : bad[0][1].result,
+    reason: (bad.length ? bad.map(([sub, r]) => `${sub} ${r.result}: ${r.reason}`).join("; ") : `${parts.length} checks PASS`) + (check.excluded ? `; ${check.excluded}` : ""),
+    secs: Math.round((Date.now() - t) / 1000),
+    evidence: parts.flatMap(([sub, r]) => [`${sub}: ${r.result} ${r.reason}`, ...r.evidence.map((e) => `${sub}: ${e}`)]),
+    shots: parts.flatMap(([, r]) => r.shots),
+    rtt: {},
+  };
 };
 
 const runCheck = async (id, opts, envStreak) => {
@@ -586,35 +638,38 @@ const runCheck = async (id, opts, envStreak) => {
   if (!fs.existsSync(file)) return { result: "FAIL", reason: "no check script", secs: 0, evidence: [], shots: [] };
   delete require.cache[require.resolve(file)];
   const check = require(file);
-  const runs = opts.runs || (opts.final && check.engines ? 3 : 1);
+  const runs = opts.runs || (opts.final && (check.engines || check.suite) ? 3 : 1);
   const results = [];
-  const build = buildStamp(file);
+  const build = buildStamp(file, check);
   const checkName = id === "adhoc" ? `adhoc:${path.basename(file)}` : id;
-  for (let n = 1; n <= runs; n++) {
+  let exercised = 0;
+  for (let n = 1; exercised < runs && n <= runs + 2; n++) {
     let r;
     let prevReason;
     for (let attempt = 0; attempt < 3; attempt++) {
       log(`${id} run ${n}/${runs}${attempt ? ` retry ${attempt}` : ""}`);
-      r = await runOnce(id, check, n, attempt);
+      r = check.suite ? await runSuite(id, check, n, build) : await runOnce(id, check, n, attempt);
       log(`${id} run ${n}: ${r.result} ${r.reason}`);
-      fs.appendFileSync(path.join(OUT, "attempts.jsonl"), `${JSON.stringify({ id: checkName, run: n, attempt, result: r.result, reason: r.reason, secs: r.secs, evidence: r.evidence, rtt: r.rtt, freeGB: +(os.freemem() / 2 ** 30).toFixed(1), build, at: new Date().toISOString() })}\n`);
+      logAttempt(checkName, n, attempt, r, build);
       envStreak.n = r.result === "ENV" ? envStreak.n + 1 : 0;
       const shape = r.reason.replace(/\d+/g, "#");
-      if (r.result !== "ENV" || envStreak.n >= 3 || (attempt > 0 && shape === prevReason)) break;
+      if (check.suite || r.result !== "ENV" || envStreak.n >= 3 || (attempt > 0 && shape === prevReason)) break;
       prevReason = shape;
     }
     results.push(r);
-    if (r.result !== "PASS" && r.result !== "ACCEPTED" && !opts.keepGoing) break;
+    if (!notExercised(r)) exercised++;
+    if (r.result !== "PASS" && r.result !== "ACCEPTED" && !notExercised(r) && !opts.keepGoing) break;
   }
   const counted = results.filter((r) => !notExercised(r));
   const failed = counted.filter((r) => r.result !== "PASS" && r.result !== "ACCEPTED");
-  const shown = failed[0] || counted[counted.length - 1] || results[results.length - 1];
+  const short = !failed.length && counted.length < runs;
+  const shown = failed[0] || (short ? results.filter(notExercised).pop() : counted[counted.length - 1]);
   const skipped = results.length - counted.length ? `, ${results.length - counted.length} not exercised` : "";
   return {
     ...shown,
     secs: results.reduce((s, r) => s + r.secs, 0),
-    reason: failed.length ? `${failed.length} of ${results.length} runs not PASS${skipped}; run ${results.indexOf(shown) + 1}/${runs}: ${shown.reason}` : counted.length ? `${counted.length}/${runs} runs PASS${skipped}` : `run ${results.length}/${runs}: ${shown.reason}`,
-    result: failed.length ? shown.result : !counted.length ? shown.result : counted.some((r) => r.result === "ACCEPTED") ? "ACCEPTED" : "PASS",
+    reason: failed.length ? `${failed.length} of ${results.length} runs not PASS${skipped}; run ${results.indexOf(shown) + 1}/${results.length}: ${shown.reason}` : short ? `${counted.length}/${runs} runs exercised in ${results.length}; run ${results.indexOf(shown) + 1}: ${shown.reason}` : `${counted.length}/${runs} runs PASS${skipped}`,
+    result: failed.length || short ? shown.result : counted.some((r) => r.result === "ACCEPTED") ? "ACCEPTED" : "PASS",
     evidence: results.flatMap((r, i) => r.evidence.map((e) => `run ${i + 1}: ${e}`)),
     shots: results.flatMap((r) => r.shots),
   };

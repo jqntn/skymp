@@ -16,7 +16,7 @@ module.exports = {
   timeout: 10 * 60000,
   async run(ctx) {
     const build = path.join(__dirname, "..", "..", "..", "build");
-    const r = spawnSync("ctest", ["-C", "Release", "-R", "^integration_test_coop$", "-V"], { cwd: build, encoding: "utf8", maxBuffer: 1 << 28 });
+    const r = spawnSync("ctest", ["-C", "Release", "-R", "^integration_test_coop$", "-FA", "unit_passed", "-V"], { cwd: build, encoding: "utf8", maxBuffer: 1 << 28 });
     const out = `${r.stdout || ""}${r.stderr || ""}`;
     fs.writeFileSync(path.join(ctx.dir, "ctest.log"), out);
     const passed = r.status === 0 && /Test passed!/.test(out);

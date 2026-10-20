@@ -29,18 +29,27 @@ export interface AnimationApplyState {
   lastNumChanges: number;
   useAnimOverrides: boolean;
   overriddenAnimEventName?: string;
+  seat?: { furniture: number, enter: string } | null;
+  ownSeat?: boolean;
+  seatTries?: number;
+  standTries?: number;
 }
 
 const allowedIdles = new Array<[number, string]>();
 const lastAnimEvents = new Map<number, string>();
+const lastFurnitureIdles = new Map<number, string>();
 
 export const standAnimEventName = "SkympStand";
 export const flyAnimEventName = "SkympFly";
 export const speakAnimPrefix = "SkympSpeak:";
+export const sitAnimPrefix = "SkympSit_";
 
 export const isFurnitureIdle = (animEventName: string | undefined): boolean =>
-  !!animEventName && (animOverridesLowerCase[animEventName.toLowerCase()] !== undefined
+  !!animEventName && !/^idlestop/i.test(animEventName) && (animOverridesLowerCase[animEventName.toLowerCase()] !== undefined
     || (/^idle.*(enter|start|instant)/i.test(animEventName) && !/exit/i.test(animEventName)));
+
+export const instantEnter = (animEventName: string): string =>
+  animOverridesLowerCase[animEventName.toLowerCase()] ?? animEventName;
 
 export const standUp = (ac: Actor): void => {
   Debug.sendAnimationEvent(ac, "IdleForceDefaultState");
@@ -183,7 +192,22 @@ export const applyAnimation = (
     return;
   }
 
+  if (anim.animEventName.startsWith(sitAnimPrefix)) {
+    const rest = anim.animEventName.slice(sitAnimPrefix.length);
+    const i = rest.indexOf("_");
+    const seat = { furniture: parseInt(rest.slice(0, i), 16), enter: rest.slice(i + 1) };
+    if (!state.seat || state.seat.furniture !== seat.furniture) {
+      state.seatTries = 0;
+      state.standTries = 0;
+    }
+    state.seat = seat;
+    return;
+  }
+
   if (anim.animEventName === standAnimEventName) {
+    state.seat = null;
+    state.ownSeat = false;
+    state.standTries = 0;
     if (ac && !ac.isDead() && ac.getSitState() !== 0) {
       standUp(ac);
     }
@@ -216,7 +240,12 @@ export const applyAnimation = (
     }
   }
 
+  const standing = !ac || ac.getSitState() === 0;
   Debug.sendAnimationEvent(refr, anim.animEventName);
+
+  if (standing && isFurnitureIdle(anim.animEventName)) {
+    state.ownSeat = true;
+  }
 
   if (anim.animEventName === "GetUpBegin") {
     const refrId = refr.getFormID();
@@ -282,11 +311,16 @@ export class AnimationSource {
   }
 
   addStand(): void {
+    lastFurnitureIdles.delete(this.refrId);
     this.onSendAnimationEvent(standAnimEventName);
   }
 
   addFly(): void {
     this.onSendAnimationEvent(flyAnimEventName);
+  }
+
+  addSit(furniture: number): void {
+    this.enqueue(`${sitAnimPrefix}${furniture.toString(16)}_${lastFurnitureIdles.get(this.refrId) ?? ""}`);
   }
 
   addSpeak(voiceFile: string): void {
@@ -428,6 +462,9 @@ export const setupHooks = (): void => {
     leave: (ctx) => {
       if (ctx.selfId < 0xff000000 && ctx.animationSucceeded && !ignoredAnims.has(ctx.animEventName)) {
         lastAnimEvents.set(ctx.selfId, ctx.animEventName);
+        if (isFurnitureIdle(ctx.animEventName)) {
+          lastFurnitureIdles.set(ctx.selfId, ctx.animEventName);
+        }
       }
     },
   });

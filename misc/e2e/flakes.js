@@ -10,7 +10,7 @@ const ledger = new Map();
 for (const line of fs.readFileSync(path.join(__dirname, "out", "attempts.jsonl"), "utf8").split(/\r?\n/)) {
   if (!line.trim()) continue;
   const a = JSON.parse(line);
-  if (a.at < since || a.id.startsWith("adhoc:") || (only && a.id !== only)) continue;
+  if (a.at < since || a.id.startsWith("adhoc") || (only && a.id !== only)) continue;
   const row = ledger.get(a.id) || { runs: 0, shapes: new Map() };
   row.runs++;
   if (a.result !== "PASS" && a.result !== "ACCEPTED") {
