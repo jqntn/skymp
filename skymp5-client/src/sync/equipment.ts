@@ -81,7 +81,7 @@ const removeUnnecessaryExtra = (inv: Inventory, ignoreAmmo: boolean): Inventory 
 
 export const getEquipment = (ac: Actor, numChanges: number): Equipment => {
   return {
-    inv: getInventory(ac),
+    inv: { entries: getInventory(ac).entries.filter((e) => e.count > 0) },
     leftSpell: getEquipedSpell(ac, SpellType.Left),
     rightSpell: getEquipedSpell(ac, SpellType.Right),
     voiceSpell: getEquipedSpell(ac, SpellType.Voice),
