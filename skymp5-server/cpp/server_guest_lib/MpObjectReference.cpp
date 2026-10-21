@@ -1870,7 +1870,9 @@ void MpObjectReference::InitScripts()
                                          auto kPrefix = "Sweet";
                                          bool startsWith = val.size() >= 5 &&
                                            !memcmp(kPrefix, val.data(), 5);
-                                         return !startsWith;
+                                         return !startsWith &&
+                                           Utils::stricmp(val.data(),
+                                                          "powerShrineScript");
                                        }),
                         scriptNames.end());
     }

@@ -70,6 +70,12 @@ First non-PASS in plan order: G1.7
 | P6 | PASS | 343 | 2026-10-20 19:07 | 1/1 runs PASS |
 | P7 | PASS | 2084 | 2026-10-20 19:41 | 1/1 runs PASS |
 | P8 | PASS | 36 | 2026-10-20 19:42 | 1/1 runs PASS |
+| T1 | PASS | 115 | 2026-10-21 21:10 | 2/2 runs PASS |
+| T2 | PASS | 126 | 2026-10-21 22:42 | 1/1 runs PASS |
+| T3 | FAIL | 0 | - | not run |
+| T4 | FAIL | 0 | - | not run |
+| T5 | FAIL | 0 | - | not run |
+| T6 | FAIL | 0 | - | not run |
 
 ## Evidence
 
@@ -725,3 +731,19 @@ First non-PASS in plan order: G1.7
 - ![P7](runs/P7-G2_6/1/G2_6-lydia-member.png)
 ### P8
 - run 1: 110 client log lines, 0 [Exception] lines
+### T1
+- run 1: the bandit ran at engine 2's player before the kill; server: dead true, hoster ff000001, at 3c:Skyrim.esm 7439,-41342,3543; engine 1 away in 1a26f:Skyrim.esm
+- run 1: engine 1 3 s after the bandit loaded: dead true, pelvis -3.8 above the reference, 85 units from the server's death position, Speed 355
+- run 1: engine 1 10 s after the bandit loaded: dead true, pelvis -3.6 above the reference, 98 units from the server's death position, Speed 355
+- run 1: engine 1 opens the corpse: true
+- run 2: the bandit ran at engine 2's player before the kill; server: dead true, hoster ff000001, at 3c:Skyrim.esm 7407,-41376,3558; engine 1 away in 1a26f:Skyrim.esm
+- run 2: engine 1 3 s after the bandit loaded: dead true, pelvis 0.4 above the reference, 46 units from the server's death position, Speed 317
+- run 2: engine 1 10 s after the bandit loaded: dead true, pelvis 0.4 above the reference, 46 units from the server's death position, Speed 317
+- run 2: engine 1 opens the corpse: true
+- ![T1](runs/T1/1/T1-corpse.png)
+- ![T1](runs/T1/2/T1-corpse.png)
+### T2
+- run 1: Warrior Stone e7bdd: 1 message box(es) answered ["Ceux placés sous le signe du Guerrier ap"]; client added ["e5f4c"], removed []; server learned ["e5f4c"]
+- run 1: Mage Stone e7bd6: 1 message box(es) answered ["Ceux placés sous le signe du Mage appren"]; client added ["e5f47"], removed ["e5f4c"]; server learned ["e5f47"]
+- run 1: Thief Stone e7bdc: 1 message box(es) answered ["Ceux placés sous le signe du Voleur appr"]; client added ["e5f45"], removed ["e5f47"]; server learned ["e5f45"]
+- run 1: after the relog: client spells ["e5f45","2012ccc"], server ["e5f45"]

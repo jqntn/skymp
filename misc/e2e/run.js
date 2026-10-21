@@ -30,8 +30,10 @@ const range = (prefix, n) => Array.from({ length: n }, (_, i) => `${prefix}${i +
 const ORDER = [
   "L1", "S0", "S0b", "S0c", "S1.1", "S1.2", "S1.4", "S1.3", "S1.5", "S1.6", "S2", "S3.1", "S3.2", "S3.3", "S3.4",
   ...range("1A.", 5), ...range("1B.", 5), ...range("G1.", 8),
-  ...range("2A.", 5), "G1.9", ...range("2B.", 5), "G2.1", "G2.2", "G2.3", "F1", "G2.4", "G2.5", "F4", "F5", "F7", "G2.6", "F6", "F2", "F3", ...range("P", 8),
+  ...range("2A.", 5), "G1.9", ...range("2B.", 5), "G2.1", "G2.2", "G2.3", "F1", "G2.4", "G2.5", "F4", "F5", "F7", "G2.6", "F6", "F2", "F3", ...range("P", 8), ...range("T", 6),
 ];
+
+const SLOW = ["P5", "P7"];
 
 class Env extends Error {}
 class Blocked extends Error {}
@@ -707,6 +709,7 @@ const main = async () => {
   const args = process.argv.slice(2);
   const arg = (name) => { const i = args.indexOf(name); return i >= 0 ? args[i + 1] : undefined; };
   const only = arg("--only")?.split(",");
+  const skip = [...(arg("--skip")?.split(",") || []), ...(args.includes("--all") || args.includes("--final") ? [] : SLOW.filter((id) => !only?.includes(id)))];
   const opts = { runs: Number(arg("--runs")) || 0, adhoc: arg("--check"), final: args.includes("--final"), keepGoing: args.includes("--keep-going") };
   if ((arg("--dist") || arg("--client") || arg("--tag")) && (!opts.adhoc || !args.includes("--no-l1"))) {
     log("--dist, --client and --tag need --check and --no-l1");
@@ -748,7 +751,7 @@ const main = async () => {
     if (!stopped) {
       prepareServer();
       const envStreak = { n: 0 };
-      for (const id of ORDER.filter((id) => id !== "L1" && (!only || only.includes(id)))) {
+      for (const id of ORDER.filter((id) => id !== "L1" && (!only || only.includes(id)) && !skip.includes(id))) {
         save(id, await runCheck(id, opts, envStreak));
         if (envStreak.n >= 3) { stopped = `3 ENV results in a row (${id}: ${results[id].reason})`; break; }
       }

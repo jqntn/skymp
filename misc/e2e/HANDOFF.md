@@ -77,6 +77,7 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 - `fix(server): cut hosted NPC saves, echoes and per-packet costs under load (P5)`: see the P5 log line of 2026-10-19 16:15 and the P5 bullets in PLAN; committed on the user's request before the 1 hour PASS run at the new limits.
 - `test(e2e): treat leaving the party as no hoster loss in P2 and P3`: user decision 2026-10-19; P2 and P3 PASS 2026-10-19 21:30 UTC (passes 9 and 10 since retro 3: retro 4 is due).
 - `test(e2e): check solo play without a party (P6)`: no product change, see the P6 log line of 2026-10-19 19:25 and the P6 bullets in PLAN.
+- `fix(server): run the guardian stone script on the server (T2)`: see the T2 status bullet in PLAN and the T2 log line of 2026-10-22 00:50; also the runner change of 00:45 (P5 and P7 only with `--all`, `--final` or `--only`), checks/T1.js (T1 not reproduced) and the T1-T6 plan section.
 - `fix(client): keep negative inventory counts out of the equipment message (P8)`: see the P8 log line of 2026-10-20 19:47 and the P8 bullet in PLAN.
 - `fix(client): sync hosted NPC seats under network delay and loss (P7)`: see the P7 log line of 2026-10-20 19:46 and the P7 bullets in PLAN.
 - `test(e2e): gate P5 bandwidth per client and harden the load runner (P5)`: P5 PASS 2026-10-19 18:20 UTC (pass 7 since retro 3); see the P5 log lines and bullets.
@@ -94,10 +95,16 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 - G1.7 work is in the stash "G1.7 harness press attempts" (not in the tree).
 - Nothing for 2A.2 (committed).
 - Stashes "G1.6 stand fix" and "G1.6 hold after a relayed stand": dropped G1.6 parts (no red on the final check); apply one only with the Alvor signature on the HEAD client (see the G1.6 findings of 2026-10-15 in PLAN).
-- Nothing else: P7 and P8 are committed (see Committed).
+- Uncommitted after the T2 commit (2026-10-22):
+  - T4 fix (client formView, talkEvents.ts, coopService; server coop.ts `talk` handler): a non-hoster client in dialogue with a puppet sends `talk` (on, off, refresh every 20 s); the server forwards `talkHold` to the hoster, which sets SetDontMove, turns the NPC to the talker and looks at him (hold dropped after 60 s without a refresh). checks/T4.js written, not run yet. Next: T4 green, red (revert the T4 files), review, commit.
+  - T5 groundwork: SP native `getDialogueTopic()` (MenuTopicManager lastSelectedDialogue: id and topic text) in DevApi, declared in codegen skyrimPlatform.ts; not built or used yet. Probe (scratchpad t5probe.js): HUD `ShowSubtitle` shows text, read back at `_root.HUDMovieBaseInstance.SubtitleText.text` (it stays until hidden); Flash `TopicList.selectedEntry.text` already holds the first entry at the greeting, so it cannot tell a picked topic; `sp.Ui` has no getNumber (use getInt or getFloat). Voice lines are relayed only by the hoster (sendInputsService `onSpeakSound`), which is the T5 cause when the talker does not host.
+  - checks/T6.js written, not run yet (bandit 1ebf6 hosted by engine 2 fights engine 2's player; attack events and IsAttacking starts on both engines within 500 ms).
+  - T1 parked (see PLAN); T3 next after T4 in plan order (no check yet).
+  - The playtest server folder (build/dist/server) holds the playtest world of 2026-10-21; wipe it again before the next playtest.
 
 ## User decisions (2026-10-12)
 
+- 2026-10-21: playtest bugs T1 to T6 added to the plan (see PLAN, Playtest 2026-10-21); the loop resumes on them, the faster harness first. T5: the other party member hears the NPC's line live and sees a subtitle "<NPC>: <line>" and the talker's topic "<player>: <topic>" (replaces G1.8's "without subtitles").
 - 2026-10-20: finish after one clean full scoreboard on the final code; P7 3 runs in a row under `--final` and the 3 final full runs are not run; the user checks by hand.
 - 2026-10-19: P5 limits: tick at most 2.5 times main, server memory at most 1.4 times main; bandwidth per client 1.25 times and load times 2 times stay. The P5 fixes are committed before the final run.
 
@@ -210,6 +217,7 @@ Rewritten at the end of each pass and committed with the loop commits. Read it w
 ## Runner
 
 - Command: `node misc/e2e/run.js [--no-l1] [--only IDs] [--runs N] [--keep-going] [--final] [--check file] [--visible]` (`--keep-going` runs all N runs even after a FAIL, to measure a flake rate; since retro 2 a FAIL with an engine's median driver round trip over 1000 ms counts as ENV, a repeated ENV reason is not retried, steamwebhelper over 10 GB is killed when RAM is short, and the build stamp has the server bundle and check file hashes)
+- P5 and P7 (about 100 min together) run only with `--all`, `--final`, or when named in `--only`; `--skip a,b` leaves out more ids (2026-10-21, the user asked for a shorter harness).
 - L1 rebuilds the client and installs it; use --no-l1 only when nothing in the client changed.
 - Ports: 7790 server, 7791 UI, 7792 probe, 7793 runner. Kill a stale runner that holds 7793.
 - A crashed run is restored by the next start.

@@ -59,6 +59,8 @@ public:
 
   VarValue RemoveSpell(VarValue self, const std::vector<VarValue>& arguments);
 
+  VarValue HasSpell(VarValue self, const std::vector<VarValue>& arguments);
+
   VarValue GetRace(VarValue self, const std::vector<VarValue>& arguments);
 
   VarValue GetSpellCount(VarValue self,

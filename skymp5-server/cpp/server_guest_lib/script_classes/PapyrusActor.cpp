@@ -598,6 +598,23 @@ VarValue PapyrusActor::AddSpell(VarValue self,
   return VarValue(false);
 }
 
+VarValue PapyrusActor::HasSpell(VarValue self,
+                                const std::vector<VarValue>& arguments)
+{
+  if (auto actor = GetFormPtr<MpActor>(self)) {
+    if (arguments.size() < 1) {
+      throw std::runtime_error(
+        "Actor.HasSpell requires at least one argument");
+    }
+    const auto& spell = GetRecordPtr(arguments[0]);
+    if (spell.rec) {
+      return VarValue(
+        actor->IsSpellLearned(spell.ToGlobalId(spell.rec->GetId())));
+    }
+  }
+  return VarValue(false);
+}
+
 VarValue PapyrusActor::RemoveSpell(VarValue self,
                                    const std::vector<VarValue>& arguments)
 {
@@ -781,6 +798,7 @@ void PapyrusActor::Register(
   AddMethod(vm, "RemoveFromFaction", &PapyrusActor::RemoveFromFaction);
   AddMethod(vm, "AddSpell", &PapyrusActor::AddSpell);
   AddMethod(vm, "RemoveSpell", &PapyrusActor::RemoveSpell);
+  AddMethod(vm, "HasSpell", &PapyrusActor::HasSpell);
   AddMethod(vm, "GetRace", &PapyrusActor::GetRace);
   AddMethod(vm, "GetSpellCount", &PapyrusActor::GetSpellCount);
   AddMethod(vm, "GetNthSpell", &PapyrusActor::GetNthSpell);
