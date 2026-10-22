@@ -1,4 +1,4 @@
-import { Actor, Cell, Debug, DxScanCode, Faction, Game, GlobalVariable, ObjectReference, Quest, QuestStageEvent, QuestStartStopEvent, ReferenceAlias, TESModPlatform, Utility, WorldSpace } from "skyrimPlatform";
+import { Actor, Cell, Debug, DxScanCode, Faction, Game, GlobalVariable, ObjectReference, Quest, QuestStageEvent, QuestStartStopEvent, ReferenceAlias, TESModPlatform, Ui, Utility, WorldSpace } from "skyrimPlatform";
 import { logError, logTrace } from "../../logging";
 import { ObjectReferenceEx } from "../../extensions/objectReferenceEx";
 import { ConnectionMessage } from "../events/connectionMessage";
@@ -13,8 +13,8 @@ import { WorldCleanerService } from "./worldCleanerService";
 
 const STOP = -1;
 const MQ_QUICKSTART_GLOBAL = 0x4679e;
-const COMPASS_INTERVAL_MS = 100;
-const COMPASS_CARDINALS: [string, number][] = [["N", 0], ["E", 90], ["S", 180], ["W", 270]];
+const COMPASS_RECT_MS = 1000;
+const HUD_STAGE = [1280, 720];
 const QUEST_LOG_REQUEST_DELAY_MS = 3000;
 const REPLAY_SETTLE_SECONDS = 3;
 const MAX_REPLAY_DRIFT = 2048;
@@ -341,11 +341,6 @@ export class CoopService extends ClientListener {
   }
 
   private updateCompass() {
-    const now = Date.now();
-    if (now - this.compassAt < COMPASS_INTERVAL_MS) {
-      return;
-    }
-    this.compassAt = now;
     const player = Game.getPlayer();
     if (!player) {
       return;
@@ -358,14 +353,22 @@ export class CoopService extends ClientListener {
       heading = this.sp.getCameraAngleZ();
     } catch {
     }
-    const toLeft = (bearing: number) => Math.round((50 + (((((bearing - heading) % 360) + 540) % 360) - 180) / 3.6) * 10) / 10;
-    const markers = members.filter((m) => m.cellOrWorld === here).map((m) => ({
-      actor: m.actor,
-      name: party?.members.find((x) => x.actor === m.actor)?.name ?? "",
-      left: toLeft((Math.atan2(m.pos[0] - player.getPositionX(), m.pos[1] - player.getPositionY()) * 180) / Math.PI),
-    }));
-    const cardinals = this.partyState?.party ? COMPASS_CARDINALS.map(([text, bearing]) => ({ text, left: toLeft(bearing) })) : [];
-    const key = JSON.stringify({ markers, cardinals });
+    const toLeft = (bearing: number) => Math.round((50 + (((((bearing - heading) % 360) + 540) % 360) - 180) / 3.6) * 100) / 100;
+    const view = getViewFromStorage();
+    const markers = members.filter((m) => m.cellOrWorld === here).map((m) => {
+      const local = Actor.from(Game.getFormEx(view?.getLocalRefrId(m.actor) ?? 0));
+      const pos = local && local.is3DLoaded() ? [local.getPositionX(), local.getPositionY()] : m.pos;
+      return {
+        actor: m.actor,
+        name: party?.members.find((x) => x.actor === m.actor)?.name ?? "",
+        left: toLeft((Math.atan2(pos[0] - player.getPositionX(), pos[1] - player.getPositionY()) * 180) / Math.PI),
+      };
+    });
+    if (Date.now() - this.compassAt >= COMPASS_RECT_MS) {
+      this.compassAt = Date.now();
+      this.compassRect = this.nativeCompassRect() ?? this.compassRect;
+    }
+    const key = JSON.stringify({ markers, rect: this.compassRect });
     if (key === this.compassKey) {
       return;
     }
@@ -376,28 +379,48 @@ export class CoopService extends ClientListener {
       if (!bar) {
         bar = document.createElement("div");
         bar.id = "skymp-party-compass";
-        bar.style.cssText = "position:fixed;top:7%;left:35%;width:30%;height:40px;pointer-events:none;z-index:1000;font:bold 11px sans-serif;color:#d8d0b8;text-shadow:0 0 2px #000";
+        bar.style.cssText = "position:fixed;pointer-events:none;z-index:1000;font:bold 10px sans-serif;color:#d8d0b8;text-shadow:0 0 2px #000";
         document.body.appendChild(bar);
       }
-      bar.style.borderTop = state.cardinals.length ? "1px solid rgba(216,208,184,0.5)" : "none";
-      bar.replaceChildren(...state.cardinals.map((c) => {
-        const e = document.createElement("div");
-        e.dataset.cardinal = c.text;
-        e.textContent = c.text;
-        e.style.cssText = "position:absolute;top:1px;left:" + c.left + "%;transform:translateX(-50%)";
-        return e;
-      }), ...state.markers.map((m) => {
-        const e = document.createElement("div");
-        e.dataset.actor = String(m.actor);
-        e.style.cssText = "position:absolute;top:16px;left:" + m.left + "%;transform:translateX(-50%);text-align:center;white-space:nowrap;font-size:10px";
-        const diamond = document.createElement("div");
-        diamond.style.cssText = "width:9px;height:9px;margin:0 auto 3px;transform:rotate(45deg);background:#7fd3ff;border:1px solid #102030";
-        const name = document.createElement("div");
-        name.textContent = m.name;
-        e.replaceChildren(diamond, name);
-        return e;
-      }));
+      const [left, top, width, height] = state.rect;
+      Object.assign(bar.style, { left: left + "%", top: top + "%", width: width + "%", height: height + "%" });
+      const seen = new Set();
+      for (const m of state.markers) {
+        seen.add(String(m.actor));
+        let e = bar.querySelector('[data-actor="' + m.actor + '"]');
+        if (!e) {
+          e = document.createElement("div");
+          e.dataset.actor = String(m.actor);
+          e.style.cssText = "position:absolute;top:50%;width:8px;height:8px;margin:-4px 0 0 -4px";
+          const diamond = document.createElement("div");
+          diamond.style.cssText = "width:8px;height:8px;transform:rotate(45deg);background:#7fd3ff;border:1px solid #102030;box-sizing:border-box";
+          const name = document.createElement("div");
+          name.style.cssText = "position:absolute;left:4px;top:12px;transform:translateX(-50%);white-space:nowrap";
+          e.replaceChildren(diamond, name);
+          bar.appendChild(e);
+        }
+        e.style.left = m.left + "%";
+        e.lastChild.textContent = m.name;
+      }
+      for (const e of Array.from(bar.children)) {
+        if (!seen.has(e.dataset.actor)) {
+          e.remove();
+        }
+      }
     })();`);
+  }
+
+  private nativeCompassRect(): number[] | undefined {
+    const value = (path: string) => Ui.getFloat("HUD Menu", `_root.HUDMovieBaseInstance${path}`);
+    const frame = ".CompassShoutMeterHolder.Compass.CompassFrame";
+    const width = value(`${frame}._width`);
+    const height = value(`${frame}._height`);
+    if (!width || !height) {
+      return undefined;
+    }
+    const x = value("._x") + value(".CompassShoutMeterHolder._x") + value(`${frame}._x`);
+    const y = value("._y") + value(".CompassShoutMeterHolder._y") + value(`${frame}._y`);
+    return [(x - width / 2) / HUD_STAGE[0] * 100, (y - height / 2) / HUD_STAGE[1] * 100, width / HUD_STAGE[0] * 100, height / HUD_STAGE[1] * 100];
   }
 
   private sendAliasFill(quest: number, aliases: number[]) {
@@ -682,6 +705,7 @@ export class CoopService extends ClientListener {
   private partyPositions = new Array<PartyPosition>();
   private compassAt = 0;
   private compassKey = "";
+  private compassRect = [35.8, 3.3, 28.3, 3.7];
   private trackedQuests = new Set<number>();
   private expectedEchoes = new Map<string, number>();
   private talkHolds = new Map<number, number>();

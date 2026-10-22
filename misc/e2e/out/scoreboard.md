@@ -43,7 +43,7 @@ First non-PASS in plan order: G1.3
 | 2A.3 | PASS | 35 | 2026-10-20 17:13 | 1/1 runs PASS |
 | 2A.4 | PASS | 63 | 2026-10-20 17:14 | 1/1 runs PASS |
 | 2A.5 | PASS | 72 | 2026-10-20 17:15 | 1/1 runs PASS |
-| G1.9 | PASS | 55 | 2026-10-20 17:16 | 1/1 runs PASS |
+| G1.9 | PASS | 55 | 2026-10-22 15:18 | 1/1 runs PASS |
 | 2B.1 | PASS | 29 | 2026-10-20 17:17 | 1/1 runs PASS |
 | 2B.2 | PASS | 63 | 2026-10-20 17:18 | 1/1 runs PASS |
 | 2B.3 | PASS | 71 | 2026-10-20 17:19 | 1/1 runs PASS |
@@ -72,7 +72,7 @@ First non-PASS in plan order: G1.3
 | P8 | PASS | 36 | 2026-10-20 19:42 | 1/1 runs PASS |
 | T1 | PASS | 115 | 2026-10-21 21:10 | 2/2 runs PASS |
 | T2 | PASS | 126 | 2026-10-21 22:42 | 1/1 runs PASS |
-| T3 | FAIL | 0 | - | not run |
+| T3 | FAIL | 34 | 2026-10-22 15:33 | 1 of 1 runs not PASS; run 1/1: the member walks past: the marker moved 34 times while the member's actor moved on 99 engine 1 frames |
 | T4 | PASS | 135 | 2026-10-22 14:59 | 3/3 runs PASS |
 | T5 | FAIL | 0 | - | not run |
 | T6 | PASS | 92 | 2026-10-22 13:59 | 1/1 runs PASS |
@@ -384,11 +384,11 @@ First non-PASS in plan order: G1.3
 ### G1.9
 - run 1: bot players ff000002, ff000003 formed their own party near engine 1
 - run 1: before the party: engine 1 web UI visible true, markers []; engine 2 visible true, markers []
-- run 1: member at (0, 1500) from the leader, leader heading 0, member heading 45: engine 1 (heading 0.0, camera 0.0) expects 0.0, shows 0.0 ({"visible":true,"markers":[{"actor":4278190081,"left":50,"width":40.578125}],"cardinals":[{"text":"N","left":50},{"text":"E","left":75},{"text":"S","left":0},{"text":"W","left":25}]}); engine 2 (heading 45.0, camera 45.0) expects 135.0, shows 135.0 ({"visible":true,"markers":[{"actor":4278190080,"left":87.5,"width":40.578125}],"cardinals":[{"text":"N","left":37.5},{"text":"E","left":62.5},{"text":"S","left":87.5},{"text":"W","left":12.5}]})
-- run 1: member at (1500, 0) from the leader, leader heading 0, member heading 270: engine 1 (heading 0.0, camera 0.0) expects 90.0, shows 90.0 ({"visible":true,"markers":[{"actor":4278190081,"left":75,"width":40.578125}],"cardinals":[{"text":"N","left":50},{"text":"E","left":75},{"text":"S","left":0},{"text":"W","left":25}]}); engine 2 (heading 270.0, camera 270.0) expects 0.0, shows 0.0 ({"visible":true,"markers":[{"actor":4278190080,"left":50,"width":40.578125}],"cardinals":[{"text":"N","left":75},{"text":"E","left":100},{"text":"S","left":25},{"text":"W","left":50}]})
-- run 1: member at (-1000, -1200) from the leader, leader heading 90, member heading 160: engine 1 (heading 90.0, camera 90.0) expects 129.8, shows 130.0 ({"visible":true,"markers":[{"actor":4278190081,"left":86.1,"width":40.578125}],"cardinals":[{"text":"N","left":25},{"text":"E","left":50},{"text":"S","left":75},{"text":"W","left":100}]}); engine 2 (heading 160.0, camera 160.0) expects -120.2, shows -120.2 ({"visible":true,"markers":[{"actor":4278190080,"left":16.6,"width":40.578125}],"cardinals":[{"text":"N","left":5.6},{"text":"E","left":30.6},{"text":"S","left":55.6},{"text":"W","left":80.6}]})
-- run 1: member at (-1400, 600) from the leader, leader heading 200, member heading 0: engine 1 (heading 200.0, camera 200.0) expects 93.2, shows 93.2 ({"visible":true,"markers":[{"actor":4278190081,"left":75.9,"width":40.578125}],"cardinals":[{"text":"N","left":94.4},{"text":"E","left":19.4},{"text":"S","left":44.4},{"text":"W","left":69.4}]}); engine 2 (heading 0.0, camera 0.0) expects 113.2, shows 113.0 ({"visible":true,"markers":[{"actor":4278190080,"left":81.4,"width":40.578125}],"cardinals":[{"text":"N","left":50},{"text":"E","left":75},{"text":"S","left":0},{"text":"W","left":25}]})
-- run 1: member at (9000, 7000) from the leader, leader heading 300, member heading 110: engine 1 (heading 300.0, camera 300.0) expects 112.1, shows 112.0 ({"visible":true,"markers":[{"actor":4278190081,"left":81.1,"width":40.578125}],"cardinals":[{"text":"N","left":66.7},{"text":"E","left":91.7},{"text":"S","left":16.7},{"text":"W","left":41.7}]}); engine 2 (heading 110.0, camera 110.0) expects 122.1, shows 122.0 ({"visible":true,"markers":[{"actor":4278190080,"left":83.9,"width":40.578125}],"cardinals":[{"text":"N","left":19.4},{"text":"E","left":44.4},{"text":"S","left":69.4},{"text":"W","left":94.4}]})
+- run 1: member at (0, 1500) from the leader, leader heading 0, member heading 45: engine 1 (heading 0.0, camera 0.0) expects 0.0, shows 0.0 ({"visible":true,"markers":[{"actor":4278190081,"left":50,"width":8}],"cardinals":[]}); engine 2 (heading 45.0, camera 45.0) expects 135.0, shows 135.0 ({"visible":true,"markers":[{"actor":4278190080,"left":87.5,"width":8}],"cardinals":[]})
+- run 1: member at (1500, 0) from the leader, leader heading 0, member heading 270: engine 1 (heading 0.0, camera 0.0) expects 90.0, shows 90.0 ({"visible":true,"markers":[{"actor":4278190081,"left":75,"width":8}],"cardinals":[]}); engine 2 (heading 270.0, camera 270.0) expects 0.0, shows 0.0 ({"visible":true,"markers":[{"actor":4278190080,"left":50,"width":8}],"cardinals":[]})
+- run 1: member at (-1000, -1200) from the leader, leader heading 90, member heading 160: engine 1 (heading 90.0, camera 90.0) expects 129.8, shows 130.0 ({"visible":true,"markers":[{"actor":4278190081,"left":86.1,"width":8}],"cardinals":[]}); engine 2 (heading 160.0, camera 160.0) expects -120.2, shows -120.2 ({"visible":true,"markers":[{"actor":4278190080,"left":16.6,"width":8}],"cardinals":[]})
+- run 1: member at (-1400, 600) from the leader, leader heading 200, member heading 0: engine 1 (heading 200.0, camera 200.0) expects 93.2, shows 93.2 ({"visible":true,"markers":[{"actor":4278190081,"left":75.9,"width":8}],"cardinals":[]}); engine 2 (heading 0.0, camera 0.0) expects 113.2, shows 113.0 ({"visible":true,"markers":[{"actor":4278190080,"left":81.4,"width":8}],"cardinals":[]})
+- run 1: member at (9000, 7000) from the leader, leader heading 300, member heading 110: engine 1 (heading 300.0, camera 300.0) expects 112.1, shows 112.0 ({"visible":true,"markers":[{"actor":4278190081,"left":81.1,"width":8}],"cardinals":[]}); engine 2 (heading 110.0, camera 110.0) expects 122.1, shows 122.0 ({"visible":true,"markers":[{"actor":4278190080,"left":83.9,"width":8}],"cardinals":[]})
 - run 1: after engine 2 leaves the party: engine 1 markers []; engine 2 markers []
 - ![G1.9](runs/G1_9/1/compass-engine1.png)
 ### 2B.1
@@ -776,6 +776,11 @@ First non-PASS in plan order: G1.3
 - run 1: Mage Stone e7bd6: 1 message box(es) answered ["Ceux placés sous le signe du Mage appren"]; client added ["e5f47"], removed ["e5f4c"]; server learned ["e5f47"]
 - run 1: Thief Stone e7bdc: 1 message box(es) answered ["Ceux placés sous le signe du Voleur appr"]; client added ["e5f45"], removed ["e5f47"]; server learned ["e5f45"]
 - run 1: after the relog: client spells ["e5f45","2012ccc"], server ["e5f45"]
+### T3
+- run 1: native compass (HUD {"baseX":616.6500244140625,"baseY":475.45001220703125,"holderX":22.700000762939453,"holderY":-460.45001220703125,"frameX":0.75,"frameY":21.899999618530273,"frameW":362.75,"frameH":26.450000762939453} on a 1280x720 stage): left 35.8%, top 3.3%, width 28.3%, height 3.7% of the window
+- run 1: party compass on engine 1 (640x400): left 35.8%, top 3.3%, width 28.3%, height 3.7%; 1 markers, 0 cardinal elements, single letters []
+- run 1: engine 1 turns: engine 1 moved 25 times in 76 frames (19.0 per s); the member's marker on engine 1 moved 25 times (6.3 per s) in 78 engine 1 frames, 0 of them with the member's actor ff000d2c moved on engine 1
+- run 1: the member walks past: engine 2 moved 25 times in 76 frames (19.0 per s); the member's marker on engine 1 moved 34 times (8.5 per s) in 142 engine 1 frames, 99 of them with the member's actor ff000d2c moved on engine 1
 ### T4
 - run 1: Sven 13491 walked on engine 2 (hoster ff000001); during 8 s of dialogue on engine 1 (open throughout): moved up to 12 units on the server, 4 on engine 2; worst facing on engine 2 0 degrees off the talker; moved again within 30 s after the close: true, hoster after ff000001, package on engine 2 at the close 1cb1b and 30 s later 1cb1b; 13 samples on engine 2
 - run 2: Faendal 1348c walked on engine 2 (hoster ff000001); during 8 s of dialogue on engine 1 (open throughout): moved up to 0 units on the server, 0 on engine 2; worst facing on engine 2 0 degrees off the talker; moved again within 30 s after the close: true, hoster after ff000001, package on engine 2 at the close 79adb and 30 s later 79adb; 14 samples on engine 2

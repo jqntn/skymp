@@ -8,7 +8,6 @@ const PLACEMENTS = [
   { dx: -1400, dy: 600, heading: 200, memberHeading: 0 },
   { dx: 9000, dy: 7000, heading: 300, memberHeading: 110 },
 ];
-const LETTERS = { N: 0, E: 90, S: 180, W: 270 };
 const STRANGERS = [{ profileId: 930191, dx: -2000, dy: 1800 }, { profileId: 930192, dx: 2200, dy: -1600 }];
 
 module.exports = {
@@ -39,8 +38,7 @@ module.exports = {
       const expected = norm((Math.atan2(them.x - me.x, them.y - me.y) * 180) / Math.PI - me.heading);
       const mine = ui.markers.filter((m) => m.actor === actors[other - 1]);
       const shown = mine.length === 1 ? norm((mine[0].left - 50) * 3.6) : null;
-      const letters = ui.cardinals.length === 4 && ui.cardinals.every((c) => Math.abs(norm((c.left - 50) * 3.6 - (LETTERS[c.text] - me.heading))) <= TOLERANCE);
-      return { ui, me, expected, shown, letters, ok: ui.visible && letters && ui.markers.length === 1 && mine.length === 1 && mine[0].width > 0 && Math.abs(norm(shown - expected)) <= TOLERANCE };
+      return { ui, me, expected, shown, ok: ui.visible && ui.markers.length === 1 && mine.length === 1 && mine[0].width > 0 && Math.abs(norm(shown - expected)) <= TOLERANCE };
     };
 
     const base = await ctx.probe(`return mp.get(${leader}, "locationalData");`);
@@ -84,8 +82,8 @@ module.exports = {
       const b = await look(2, 1);
       if (p === PLACEMENTS[1]) ctx.shot("compass-engine1", 1);
       ctx.evidence.push(`member at (${p.dx}, ${p.dy}) from the leader, leader heading ${p.heading}, member heading ${p.memberHeading}: engine 1 (heading ${a.me.heading.toFixed(1)}, camera ${a.me.camera.toFixed(1)}) expects ${a.expected.toFixed(1)}, shows ${a.shown === null ? "-" : a.shown.toFixed(1)} (${JSON.stringify(a.ui)}); engine 2 (heading ${b.me.heading.toFixed(1)}, camera ${b.me.camera.toFixed(1)}) expects ${b.expected.toFixed(1)}, shows ${b.shown === null ? "-" : b.shown.toFixed(1)} (${JSON.stringify(b.ui)})`);
-      if (!a.ok) fails.push(`engine 1's marker for engine 2 at (${p.dx}, ${p.dy}), heading ${p.heading}: expected ${a.expected.toFixed(1)}, shown ${a.shown === null ? "none" : a.shown.toFixed(1)}, ${a.ui.markers.length} markers in all, letters right ${a.letters}`);
-      if (!b.ok) fails.push(`engine 2's marker for engine 1 at (${p.dx}, ${p.dy}): expected ${b.expected.toFixed(1)}, shown ${b.shown === null ? "none" : b.shown.toFixed(1)}, ${b.ui.markers.length} markers in all, letters right ${b.letters}`);
+      if (!a.ok) fails.push(`engine 1's marker for engine 2 at (${p.dx}, ${p.dy}), heading ${p.heading}: expected ${a.expected.toFixed(1)}, shown ${a.shown === null ? "none" : a.shown.toFixed(1)}, ${a.ui.markers.length} markers in all`);
+      if (!b.ok) fails.push(`engine 2's marker for engine 1 at (${p.dx}, ${p.dy}): expected ${b.expected.toFixed(1)}, shown ${b.shown === null ? "none" : b.shown.toFixed(1)}, ${b.ui.markers.length} markers in all`);
     }
 
     await send(2, { customPacketType: "partyLeave" });
