@@ -26,6 +26,7 @@ export declare function getQuestAliasReference(questFormId: number, aliasId: num
 export declare function getInventoryReferences(refrFormId: number): { ref: number, baseId: number }[]
 export declare function getRunningQuests(): [number, number][]
 export declare function getSubtitles(): { speakerId: number, text: string }[]
+export declare function getDialogueTopic(): { id: number, text: string }
 export declare function sendIpcMessage(targetSystemName: string, message: ArrayBuffer): void
 export declare function encodeUtf8(text: string): ArrayBuffer
 export declare function decodeUtf8(buffer: ArrayBuffer): string

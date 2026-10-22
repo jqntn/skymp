@@ -14,6 +14,7 @@ import {
 } from "skyrimPlatform";
 import { Movement } from "./movement";
 import { applyWeapDrawn } from "./movementApply";
+import { markRelayedSpeak } from "../view/talkEvents";
 
 export enum AnimationEventName {
   Ragdoll = "Ragdoll",
@@ -187,6 +188,7 @@ export const applyAnimation = (
 
   if (anim.animEventName.startsWith(speakAnimPrefix)) {
     if (ac && !ac.isDead()) {
+      markRelayedSpeak(ac.getFormID(), anim.animEventName.slice(speakAnimPrefix.length));
       speakSound(ac.getFormID(), anim.animEventName.slice(speakAnimPrefix.length));
     }
     return;

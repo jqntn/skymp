@@ -1,4 +1,4 @@
-import { Actor, Cell, Debug, DxScanCode, Faction, Game, GlobalVariable, ObjectReference, Quest, QuestStageEvent, QuestStartStopEvent, ReferenceAlias, TESModPlatform, Ui, Utility, WorldSpace } from "skyrimPlatform";
+import { Actor, Cell, Debug, DxScanCode, Faction, Game, GlobalVariable, ObjectReference, Quest, QuestStageEvent, QuestStartStopEvent, ReferenceAlias, SpeakSoundEvent, TESModPlatform, Ui, Utility, WorldSpace } from "skyrimPlatform";
 import { logError, logTrace } from "../../logging";
 import { ObjectReferenceEx } from "../../extensions/objectReferenceEx";
 import { ConnectionMessage } from "../events/connectionMessage";
@@ -7,8 +7,8 @@ import { QueryKeyCodeBindings } from "../events/queryKeyCodeBindings";
 import { CustomPacketMessage } from "../messages/customPacketMessage";
 import { MsgType } from "../../messages";
 import { ClientListener, CombinedController, Sp } from "./clientListener";
-import { getViewFromStorage, localIdToRemoteId } from "../../view/worldViewMisc";
-import { nextTalk } from "../../view/talkEvents";
+import { getViewFromStorage, localIdToRemoteId, remoteIdToLocalId } from "../../view/worldViewMisc";
+import { isRelayedSpeak, isTalkTarget, markRelayedSpeak, nextTalk, setTalkTarget } from "../../view/talkEvents";
 import { WorldCleanerService } from "./worldCleanerService";
 
 const STOP = -1;
@@ -49,6 +49,11 @@ interface PartyState {
 }
 
 const talkHoldMs = 60000;
+const DIALOGUE_MENU = "Dialogue Menu";
+const HUD_ROOT = "_root.HUDMovieBaseInstance";
+const TALK_AFTER_MS = 1500;
+const TALK_TEXT_MS = 300;
+const TALK_TOPIC_HOLD_MS = 2000;
 
 export class CoopService extends ClientListener {
   constructor(private sp: Sp, private controller: CombinedController) {
@@ -62,6 +67,7 @@ export class CoopService extends ClientListener {
     this.controller.on("questStage", (e) => this.onQuestStage(e));
     this.controller.on("questStop", (e) => this.onQuestStop(e));
     this.controller.on("update", () => this.onUpdate());
+    this.controller.on("speakSound", (e) => this.talkSpeaks.push(e));
     this.controller.once("update", () => this.setQuestAuthority(true));
   }
 
@@ -130,6 +136,7 @@ export class CoopService extends ClientListener {
 
   private onUpdate() {
     this.updateCompass();
+    this.relayTalk();
     for (let talk = nextTalk(); talk; talk = nextTalk()) {
       this.send({ customPacketType: "talk", npc: talk[0], on: talk[1] });
       logTrace(this, "talk", talk[0].toString(16), talk[1]);
@@ -294,6 +301,18 @@ export class CoopService extends ClientListener {
       case "questApply":
         if (Array.isArray(content["entries"])) {
           this.applyQueue.push({ entries: content["entries"] as QuestLogEntry[], replay: content["replay"] === true, followers: content["followers"], questItems: content["questItems"] });
+        }
+        break;
+      case "talkLine":
+        if (typeof content["npc"] === "number" && typeof content["file"] === "string" && typeof content["text"] === "string") {
+          const [npc, file, text] = [content["npc"], content["file"], content["text"]];
+          this.controller.once("update", () => this.playTalkLine(npc, file, text));
+        }
+        break;
+      case "talkTopic":
+        if (typeof content["name"] === "string" && typeof content["text"] === "string") {
+          const line = `${content["name"]}: ${content["text"]}`;
+          this.controller.once("update", () => this.showSubtitle(line, true));
         }
         break;
       case "talkHold":
@@ -664,6 +683,67 @@ export class CoopService extends ClientListener {
     this.controller.once("update", () => Debug.notification(text));
   }
 
+  private relayTalk() {
+    const open = Ui.isMenuOpen(DIALOGUE_MENU);
+    const topic = open ? this.sp.getDialogueTopic() : undefined;
+    if (topic?.text && this.talkTopic && (topic.id !== this.talkTopic.id || topic.text !== this.talkTopic.text)) {
+      this.send({ customPacketType: "talkTopic", text: topic.text });
+    }
+    this.talkTopic = topic;
+    const now = Date.now();
+    if (open && this.talkNpc) {
+      setTalkTarget(this.talkNpc, now + TALK_AFTER_MS);
+    }
+    for (const e of this.talkSpeaks.splice(0)) {
+      const npc = e.actorId < 0xff000000 ? Actor.from(Game.getFormEx(e.actorId)) : null;
+      const talking = !!npc?.isInDialogueWithPlayer();
+      if ((talking || isTalkTarget(e.actorId)) && !isRelayedSpeak(e.actorId, e.voiceFile)) {
+        if (talking) {
+          this.talkNpc = e.actorId;
+          setTalkTarget(e.actorId, now + TALK_AFTER_MS);
+        }
+        this.talkLines.push([e, now]);
+      }
+    }
+    const subtitles = this.talkLines.length ? this.sp.getSubtitles() : [];
+    this.talkLines = this.talkLines.filter(([e, at]) => {
+      const text = subtitles.find((s) => s.speakerId === e.actorId)?.text;
+      if (!text && now - at < TALK_TEXT_MS) {
+        return true;
+      }
+      this.send({ customPacketType: "talkLine", npc: localIdToRemoteId(e.actorId), file: e.voiceFile, text: text || "" });
+      return false;
+    });
+    if (this.subtitleHideAt && Date.now() > this.subtitleHideAt) {
+      this.subtitleHideAt = 0;
+      Ui.invokeString("HUD Menu", `${HUD_ROOT}.HideSubtitle`, "");
+    }
+  }
+
+  private playTalkLine(npc: number, file: string, text: string) {
+    const id = remoteIdToLocalId(npc);
+    const ac = Actor.from(Game.getFormEx(id));
+    if (!ac) {
+      return;
+    }
+    markRelayedSpeak(id, file);
+    this.sp.speakSound(id, file);
+    if (text) {
+      this.showSubtitle(`${ac.getDisplayName()}: ${text}`);
+    }
+  }
+
+  private showSubtitle(text: string, topic = false) {
+    const now = Date.now();
+    const shown = !topic && now - this.subtitleTopicAt < TALK_TOPIC_HOLD_MS ? `${this.subtitleTopic}\n${text}` : text;
+    if (topic) {
+      this.subtitleTopic = text;
+      this.subtitleTopicAt = now;
+    }
+    Ui.invokeString("HUD Menu", `${HUD_ROOT}.ShowSubtitle`, shown);
+    this.subtitleHideAt = now + Math.min(10000, 2000 + shown.length * 60);
+  }
+
   private setTalkHold(npc: number, on: boolean, pos: number[]) {
     if (on) {
       this.talkHolds.set(npc, Date.now());
@@ -709,6 +789,13 @@ export class CoopService extends ClientListener {
   private trackedQuests = new Set<number>();
   private expectedEchoes = new Map<string, number>();
   private talkHolds = new Map<number, number>();
+  private talkSpeaks = new Array<SpeakSoundEvent>();
+  private talkLines = new Array<[SpeakSoundEvent, number]>();
+  private talkNpc = 0;
+  private talkTopic: { id: number, text: string } | undefined;
+  private subtitleHideAt = 0;
+  private subtitleTopic = "";
+  private subtitleTopicAt = 0;
   private partyKeyDown = false;
   private loadCount = 0;
 }

@@ -37,7 +37,7 @@ First non-PASS in plan order: G1.3
 | G1.5 | PASS | 121 | 2026-10-20 17:08 | 1/1 runs PASS |
 | G1.6 | PASS | 79 | 2026-10-20 17:09 | 1/1 runs PASS |
 | G1.7 | FAIL | 0 | 2026-10-20 17:09 | no check script |
-| G1.8 | PASS | 89 | 2026-10-20 17:11 | 1/1 runs PASS |
+| G1.8 | PASS | 91 | 2026-10-22 17:25 | 1/1 runs PASS |
 | 2A.1 | PASS | 50 | 2026-10-20 17:12 | 1/1 runs PASS |
 | 2A.2 | PASS | 89 | 2026-10-20 19:44 | 2/2 runs PASS |
 | 2A.3 | PASS | 35 | 2026-10-20 17:13 | 1/1 runs PASS |
@@ -73,8 +73,8 @@ First non-PASS in plan order: G1.3
 | T1 | PASS | 115 | 2026-10-21 21:10 | 2/2 runs PASS |
 | T2 | PASS | 126 | 2026-10-21 22:42 | 1/1 runs PASS |
 | T3 | FAIL | 34 | 2026-10-22 15:33 | 1 of 1 runs not PASS; run 1/1: the member walks past: the marker moved 34 times while the member's actor moved on 99 engine 1 frames |
-| T4 | PASS | 135 | 2026-10-22 14:59 | 3/3 runs PASS |
-| T5 | FAIL | 0 | - | not run |
+| T4 | PASS | 46 | 2026-10-22 17:26 | 1/1 runs PASS |
+| T5 | PASS | 328 | 2026-10-22 17:24 | 3/3 runs PASS |
 | T6 | PASS | 92 | 2026-10-22 13:59 | 1/1 runs PASS |
 
 ## Evidence
@@ -319,19 +319,19 @@ First non-PASS in plan order: G1.3
 - run 1: subtitle settings (dialogue, general): engine 1 true,false, engine 2 true,false
 - run 1: Gerdur hosted by engine 2 talks to engine 2's player: greeting "D'après Lucan, du Marché de Rivebois, des voleurs se seraient introduits dans sa boutique. Ils n'ont quasiment rien pris, c'est étrange.", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
 - run 1: topic: engine 2 said 5 lines, engine 1 played 5; engine 1 subtitles []; engine 2 subtitles 3
-- run 1: topic: Gerdur MS13__00039642_1.wav on engine 1 after 79 ms
-- run 1: topic: Gerdur MS13__00039642_1.wav on engine 1 after 120 ms
-- run 1: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 119 ms
-- run 1: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 85 ms
-- run 1: topic: Gerdur DialogueGe_DialogueGeneric_00087935_1.wav on engine 1 after 109 ms
+- run 1: topic: Gerdur MS13__00039642_1.wav on engine 1 after 182 ms
+- run 1: topic: Gerdur MS13__00039642_1.wav on engine 1 after 155 ms
+- run 1: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 188 ms
+- run 1: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 155 ms
+- run 1: topic: Gerdur DialogueGe_DialogueGeneric_00014105_1.wav on engine 1 after 133 ms
 - run 1: scene: DialogueRiverwoodIntroScene stage 10 on engine 2
 - run 1: scene: engine 2 said 5 lines, engine 1 played 6; engine 1 subtitles []; engine 2 subtitles 5
-- run 1: scene: Sven DialogueRi__000954C6_1.wav on engine 1 after 56 ms
-- run 1: scene: Hilde DialogueRi__000954C8_1.wav on engine 1 after 87 ms
-- run 1: scene: Sven DialogueRi__000954D3_1.wav on engine 1 after 93 ms
-- run 1: scene: Sven DialogueRi__000BB963_1.wav on engine 1 after 123 ms
-- run 1: scene: Hilde DialogueRi__000D39A1_1.wav on engine 1 after 123 ms
-- run 1: scene: engine 1 also played Hilde DialogueRi__000954CC_1.wav, 331 ms into the part, with no line of engine 2 to match
+- run 1: scene: Sven DialogueRi__000954C6_1.wav on engine 1 after 57 ms
+- run 1: scene: Hilde DialogueRi__000954C8_1.wav on engine 1 after 75 ms
+- run 1: scene: Sven DialogueRi__000954D3_1.wav on engine 1 after 110 ms
+- run 1: scene: Sven DialogueRi__000BB963_1.wav on engine 1 after 107 ms
+- run 1: scene: Hilde DialogueRi__000D39A1_1.wav on engine 1 after 112 ms
+- run 1: scene: engine 1 also played Hilde DialogueRi__000954CC_1.wav, 251 ms into the part, with no line of engine 2 to match
 ### 2A.1
 - run 1: bandit 1ebf6 in 3c:Skyrim.esm, hoster ff000001 (engine 1's player ff000000, engine 2's ff000001), server dead false
 - run 1: after engine 2 killed it: hoster ff000001, server inventory ["f x25","13910 x1","13912 x1","13984 x1","1398e x1","10594b x1"]
@@ -782,9 +782,45 @@ First non-PASS in plan order: G1.3
 - run 1: engine 1 turns: engine 1 moved 25 times in 76 frames (19.0 per s); the member's marker on engine 1 moved 25 times (6.3 per s) in 78 engine 1 frames, 0 of them with the member's actor ff000d2c moved on engine 1
 - run 1: the member walks past: engine 2 moved 25 times in 76 frames (19.0 per s); the member's marker on engine 1 moved 34 times (8.5 per s) in 142 engine 1 frames, 99 of them with the member's actor ff000d2c moved on engine 1
 ### T4
-- run 1: Sven 13491 walked on engine 2 (hoster ff000001); during 8 s of dialogue on engine 1 (open throughout): moved up to 12 units on the server, 4 on engine 2; worst facing on engine 2 0 degrees off the talker; moved again within 30 s after the close: true, hoster after ff000001, package on engine 2 at the close 1cb1b and 30 s later 1cb1b; 13 samples on engine 2
-- run 2: Faendal 1348c walked on engine 2 (hoster ff000001); during 8 s of dialogue on engine 1 (open throughout): moved up to 0 units on the server, 0 on engine 2; worst facing on engine 2 0 degrees off the talker; moved again within 30 s after the close: true, hoster after ff000001, package on engine 2 at the close 79adb and 30 s later 79adb; 14 samples on engine 2
-- run 3: Faendal 1348c walked on engine 2 (hoster ff000001); during 8 s of dialogue on engine 1 (open throughout): moved up to 0 units on the server, 0 on engine 2; worst facing on engine 2 0 degrees off the talker; moved again within 30 s after the close: true, hoster after ff000001, package on engine 2 at the close 79adb and 30 s later 79adb; 14 samples on engine 2
+- run 1: Sven 13491 walked on engine 2 (hoster ff000001); during 8 s of dialogue on engine 1 (open throughout): moved up to 0 units on the server, 0 on engine 2; worst facing on engine 2 1 degrees off the talker; moved again within 30 s after the close: true, hoster after ff000001, package on engine 2 at the close 1cb1b and 30 s later 1cb1b; 14 samples on engine 2
+### T5
+- run 1: A (engine 2 hosts): hoster ff000001; topic "Que pouvez-vous me dire sur Rivebois ?"; engine 1 heard 3 lines ["DialogueRiverwood_Revised__000453FF_1.wav","DialogueRi_DialogueRiverwo_000FE2D3_1.wav","DialogueGe_DialogueGeneric_000854CE_1.wav"] and subtitled ["Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.","C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."]; engine 2 played 3 ["DialogueRiverwood_Revised__000453FF_1.wav","DialogueRi_DialogueRiverwo_000FE2D3_1.wav","DialogueGe_DialogueGeneric_000854CE_1.wav"], its HUD showed ["Gerdur: Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.","Prisoner: Que pouvez-vous me dire sur Rivebois ?","Prisoner: Que pouvez-vous me dire sur Rivebois ?","Gerdur: C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."]
+- run 1: A (engine 2 hosts): DialogueRiverwood_Revised__000453FF_1.wav on engine 2 after 137 ms
+- run 1: A (engine 2 hosts): DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 2 after 161 ms
+- run 1: A (engine 2 hosts): DialogueGe_DialogueGeneric_000854CE_1.wav on engine 2 after 394 ms
+- run 1: A (engine 2 hosts): the topic stayed on engine 2's HUD for 10101 ms
+- run 1: B (engine 1 hosts): hoster ff000000; topic "Que pouvez-vous me dire sur Rivebois ?"; engine 1 heard 3 lines ["MS13__00039642_1.wav","DialogueRi_DialogueRiverwo_000FE2D3_1.wav","DialogueGe_DialogueGeneric_00014105_1.wav"] and subtitled ["D'après Lucan, du Marché de Rivebois, des voleurs se seraient introduits dans sa boutique. Ils n'ont quasiment rien pris, c'est étrange.","C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout.","Bonne journée."]; engine 2 played 3 ["MS13__00039642_1.wav","DialogueRi_DialogueRiverwo_000FE2D3_1.wav","DialogueGe_DialogueGeneric_00014105_1.wav"], its HUD showed ["Gerdur: D'après Lucan, du Marché de Rivebois, des voleurs se seraient introduits dans sa boutique. Ils n'ont quasiment rien pris, c'est étrange.","Prisoner: Que pouvez-vous me dire sur Rivebois ?","Prisoner: Que pouvez-vous me dire sur Rivebois ?","Gerdur: C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout.","Gerdur: Bonne journée."]
+- run 1: B (engine 1 hosts): MS13__00039642_1.wav on engine 2 after 74 ms
+- run 1: B (engine 1 hosts): DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 2 after 180 ms
+- run 1: B (engine 1 hosts): DialogueGe_DialogueGeneric_00014105_1.wav on engine 2 after 147 ms
+- run 1: B (engine 1 hosts): the topic stayed on engine 2's HUD for 10101 ms
+- run 1: C (engine 2 in another cell): hoster ff000000; topic "Que pouvez-vous me dire sur Rivebois ?"; engine 1 heard 3 lines ["DialogueRiverwood_Revised__00045400_1.wav","DialogueRi_DialogueRiverwo_000FE2D3_1.wav","DialogueGe_DialogueGeneric_000854CD_1.wav"] and subtitled ["Notre village tient dans un mouchoir de poche, mais nous travaillons dur pour ne dépendre de personne.","C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout.","Eh bien voilà."]; engine 2 played 0 [], its HUD showed []
+- run 1: C (engine 2 in another cell): engine 1 in 133c7:Skyrim.esm, engine 2 in 1a26f:Skyrim.esm on the server after the talk
+- run 2: A (engine 2 hosts): hoster ff000001; topic "Que pouvez-vous me dire sur Rivebois ?"; engine 1 heard 3 lines ["DialogueRiverwood_Revised__000453FF_1.wav","DialogueRi_DialogueRiverwo_000FE2D3_1.wav","MS13__00039642_1.wav"] and subtitled ["Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.","C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."]; engine 2 played 3 ["DialogueRiverwood_Revised__000453FF_1.wav","DialogueRi_DialogueRiverwo_000FE2D3_1.wav","MS13__00039642_1.wav"], its HUD showed ["Gerdur: Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.","Prisoner: Que pouvez-vous me dire sur Rivebois ?","Prisoner: Que pouvez-vous me dire sur Rivebois ?","Gerdur: C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."]
+- run 2: A (engine 2 hosts): DialogueRiverwood_Revised__000453FF_1.wav on engine 2 after 135 ms
+- run 2: A (engine 2 hosts): DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 2 after 176 ms
+- run 2: A (engine 2 hosts): MS13__00039642_1.wav on engine 2 after -124 ms
+- run 2: A (engine 2 hosts): the topic stayed on engine 2's HUD for 10100 ms
+- run 2: B (engine 1 hosts): hoster ff000000; topic "Que pouvez-vous me dire sur Rivebois ?"; engine 1 heard 3 lines ["MS13__00039642_1.wav","DialogueRi_DialogueRiverwo_000FE2D3_1.wav","DialogueGe_DialogueGeneric_000854CE_1.wav"] and subtitled ["D'après Lucan, du Marché de Rivebois, des voleurs se seraient introduits dans sa boutique. Ils n'ont quasiment rien pris, c'est étrange.","C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout.","Hmm hmm."]; engine 2 played 3 ["MS13__00039642_1.wav","DialogueRi_DialogueRiverwo_000FE2D3_1.wav","DialogueGe_DialogueGeneric_000854CE_1.wav"], its HUD showed ["Gerdur: D'après Lucan, du Marché de Rivebois, des voleurs se seraient introduits dans sa boutique. Ils n'ont quasiment rien pris, c'est étrange.","Prisoner: Que pouvez-vous me dire sur Rivebois ?","Prisoner: Que pouvez-vous me dire sur Rivebois ?","Gerdur: C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout.","Gerdur: Hmm hmm."]
+- run 2: B (engine 1 hosts): MS13__00039642_1.wav on engine 2 after 93 ms
+- run 2: B (engine 1 hosts): DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 2 after 166 ms
+- run 2: B (engine 1 hosts): DialogueGe_DialogueGeneric_000854CE_1.wav on engine 2 after 132 ms
+- run 2: B (engine 1 hosts): the topic stayed on engine 2's HUD for 10102 ms
+- run 2: C (engine 2 in another cell): hoster ff000000; topic "Que pouvez-vous me dire sur Rivebois ?"; engine 1 heard 4 lines ["DialogueRiverwood_Revised__00045401_1.wav","DialogueRiverwood_Revised__00045402_1.wav","DialogueRi_DialogueRiverwo_000FE2D3_1.wav","DialogueGe_DialogueGeneric_000854CD_1.wav"] and subtitled ["Mon seul problème, c'est que la guerre vienne jusqu'à nous.","C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout.","Eh bien voilà."]; engine 2 played 0 [], its HUD showed []
+- run 2: C (engine 2 in another cell): engine 1 in 133c7:Skyrim.esm, engine 2 in 1a26f:Skyrim.esm on the server after the talk
+- run 3: A (engine 2 hosts): hoster ff000001; topic "Que pouvez-vous me dire sur Rivebois ?"; engine 1 heard 3 lines ["DialogueRiverwood_Revised__000453FF_1.wav","DialogueRi_DialogueRiverwo_000FE2D3_1.wav","DialogueGe_DialogueGeneric_000854CE_1.wav"] and subtitled ["Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.","C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."]; engine 2 played 3 ["DialogueRiverwood_Revised__000453FF_1.wav","DialogueRi_DialogueRiverwo_000FE2D3_1.wav","DialogueGe_DialogueGeneric_000854CE_1.wav"], its HUD showed ["Gerdur: Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.","Prisoner: Que pouvez-vous me dire sur Rivebois ?","Prisoner: Que pouvez-vous me dire sur Rivebois ?","Gerdur: C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."]
+- run 3: A (engine 2 hosts): DialogueRiverwood_Revised__000453FF_1.wav on engine 2 after 127 ms
+- run 3: A (engine 2 hosts): DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 2 after 175 ms
+- run 3: A (engine 2 hosts): DialogueGe_DialogueGeneric_000854CE_1.wav on engine 2 after 441 ms
+- run 3: A (engine 2 hosts): the topic stayed on engine 2's HUD for 10100 ms
+- run 3: B (engine 1 hosts): hoster ff000000; topic "Que pouvez-vous me dire sur Rivebois ?"; engine 1 heard 4 lines ["MS13__00039642_1.wav","DialogueRiverwood_Revised__00045400_1.wav","DialogueRi_DialogueRiverwo_000FE2D3_1.wav","DialogueGe_DialogueGeneric_00087935_1.wav"] and subtitled ["Notre village tient dans un mouchoir de poche, mais nous travaillons dur pour ne dépendre de personne.","C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout.","À la prochaine fois."]; engine 2 played 4 ["MS13__00039642_1.wav","DialogueRiverwood_Revised__00045400_1.wav","DialogueRi_DialogueRiverwo_000FE2D3_1.wav","DialogueGe_DialogueGeneric_00087935_1.wav"], its HUD showed ["Gerdur: Notre village tient dans un mouchoir de poche, mais nous travaillons dur pour ne dépendre de personne.","Prisoner: Que pouvez-vous me dire sur Rivebois ?","Prisoner: Que pouvez-vous me dire sur Rivebois ?","Gerdur: C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout.","Gerdur: À la prochaine fois."]
+- run 3: B (engine 1 hosts): MS13__00039642_1.wav on engine 2 after 86 ms
+- run 3: B (engine 1 hosts): DialogueRiverwood_Revised__00045400_1.wav on engine 2 after 81 ms
+- run 3: B (engine 1 hosts): DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 2 after 169 ms
+- run 3: B (engine 1 hosts): DialogueGe_DialogueGeneric_00087935_1.wav on engine 2 after 136 ms
+- run 3: B (engine 1 hosts): the topic stayed on engine 2's HUD for 10101 ms
+- run 3: C (engine 2 in another cell): hoster ff000000; topic "Que pouvez-vous me dire sur Rivebois ?"; engine 1 heard 3 lines ["DialogueRiverwood_Revised__00045401_1.wav","DialogueRi_DialogueRiverwo_000FE2D3_1.wav","DialogueGe_DialogueGeneric_00014105_1.wav"] and subtitled ["Je possède la scierie et je paie bien. Si vous cherchez du travail, allez voir mon mari, Hod.","C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout.","Bonne journée."]; engine 2 played 0 [], its HUD showed []
+- run 3: C (engine 2 in another cell): engine 1 in 133c7:Skyrim.esm, engine 2 in 1a26f:Skyrim.esm on the server after the talk
 ### T6
 - run 1: bandit 1ebf6: sit state on engine 1 at the start 0; hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events ["attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackPowerStartForward"], engine 1 ["attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackPowerStartForward"], refused by engine 1's graph at [] ms
 - run 1: Gerdur: seats near her on engine 2 [["38b92",160,"Chaise"],["38b93",172,"Chaise"],["5bfb9",432,"Chaise"],["5bf91",644,"Chaise"]]

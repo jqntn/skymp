@@ -4,6 +4,7 @@ const M = "Dialogue Menu";
 const R = "_root.DialogueMenu_mc";
 const HUD = "_root.HUDMovieBaseInstance.SubtitleText.text";
 const LAG_MS = 1000;
+const TOPIC_MS = 1000;
 
 module.exports = {
   engines: 2,
@@ -20,29 +21,32 @@ module.exports = {
     const loaded = (n) => ctx.waitFor(() => ctx.drv(`${npc} return !sp.Ui.isMenuOpen("Loading Menu") && !!a && a.is3DLoaded();`, n).catch(() => false), 120000, `Gerdur is loaded on engine ${n}`);
     const place = (n, loc, dx) => ctx.probe(`mp.set(${actors[n - 1]}, "locationalData", ${JSON.stringify({ ...loc, pos: [loc.pos[0] + dx, loc.pos[1], loc.pos[2] + 30] })}); return 0;`);
     for (const n of [1, 2]) {
-      await ctx.drv(`const w = globalThis.e2eT5 = { speaks: [], hud: [], lines: [] }; let hud = ""; let line = "";
+      await ctx.drv(`const w = globalThis.e2eT5 = { speaks: [], hud: [], lines: [], closed: [] }; let hud = ""; let subs = []; let open = false;
         sp.on("speakSound", (e) => { if (e.actorId === ${GERDUR}) w.speaks.push({ file: e.voiceFile, t: Date.now() }); });
         sp.on("update", () => {
-          try { const h = (sp.Ui.getString("HUD Menu", "${HUD}") || "").trim(); if (h !== hud) { hud = h; if (h) w.hud.push({ text: h, t: Date.now() }); } } catch (e) {}
-          try { if (sp.Ui.isMenuOpen("${M}")) { const l = (sp.Ui.getString("${M}", "${R}.SubtitleText.text") || "").trim(); if (l !== line) { line = l; if (l) w.lines.push({ text: l, t: Date.now() }); } } } catch (e) {}
+          try { const h = (sp.Ui.getString("HUD Menu", "${HUD}") || "").trim(); if (h !== hud) { hud = h; w.hud.push({ text: h, t: Date.now() }); } } catch (e) {}
+          const o = sp.Ui.isMenuOpen("${M}"); if (open && !o) w.closed.push({ t: Date.now() }); open = o;
+          try { const now = sp.getSubtitles().filter((s) => s.speakerId === ${GERDUR}).map((s) => s.text.trim()).filter((x) => x); for (const x of new Set(now)) { if (!subs.includes(x)) w.lines.push({ text: x, t: Date.now() }); } subs = now; } catch (e) {}
         });
         return 0;`, n);
     }
-    const since = (n, t) => ctx.drv(`const w = globalThis.e2eT5; const f = (x) => x.filter((e) => e.t >= ${t}); return { speaks: f(w.speaks), hud: f(w.hud), lines: f(w.lines) };`, n);
+    const since = (n, t) => ctx.drv(`const w = globalThis.e2eT5; const f = (x) => x.filter((e) => e.t >= ${t}); return { speaks: f(w.speaks), hud: f(w.hud), lines: f(w.lines), closed: f(w.closed) };`, n);
     const dedupe = (list) => list.filter((s, i) => !list.slice(0, i).some((p) => p.file === s.file && s.t - p.t < 500));
     const gerdurName = await ctx.drv(`${npc} return a ? a.getDisplayName() : "";`, 1).catch(() => "");
     const talkerName = await ctx.probe(`return mp.getActorName(${actors[0]});`);
     const fails = [];
+    const cells = () => ctx.probe(`return [mp.get(${actors[0]}, "locationalData").cellOrWorldDesc, mp.get(${actors[1]}, "locationalData").cellOrWorldDesc];`);
 
-    const talk = async (label) => {
+    const talk = async (label, far) => {
       await ctx.sleep(2000);
-      const t0 = Date.now();
+      let t0 = Date.now();
       let open = false;
       for (let k = 0; k < 3 && !open; k++) {
         await ctx.drv(`${npc} const p = sp.Game.getPlayer(); p.setPosition(a.getPositionX() + 110 * Math.sin(a.getAngleZ() * Math.PI / 180), a.getPositionY() + 110 * Math.cos(a.getAngleZ() * Math.PI / 180), a.getPositionZ() + 10); return 0;`, 1);
         await ctx.sleep(1000);
         await ctx.drv(`${npc} const p = sp.Game.getPlayer(); p.setAngle(0, 0, p.getAngleZ() + p.getHeadingAngle(a)); return 0;`, 1);
         await ctx.sleep(1000);
+        t0 = Date.now();
         await ctx.drv(`sp.once("update", () => sp.Actor.from(sp.Game.getFormEx(${GERDUR})).activate(sp.Game.getPlayer(), false)); return 0;`, 1);
         open = await ctx.waitFor(() => ctx.drv(`${npc} return sp.Ui.isMenuOpen("${M}") && a.isInDialogueWithPlayer();`, 1), 10000, "the dialogue opens on engine 1").then(() => true).catch(() => false);
       }
@@ -64,24 +68,49 @@ module.exports = {
       }, 30000, "the dialogue closes on engine 1").catch(() => false);
       await ctx.sleep(3000);
       const h = await hoster();
-      const talker = await since(1, t0);
+      const all = await since(1, t0);
+      const end = (all.closed.length ? all.closed[0].t : Date.now()) + 1000;
+      const talker = { ...all, speaks: all.speaks.filter((s) => s.t <= end), lines: all.lines.filter((l) => l.t <= end) };
       const other = await since(2, t0);
+      other.speaks = other.speaks.filter((s) => s.t <= end + LAG_MS);
       const spoken = dedupe(talker.speaks);
       const heard = dedupe(other.speaks);
-      const shown = other.hud.map((x) => x.text);
-      ctx.evidence.push(`${label}: hoster ${hex(h)}; topic "${topic}"; engine 1 heard ${spoken.length} lines ${JSON.stringify(spoken.map((s) => s.file.split("\\").pop()))} and showed ${JSON.stringify(talker.lines.map((x) => x.text))}; engine 2 played ${heard.length} ${JSON.stringify(heard.map((s) => s.file.split("\\").pop()))}, its HUD showed ${JSON.stringify(shown)}`);
+      const shown = other.hud.flatMap((x) => x.text.split(/[\r\n]+/)).filter((x) => x);
+      const visible = (line) => { const i = other.hud.findIndex((x) => x.text.split(/[\r\n]+/).includes(line)); if (i < 0) return 0; let j = i; while (j + 1 < other.hud.length && other.hud[j + 1].text.split(/[\r\n]+/).includes(line)) j++; return (j + 1 < other.hud.length ? other.hud[j + 1].t : Date.now()) - other.hud[i].t; };
+      ctx.evidence.push(`${label}: hoster ${hex(h)}; topic "${topic}"; engine 1 heard ${spoken.length} lines ${JSON.stringify(spoken.map((s) => s.file.split("\\").pop()))} and subtitled ${JSON.stringify(talker.lines.map((x) => x.text))}; engine 2 played ${heard.length} ${JSON.stringify(heard.map((s) => s.file.split("\\").pop()))}, its HUD showed ${JSON.stringify(shown)}`);
       if (spoken.length < 2) fails.push(`${label}: not exercised, engine 1 heard ${spoken.length} lines of Gerdur (greeting and answer expected)`);
+      if (talker.lines.length < 2) fails.push(`${label}: not exercised, engine 1 subtitled ${talker.lines.length} lines of Gerdur`);
+      if (far) {
+        const c = await cells();
+        ctx.evidence.push(`${label}: engine 1 in ${c[0]}, engine 2 in ${c[1]} on the server after the talk`);
+        if (c[0] === c[1]) fails.push(`${label}: not exercised, engine 2 is in engine 1's cell ${c[0]}`);
+        const leaked = shown.filter((t) => t.startsWith(`${gerdurName}: `) || t.startsWith(`${talkerName}: `));
+        const played = heard.filter((x) => spoken.some((s) => s.file === x.file));
+        if (leaked.length || played.length) fails.push(`${label}: engine 2 showed ${JSON.stringify(leaked)} and played ${played.length} lines of the talk`);
+        return h;
+      }
+      const unused = [...heard];
       for (const s of spoken) {
-        const m = heard.find((x) => x.file === s.file && x.t >= s.t && x.t <= s.t + LAG_MS);
+        const i = unused.findIndex((x) => x.file === s.file && Math.abs(x.t - s.t) <= LAG_MS);
+        const m = i >= 0 ? unused.splice(i, 1)[0] : null;
         const late = heard.find((x) => x.file === s.file);
         ctx.evidence.push(`${label}: ${s.file.split("\\").pop()} on engine 2 ${m ? `after ${m.t - s.t} ms` : late ? `after ${late.t - s.t} ms` : "never"}`);
         if (!m) fails.push(`${label}: engine 2 ${late ? `played ${s.file.split("\\").pop()} ${late.t - s.t} ms after engine 1` : `did not play ${s.file.split("\\").pop()}`}`);
+      }
+      const count = (list) => list.reduce((m, s) => m.set(s.file, (m.get(s.file) || 0) + 1), new Map());
+      const [c1, c2] = [count(talker.speaks), count(other.speaks)];
+      for (const [file, n] of c1) {
+        if (c2.has(file) && c2.get(file) !== n) fails.push(`${label}: ${file.split("\\").pop()} reported ${n} times on engine 1 and ${c2.get(file)} times on engine 2`);
       }
       for (const l of talker.lines) {
         if (!shown.includes(`${gerdurName}: ${l.text}`)) fails.push(`${label}: engine 2 did not show "${gerdurName}: ${l.text}"`);
       }
       if (!topic) fails.push(`${label}: not exercised, no topic text on engine 1`);
       else if (!shown.includes(`${talkerName}: ${topic}`)) fails.push(`${label}: engine 2 did not show "${talkerName}: ${topic}"`);
+      else {
+        ctx.evidence.push(`${label}: the topic stayed on engine 2's HUD for ${visible(`${talkerName}: ${topic}`)} ms`);
+        if (visible(`${talkerName}: ${topic}`) < TOPIC_MS) fails.push(`${label}: engine 2 showed "${talkerName}: ${topic}" for ${visible(`${talkerName}: ${topic}`)} ms, under ${TOPIC_MS} ms`);
+      }
       return h;
     };
 
@@ -106,6 +135,13 @@ module.exports = {
       await loaded(2);
       const h = await talk("B (engine 1 hosts)");
       if (h !== undefined && h !== actors[0]) fails.push(`B: Gerdur was hosted by ${hex(h)} at the end, not engine 1`);
+    }
+    if (hostB) {
+      await place(2, AWAY, 0);
+      await ctx.sleep(3000);
+      await ctx.waitFor(() => ctx.drv(`return !sp.Ui.isMenuOpen("Loading Menu");`, 2), 120000, "engine 2 arrives in another cell").catch(() => false);
+      if (await ctx.waitFor(async () => { const c = await cells(); return c[0] !== c[1]; }, 60000, "engine 2 leaves engine 1's cell").then(() => true).catch(() => false)) await talk("C (engine 2 in another cell)", true);
+      else fails.push(`C: not exercised, engine 2 stays in engine 1's cell ${(await cells())[0]}`);
     }
     ctx.assert.ok(!fails.length, fails.join("; "));
   },

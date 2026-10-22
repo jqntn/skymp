@@ -13,6 +13,7 @@ import { getAppearance } from "../../sync/appearance";
 import { ActorValues, getActorValues } from "../../sync/actorvalues";
 import { getEquipment } from "../../sync/equipment";
 import { nextHostAttempt, teleportingHosts, tryHost } from "../../view/hostAttempts";
+import { isRelayedSpeak, isTalkTarget } from "../../view/talkEvents";
 import { ObjectReferenceEx } from "../../extensions/objectReferenceEx";
 import { CoopService } from "./coopService";
 import { SkympClient } from "./skympClient";
@@ -55,7 +56,7 @@ export class SendInputsService extends ClientListener {
     private applyPendingSpeaks() {
         for (const e of this.pendingSpeaks.splice(0)) {
             const actor = this.sp.Actor.from(this.sp.Game.getFormEx(e.actorId));
-            if (actor) {
+            if (actor && !isTalkTarget(e.actorId) && !isRelayedSpeak(e.actorId, e.voiceFile)) {
                 getAnimationSource(actor, true).addSpeak(e.voiceFile);
             }
         }

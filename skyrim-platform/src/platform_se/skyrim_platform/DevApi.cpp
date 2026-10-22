@@ -305,6 +305,24 @@ Napi::Value DevApi::GetSubtitles(const Napi::CallbackInfo& info)
   return result;
 }
 
+Napi::Value DevApi::GetDialogueTopic(const Napi::CallbackInfo& info)
+{
+  uintptr_t id = 0;
+  std::string text;
+  if (auto manager = RE::MenuTopicManager::GetSingleton()) {
+    REX::W32::EnterCriticalSection(&manager->criticalSection);
+    if (auto dialogue = manager->lastSelectedDialogue) {
+      id = reinterpret_cast<uintptr_t>(dialogue);
+      text = dialogue->topicText.c_str();
+    }
+    REX::W32::LeaveCriticalSection(&manager->criticalSection);
+  }
+  auto result = Napi::Object::New(info.Env());
+  result.Set("id", Napi::Number::New(info.Env(), static_cast<double>(id)));
+  result.Set("text", Napi::String::New(info.Env(), text));
+  return result;
+}
+
 Napi::Value DevApi::SpeakSound(const Napi::CallbackInfo& info)
 {
   auto formId = NapiHelper::ExtractUInt32(info[0], "formId");

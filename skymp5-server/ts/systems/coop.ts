@@ -9,6 +9,8 @@ export const COOP_CREATED_PROPERTY = "private.coopCreated";
 
 const MAX_QUEST_LOG_ENTRIES = 20000;
 const NEARBY_DISTANCE = 8192;
+const TALK_DISTANCE = 2048;
+const VOICE_FILE = /^Data\\Sound\\Voice\\(?!.*\.\.)[^<>:"|?*\x00-\x1f]{1,240}\.(wav|xwm|fuz)$/i;
 const QUEST_LOG_REQUEST_COOLDOWN_MS = 2000;
 const INVALID_USER_ID = 65535;
 const QUEST_FLAG_ALLOW_REPEATED_STAGES = 0x8;
@@ -111,7 +113,12 @@ export class Coop implements System {
     }
   }
 
+  connect(userId: number): void {
+    this.users.add(userId);
+  }
+
   disconnect(userId: number, ctx: SystemContext): void {
+    this.users.delete(userId);
     this.lastQuestLogRequest.delete(userId);
     this.runningQuestsReported.delete(userId);
     const actor = ctx.svr.getUserActor(userId);
@@ -159,6 +166,8 @@ export class Coop implements System {
     followers: (ctx, actor, content) => this.onFollowers(ctx, actor, content.refs),
     questItemHolders: (ctx, actor, content) => this.onQuestItemHolders(ctx, actor, content.holders),
     talk: (ctx, actor, content) => this.onTalk(ctx, actor, content.npc, content.on === true),
+    talkLine: (ctx, actor, content) => this.onTalkLine(ctx, actor, content.npc, content.file, content.text),
+    talkTopic: (ctx, actor, content) => this.onTalkTopic(ctx, actor, content.text),
   };
 
   private onTalk(ctx: SystemContext, talker: number, npc: unknown, on: boolean): void {
@@ -169,6 +178,29 @@ export class Coop implements System {
     this.log(`Coop: ${hex(talker)} ${on ? "talks to" : "stops talking to"} ${hex(npc)}, hoster ${hex(hoster || 0)}`);
     if (hoster && hoster !== talker) {
       this.send(ctx, hoster, { customPacketType: "talkHold", npc, on, pos: ctx.svr.getActorPos(talker) });
+    }
+  }
+
+  private onTalkLine(ctx: SystemContext, talker: number, npc: unknown, file: unknown, text: unknown): void {
+    if (!isFormId(npc) || npc >= 0xff000000 || typeof file !== "string" || !VOICE_FILE.test(file) || typeof text !== "string" || text.length > 1000) {
+      return;
+    }
+    this.sendNearTalker(ctx, talker, { customPacketType: "talkLine", npc, file, text });
+  }
+
+  private onTalkTopic(ctx: SystemContext, talker: number, text: unknown): void {
+    if (typeof text !== "string" || !text || text.length > 500) {
+      return;
+    }
+    this.sendNearTalker(ctx, talker, { customPacketType: "talkTopic", name: this.name(ctx, talker), text });
+  }
+
+  private sendNearTalker(ctx: SystemContext, talker: number, content: Content): void {
+    for (const userId of this.users) {
+      const actor = ctx.svr.getUserActor(userId);
+      if (actor && actor !== talker && this.isNearby(ctx, actor, talker, TALK_DISTANCE)) {
+        this.send(ctx, actor, content);
+      }
     }
   }
 
@@ -698,13 +730,13 @@ export class Coop implements System {
     return userId !== INVALID_USER_ID && ctx.svr.isConnected(userId);
   }
 
-  private isNearby(ctx: SystemContext, a: number, b: number): boolean {
+  private isNearby(ctx: SystemContext, a: number, b: number, distance = NEARBY_DISTANCE): boolean {
     if (ctx.svr.getActorCellOrWorld(a) !== ctx.svr.getActorCellOrWorld(b)) {
       return false;
     }
     const pa = ctx.svr.getActorPos(a);
     const pb = ctx.svr.getActorPos(b);
-    return Math.hypot(pa[0] - pb[0], pa[1] - pb[1], pa[2] - pb[2]) <= NEARBY_DISTANCE;
+    return Math.hypot(pa[0] - pb[0], pa[1] - pb[1], pa[2] - pb[2]) <= distance;
   }
 
   private name(ctx: SystemContext, actor: number): string {
@@ -726,4 +758,5 @@ export class Coop implements System {
   private itemWindows = new Map<number, ItemWindow>();
   private replays = new Map<number, number>();
   private holderAnswers = new Map<number, number>();
+  private users = new Set<number>();
 }
