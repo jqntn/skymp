@@ -7,7 +7,7 @@ import { QueryKeyCodeBindings } from "../events/queryKeyCodeBindings";
 import { CustomPacketMessage } from "../messages/customPacketMessage";
 import { MsgType } from "../../messages";
 import { ClientListener, CombinedController, Sp } from "./clientListener";
-import { getViewFromStorage, localIdToRemoteId, remoteIdToLocalId } from "../../view/worldViewMisc";
+import { getViewFromStorage, localIdToRemoteId } from "../../view/worldViewMisc";
 import { nextTalk } from "../../view/talkEvents";
 import { WorldCleanerService } from "./worldCleanerService";
 
@@ -136,7 +136,7 @@ export class CoopService extends ClientListener {
     }
     this.talkHolds.forEach((at, npc) => {
       if (Date.now() - at > talkHoldMs) {
-        this.setTalkHold(npc, 0, false);
+        this.setTalkHold(npc, false, []);
       }
     });
     this.reportFollowers();
@@ -297,9 +297,9 @@ export class CoopService extends ClientListener {
         }
         break;
       case "talkHold":
-        if (typeof content["npc"] === "number" && typeof content["talker"] === "number") {
-          const [npc, talker, on] = [content["npc"], content["talker"], content["on"] === true];
-          this.controller.once("update", () => this.setTalkHold(npc, talker, on));
+        if (typeof content["npc"] === "number" && Array.isArray(content["pos"])) {
+          const [npc, on, pos] = [content["npc"], content["on"] === true, content["pos"] as number[]];
+          this.controller.once("update", () => this.setTalkHold(npc, on, pos));
         }
         break;
       case "partyState": {
@@ -641,23 +641,22 @@ export class CoopService extends ClientListener {
     this.controller.once("update", () => Debug.notification(text));
   }
 
-  private setTalkHold(npc: number, talker: number, on: boolean) {
-    const ac = Actor.from(Game.getFormEx(npc));
+  private setTalkHold(npc: number, on: boolean, pos: number[]) {
     if (on) {
       this.talkHolds.set(npc, Date.now());
     } else {
       this.talkHolds.delete(npc);
     }
+    logTrace(this, "talkHold", npc.toString(16), on);
+    const ac = Actor.from(Game.getFormEx(npc));
     if (!ac) {
       return;
     }
     ac.setDontMove(on);
-    const target = on ? ObjectReference.from(Game.getFormEx(remoteIdToLocalId(talker))) : null;
-    if (target) {
-      ac.setAngle(0, 0, ac.getAngleZ() + ac.getHeadingAngle(target));
-      ac.setLookAt(target, false);
-    } else if (!on) {
-      ac.clearLookAt();
+    if (on) {
+      ac.setAngle(0, 0, (Math.atan2(pos[0] - ac.getPositionX(), pos[1] - ac.getPositionY()) * 180) / Math.PI);
+    } else {
+      ac.evaluatePackage();
     }
   }
 

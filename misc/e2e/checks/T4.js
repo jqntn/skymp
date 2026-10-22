@@ -3,7 +3,7 @@ const RIVERWOOD = { cellOrWorldDesc: "3c:Skyrim.esm", pos: [19157, -46588, -94],
 const WHITERUN_PORCH = { cellOrWorldDesc: "1a26f:Skyrim.esm", pos: [26691, 1678, -1404], rot: [0, 0, 0] };
 const MENU = "Dialogue Menu";
 const HOLD = 100;
-const FACE = 60;
+const FACE = 30;
 const TALK_MS = 8000;
 
 module.exports = {
@@ -23,7 +23,7 @@ module.exports = {
     };
     const npc = (id) => `const a = sp.Actor.from(sp.Game.getFormEx(${id}));`;
     const server = (id) => ctx.probe(`const l = mp.get(${id}, "locationalData"); return { hoster: mp.get(${id}, "hoster") || 0, pos: l.pos };`);
-    const local = (id, n) => ctx.drv(`${npc(id)} if (!a || !a.is3DLoaded()) return null; const p = sp.Game.getPlayer(); return { pos: [a.getPositionX(), a.getPositionY(), a.getPositionZ()], heading: a.getAngleZ(), sit: a.getSitState() };`, n).catch(() => null);
+    const local = (id, n) => ctx.drv(`${npc(id)} if (!a || !a.is3DLoaded()) return null; const pk = a.getCurrentPackage(); return { pos: [a.getPositionX(), a.getPositionY(), a.getPositionZ()], heading: a.getAngleZ(), sit: a.getSitState(), pkg: pk ? pk.getFormID() : 0 };`, n).catch(() => null);
     const dist = (a, b) => Math.round(Math.hypot(a[0] - b[0], a[1] - b[1]));
 
     await go(1, WHITERUN_PORCH, 0x1a26f);
@@ -48,7 +48,7 @@ module.exports = {
     await ctx.waitFor(async () => !!(await local(id, 1)), 60000, `${name} is loaded on engine 1`);
     let open = false;
     for (let k = 0; k < 4 && !open; k++) {
-      await ctx.drv(`${npc(id)} const p = sp.Game.getPlayer(); p.setPosition(a.getPositionX() + 120 * Math.sin(a.getAngleZ() * Math.PI / 180), a.getPositionY() + 120 * Math.cos(a.getAngleZ() * Math.PI / 180), a.getPositionZ() + 20); return 0;`, 1);
+      await ctx.drv(`${npc(id)} const p = sp.Game.getPlayer(); const side = (a.getAngleZ() + 90) * Math.PI / 180; p.setPosition(a.getPositionX() + 120 * Math.sin(side), a.getPositionY() + 120 * Math.cos(side), a.getPositionZ() + 20); return 0;`, 1);
       await ctx.sleep(1000);
       await ctx.drv(`${npc(id)} const p = sp.Game.getPlayer(); p.setAngle(0, 0, p.getAngleZ() + p.getHeadingAngle(a)); return 0;`, 1);
       await ctx.sleep(1000);
@@ -62,6 +62,7 @@ module.exports = {
     let farServer = 0;
     let farEngine2 = 0;
     let worstFacing = 0;
+    let engine2Samples = 0;
     let shutAt = 0;
     for (const t0 = Date.now(); Date.now() - t0 < TALK_MS;) {
       if (!shutAt && !(await ctx.drv(`return sp.Ui.isMenuOpen("${MENU}");`, 1))) shutAt = Date.now() - t0;
@@ -69,6 +70,7 @@ module.exports = {
       const e2 = await local(id, 2);
       farServer = Math.max(farServer, dist(s.pos, start.server));
       if (e2 && start.engine2) {
+        engine2Samples++;
         farEngine2 = Math.max(farEngine2, dist(e2.pos, start.engine2));
         if (Date.now() - t0 > 3000) {
           const want = (Math.atan2(talker[0] - e2.pos[0], talker[1] - e2.pos[1]) * 180) / Math.PI;
@@ -78,9 +80,12 @@ module.exports = {
       await ctx.sleep(500);
     }
     await ctx.drv(`sp.TESModPlatform.closeMenu("${MENU}"); return 0;`, 1).catch(() => 0);
+    const pkgBefore = (await local(id, 2))?.pkg ?? 0;
     const closedAt = (await server(id)).pos;
     const resumed = await ctx.waitFor(async () => dist((await server(id)).pos, closedAt) > 60, 30000, `${name} moves again after the dialogue`).then(() => true).catch(() => false);
-    ctx.evidence.push(`${name} ${hex(id)} walked on engine 2 (hoster ${hex(hosterAtTalk)}); during ${TALK_MS / 1000} s of dialogue on engine 1 (${shutAt ? `closed by itself after ${shutAt} ms` : "open throughout"}): moved up to ${farServer} units on the server, ${farEngine2} on engine 2; worst facing on engine 2 ${Math.round(worstFacing)} degrees off the talker; moved again within 30 s after the close: ${resumed}`);
+    const after = await server(id);
+    const pkgAfter = (await local(id, 2))?.pkg ?? 0;
+    ctx.evidence.push(`${name} ${hex(id)} walked on engine 2 (hoster ${hex(hosterAtTalk)}); during ${TALK_MS / 1000} s of dialogue on engine 1 (${shutAt ? `closed by itself after ${shutAt} ms` : "open throughout"}): moved up to ${farServer} units on the server, ${farEngine2} on engine 2; worst facing on engine 2 ${Math.round(worstFacing)} degrees off the talker; moved again within 30 s after the close: ${resumed}, hoster after ${hex(after.hoster)}, package on engine 2 at the close ${hex(pkgBefore)} and 30 s later ${hex(pkgAfter)}; ${engine2Samples} samples on engine 2`);
     const fails = [];
     if (shutAt) fails.push(`the dialogue with ${name} closed by itself on engine 1 after ${shutAt} ms`);
     if (hosterAtTalk !== actors[1]) fails.push(`${name} was hosted by ${hex(hosterAtTalk)}, not engine 2, at the talk`);
@@ -88,6 +93,8 @@ module.exports = {
     if (farEngine2 > HOLD) fails.push(`${name} moved ${farEngine2} units on engine 2 during the dialogue`);
     if (worstFacing > FACE) fails.push(`${name} turned ${Math.round(worstFacing)} degrees away from the talker on engine 2`);
     if (!resumed) fails.push(`${name} did not move again within 30 s after the dialogue`);
+    if (after.hoster !== actors[1]) fails.push(`${name} was hosted by ${hex(after.hoster)} after the dialogue, not engine 2`);
+    if (engine2Samples < 8) fails.push(`not exercised: only ${engine2Samples} samples of ${name} on engine 2 during the dialogue`);
     ctx.assert.ok(!fails.length, fails.join("; "));
   },
 };

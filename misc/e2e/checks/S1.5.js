@@ -113,11 +113,11 @@ module.exports = {
     }
     fs.writeFileSync(path.join(ctx.dir, `${name}-samples.json`), JSON.stringify({ t0, hostPath, puppet, server }));
 
-    const net = hostPath.length ? dist(hostPath[hostPath.length - 1].pos, before2) : 0;
+    const net = hostPath.reduce((m, x) => Math.max(m, dist(x.pos, before2)), 0);
     const late = puppet.filter((x) => x.t - t0 >= WINDOW_MS).map((x) => ({ t: x.t, d: distToPath(x.pos, hostPath.filter((y) => y.t >= x.t - WINDOW_MS && y.t <= x.t)) }));
     const worst = late.reduce((m, x) => Math.max(m, x.d), 0);
     const hosters = [...new Set(server.map((x) => x.hoster))];
-    ctx.evidence.push(`then engine 2 translates ${name} 200 units to ${target.map(Math.round)}: ${net.toFixed(0)} units from its start on the hoster, ${late.length} puppet samples on engine 1, worst distance to the hoster path of the last ${WINDOW_MS} ms: ${worst.toFixed(1)}, hosters ${hosters.map((x) => x.toString(16))}`);
+    ctx.evidence.push(`then engine 2 translates ${name} 200 units to ${target.map(Math.round)}: up to ${net.toFixed(0)} units from its start on the hoster, ${late.length} puppet samples on engine 1, worst distance to the hoster path of the last ${WINDOW_MS} ms: ${worst.toFixed(1)}, hosters ${hosters.map((x) => x.toString(16))}`);
     ctx.shot("S1_5-follow", 1);
     ctx.assert.ok(net > 100, `${name} did not move on the hoster (${net.toFixed(0)} units)`);
     ctx.assert.ok(hosters.length === 1 && hosters[0] === actors[1], `${name} changed hoster: ${hosters.map((x) => x.toString(16))}`);

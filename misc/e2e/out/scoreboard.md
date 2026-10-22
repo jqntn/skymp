@@ -1,7 +1,7 @@
 # Scoreboard
 
 
-First non-PASS in plan order: G1.7
+First non-PASS in plan order: G1.3
 
 | id | result | secs | at | detail |
 |---|---|---|---|---|
@@ -13,7 +13,7 @@ First non-PASS in plan order: G1.7
 | S1.2 | PASS | 67 | 2026-10-20 16:46 | 1/1 runs PASS |
 | S1.4 | PASS | 64 | 2026-10-20 16:47 | 1/1 runs PASS |
 | S1.3 | PASS | 21 | 2026-10-20 16:48 | 1/1 runs PASS |
-| S1.5 | PASS | 50 | 2026-10-20 16:48 | 1/1 runs PASS |
+| S1.5 | PASS | 95 | 2026-10-22 14:33 | 2/2 runs PASS |
 | S1.6 | PASS | 46 | 2026-10-20 16:49 | 1/1 runs PASS |
 | S2 | PASS | 116 | 2026-10-20 16:51 | 1/1 runs PASS |
 | S3.1 | PASS | 26 | 2026-10-20 16:52 | 1/1 runs PASS |
@@ -32,7 +32,7 @@ First non-PASS in plan order: G1.7
 | 1B.5 | PASS | 45 | 2026-10-20 16:58 | 1/1 runs PASS |
 | G1.1 | PASS | 213 | 2026-10-20 17:02 | 1/1 runs PASS |
 | G1.2 | PASS | 49 | 2026-10-20 17:03 | 1/1 runs PASS |
-| G1.3 | PASS | 74 | 2026-10-20 17:04 | 1/1 runs PASS |
+| G1.3 | FAIL | 240 | 2026-10-22 14:56 | 1 of 3 runs not PASS; run 1/3: Alvor: no spot near the NPC with line of sight on engine 2 |
 | G1.4 | PASS | 128 | 2026-10-20 17:06 | 1/1 runs PASS |
 | G1.5 | PASS | 121 | 2026-10-20 17:08 | 1/1 runs PASS |
 | G1.6 | PASS | 79 | 2026-10-20 17:09 | 1/1 runs PASS |
@@ -73,9 +73,9 @@ First non-PASS in plan order: G1.7
 | T1 | PASS | 115 | 2026-10-21 21:10 | 2/2 runs PASS |
 | T2 | PASS | 126 | 2026-10-21 22:42 | 1/1 runs PASS |
 | T3 | FAIL | 0 | - | not run |
-| T4 | FAIL | 51 | 2026-10-21 23:13 | 1 of 1 runs not PASS; run 1/1: the dialogue with Faendal closed by itself on engine 1 after 590 ms; Faendal moved 587 units on the server during the dialogue; Faendal moved 582 units on engine 2 during the dialogue; Faendal turned 178 degrees away from the talker on engine 2 |
+| T4 | PASS | 135 | 2026-10-22 14:59 | 3/3 runs PASS |
 | T5 | FAIL | 0 | - | not run |
-| T6 | FAIL | 282 | 2026-10-22 00:16 | 1 of 3 runs not PASS; run 1/3: Gerdur: engine 1 did not play 12 of 12 attack events within 500 ms: attackPowerStartInPlace at 0 ms: never, attackStart at 1633 ms: never, attackStart at 3567 ms: never, attackStart at 5501 ms: never, attackStart at 7200 ms: never, attackPowerStartInPlace at 8667 ms: never, attackStart at 11536 ms: never, attackStart at 14401 ms: never, attackStart at 15901 ms: never, attackStart at 16801 ms: never, attackStart at 18335 ms: never, attackStart at 19535 ms: never |
+| T6 | PASS | 92 | 2026-10-22 13:59 | 1/1 runs PASS |
 
 ## Evidence
 
@@ -138,9 +138,14 @@ First non-PASS in plan order: G1.7
 ### S1.5
 - run 1: engine 1 talks to the puppet Delphine (13485) hosted by engine 2; topic "Je voudrais une chambre. (10 or)", answer "Pas de problème, elle est à vous."
 - run 1: dialogue closed on engine 1
-- run 1: then engine 2 translates Delphine 200 units to -986,839,-1: 190 units from its start on the hoster, 51 puppet samples on engine 1, worst distance to the hoster path of the last 1000 ms: 1.1, hosters ff000001
+- run 1: then engine 2 translates Delphine 200 units to -986,839,-1: up to 204 units from its start on the hoster, 50 puppet samples on engine 1, worst distance to the hoster path of the last 1000 ms: 2.7, hosters ff000001
+- run 2: engine 1 talks to the puppet Delphine (13485) hosted by engine 2; topic "Je voudrais une chambre. (10 or)", answer "Pas de problème, elle est à vous."
+- run 2: dialogue closed on engine 1
+- run 2: then engine 2 translates Delphine 200 units to -986,839,-1: up to 204 units from its start on the hoster, 50 puppet samples on engine 1, worst distance to the hoster path of the last 1000 ms: 1.6, hosters ff000001
 - ![S1.5](runs/S1_5/1/S1_5-topic.png)
 - ![S1.5](runs/S1_5/1/S1_5-follow.png)
+- ![S1.5](runs/S1_5/2/S1_5-topic.png)
+- ![S1.5](runs/S1_5/2/S1_5-follow.png)
 ### S1.6
 - run 1: Hadvar on the hoster after the moves: {"ai":true,"combat":false,"pkg":"4679f","sit":0,"scene":0,"dialogue":false}; puppet AI on: false
 - run 1: hoster engine 2, Hadvar walked 2216 units on the hoster and 2218 on the puppet; 16 samples with hoster Speed > 20 for 500 ms, puppet Speed > 20 in 16; 10 samples with hoster Speed < 1 for 500 ms, puppet Speed < 20 in 10
@@ -245,15 +250,39 @@ First non-PASS in plan order: G1.7
 - run 1: Gerdur (13489) on engine 1 (hoster): greeting "D'après Lucan, du Marché de Rivebois, des voleurs se seraient introduits dans sa boutique. Ils n'ont quasiment rien pris, c'est étrange.", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
 - run 1: Gerdur on engine 1 (hoster): the dialogue closed: true
 - run 1: Gerdur: hoster ff000000 (engine 1) before the talks, ff000000 after
-- run 1: Alvor (13482) on engine 2 (puppet): greeting "C'est pas tous les jours qu'on a des visites à Rivebois.", topic "Vous avez besoin d'aide à la forge ?", answer "Tiens, oui. Et si vous me fabriquiez une dague de fer ? Voici tout ce qu'il vous faut. Allez-y."
-- run 1: Alvor on engine 2 (puppet): the dialogue closed: true
-- run 1: Alvor (13482) on engine 1 (hoster): greeting "Dites-moi ce qu'il vous faut. Par Ysmir, si c'est simple et solide, je peux le forger.", topic "Vous avez besoin d'aide à la forge ?", answer "Tiens, oui. Et si vous me fabriquiez une dague de fer ? Voici tout ce qu'il vous faut. Allez-y."
-- run 1: Alvor on engine 1 (hoster): the dialogue closed: true
-- run 1: Alvor: hoster ff000000 (engine 1) before the talks, ff000000 after
+- run 1: Alvor (13482) on engine 1 (puppet): greeting "C'est pas tous les jours qu'on a des visites à Rivebois.", topic "Vous avez besoin d'aide à la forge ?", answer "Tiens, oui. Et si vous me fabriquiez une dague de fer ? Voici tout ce qu'il vous faut. Allez-y."
+- run 1: Alvor on engine 1 (puppet): the dialogue closed: true
+- run 2: Gerdur (13489) on engine 2 (puppet): greeting "Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
+- run 2: Gerdur on engine 2 (puppet): the dialogue closed: true
+- run 2: Gerdur (13489) on engine 1 (hoster): greeting "D'après Lucan, du Marché de Rivebois, des voleurs se seraient introduits dans sa boutique. Ils n'ont quasiment rien pris, c'est étrange.", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
+- run 2: Gerdur on engine 1 (hoster): the dialogue closed: true
+- run 2: Gerdur: hoster ff000000 (engine 1) before the talks, ff000000 after
+- run 2: Alvor (13482) on engine 2 (puppet): greeting "C'est pas tous les jours qu'on a des visites à Rivebois.", topic "Vous avez besoin d'aide à la forge ?", answer "Tiens, oui. Et si vous me fabriquiez une dague de fer ? Voici tout ce qu'il vous faut. Allez-y."
+- run 2: Alvor on engine 2 (puppet): the dialogue closed: true
+- run 2: Alvor (13482) on engine 1 (hoster): greeting "Dites-moi ce qu'il vous faut. Par Ysmir, si c'est simple et solide, je peux le forger.", topic "Vous avez besoin d'aide à la forge ?", answer "Tiens, oui. Et si vous me fabriquiez une dague de fer ? Voici tout ce qu'il vous faut. Allez-y."
+- run 2: Alvor on engine 1 (hoster): the dialogue closed: true
+- run 2: Alvor: hoster ff000000 (engine 1) before the talks, ff000000 after
+- run 3: Gerdur (13489) on engine 2 (puppet): greeting "Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
+- run 3: Gerdur on engine 2 (puppet): the dialogue closed: true
+- run 3: Gerdur (13489) on engine 1 (hoster): greeting "D'après Lucan, du Marché de Rivebois, des voleurs se seraient introduits dans sa boutique. Ils n'ont quasiment rien pris, c'est étrange.", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
+- run 3: Gerdur on engine 1 (hoster): the dialogue closed: true
+- run 3: Gerdur: hoster ff000000 (engine 1) before the talks, ff000000 after
+- run 3: Alvor (13482) on engine 2 (puppet): greeting "C'est pas tous les jours qu'on a des visites à Rivebois.", topic "Vous avez besoin d'aide à la forge ?", answer "Tiens, oui. Et si vous me fabriquiez une dague de fer ? Voici tout ce qu'il vous faut. Allez-y."
+- run 3: Alvor on engine 2 (puppet): the dialogue closed: true
+- run 3: Alvor (13482) on engine 1 (hoster): greeting "Dites-moi ce qu'il vous faut. Par Ysmir, si c'est simple et solide, je peux le forger.", topic "Vous avez besoin d'aide à la forge ?", answer "Tiens, oui. Et si vous me fabriquiez une dague de fer ? Voici tout ce qu'il vous faut. Allez-y."
+- run 3: Alvor on engine 1 (hoster): the dialogue closed: true
+- run 3: Alvor: hoster ff000000 (engine 1) before the talks, ff000000 after
 - ![G1.3](runs/G1_3/1/G1_3-Gerdur-engine2-puppet.png)
 - ![G1.3](runs/G1_3/1/G1_3-Gerdur-engine1-hoster.png)
-- ![G1.3](runs/G1_3/1/G1_3-Alvor-engine2-puppet.png)
-- ![G1.3](runs/G1_3/1/G1_3-Alvor-engine1-hoster.png)
+- ![G1.3](runs/G1_3/1/G1_3-Alvor-engine1-puppet.png)
+- ![G1.3](runs/G1_3/2/G1_3-Gerdur-engine2-puppet.png)
+- ![G1.3](runs/G1_3/2/G1_3-Gerdur-engine1-hoster.png)
+- ![G1.3](runs/G1_3/2/G1_3-Alvor-engine2-puppet.png)
+- ![G1.3](runs/G1_3/2/G1_3-Alvor-engine1-hoster.png)
+- ![G1.3](runs/G1_3/3/G1_3-Gerdur-engine2-puppet.png)
+- ![G1.3](runs/G1_3/3/G1_3-Gerdur-engine1-hoster.png)
+- ![G1.3](runs/G1_3/3/G1_3-Alvor-engine2-puppet.png)
+- ![G1.3](runs/G1_3/3/G1_3-Alvor-engine1-hoster.png)
 ### G1.4
 - run 1: bandit 1ebf6 (base b623a NPC_ LvlBanditMeleeAnyAggro1024) in 3c:Skyrim.esm at 7358,-41431,3578; hosted by the player ff000000, server dead false
 - run 1: 31 s after the kill: server dead true, client dead true, disabled false
@@ -748,14 +777,10 @@ First non-PASS in plan order: G1.7
 - run 1: Thief Stone e7bdc: 1 message box(es) answered ["Ceux placés sous le signe du Voleur appr"]; client added ["e5f45"], removed ["e5f47"]; server learned ["e5f45"]
 - run 1: after the relog: client spells ["e5f45","2012ccc"], server ["e5f45"]
 ### T4
-- run 1: Faendal 1348c walked on engine 2 (hoster ff000001); during 8 s of dialogue on engine 1 (closed by itself after 590 ms): moved up to 587 units on the server, 582 on engine 2; worst facing on engine 2 178 degrees off the talker; moved again within 30 s after the close: true
+- run 1: Sven 13491 walked on engine 2 (hoster ff000001); during 8 s of dialogue on engine 1 (open throughout): moved up to 12 units on the server, 4 on engine 2; worst facing on engine 2 0 degrees off the talker; moved again within 30 s after the close: true, hoster after ff000001, package on engine 2 at the close 1cb1b and 30 s later 1cb1b; 13 samples on engine 2
+- run 2: Faendal 1348c walked on engine 2 (hoster ff000001); during 8 s of dialogue on engine 1 (open throughout): moved up to 0 units on the server, 0 on engine 2; worst facing on engine 2 0 degrees off the talker; moved again within 30 s after the close: true, hoster after ff000001, package on engine 2 at the close 79adb and 30 s later 79adb; 14 samples on engine 2
+- run 3: Faendal 1348c walked on engine 2 (hoster ff000001); during 8 s of dialogue on engine 1 (open throughout): moved up to 0 units on the server, 0 on engine 2; worst facing on engine 2 0 degrees off the talker; moved again within 30 s after the close: true, hoster after ff000001, package on engine 2 at the close 79adb and 30 s later 79adb; 14 samples on engine 2
 ### T6
-- run 1: bandit 1ebf6: sit state on engine 1 at the start 0; hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events ["attackStart","attackStart","attackStart","attackPowerStartInPlace","attackStart"], engine 1 ["attackStart","attackStart","attackStart","attackPowerStartInPlace","attackStart"], refused by engine 1's graph at [] ms; IsAttacking starts: engine 2 5, engine 1 3, engine 1 lag [-44,2799,63,11034,65] ms
-- run 1: Gerdur: seats near her on engine 2 [["5bf91",157,"Chaise"],["5bfba",341,"Chaise"],["a035a",558,"Invisible Chair Marker"],["5bfb9",594,"Chaise"]]
-- run 1: Gerdur 13489 (seated on engine 2 when the fight starts): sit state on engine 1 at the start 3; hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events ["attackPowerStartInPlace","attackStart","attackStart","attackStart","attackStart","attackPowerStartInPlace","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart"], engine 1 [], refused by engine 1's graph at [65,1733,3652,5587,7286,8754,11642,14492,15992,16926,18409,19610] ms; IsAttacking starts: engine 2 10, engine 1 0, engine 1 lag [null,null,null,null,null,null,null,null,null,null] ms
-- run 2: bandit 1ebf6: sit state on engine 1 at the start 0; hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events ["attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart"], engine 1 ["attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart"], refused by engine 1's graph at [] ms; IsAttacking starts: engine 2 4, engine 1 6, engine 1 lag [-40,68,51,54] ms
-- run 2: Gerdur: seats near her on engine 2 [["5bf91",157,"Chaise"],["5bfba",341,"Chaise"],["a035a",558,"Invisible Chair Marker"],["5bfb9",594,"Chaise"]]
-- run 2: Gerdur 13489 (seated on engine 2 when the fight starts): sit state on engine 1 at the start 3; hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events ["attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart"], engine 1 ["attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart"], refused by engine 1's graph at [] ms; IsAttacking starts: engine 2 9, engine 1 9, engine 1 lag [68,102,70,73,71,72,56,58,76] ms
-- run 3: bandit 1ebf6: sit state on engine 1 at the start 0; hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events ["attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart"], engine 1 ["attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart"], refused by engine 1's graph at [] ms; IsAttacking starts: engine 2 8, engine 1 7, engine 1 lag [68,49,3612,47,79,52,136,72] ms
-- run 3: Gerdur: seats near her on engine 2 [["5bf91",157,"Chaise"],["5bfba",341,"Chaise"],["a035a",558,"Invisible Chair Marker"],["5bfb9",594,"Chaise"]]
-- run 3: Gerdur 13489 (seated on engine 2 when the fight starts): sit state on engine 1 at the start 3; hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events ["attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart"], engine 1 ["attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart"], refused by engine 1's graph at [] ms; IsAttacking starts: engine 2 7, engine 1 8, engine 1 lag [60,81,66,65,69,55,77] ms
+- run 1: bandit 1ebf6: sit state on engine 1 at the start 0; hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events ["attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackPowerStartForward"], engine 1 ["attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackPowerStartForward"], refused by engine 1's graph at [] ms
+- run 1: Gerdur: seats near her on engine 2 [["38b92",160,"Chaise"],["38b93",172,"Chaise"],["5bfb9",432,"Chaise"],["5bf91",644,"Chaise"]]
+- run 1: Gerdur 13489 (seated on engine 2 when the fight starts): sit state on engine 1 at the start 3; hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events ["attackPowerStartForward","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackPowerStartForward","attackStart","attackStart","attackStart"], engine 1 ["attackPowerStartForward","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackPowerStartForward","attackStart","attackStart","attackStart"], refused by engine 1's graph at [] ms

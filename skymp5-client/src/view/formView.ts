@@ -1,4 +1,4 @@
-import { Actor, ActorBase, createText, Debug, destroyText, Form, FormType, Game, isAnimationGraphReady, Keyword, NetImmerse, ObjectReference, once, printConsole, setTextPos, setTextSize, setTextString, storage, TESModPlatform, Ui, Utility, worldPointToScreenPoint } from "skyrimPlatform";
+import { Actor, ActorBase, createText, Debug, destroyText, Form, FormType, Game, isAnimationGraphReady, Keyword, NetImmerse, ObjectReference, once, printConsole, setTextPos, setTextSize, setTextString, storage, TESModPlatform, Utility, worldPointToScreenPoint } from "skyrimPlatform";
 import { setDefaultAnimsDisabled, applyAnimation, standUp, instantEnter } from "../sync/animation";
 import { pushTalk } from "./talkEvents";
 import { Appearance, applyAppearance } from "../sync/appearance";
@@ -481,10 +481,9 @@ export class FormView {
     }
     this.hostedHere = alreadyHosted;
 
-    const talksToPlayer = this.realActor && (!!Actor.from(refr)?.isInDialogueWithPlayer() || (this.movState.talksToPlayer && Ui.isMenuOpen("Dialogue Menu")));
+    const talksToPlayer = this.realActor && !!Actor.from(refr)?.isInDialogueWithPlayer();
     if (talksToPlayer && !this.movState.talksToPlayer) {
       Actor.from(refr)?.clearKeepOffsetFromActor();
-      refr.stopTranslation();
     }
     if (model.isHostedByOther && model.refrId && model.refrId > espActorIdOffset && (talksToPlayer !== this.movState.talksToPlayer || (talksToPlayer && Date.now() - this.movState.talkSentAt > talkRefreshMs))) {
       pushTalk(model.refrId - espActorIdOffset, talksToPlayer);
@@ -702,7 +701,7 @@ export class FormView {
       }
       const queued = model.animationQueue?.splice(0) ?? [];
       const lastNumChanges = this.animState.lastNumChanges;
-      if (model.animation && !this.hostedHere && !this.movState.talksToPlayer) {
+      if (model.animation && !this.hostedHere) {
         for (const anim of queued.length ? queued : [model.animation]) {
           applyAnimation(refr, anim, this.animState);
         }

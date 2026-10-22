@@ -168,7 +168,7 @@ export class Coop implements System {
     const hoster = ctx.svr.get(npc, "hoster") as number;
     this.log(`Coop: ${hex(talker)} ${on ? "talks to" : "stops talking to"} ${hex(npc)}, hoster ${hex(hoster || 0)}`);
     if (hoster && hoster !== talker) {
-      this.send(ctx, hoster, { customPacketType: "talkHold", npc, talker, on });
+      this.send(ctx, hoster, { customPacketType: "talkHold", npc, on, pos: ctx.svr.getActorPos(talker) });
     }
   }
 
