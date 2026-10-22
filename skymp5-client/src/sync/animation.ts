@@ -263,6 +263,8 @@ export const applyAnimation = (
 
   if (actorGetUpAnimsLowerCase.find((x) => x === animEventNameLowerCase) !== undefined) {
     setCollision(refr.getFormID(), true);
+    state.seat = null;
+    state.ownSeat = false;
   }
 };
 

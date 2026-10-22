@@ -110,7 +110,7 @@ const applyLocomotion = (ac: Actor, m: Movement) => {
   const id = ac.getFormID();
   const moving = m.runMode !== "Standing";
   if (moving) {
-    if (!movingActors.has(id) || ac.getAnimationVariableBool("bAnimationDriven")) {
+    if ((!movingActors.has(id) || ac.getAnimationVariableBool("bAnimationDriven")) && !ac.isWeaponDrawn()) {
       Debug.sendAnimationEvent(ac, "IdleForceDefaultState");
     }
     movingActors.add(id);
