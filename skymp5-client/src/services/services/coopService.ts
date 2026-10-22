@@ -7,7 +7,8 @@ import { QueryKeyCodeBindings } from "../events/queryKeyCodeBindings";
 import { CustomPacketMessage } from "../messages/customPacketMessage";
 import { MsgType } from "../../messages";
 import { ClientListener, CombinedController, Sp } from "./clientListener";
-import { getViewFromStorage, localIdToRemoteId } from "../../view/worldViewMisc";
+import { getViewFromStorage, localIdToRemoteId, remoteIdToLocalId } from "../../view/worldViewMisc";
+import { nextTalk } from "../../view/talkEvents";
 import { WorldCleanerService } from "./worldCleanerService";
 
 const STOP = -1;
@@ -46,6 +47,8 @@ interface PartyState {
   party: { leader: number, members: { actor: number, name: string, followers?: number[] }[] } | null;
   invites: { inviter: number, name: string }[];
 }
+
+const talkHoldMs = 60000;
 
 export class CoopService extends ClientListener {
   constructor(private sp: Sp, private controller: CombinedController) {
@@ -127,6 +130,15 @@ export class CoopService extends ClientListener {
 
   private onUpdate() {
     this.updateCompass();
+    for (let talk = nextTalk(); talk; talk = nextTalk()) {
+      this.send({ customPacketType: "talk", npc: talk[0], on: talk[1] });
+      logTrace(this, "talk", talk[0].toString(16), talk[1]);
+    }
+    this.talkHolds.forEach((at, npc) => {
+      if (Date.now() - at > talkHoldMs) {
+        this.setTalkHold(npc, 0, false);
+      }
+    });
     this.reportFollowers();
     if (this.questLogRequestAt && Date.now() >= this.questLogRequestAt) {
       this.questLogRequestAt = 0;
@@ -282,6 +294,12 @@ export class CoopService extends ClientListener {
       case "questApply":
         if (Array.isArray(content["entries"])) {
           this.applyQueue.push({ entries: content["entries"] as QuestLogEntry[], replay: content["replay"] === true, followers: content["followers"], questItems: content["questItems"] });
+        }
+        break;
+      case "talkHold":
+        if (typeof content["npc"] === "number" && typeof content["talker"] === "number") {
+          const [npc, talker, on] = [content["npc"], content["talker"], content["on"] === true];
+          this.controller.once("update", () => this.setTalkHold(npc, talker, on));
         }
         break;
       case "partyState": {
@@ -623,6 +641,26 @@ export class CoopService extends ClientListener {
     this.controller.once("update", () => Debug.notification(text));
   }
 
+  private setTalkHold(npc: number, talker: number, on: boolean) {
+    const ac = Actor.from(Game.getFormEx(npc));
+    if (on) {
+      this.talkHolds.set(npc, Date.now());
+    } else {
+      this.talkHolds.delete(npc);
+    }
+    if (!ac) {
+      return;
+    }
+    ac.setDontMove(on);
+    const target = on ? ObjectReference.from(Game.getFormEx(remoteIdToLocalId(talker))) : null;
+    if (target) {
+      ac.setAngle(0, 0, ac.getAngleZ() + ac.getHeadingAngle(target));
+      ac.setLookAt(target, false);
+    } else if (!on) {
+      ac.clearLookAt();
+    }
+  }
+
   private send(content: Record<string, unknown>) {
     const message: CustomPacketMessage = {
       t: MsgType.CustomPacket,
@@ -647,6 +685,7 @@ export class CoopService extends ClientListener {
   private compassKey = "";
   private trackedQuests = new Set<number>();
   private expectedEchoes = new Map<string, number>();
+  private talkHolds = new Map<number, number>();
   private partyKeyDown = false;
   private loadCount = 0;
 }

@@ -1,5 +1,6 @@
-import { Actor, ActorBase, createText, Debug, destroyText, Form, FormType, Game, isAnimationGraphReady, Keyword, NetImmerse, ObjectReference, once, printConsole, setTextPos, setTextSize, setTextString, storage, TESModPlatform, Utility, worldPointToScreenPoint } from "skyrimPlatform";
+import { Actor, ActorBase, createText, Debug, destroyText, Form, FormType, Game, isAnimationGraphReady, Keyword, NetImmerse, ObjectReference, once, printConsole, setTextPos, setTextSize, setTextString, storage, TESModPlatform, Ui, Utility, worldPointToScreenPoint } from "skyrimPlatform";
 import { setDefaultAnimsDisabled, applyAnimation, standUp, instantEnter } from "../sync/animation";
+import { pushTalk } from "./talkEvents";
 import { Appearance, applyAppearance } from "../sync/appearance";
 import { isBadMenuShown, applyEquipment } from "../sync/equipment";
 import { RespawnNeededError } from "../lib/errors";
@@ -35,6 +36,7 @@ export const getScreenResolution = (): ScreenResolution => {
 
 const espActorIdOffset = 0x100000000;
 const seatWaitMs = 4000;
+const talkRefreshMs = 20000;
 
 const pelvisNodes = ["NPC Pelvis [Pelv]", "NPC Pelvis"];
 
@@ -479,9 +481,14 @@ export class FormView {
     }
     this.hostedHere = alreadyHosted;
 
-    const talksToPlayer = this.realActor && !!Actor.from(refr)?.isInDialogueWithPlayer();
+    const talksToPlayer = this.realActor && (!!Actor.from(refr)?.isInDialogueWithPlayer() || (this.movState.talksToPlayer && Ui.isMenuOpen("Dialogue Menu")));
     if (talksToPlayer && !this.movState.talksToPlayer) {
       Actor.from(refr)?.clearKeepOffsetFromActor();
+      refr.stopTranslation();
+    }
+    if (model.isHostedByOther && model.refrId && model.refrId > espActorIdOffset && (talksToPlayer !== this.movState.talksToPlayer || (talksToPlayer && Date.now() - this.movState.talkSentAt > talkRefreshMs))) {
+      pushTalk(model.refrId - espActorIdOffset, talksToPlayer);
+      this.movState.talkSentAt = Date.now();
     }
     this.movState.talksToPlayer = talksToPlayer;
 
@@ -695,7 +702,7 @@ export class FormView {
       }
       const queued = model.animationQueue?.splice(0) ?? [];
       const lastNumChanges = this.animState.lastNumChanges;
-      if (model.animation && !this.hostedHere) {
+      if (model.animation && !this.hostedHere && !this.movState.talksToPlayer) {
         for (const anim of queued.length ? queued : [model.animation]) {
           applyAnimation(refr, anim, this.animState);
         }
@@ -918,6 +925,7 @@ export class FormView {
     lastRehost: 0,
     everApplied: false,
     talksToPlayer: false,
+    talkSentAt: 0,
   };
   private appearanceState = this.getDefaultAppearanceState();
   private eqState = this.getDefaultEquipState();

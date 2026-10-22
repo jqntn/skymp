@@ -158,7 +158,19 @@ export class Coop implements System {
     scriptItems: (ctx, actor, content) => this.onScriptItems(ctx, actor, content.gains, content.losses, content.dialogue === true),
     followers: (ctx, actor, content) => this.onFollowers(ctx, actor, content.refs),
     questItemHolders: (ctx, actor, content) => this.onQuestItemHolders(ctx, actor, content.holders),
+    talk: (ctx, actor, content) => this.onTalk(ctx, actor, content.npc, content.on === true),
   };
+
+  private onTalk(ctx: SystemContext, talker: number, npc: unknown, on: boolean): void {
+    if (!isFormId(npc) || npc >= 0xff000000) {
+      return;
+    }
+    const hoster = ctx.svr.get(npc, "hoster") as number;
+    this.log(`Coop: ${hex(talker)} ${on ? "talks to" : "stops talking to"} ${hex(npc)}, hoster ${hex(hoster || 0)}`);
+    if (hoster && hoster !== talker) {
+      this.send(ctx, hoster, { customPacketType: "talkHold", npc, talker, on });
+    }
+  }
 
   private invite(ctx: SystemContext, inviter: number, target: unknown): void {
     if (!isFormId(target)) {
