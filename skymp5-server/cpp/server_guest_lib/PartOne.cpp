@@ -269,6 +269,9 @@ void PartOne::SetHoster(MpObjectReference& npc, uint32_t hosterId,
   }
   GetLogger().info("Hoster changed from {:x} to {:x} on {:x} ({})", previous,
                    hosterId, npc.GetFormId(), reason);
+  if (previous) {
+    worldState.lastRunAt[npc.GetFormId()] = std::chrono::steady_clock::now();
+  }
   if (hosterId) {
     worldState.hosters[npc.GetFormId()] = hosterId;
   } else {

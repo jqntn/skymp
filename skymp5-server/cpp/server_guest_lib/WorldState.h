@@ -240,6 +240,8 @@ public:
   std::vector<std::shared_ptr<PartOneListener>> listeners;
   std::unordered_map<uint32_t, uint32_t> hosters;
   std::unordered_map<uint32_t, uint32_t> hostOwners;
+  std::unordered_map<uint32_t, std::chrono::steady_clock::time_point>
+    lastRunAt;
   std::unordered_map<uint32_t, std::map<uint32_t, float>>
     activationChildsByActivationParent;
 

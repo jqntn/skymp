@@ -783,14 +783,18 @@ void ActionListener::OnHostAttempt(const RawMessageData& rawMsgData,
                              remoteId, me->GetFormId());
     return;
   }
+  constexpr auto kRecentlyRun = std::chrono::seconds(30);
   const auto ownerIt = worldState.hostOwners.find(remoteId);
   const bool fromOwner = ownerIt != worldState.hostOwners.end() &&
     ownerIt->second == me->GetFormId();
+  const auto runIt = worldState.lastRunAt.find(remoteId);
+  const bool recentlyRun = runIt != worldState.lastRunAt.end() &&
+    std::chrono::steady_clock::now() - runIt->second < kRecentlyRun;
   if (!remote.IsDisabled() &&
       (remote.AsActor()->IsDead() ||
-       (!fromOwner && (hoster || partOne.IsSeen(remote))))) {
+       (!fromOwner && (hoster || recentlyRun || partOne.IsSeen(remote))))) {
     partOne.GetLogger().debug("Ignored host claim on {:x} by {:x}: the "
-                              "server copy is run, dead or seen",
+                              "server copy is run, recently run, dead or seen",
                               remoteId, me->GetFormId());
     return;
   }

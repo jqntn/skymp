@@ -733,8 +733,8 @@ TEST_CASE("An NPC keeps its hoster in a cell the hoster still sees, and goes "
   DisconnectClaimer(partOne);
 }
 
-TEST_CASE("A report moves an NPC that nobody sees or runs, and is ignored "
-          "while a player sees it",
+TEST_CASE("A report moves an NPC that nobody sees or ran in the last 30 s, "
+          "and is ignored while a player sees it",
           "[NpcHost][espm][H1]")
 {
   auto& partOne = GetNpcHostPartOne();
@@ -742,9 +742,17 @@ TEST_CASE("A report moves an NPC that nobody sees or runs, and is ignored "
   const auto cell = CellOf(partOne, alvor);
   const auto start = alvor.GetPos();
   partOne.worldState.hosters[kAlvor] = 0;
+  partOne.worldState.lastRunAt.erase(kAlvor);
   ConnectPlayer(partOne, 0, kClaimer, kRiverwoodSpot, kTamriel);
   const NiPoint3 reported = kRiverwoodSpot + NiPoint3(100.f, 0.f, 0.f);
 
+  SECTION("a player ran him a moment ago")
+  {
+    partOne.worldState.lastRunAt[kAlvor] = std::chrono::steady_clock::now();
+    DoMessage(partOne, 0, Claim(kAlvor, kTamriel, reported));
+    REQUIRE(CellOf(partOne, alvor) == cell);
+    REQUIRE((alvor.GetPos() - start).Length() < 1.f);
+  }
   SECTION("nobody sees him")
   {
     DoMessage(partOne, 0, Claim(kAlvor, kTamriel, reported));

@@ -119,6 +119,7 @@ module.exports = {
 
     const violations = [];
     const weak = [];
+    let left = 0;
     for (const id of npcs) {
       const hostPath = (h) => samples.map((s) => ({ t: s.t, st: s.engines[h][id], h: actors.indexOf(s.hosters[id]) + 1 })).filter((x) => x.st && x.h === h);
       const pv = provoked[id];
@@ -151,6 +152,11 @@ module.exports = {
         if (d > TOLERANCE) add(`position ${d.toFixed(0)} units from the hoster path${pv && s.t > pv.t ? `, ${s.t - pv.t} ms after the nudge` : ""}`);
       }
       ctx.evidence.push(`${id.toString(16)}: ${checked} puppet samples` + (pv ? `; frenzied and nudged on engine ${pv.engine} (largest move seen in the next 15 frames ${pv.nudge.toFixed(0)} units) at +${pv.t - t0} ms, Aggression 3 held in ${frenzied} of ${afterProvoke} later samples, worst distance to the hoster path in the ${RECOVERY_MS} ms after the nudge ${worstAfterNudge.toFixed(0)}` : "; not provoked"));
+      if (checked < 20 && !pv && (await ctx.probe(`return mp.getActorCellOrWorld(${id}) !== mp.getActorCellOrWorld(${actors[0]});`))) {
+        ctx.evidence.push(`${id.toString(16)}: left the inn on its hoster's game after ${checked} puppet samples, not counted`);
+        left++;
+        continue;
+      }
       if (checked < 20) weak.push(`${id.toString(16)}: only ${checked} puppet samples`);
       if (!pv) weak.push(`${id.toString(16)}: no puppet to provoke`);
       else if (pv.nudge < 80) weak.push(`${id.toString(16)}: the nudge moved the puppet only ${pv.nudge.toFixed(0)} units`);
@@ -163,6 +169,7 @@ module.exports = {
     ctx.shot("S1_4-engine2", 2);
     ctx.assert.equal(violations.length, 0, violations[0]);
     ctx.assert.equal(weak.length, 0, `the check could not provoke the puppets: ${weak.join("; ")}`);
+    ctx.assert.ok(npcs.length - left >= 2, `not exercised: only ${npcs.length - left} hosted NPCs stayed in the inn`);
     ctx.assert.ok(control.length > 0, "positive control failed: no frenzied hosted NPC entered combat, so the provocation proves nothing");
   },
 };
