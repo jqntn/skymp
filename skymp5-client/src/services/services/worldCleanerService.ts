@@ -1,9 +1,12 @@
 import { ClientListener, CombinedController, Sp } from "./clientListener";
 import { Actor, ObjectLoadedEvent } from "skyrimPlatform";
 import { CoopService } from "./coopService";
-import { tryHost } from "../../view/hostAttempts";
+import { MsgType } from "../../messages";
+import { ObjectReferenceEx } from "../../extensions/objectReferenceEx";
 import { getViewFromStorage } from "../../view/worldViewMisc";
 import { movingActors } from "../../sync/movementApply";
+import { RemoteServer } from "./remoteServer";
+import { logTrace } from "../../logging";
 
 const serverBannedRaceIds = [0x000e7713, 0x001052a3, 0x0010760a];
 
@@ -72,7 +75,7 @@ export class WorldCleanerService extends ClientListener {
     }
 
     if (actorId < 0xff000000) {
-      this.claim(actorId);
+      this.reportUnstreamed(actor, pc);
       return;
     }
 
@@ -101,18 +104,52 @@ export class WorldCleanerService extends ClientListener {
     });
   }
 
-  private claim(actorId: number) {
+  private isDisabledOnServer(remoteId: number): boolean {
+    const form = this.controller.lookupListener(RemoteServer).getWorldModel().forms.find((f) => f?.refrId === remoteId);
+    return !!(form as Record<string, unknown> | undefined)?.isDisabled;
+  }
+
+  private reportUnstreamed(actor: Actor, pc: Actor) {
+    const actorId = actor.getFormID();
     const remoteId = actorId + 0x100000000;
     const hosted = this.sp.storage["hosted"];
     if (
-      actorId === 0x14 || Date.now() < (this.claimAfter.get(actorId) ?? 0)
+      actorId === 0x14 || !this.controller.lookupListener(CoopService).isReporting()
       || (Array.isArray(hosted) && hosted.includes(remoteId))
-      || getViewFromStorage()?.getLocalRefrId(remoteId)
+      || (getViewFromStorage()?.getLocalRefrId(remoteId) && !this.isDisabledOnServer(remoteId))
+      || serverBannedRaceIds.includes(actor.getRace()?.getFormID() ?? 0)
+      || actor.isDead() || actor.isDisabled() || !actor.is3DLoaded() || actor.isInDialogueWithPlayer()
+      || ObjectReferenceEx.getWorldOrCell(actor) !== ObjectReferenceEx.getWorldOrCell(pc)
+      || actor.getDistance(pc) > 4096
     ) {
+      this.unstreamedSince.delete(actorId);
       return;
     }
-    this.claimAfter.set(actorId, Date.now() + 5000);
-    tryHost(remoteId);
+    const now = Date.now();
+    const teleports = this.controller.lookupListener(RemoteServer).getPlayerTeleports();
+    const since = this.unstreamedSince.get(actorId);
+    if (since !== undefined && since.teleports !== teleports) {
+      this.unstreamedSince.delete(actorId);
+      return;
+    }
+    if (since === undefined) {
+      this.unstreamedSince.set(actorId, { at: now, teleports });
+      logTrace(this, `Reporting ${actorId.toString(16)} at ${ObjectReferenceEx.getWorldOrCell(actor).toString(16)} ${[actor.getPositionX(), actor.getPositionY(), actor.getPositionZ()].map(Math.round)}`);
+      this.controller.emitter.emit("sendMessage", {
+        message: {
+          t: MsgType.Host,
+          remoteId,
+          worldOrCell: ObjectReferenceEx.getWorldOrCell(actor),
+          pos: [actor.getPositionX(), actor.getPositionY(), actor.getPositionZ()],
+          rot: [actor.getAngleX(), actor.getAngleY(), actor.getAngleZ()]
+        },
+        reliability: "reliable"
+      });
+    } else if (now - since.at >= 2000) {
+      this.unstreamedSince.delete(actorId);
+      logTrace(this, `Hiding ${actorId.toString(16)}: the server does not stream it`);
+      actor.disableNoWait(false);
+    }
   }
 
   private isActorInDialogue(ac: Actor) {
@@ -121,5 +158,5 @@ export class WorldCleanerService extends ClientListener {
 
   private protection = new Map<number, number>();
   private pausedUntil = 0;
-  private claimAfter = new Map<number, number>();
+  private unstreamedSince = new Map<number, { at: number, teleports: number }>();
 }

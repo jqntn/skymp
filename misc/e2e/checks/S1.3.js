@@ -27,6 +27,7 @@ module.exports = {
     const server = await ctx.probe(`return { cell: mp.getActorCellOrWorld(${ALVOR}), pos: mp.getActorPos(${ALVOR}) };`);
     ctx.evidence.push(`game hour ${hour.toFixed(2)}; ${forge.name} ${forge.id.toString(16)} at ${forge.pos.map(Math.round)}; client after ${waited} ms: Alvor in ${where(first)}; server: ${server.cell.toString(16)} at ${server.pos.map(Math.round)}`);
     ctx.shot("S1_3");
+    if (!atForge(first) && server.cell !== 0x3c) throw new ctx.Accepted(`the server has Alvor in cell ${server.cell.toString(16)}, his house, where nobody is: an NPC pauses while no player is near (user decisions 2026-10-12 and 2026-10-23)`);
     ctx.assert.ok(atForge(first), `Alvor is not at the forge ${waited} ms after the player arrived: ${where(first)}`);
     await ctx.sleep(HOLD_MS);
     const later = await read();

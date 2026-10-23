@@ -29,7 +29,7 @@ const HELGEN_EXIT = { pos: [12155.9, -71991.3, 6015.5], angleZ: 286.1, worldOrCe
 const range = (prefix, n) => Array.from({ length: n }, (_, i) => `${prefix}${i + 1}`);
 const ORDER = [
   "L1", "S0", "S0b", "S0c", "S1.1", "S1.2", "S1.4", "S1.3", "S1.5", "S1.6", "S2", "S3.1", "S3.2", "S3.3", "S3.4",
-  ...range("1A.", 5), ...range("1B.", 5), ...range("G1.", 8),
+  ...range("1A.", 5), ...range("1B.", 5), "H1", "H2", "H3", "H4", ...range("G1.", 8),
   ...range("2A.", 5), "G1.9", ...range("2B.", 5), "G2.1", "G2.2", "G2.3", "F1", "G2.4", "G2.5", "F4", "F5", "F7", "G2.6", "F6", "F2", "F3", ...range("P", 8), ...range("T", 6),
 ];
 
@@ -217,7 +217,7 @@ const runnerServer = () =>
     });
   }).listen(PORT.runner, "127.0.0.1");
 
-const engineDir = (n) => (n === 1 ? GAME : path.join(BUILD, `e2e-game${n}`));
+const engineDir = (n) => path.join(BUILD, `e2e-game${n}`);
 const profileId = (n) => 990000 + n;
 const RELINKED = [...fs.readdirSync(path.join(BUILD, "dist", "client", "Data")).map((d) => path.join("Data", d)), path.join("Data", "Platform"), path.join("Data", "SKSE")];
 
@@ -342,7 +342,7 @@ const launchGame = (dir, n = 1) => {
 
 const startGame = async (n, ctx) => {
   const dir = engineDir(n);
-  if (n > 1) prepareEngineDir(n);
+  prepareEngineDir(n);
   const plugins = path.join(dir, "Data", "Platform", "Plugins");
   const dev = path.join(dir, "Data", "Platform", "PluginsDev");
   const settingsFile = path.join(plugins, "skymp5-client-settings.txt");
@@ -478,11 +478,7 @@ const makeCtx = (id, dir) => {
       }),
     clientLog: (engine = 1) => drivers.lines[engine] || [],
     character: (engine = 1, at = HELGEN_EXIT) => ctx.probe(`return mp.createActor(0, ${JSON.stringify(at.pos)}, ${at.angleZ}, ${at.worldOrCell}, ${profileId(engine)});`),
-    npcLocation: async (id, engine = 1) => {
-      const l = await ctx.drv(`const a = sp.Actor.from(sp.Game.getFormEx(${id})); const f = a && (a.getWorldSpace() || a.getParentCell()); if (!f) return null;
-        const fid = f.getFormID(); return { cellOrWorldDesc: (fid & 0xffffff).toString(16) + ":" + sp.Game.getModName(fid >>> 24), pos: [a.getPositionX(), a.getPositionY(), a.getPositionZ()], rot: [0, 0, a.getAngleZ()] };`, engine);
-      return l || ctx.probe(`return mp.get(${id}, "locationalData");`);
-    },
+    npcLocation: (id) => ctx.probe(`return mp.get(${id}, "locationalData");`),
     shot: (name, engine = 1) => {
       const file = path.join(dir, `${name}.png`);
       const r = spawnSync("powershell", ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", path.join(__dirname, "desktop.ps1"), "-desktop", desktopOf(engine), "-procId", String(ctx.gamePids[engine]), "-out", file], { encoding: "utf8" });
@@ -706,6 +702,7 @@ const writeScoreboard = (results, stopped) => {
 };
 
 const main = async () => {
+  spawn("powershell", ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", path.join(__dirname, "audio.ps1"), "-watchDir", path.join(BUILD, "e2e-game"), "-parentPid", String(process.pid)], { stdio: "ignore", windowsHide: true }).unref();
   const args = process.argv.slice(2);
   const arg = (name) => { const i = args.indexOf(name); return i >= 0 ? args[i + 1] : undefined; };
   const only = arg("--only")?.split(",");

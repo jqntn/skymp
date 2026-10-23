@@ -234,6 +234,21 @@ const translateTo = (refr: ObjectReference, m: Movement, dead: boolean) => {
   }
 };
 
+export const moveActorTo = (refr: ObjectReference, m: Transform, viaPlayer = false): void => {
+  const player = Game.getPlayer() as Actor;
+  if (viaPlayer && ObjectReferenceEx.getWorldOrCell(player) === m.worldOrCell) {
+    refr.moveTo(player, m.pos[0] - player.getPositionX(), m.pos[1] - player.getPositionY(), m.pos[2] - player.getPositionZ(), false);
+    return;
+  }
+  TESModPlatform.moveRefrToPosition(
+    refr,
+    Cell.from(Game.getFormEx(m.worldOrCell)),
+    WorldSpace.from(Game.getFormEx(m.worldOrCell)),
+    m.pos[0], m.pos[1], m.pos[2],
+    m.rot[0], m.rot[1], m.rot[2],
+  );
+};
+
 const teleportIfNeed = (refr: ObjectReference, m: Transform) => {
   if (
     isInDifferentWorldOrCell(refr, m.worldOrCell) ||
@@ -242,13 +257,7 @@ const teleportIfNeed = (refr: ObjectReference, m: Transform) => {
     if (refr.getFormID() >= 0xff000000) {
       throw new RespawnNeededError("needs to be respawned");
     }
-    TESModPlatform.moveRefrToPosition(
-      refr,
-      Cell.from(Game.getFormEx(m.worldOrCell)),
-      WorldSpace.from(Game.getFormEx(m.worldOrCell)),
-      m.pos[0], m.pos[1], m.pos[2],
-      m.rot[0], m.rot[1], m.rot[2],
-    );
+    moveActorTo(refr, m);
     return true;
   }
   return false;

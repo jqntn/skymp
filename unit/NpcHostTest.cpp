@@ -131,58 +131,46 @@ TEST_CASE("StartsDead NPCs and deleted refs stay skipped",
                Catch::Matchers::ContainsSubstring("skips deleted references"));
 }
 
-TEST_CASE("A host attempt on an NPC with a high idx records its time",
-          "[NpcHost][espm][1A.2]")
-{
-  auto& partOne = GetNpcHostPartOne();
-  auto& alvor = partOne.worldState.GetFormAt<MpActor>(kAlvor);
-  partOne.worldState.lastMovUpdateByIdx.clear();
-
-  DoConnect(partOne, 0);
-  partOne.CreateActor(0xff000000, alvor.GetPos(), 0,
-                      alvor.GetCellOrWorld().ToFormId(
-                        partOne.worldState.espmFiles));
-  partOne.SetUserActor(0, 0xff000000);
-
-  const auto pos = alvor.GetPos();
-  DoMessage(
-    partOne, 0,
-    nlohmann::json{
-      { "t", MsgType::Host },
-      { "remoteId", 0x100000000 + kAlvor },
-      { "worldOrCell",
-        alvor.GetCellOrWorld().ToFormId(partOne.worldState.espmFiles) },
-      { "pos", { pos.x, pos.y, pos.z } } });
-
-  REQUIRE(partOne.worldState.hosters[kAlvor] == 0xff000000);
-  REQUIRE(partOne.worldState.lastMovUpdateByIdx.size() > alvor.GetIdx());
-
-  partOne.DestroyActor(0xff000000);
-  DoDisconnect(partOne, 0);
-}
-
 namespace {
 constexpr uint32_t kClaimer = 0xff000000;
 constexpr uint32_t kOtherPlayer = 0xff000001;
+constexpr uint32_t kThirdPlayer = 0xff000003;
+constexpr uint32_t kServerNpc = 0xff000002;
 constexpr uint32_t kTamriel = 0x3c;
+const NiPoint3 kRiverwoodSpot = { 22528.f, -45138.f, -81.f };
 
 uint32_t CellOf(PartOne& partOne, MpObjectReference& refr)
 {
   return refr.GetCellOrWorld().ToFormId(partOne.worldState.espmFiles);
 }
 
+MpActor& ConnectPlayer(PartOne& partOne, Networking::UserId userId,
+                       uint32_t formId, NiPoint3 pos, uint32_t cellOrWorld)
+{
+  DoConnect(partOne, userId);
+  partOne.CreateActor(formId, pos, 0, cellOrWorld);
+  partOne.SetUserActor(userId, formId);
+  partOne.serverState.userInfo[userId]->lastMovementAt =
+    std::chrono::steady_clock::now();
+  return partOne.worldState.GetFormAt<MpActor>(formId);
+}
+
+void DisconnectPlayer(PartOne& partOne, Networking::UserId userId,
+                      uint32_t formId)
+{
+  partOne.DestroyActor(formId);
+  DoDisconnect(partOne, userId);
+}
+
 void ConnectClaimer(PartOne& partOne, MpObjectReference& origin,
                     uint32_t cellOrWorld)
 {
-  DoConnect(partOne, 0);
-  partOne.CreateActor(kClaimer, origin.GetPos(), 0, cellOrWorld);
-  partOne.SetUserActor(0, kClaimer);
+  ConnectPlayer(partOne, 0, kClaimer, origin.GetPos(), cellOrWorld);
 }
 
 void DisconnectClaimer(PartOne& partOne)
 {
-  partOne.DestroyActor(kClaimer);
-  DoDisconnect(partOne, 0);
+  DisconnectPlayer(partOne, 0, kClaimer);
 }
 
 nlohmann::json Claim(uint32_t npc, uint32_t cellOrWorld, NiPoint3 pos)
@@ -193,10 +181,45 @@ nlohmann::json Claim(uint32_t npc, uint32_t cellOrWorld, NiPoint3 pos)
                          { "pos", { pos.x, pos.y, pos.z } },
                          { "rot", { 0.f, 0.f, 0.f } } };
 }
+
+size_t CountSent(PartOne& partOne, Networking::UserId userId, MsgType type,
+                 uint64_t target)
+{
+  return std::count_if(
+    partOne.Messages().begin(), partOne.Messages().end(), [&](auto& m) {
+      return m.userId == userId && m.j["t"] == type && m.j["target"] == target;
+    });
 }
 
-TEST_CASE("A location claim enables the NPC and moves it to the claim",
-          "[NpcHost][espm][1A.2]")
+void TickHosters(PartOne& partOne)
+{
+  std::this_thread::sleep_for(std::chrono::milliseconds(260));
+  partOne.Tick();
+}
+
+bool SentHostedByOther(PartOne& partOne, Networking::UserId userId,
+                       uint32_t idx, bool value)
+{
+  return std::any_of(
+    partOne.Messages().begin(), partOne.Messages().end(), [&](auto& m) {
+      return m.userId == userId && m.j["t"] == MsgType::UpdateProperty &&
+        m.j["propName"] == "isHostedByOther" && m.j["idx"] == idx &&
+        m.j["dataDump"] == (value ? "true" : "false");
+    });
+}
+
+void SetPings(PartOne& partOne, std::map<Networking::UserId, int> pings)
+{
+  partOne.SetPingSource([pings](Networking::UserId userId) {
+    auto it = pings.find(userId);
+    return it == pings.end() ? 0 : it->second;
+  });
+}
+}
+
+TEST_CASE("A location claim enables a disabled NPC at the claim, and the "
+          "server picks its hoster",
+          "[NpcHost][espm][1A.2][H1]")
 {
   auto& partOne = GetNpcHostPartOne();
   auto& guard = partOne.worldState.GetFormAt<MpActor>(kInitiallyDisabledGuard);
@@ -211,10 +234,10 @@ TEST_CASE("A location claim enables the NPC and moves it to the claim",
   const NiPoint3 target = alvor.GetPos() + NiPoint3(50.f, 0.f, 0.f);
   DoMessage(partOne, 0, Claim(kInitiallyDisabledGuard, cell, target));
 
-  REQUIRE(partOne.worldState.hosters[kInitiallyDisabledGuard] == kClaimer);
   REQUIRE(!guard.IsDisabled());
   REQUIRE((guard.GetPos() - target).Length() < 1.f);
   REQUIRE(CellOf(partOne, guard) == cell);
+  REQUIRE(partOne.worldState.hosters[kInitiallyDisabledGuard] == kClaimer);
 
   partOne.worldState.hosters[kInitiallyDisabledGuard] = 0;
   guard.UpdateHoster(0);
@@ -222,6 +245,37 @@ TEST_CASE("A location claim enables the NPC and moves it to the claim",
     FormDesc::FromFormId(guardCell, partOne.worldState.espmFiles));
   guard.SetPos(start);
   guard.Disable();
+  guard.SetPropertyValueDump(MpObjectReference::kDisabledInPlay, "false",
+                             false, false);
+  DisconnectClaimer(partOne);
+}
+
+TEST_CASE("A claim on an enabled NPC changes neither its hoster nor its "
+          "position",
+          "[NpcHost][espm][1A.2][H1]")
+{
+  auto& partOne = GetNpcHostPartOne();
+  auto& alvor = partOne.worldState.GetFormAt<MpActor>(kAlvor);
+  const auto cell = CellOf(partOne, alvor);
+  const auto start = alvor.GetPos();
+  partOne.worldState.hosters[kAlvor] = 0;
+  ConnectClaimer(partOne, alvor, cell);
+  partOne.RefreshHoster(alvor);
+  REQUIRE(partOne.worldState.hosters[kAlvor] == kClaimer);
+  ConnectPlayer(partOne, 1, kOtherPlayer, start, cell);
+
+  DoMessage(partOne, 1,
+            Claim(kAlvor, cell, start + NiPoint3(30.f, 0.f, 0.f)));
+  DoMessage(partOne, 1,
+            nlohmann::json{ { "t", MsgType::Host },
+                            { "remoteId", 0x100000000 + kAlvor } });
+
+  REQUIRE(partOne.worldState.hosters[kAlvor] == kClaimer);
+  REQUIRE((alvor.GetPos() - start).Length() < 1.f);
+
+  partOne.worldState.hosters[kAlvor] = 0;
+  alvor.UpdateHoster(0);
+  DisconnectPlayer(partOne, 1, kOtherPlayer);
   DisconnectClaimer(partOne);
 }
 
@@ -230,39 +284,39 @@ TEST_CASE("A location claim is rejected from another cell, from too far, or "
           "[NpcHost][espm][1A.2]")
 {
   auto& partOne = GetNpcHostPartOne();
+  auto& guard = partOne.worldState.GetFormAt<MpActor>(kInitiallyDisabledGuard);
   auto& alvor = partOne.worldState.GetFormAt<MpActor>(kAlvor);
   const auto cell = CellOf(partOne, alvor);
   const auto start = alvor.GetPos();
-  partOne.worldState.hosters[kAlvor] = 0;
-  partOne.worldState.lastMovUpdateByIdx.clear();
+  REQUIRE(guard.IsDisabled());
 
   SECTION("another cell")
   {
     ConnectClaimer(partOne, alvor, kTamriel);
-    DoMessage(partOne, 0, Claim(kAlvor, cell, start));
+    DoMessage(partOne, 0, Claim(kInitiallyDisabledGuard, cell, start));
   }
   SECTION("too far")
   {
     ConnectClaimer(partOne, alvor, cell);
     DoMessage(partOne, 0,
-              Claim(kAlvor, cell, { start.x + 5000.f, start.y, start.z }));
+              Claim(kInitiallyDisabledGuard, cell,
+                    { start.x + 5000.f, start.y, start.z }));
   }
   SECTION("not a cell or a worldspace")
   {
     ConnectClaimer(partOne, alvor, cell);
-    DoMessage(partOne, 0, Claim(kAlvor, kAlvor, start));
+    DoMessage(partOne, 0, Claim(kInitiallyDisabledGuard, kAlvor, start));
   }
   SECTION("no position")
   {
     ConnectClaimer(partOne, alvor, cell);
-    auto claim = Claim(kAlvor, cell, start);
+    auto claim = Claim(kInitiallyDisabledGuard, cell, start);
     claim.erase("pos");
     DoMessage(partOne, 0, claim);
   }
 
-  REQUIRE(partOne.worldState.hosters[kAlvor] == 0);
-  REQUIRE((alvor.GetPos() - start).Length() < 1.f);
-  REQUIRE(CellOf(partOne, alvor) == cell);
+  REQUIRE(guard.IsDisabled());
+  REQUIRE(partOne.worldState.hosters[kInitiallyDisabledGuard] == 0);
 
   DisconnectClaimer(partOne);
 }
@@ -273,32 +327,29 @@ TEST_CASE("Nobody can host the actor of a player", "[NpcHost][espm][1A.2]")
   auto& alvor = partOne.worldState.GetFormAt<MpActor>(kAlvor);
   const auto cell = CellOf(partOne, alvor);
   ConnectClaimer(partOne, alvor, cell);
-  DoConnect(partOne, 1);
-  partOne.CreateActor(kOtherPlayer, alvor.GetPos(), 0, cell);
-  partOne.SetUserActor(1, kOtherPlayer);
+  auto& other = ConnectPlayer(partOne, 1, kOtherPlayer, alvor.GetPos(), cell);
 
   DoMessage(partOne, 0,
             nlohmann::json{ { "t", MsgType::Host },
                             { "remoteId", kOtherPlayer } });
   DoMessage(partOne, 0, Claim(kOtherPlayer, cell, alvor.GetPos()));
+  partOne.RefreshHoster(other);
 
   REQUIRE(partOne.worldState.hosters[kOtherPlayer] == 0);
 
-  partOne.DestroyActor(kOtherPlayer);
-  DoDisconnect(partOne, 1);
+  DisconnectPlayer(partOne, 1, kOtherPlayer);
   DisconnectClaimer(partOne);
 }
 
-TEST_CASE("The hoster releases an NPC, optionally disabled",
-          "[NpcHost][espm][1A.2]")
+TEST_CASE("The hoster reports an NPC disabled, a plain release changes "
+          "nothing",
+          "[NpcHost][espm][1A.2][H1]")
 {
   auto& partOne = GetNpcHostPartOne();
   auto& alvor = partOne.worldState.GetFormAt<MpActor>(kAlvor);
   partOne.worldState.hosters[kAlvor] = 0;
-  partOne.worldState.lastMovUpdateByIdx.clear();
   ConnectClaimer(partOne, alvor, CellOf(partOne, alvor));
-  DoMessage(partOne, 0,
-            Claim(kAlvor, CellOf(partOne, alvor), alvor.GetPos()));
+  partOne.RefreshHoster(alvor);
   REQUIRE(partOne.worldState.hosters[kAlvor] == kClaimer);
 
   const bool disable = GENERATE(false, true);
@@ -308,26 +359,27 @@ TEST_CASE("The hoster releases an NPC, optionally disabled",
                             { "release", true },
                             { "disabled", disable } });
 
-  REQUIRE(partOne.worldState.hosters[kAlvor] == 0);
+  REQUIRE(partOne.worldState.hosters[kAlvor] == (disable ? 0 : kClaimer));
   REQUIRE(alvor.IsDisabled() == disable);
 
   alvor.Enable();
+  alvor.SetPropertyValueDump(MpObjectReference::kDisabledInPlay, "false",
+                             false, false);
+  partOne.worldState.hosters[kAlvor] = 0;
+  alvor.UpdateHoster(0);
   DisconnectClaimer(partOne);
 }
 
-TEST_CASE("Only the hoster can release an NPC", "[NpcHost][espm][1A.2]")
+TEST_CASE("Only the hoster can report an NPC disabled",
+          "[NpcHost][espm][1A.2]")
 {
   auto& partOne = GetNpcHostPartOne();
   auto& alvor = partOne.worldState.GetFormAt<MpActor>(kAlvor);
   const auto cell = CellOf(partOne, alvor);
   partOne.worldState.hosters[kAlvor] = 0;
-  partOne.worldState.lastMovUpdateByIdx.clear();
   ConnectClaimer(partOne, alvor, cell);
-  DoMessage(partOne, 0,
-            Claim(kAlvor, CellOf(partOne, alvor), alvor.GetPos()));
-  DoConnect(partOne, 1);
-  partOne.CreateActor(kOtherPlayer, alvor.GetPos(), 0, cell);
-  partOne.SetUserActor(1, kOtherPlayer);
+  partOne.RefreshHoster(alvor);
+  ConnectPlayer(partOne, 1, kOtherPlayer, alvor.GetPos(), cell);
 
   DoMessage(partOne, 1,
             nlohmann::json{ { "t", MsgType::Host },
@@ -340,8 +392,439 @@ TEST_CASE("Only the hoster can release an NPC", "[NpcHost][espm][1A.2]")
 
   partOne.worldState.hosters[kAlvor] = 0;
   alvor.UpdateHoster(0);
-  partOne.DestroyActor(kOtherPlayer);
-  DoDisconnect(partOne, 1);
+  DisconnectPlayer(partOne, 1, kOtherPlayer);
+  DisconnectClaimer(partOne);
+}
+
+TEST_CASE("The first visitor runs every NPC of a cell, a newcomer takes "
+          "over only with a ping more than 40 ms lower",
+          "[NpcHost][espm][H1]")
+{
+  auto& partOne = GetNpcHostPartOne();
+  auto& alvor = partOne.worldState.GetFormAt<MpActor>(kAlvor);
+  const auto cell = CellOf(partOne, alvor);
+  const auto start = alvor.GetPos();
+  partOne.worldState.hosters[kAlvor] = 0;
+  partOne.CreateActor(kServerNpc, start, 0, cell);
+  auto& npc = partOne.worldState.GetFormAt<MpActor>(kServerNpc);
+  npc.ForceSubscriptionsUpdate();
+  const int newcomerPing = GENERATE(10, 9);
+  SetPings(partOne, { { 0, 50 }, { 1, newcomerPing } });
+
+  partOne.Messages().clear();
+  ConnectClaimer(partOne, alvor, cell);
+  TickHosters(partOne);
+  REQUIRE(partOne.worldState.hosters[kAlvor] == kClaimer);
+  REQUIRE(partOne.worldState.hosters[kServerNpc] == kClaimer);
+  REQUIRE(CountSent(partOne, 0, MsgType::HostStart, 0x100000000 + kAlvor) ==
+          1);
+
+  partOne.Messages().clear();
+  ConnectPlayer(partOne, 1, kOtherPlayer, start, cell);
+  TickHosters(partOne);
+
+  const uint32_t expected = newcomerPing < 10 ? kOtherPlayer : kClaimer;
+  REQUIRE(partOne.worldState.hosters[kAlvor] == expected);
+  REQUIRE(partOne.worldState.hosters[kServerNpc] == expected);
+  REQUIRE(CountSent(partOne, 0, MsgType::HostStop, 0x100000000 + kAlvor) ==
+          (expected == kOtherPlayer ? 1 : 0));
+  REQUIRE(CountSent(partOne, 1, MsgType::HostStart, 0x100000000 + kAlvor) ==
+          (expected == kOtherPlayer ? 1 : 0));
+  if (expected == kOtherPlayer) {
+    REQUIRE(SentHostedByOther(partOne, 0, alvor.GetIdx(), true));
+    REQUIRE(SentHostedByOther(partOne, 1, alvor.GetIdx(), false));
+  }
+
+  partOne.worldState.hosters[kAlvor] = 0;
+  partOne.worldState.hosters[kServerNpc] = 0;
+  alvor.UpdateHoster(0);
+  partOne.DestroyActor(kServerNpc);
+  SetPings(partOne, {});
+  DisconnectPlayer(partOne, 1, kOtherPlayer);
+  DisconnectClaimer(partOne);
+}
+
+TEST_CASE("A ping takeover leaves followers to their owner and waits 10 s "
+          "before the next one",
+          "[NpcHost][espm][H1]")
+{
+  auto& partOne = GetNpcHostPartOne();
+  constexpr uint32_t kFollower = 0xff000004;
+  auto& hosters = partOne.worldState.hosters;
+  SetPings(partOne, { { 0, 50 }, { 1, 9 } });
+  ConnectPlayer(partOne, 0, kClaimer, kRiverwoodSpot, kTamriel);
+  TickHosters(partOne);
+  partOne.CreateActor(kServerNpc, kRiverwoodSpot, 0, kTamriel);
+  partOne.CreateActor(kFollower, kRiverwoodSpot, 0, kTamriel);
+  auto& npc = partOne.worldState.GetFormAt<MpActor>(kServerNpc);
+  auto& follower = partOne.worldState.GetFormAt<MpActor>(kFollower);
+  npc.ForceSubscriptionsUpdate();
+  follower.ForceSubscriptionsUpdate();
+  partOne.worldState.hostOwners[kFollower] = kClaimer;
+  partOne.RefreshHoster(npc);
+  partOne.RefreshHoster(follower);
+  REQUIRE(hosters[kServerNpc] == kClaimer);
+  REQUIRE(hosters[kFollower] == kClaimer);
+
+  auto& other =
+    ConnectPlayer(partOne, 1, kOtherPlayer, kRiverwoodSpot, kTamriel);
+  partOne.Messages().clear();
+  TickHosters(partOne);
+  REQUIRE(hosters[kServerNpc] == kOtherPlayer);
+  REQUIRE(hosters[kFollower] == kClaimer);
+  REQUIRE(CountSent(partOne, 1, MsgType::HostStart, kFollower) == 0);
+
+  other.SetPos(kRiverwoodSpot + NiPoint3(5 * 4096.f, 0.f, 0.f));
+  TickHosters(partOne);
+  REQUIRE(hosters[kServerNpc] == kClaimer);
+  other.SetPos(kRiverwoodSpot);
+  partOne.serverState.userInfo[1]->lastMovementAt =
+    std::chrono::steady_clock::now();
+  TickHosters(partOne);
+  REQUIRE(hosters[kServerNpc] == kClaimer);
+
+  partOne.worldState.hostOwners.erase(kFollower);
+  hosters.erase(kServerNpc);
+  hosters.erase(kFollower);
+  partOne.DestroyActor(kServerNpc);
+  partOne.DestroyActor(kFollower);
+  SetPings(partOne, {});
+  DisconnectPlayer(partOne, 1, kOtherPlayer);
+  DisconnectClaimer(partOne);
+}
+
+TEST_CASE("A report never enables an actor that is not an ESP NPC",
+          "[NpcHost][espm][H1]")
+{
+  auto& partOne = GetNpcHostPartOne();
+  ConnectPlayer(partOne, 0, kClaimer, kRiverwoodSpot, kTamriel);
+  partOne.CreateActor(kServerNpc, kRiverwoodSpot, 0, kTamriel);
+  auto& npc = partOne.worldState.GetFormAt<MpActor>(kServerNpc);
+  npc.Disable();
+
+  DoMessage(partOne, 0,
+            nlohmann::json{ { "t", MsgType::Host },
+                            { "remoteId", kServerNpc },
+                            { "worldOrCell", kTamriel },
+                            { "pos",
+                              { kRiverwoodSpot.x, kRiverwoodSpot.y,
+                                kRiverwoodSpot.z } },
+                            { "rot", { 0.f, 0.f, 0.f } } });
+
+  REQUIRE(npc.IsDisabled());
+  REQUIRE(partOne.worldState.hosters[kServerNpc] == 0);
+
+  partOne.DestroyActor(kServerNpc);
+  DisconnectClaimer(partOne);
+}
+
+TEST_CASE("When the authority leaves, disconnects or goes silent, the "
+          "visitor with the lowest ping runs its NPCs at once",
+          "[NpcHost][espm][H1][1A.3][P2]")
+{
+  auto& partOne = GetNpcHostPartOne();
+  auto& alvor = partOne.worldState.GetFormAt<MpActor>(kAlvor);
+  const auto cell = CellOf(partOne, alvor);
+  const auto start = alvor.GetPos();
+  partOne.worldState.hosters[kAlvor] = 0;
+  SetPings(partOne, { { 0, 10 }, { 1, 50 }, { 2, 30 } });
+  auto& claimer = ConnectPlayer(partOne, 0, kClaimer, start, cell);
+  partOne.RefreshHoster(alvor);
+  REQUIRE(partOne.worldState.hosters[kAlvor] == kClaimer);
+  ConnectPlayer(partOne, 1, kOtherPlayer, start, cell);
+  ConnectPlayer(partOne, 2, kThirdPlayer, start, cell);
+  partOne.RefreshHoster(alvor);
+  REQUIRE(partOne.worldState.hosters[kAlvor] == kClaimer);
+  partOne.Messages().clear();
+
+  const auto cause = GENERATE(as<std::string>{}, "leaves", "disconnects",
+                              "goes silent");
+  if (cause == "leaves") {
+    claimer.SetCellOrWorld(
+      FormDesc::FromFormId(kTamriel, partOne.worldState.espmFiles));
+    claimer.SetPos({ 0.f, 0.f, 0.f });
+  } else if (cause == "disconnects") {
+    DoDisconnect(partOne, 0);
+  } else {
+    partOne.serverState.userInfo[0]->lastMovementAt =
+      std::chrono::steady_clock::now() - std::chrono::milliseconds(3200);
+    TickHosters(partOne);
+  }
+
+  REQUIRE(partOne.worldState.hosters[kAlvor] == kThirdPlayer);
+  REQUIRE(CountSent(partOne, 2, MsgType::HostStart, 0x100000000 + kAlvor) ==
+          1);
+  REQUIRE(SentHostedByOther(partOne, 1, alvor.GetIdx(), true));
+  REQUIRE(SentHostedByOther(partOne, 2, alvor.GetIdx(), false));
+  if (cause != "disconnects") {
+    REQUIRE(CountSent(partOne, 0, MsgType::HostStop, 0x100000000 + kAlvor) ==
+            1);
+  }
+
+  partOne.worldState.hosters[kAlvor] = 0;
+  alvor.UpdateHoster(0);
+  SetPings(partOne, {});
+  DisconnectPlayer(partOne, 2, kThirdPlayer);
+  DisconnectPlayer(partOne, 1, kOtherPlayer);
+  if (cause == "disconnects") {
+    partOne.DestroyActor(kClaimer);
+  } else {
+    DisconnectClaimer(partOne);
+  }
+}
+
+TEST_CASE("An NPC that walks into a cell its hoster does not see goes to "
+          "that cell's authority",
+          "[NpcHost][espm][H1]")
+{
+  auto& partOne = GetNpcHostPartOne();
+  const NiPoint3 away = kRiverwoodSpot + NiPoint3(3 * 4096.f, 0.f, 0.f);
+  ConnectPlayer(partOne, 0, kClaimer, kRiverwoodSpot, kTamriel);
+  ConnectPlayer(partOne, 1, kOtherPlayer, away, kTamriel);
+  partOne.CreateActor(kServerNpc, kRiverwoodSpot, 0, kTamriel);
+  auto& npc = partOne.worldState.GetFormAt<MpActor>(kServerNpc);
+  npc.ForceSubscriptionsUpdate();
+  partOne.RefreshHoster(npc);
+  REQUIRE(partOne.worldState.hosters[kServerNpc] == kClaimer);
+  partOne.Messages().clear();
+
+  DoMessage(partOne, 0,
+            nlohmann::json{ { "t", MsgType::UpdateMovement },
+                            { "idx", npc.GetIdx() },
+                            { "data",
+                              { { "worldOrCell", kTamriel },
+                                { "pos",
+                                  { away.x - 4096.f, away.y, away.z } },
+                                { "rot", { 0.f, 0.f, 0.f } },
+                                { "runMode", "Standing" },
+                                { "direction", 0.f },
+                                { "healthPercentage", 1.f },
+                                { "speed", 0.f },
+                                { "isInJumpState", false },
+                                { "isSneaking", false },
+                                { "isBlocking", false },
+                                { "isDead", false },
+                                { "isWeapDrawn", false } } } });
+  TickHosters(partOne);
+  REQUIRE(partOne.worldState.hosters[kServerNpc] == kOtherPlayer);
+  REQUIRE(CountSent(partOne, 0, MsgType::HostStop, kServerNpc) == 1);
+  REQUIRE(CountSent(partOne, 1, MsgType::HostStart, kServerNpc) == 1);
+  REQUIRE(std::any_of(
+    partOne.Messages().begin(), partOne.Messages().end(), [&](auto& m) {
+      return m.userId == 1 && m.j["t"] == MsgType::UpdateProperty &&
+        m.j["propName"] == "isHostedByOther" && m.j["idx"] == npc.GetIdx() &&
+        m.j["dataDump"] == "false";
+    }));
+
+  partOne.worldState.hosters[kServerNpc] = 0;
+  partOne.DestroyActor(kServerNpc);
+  DisconnectPlayer(partOne, 1, kOtherPlayer);
+  DisconnectClaimer(partOne);
+}
+
+TEST_CASE("A hoster silent for 2.5 s keeps its NPCs", "[NpcHost][espm][H1]")
+{
+  auto& partOne = GetNpcHostPartOne();
+  ConnectPlayer(partOne, 0, kClaimer, kRiverwoodSpot, kTamriel);
+  ConnectPlayer(partOne, 1, kOtherPlayer, kRiverwoodSpot, kTamriel);
+  partOne.CreateActor(kServerNpc, kRiverwoodSpot, 0, kTamriel);
+  auto& npc = partOne.worldState.GetFormAt<MpActor>(kServerNpc);
+  npc.ForceSubscriptionsUpdate();
+  partOne.RefreshHoster(npc);
+  const uint32_t hoster = partOne.worldState.hosters[kServerNpc];
+  REQUIRE(hoster != 0);
+
+  partOne.serverState.userInfo[hoster == kClaimer ? 0 : 1]->lastMovementAt =
+    std::chrono::steady_clock::now() - std::chrono::milliseconds(2500);
+  TickHosters(partOne);
+  REQUIRE(partOne.worldState.hosters[kServerNpc] == hoster);
+
+  partOne.worldState.hosters[kServerNpc] = 0;
+  partOne.DestroyActor(kServerNpc);
+  DisconnectPlayer(partOne, 1, kOtherPlayer);
+  DisconnectClaimer(partOne);
+}
+
+TEST_CASE("A follower stays with her owner through a door, bots never run "
+          "NPCs",
+          "[NpcHost][espm][H1][F6]")
+{
+  auto& partOne = GetNpcHostPartOne();
+  auto& alvor = partOne.worldState.GetFormAt<MpActor>(kAlvor);
+  const auto cell = CellOf(partOne, alvor);
+  const auto start = alvor.GetPos();
+  partOne.worldState.hosters[kAlvor] = 0;
+  ConnectClaimer(partOne, alvor, cell);
+  partOne.RefreshHoster(alvor);
+  REQUIRE(partOne.worldState.hosters[kAlvor] == kClaimer);
+  auto& other = ConnectPlayer(partOne, 1, kOtherPlayer, start, cell);
+
+  partOne.Messages().clear();
+  partOne.worldState.hostOwners[kAlvor] = kOtherPlayer;
+  partOne.RefreshHoster(alvor);
+  REQUIRE(partOne.worldState.hosters[kAlvor] == kOtherPlayer);
+  REQUIRE(CountSent(partOne, 0, MsgType::HostStop, 0x100000000 + kAlvor) == 1);
+  REQUIRE(CountSent(partOne, 1, MsgType::HostStart, 0x100000000 + kAlvor) ==
+          1);
+  REQUIRE(SentHostedByOther(partOne, 0, alvor.GetIdx(), true));
+  REQUIRE(SentHostedByOther(partOne, 1, alvor.GetIdx(), false));
+
+  other.SetCellOrWorld(
+    FormDesc::FromFormId(kTamriel, partOne.worldState.espmFiles));
+  other.SetPos(kRiverwoodSpot);
+  REQUIRE(partOne.worldState.hosters[kAlvor] == kOtherPlayer);
+  auto movement = jMovement;
+  movement["idx"] = alvor.GetIdx();
+  movement["data"]["worldOrCell"] = kTamriel;
+  movement["data"]["pos"] = { kRiverwoodSpot.x + 100.f, kRiverwoodSpot.y,
+                              kRiverwoodSpot.z };
+  DoMessage(partOne, 1, movement);
+  REQUIRE(CellOf(partOne, alvor) == kTamriel);
+  REQUIRE(partOne.worldState.hosters[kAlvor] == kOtherPlayer);
+
+  partOne.worldState.hostOwners.erase(kAlvor);
+  SetPings(partOne, { { 1, -1 } });
+  partOne.RefreshHoster(alvor);
+  REQUIRE(partOne.worldState.hosters[kAlvor] == 0);
+
+  SetPings(partOne, {});
+  alvor.SetCellOrWorld(FormDesc::FromFormId(cell, partOne.worldState.espmFiles));
+  alvor.SetPos(start);
+  partOne.worldState.hosters[kAlvor] = 0;
+  alvor.UpdateHoster(0);
+  DisconnectPlayer(partOne, 1, kOtherPlayer);
+  DisconnectClaimer(partOne);
+}
+
+TEST_CASE("An NPC keeps its hoster in a cell the hoster still sees, and goes "
+          "to the cell's authority beyond",
+          "[NpcHost][espm][H1]")
+{
+  auto& partOne = GetNpcHostPartOne();
+  const float squareSix = 26624.f;
+  const float squareSeven = 30720.f;
+  ConnectPlayer(partOne, 1, kOtherPlayer,
+                { squareSeven, kRiverwoodSpot.y, kRiverwoodSpot.z }, kTamriel);
+  TickHosters(partOne);
+  ConnectPlayer(partOne, 0, kClaimer, kRiverwoodSpot, kTamriel);
+  TickHosters(partOne);
+  partOne.CreateActor(kServerNpc, kRiverwoodSpot, 0, kTamriel);
+  auto& npc = partOne.worldState.GetFormAt<MpActor>(kServerNpc);
+  npc.ForceSubscriptionsUpdate();
+  partOne.RefreshHoster(npc);
+  REQUIRE(partOne.worldState.hosters[kServerNpc] == kClaimer);
+  auto moveTo = [&](float x) {
+    auto movement = jMovement;
+    movement["idx"] = npc.GetIdx();
+    movement["data"]["worldOrCell"] = kTamriel;
+    movement["data"]["pos"] = { x, kRiverwoodSpot.y, kRiverwoodSpot.z };
+    DoMessage(partOne, 0, movement);
+    TickHosters(partOne);
+  };
+
+  moveTo(squareSix);
+  REQUIRE(partOne.worldState.hosters[kServerNpc] == kClaimer);
+  moveTo(squareSeven);
+  REQUIRE(partOne.worldState.hosters[kServerNpc] == kOtherPlayer);
+
+  partOne.worldState.hosters[kServerNpc] = 0;
+  partOne.DestroyActor(kServerNpc);
+  DisconnectPlayer(partOne, 1, kOtherPlayer);
+  DisconnectClaimer(partOne);
+}
+
+TEST_CASE("A report moves an NPC that nobody sees or runs, and is ignored "
+          "while a player sees it",
+          "[NpcHost][espm][H1]")
+{
+  auto& partOne = GetNpcHostPartOne();
+  auto& alvor = partOne.worldState.GetFormAt<MpActor>(kAlvor);
+  const auto cell = CellOf(partOne, alvor);
+  const auto start = alvor.GetPos();
+  partOne.worldState.hosters[kAlvor] = 0;
+  ConnectPlayer(partOne, 0, kClaimer, kRiverwoodSpot, kTamriel);
+  const NiPoint3 reported = kRiverwoodSpot + NiPoint3(100.f, 0.f, 0.f);
+
+  SECTION("nobody sees him")
+  {
+    DoMessage(partOne, 0, Claim(kAlvor, kTamriel, reported));
+    REQUIRE(CellOf(partOne, alvor) == kTamriel);
+    REQUIRE((alvor.GetPos() - reported).Length() < 1.f);
+    REQUIRE(partOne.worldState.hosters[kAlvor] == kClaimer);
+  }
+  SECTION("another player sees him")
+  {
+    ConnectPlayer(partOne, 1, kOtherPlayer, start, cell);
+    DoMessage(partOne, 0, Claim(kAlvor, kTamriel, reported));
+    REQUIRE(CellOf(partOne, alvor) == cell);
+    REQUIRE((alvor.GetPos() - start).Length() < 1.f);
+    DisconnectPlayer(partOne, 1, kOtherPlayer);
+  }
+
+  partOne.worldState.hosters[kAlvor] = 0;
+  alvor.UpdateHoster(0);
+  alvor.SetCellOrWorld(FormDesc::FromFormId(cell, partOne.worldState.espmFiles));
+  alvor.SetPos(start);
+  DisconnectClaimer(partOne);
+}
+
+TEST_CASE("The owner's report moves his follower to him even while another "
+          "player runs and sees her",
+          "[NpcHost][espm][H1][F6]")
+{
+  auto& partOne = GetNpcHostPartOne();
+  auto& alvor = partOne.worldState.GetFormAt<MpActor>(kAlvor);
+  const auto cell = CellOf(partOne, alvor);
+  const auto start = alvor.GetPos();
+  partOne.worldState.hosters[kAlvor] = 0;
+  ConnectPlayer(partOne, 1, kOtherPlayer, start, cell);
+  partOne.RefreshHoster(alvor);
+  REQUIRE(partOne.worldState.hosters[kAlvor] == kOtherPlayer);
+  ConnectPlayer(partOne, 0, kClaimer, kRiverwoodSpot, kTamriel);
+  const NiPoint3 reported = kRiverwoodSpot + NiPoint3(100.f, 0.f, 0.f);
+
+  DoMessage(partOne, 0, Claim(kAlvor, kTamriel, reported));
+  REQUIRE(CellOf(partOne, alvor) == cell);
+
+  partOne.worldState.hostOwners[kAlvor] = kClaimer;
+  DoMessage(partOne, 0, Claim(kAlvor, kTamriel, reported));
+  REQUIRE(CellOf(partOne, alvor) == kTamriel);
+  REQUIRE((alvor.GetPos() - reported).Length() < 1.f);
+  REQUIRE(partOne.worldState.hosters[kAlvor] == kClaimer);
+
+  partOne.worldState.hostOwners.erase(kAlvor);
+  partOne.worldState.hosters[kAlvor] = 0;
+  alvor.UpdateHoster(0);
+  alvor.SetCellOrWorld(FormDesc::FromFormId(cell, partOne.worldState.espmFiles));
+  alvor.SetPos(start);
+  DisconnectPlayer(partOne, 1, kOtherPlayer);
+  DisconnectClaimer(partOne);
+}
+
+TEST_CASE("An enable report is refused for an NPC disabled during play",
+          "[NpcHost][espm][H1]")
+{
+  auto& partOne = GetNpcHostPartOne();
+  auto& alvor = partOne.worldState.GetFormAt<MpActor>(kAlvor);
+  const auto cell = CellOf(partOne, alvor);
+  partOne.worldState.hosters[kAlvor] = 0;
+  ConnectClaimer(partOne, alvor, cell);
+  partOne.RefreshHoster(alvor);
+  DoMessage(partOne, 0,
+            nlohmann::json{ { "t", MsgType::Host },
+                            { "remoteId", 0x100000000 + kAlvor },
+                            { "release", true },
+                            { "disabled", true } });
+  REQUIRE(alvor.IsDisabled());
+
+  DoMessage(partOne, 0, Claim(kAlvor, cell, alvor.GetPos()));
+
+  REQUIRE(alvor.IsDisabled());
+  REQUIRE(partOne.worldState.hosters[kAlvor] == 0);
+
+  alvor.Enable();
+  alvor.SetPropertyValueDump(MpObjectReference::kDisabledInPlay, "false",
+                             false, false);
   DisconnectClaimer(partOne);
 }
 
@@ -351,10 +834,8 @@ TEST_CASE("A hoster that leaves the grid of the NPC loses the host",
   auto& partOne = GetNpcHostPartOne();
   auto& alvor = partOne.worldState.GetFormAt<MpActor>(kAlvor);
   partOne.worldState.hosters[kAlvor] = 0;
-  partOne.worldState.lastMovUpdateByIdx.clear();
   ConnectClaimer(partOne, alvor, CellOf(partOne, alvor));
-  DoMessage(partOne, 0,
-            Claim(kAlvor, CellOf(partOne, alvor), alvor.GetPos()));
+  partOne.RefreshHoster(alvor);
   REQUIRE(partOne.worldState.hosters[kAlvor] == kClaimer);
   partOne.Messages().clear();
 
@@ -364,11 +845,8 @@ TEST_CASE("A hoster that leaves the grid of the NPC loses the host",
   claimer.SetPos({ 0.f, 0.f, 0.f });
 
   REQUIRE(partOne.worldState.hosters[kAlvor] == 0);
-  REQUIRE(std::any_of(
-    partOne.Messages().begin(), partOne.Messages().end(), [](auto& m) {
-      return m.userId == 0 && m.j["t"] == MsgType::HostStop &&
-        m.j["target"] == 0x100000000 + kAlvor;
-    }));
+  REQUIRE(CountSent(partOne, 0, MsgType::HostStop, 0x100000000 + kAlvor) ==
+          1);
 
   DisconnectClaimer(partOne);
 }
@@ -378,10 +856,8 @@ TEST_CASE("A hoster that disconnects loses the host", "[NpcHost][espm][1A.3]")
   auto& partOne = GetNpcHostPartOne();
   auto& alvor = partOne.worldState.GetFormAt<MpActor>(kAlvor);
   partOne.worldState.hosters[kAlvor] = 0;
-  partOne.worldState.lastMovUpdateByIdx.clear();
   ConnectClaimer(partOne, alvor, CellOf(partOne, alvor));
-  DoMessage(partOne, 0,
-            Claim(kAlvor, CellOf(partOne, alvor), alvor.GetPos()));
+  partOne.RefreshHoster(alvor);
   REQUIRE(partOne.worldState.hosters[kAlvor] == kClaimer);
 
   DoDisconnect(partOne, 0);
@@ -391,56 +867,6 @@ TEST_CASE("A hoster that disconnects loses the host", "[NpcHost][espm][1A.3]")
   partOne.DestroyActor(kClaimer);
 }
 
-TEST_CASE("A location claim cannot take an NPC from a hoster that moved it "
-          "in the last 2 s",
-          "[NpcHost][espm][1A.2]")
-{
-  auto& partOne = GetNpcHostPartOne();
-  auto& alvor = partOne.worldState.GetFormAt<MpActor>(kAlvor);
-  const auto cell = CellOf(partOne, alvor);
-  const auto start = alvor.GetPos();
-  partOne.worldState.hosters[kAlvor] = 0;
-  partOne.worldState.lastMovUpdateByIdx.clear();
-  ConnectClaimer(partOne, alvor, cell);
-  DoConnect(partOne, 1);
-  partOne.CreateActor(kOtherPlayer, start, 0, cell);
-  partOne.SetUserActor(1, kOtherPlayer);
-
-  DoMessage(partOne, 0, Claim(kAlvor, cell, start));
-  REQUIRE(partOne.worldState.hosters[kAlvor] == kClaimer);
-  DoMessage(partOne, 1,
-            Claim(kAlvor, cell, start + NiPoint3(30.f, 0.f, 0.f)));
-
-  REQUIRE(partOne.worldState.hosters[kAlvor] == kClaimer);
-  REQUIRE((alvor.GetPos() - start).Length() < 1.f);
-
-  partOne.worldState.hosters[kAlvor] = 0;
-  alvor.UpdateHoster(0);
-  partOne.DestroyActor(kOtherPlayer);
-  DoDisconnect(partOne, 1);
-  DisconnectClaimer(partOne);
-}
-
-TEST_CASE("A location claim on an object that is not an NPC is rejected",
-          "[NpcHost][espm][1A.2]")
-{
-  constexpr uint32_t kBleakFallsGate = 0x3b9f1;
-  auto& partOne = GetNpcHostPartOne();
-  auto& alvor = partOne.worldState.GetFormAt<MpActor>(kAlvor);
-  auto& gate = partOne.worldState.GetFormAt<MpObjectReference>(kBleakFallsGate);
-  const auto gateCell = CellOf(partOne, gate);
-  const auto cell = CellOf(partOne, alvor);
-  partOne.worldState.hosters[kBleakFallsGate] = 0;
-  ConnectClaimer(partOne, alvor, cell);
-
-  DoMessage(partOne, 0, Claim(kBleakFallsGate, cell, alvor.GetPos()));
-
-  REQUIRE(partOne.worldState.hosters[kBleakFallsGate] == 0);
-  REQUIRE(CellOf(partOne, gate) == gateCell);
-
-  DisconnectClaimer(partOne);
-}
-
 TEST_CASE("A player who is not the hoster leaves, and the hoster stays",
           "[NpcHost][espm][1A.3]")
 {
@@ -448,15 +874,10 @@ TEST_CASE("A player who is not the hoster leaves, and the hoster stays",
   auto& alvor = partOne.worldState.GetFormAt<MpActor>(kAlvor);
   const auto cell = CellOf(partOne, alvor);
   partOne.worldState.hosters[kAlvor] = 0;
-  partOne.worldState.lastMovUpdateByIdx.clear();
   ConnectClaimer(partOne, alvor, cell);
-  DoMessage(partOne, 0,
-            Claim(kAlvor, CellOf(partOne, alvor), alvor.GetPos()));
-  DoConnect(partOne, 1);
-  partOne.CreateActor(kOtherPlayer, alvor.GetPos(), 0, cell);
-  partOne.SetUserActor(1, kOtherPlayer);
+  partOne.RefreshHoster(alvor);
+  auto& other = ConnectPlayer(partOne, 1, kOtherPlayer, alvor.GetPos(), cell);
 
-  auto& other = partOne.worldState.GetFormAt<MpActor>(kOtherPlayer);
   other.SetCellOrWorld(
     FormDesc::FromFormId(kTamriel, partOne.worldState.espmFiles));
   other.SetPos({ 0.f, 0.f, 0.f });
@@ -474,10 +895,8 @@ namespace {
 void HostAlvor(PartOne& partOne, MpActor& alvor)
 {
   partOne.worldState.hosters[kAlvor] = 0;
-  partOne.worldState.lastMovUpdateByIdx.clear();
   ConnectClaimer(partOne, alvor, CellOf(partOne, alvor));
-  DoMessage(partOne, 0,
-            Claim(kAlvor, CellOf(partOne, alvor), alvor.GetPos()));
+  partOne.RefreshHoster(alvor);
   REQUIRE(partOne.worldState.hosters[kAlvor] == kClaimer);
 }
 
@@ -506,37 +925,31 @@ nlohmann::json Movement(uint32_t idx, uint32_t cell, NiPoint3 pos,
 
 TEST_CASE("An NPC that moves up to 16 cells from its hoster stays hosted and "
           "seen by players, a hoster that moves 2 cells away loses it",
-          "[NpcHost][espm][F5]")
+          "[NpcHost][espm][F5][H1]")
 {
   auto& partOne = GetNpcHostPartOne();
   auto& alvor = partOne.worldState.GetFormAt<MpActor>(kAlvor);
   const auto cell = CellOf(partOne, alvor);
   const auto start = alvor.GetPos();
-  const NiPoint3 spot = { 22528.f, -45138.f, -81.f };
+  const NiPoint3 spot = kRiverwoodSpot;
   alvor.SetCellOrWorld(
     FormDesc::FromFormId(kTamriel, partOne.worldState.espmFiles));
   alvor.SetPos(spot);
   auto hostStops = [&] {
-    return std::count_if(
-      partOne.Messages().begin(), partOne.Messages().end(), [](auto& m) {
-        return m.userId == 0 && m.j["t"] == MsgType::HostStop &&
-          m.j["target"] == 0x100000000 + kAlvor;
-      });
+    return CountSent(partOne, 0, MsgType::HostStop, 0x100000000 + kAlvor);
   };
 
   HostAlvor(partOne, alvor);
-  DoConnect(partOne, 1);
-  partOne.CreateActor(kOtherPlayer, spot, 0, kTamriel);
-  partOne.SetUserActor(1, kOtherPlayer);
-  auto& other = partOne.worldState.GetFormAt<MpActor>(kOtherPlayer);
+  auto& other = ConnectPlayer(partOne, 1, kOtherPlayer, spot, kTamriel);
   partOne.Messages().clear();
   DoMessage(partOne, 0,
             Movement(alvor.GetIdx(), kTamriel,
                      { spot.x + 16 * 4096.f, spot.y, spot.z }));
   REQUIRE(partOne.worldState.hosters[kAlvor] == kClaimer);
   REQUIRE(alvor.GetListeners().count(&other) == 1);
-  partOne.DestroyActor(kOtherPlayer);
-  DoDisconnect(partOne, 1);
+  TickHosters(partOne);
+  REQUIRE(partOne.worldState.hosters[kAlvor] == kClaimer);
+  DisconnectPlayer(partOne, 1, kOtherPlayer);
   REQUIRE(hostStops() == 0);
   DoMessage(partOne, 0,
             Movement(alvor.GetIdx(), kTamriel,
@@ -581,28 +994,6 @@ TEST_CASE("A hoster's movement moves an NPC to another cell and far away",
 
   REQUIRE(CellOf(partOne, alvor) == kTamriel);
   REQUIRE((alvor.GetPos() - target).Length() < 1.f);
-
-  ReleaseAlvor(partOne, alvor, cell, start);
-}
-
-TEST_CASE("A hoster that stops sending movement loses the host",
-          "[NpcHost][espm][P2]")
-{
-  auto& partOne = GetNpcHostPartOne();
-  auto& alvor = partOne.worldState.GetFormAt<MpActor>(kAlvor);
-  const auto cell = CellOf(partOne, alvor);
-  const auto start = alvor.GetPos();
-  HostAlvor(partOne, alvor);
-
-  partOne.Tick();
-  REQUIRE(partOne.worldState.hosters[kAlvor] == kClaimer);
-
-  partOne.worldState.lastMovUpdateByIdx[alvor.GetIdx()] =
-    std::chrono::system_clock::now() - std::chrono::seconds(10);
-  std::this_thread::sleep_for(std::chrono::milliseconds(300));
-  partOne.Tick();
-  REQUIRE(partOne.worldState.hosters[kAlvor] == 0);
-  REQUIRE((alvor.GetPos() - start).Length() < 1.f);
 
   ReleaseAlvor(partOne, alvor, cell, start);
 }
@@ -707,7 +1098,6 @@ TEST_CASE("A hoster cannot kill an essential ESP NPC or move an NPC to a "
   REQUIRE(CellOf(partOne, alvor) == cell);
 
   partOne.worldState.hosters[kHadvar] = kClaimer;
-  partOne.worldState.lastMovUpdateByIdx.clear();
   DoMessage(partOne, 0,
             Movement(hadvar.GetIdx(), CellOf(partOne, hadvar), hadvar.GetPos(),
                      0.f, true));
@@ -999,41 +1389,27 @@ TEST_CASE("A hoster's NPC movement reaches the other players, not the hoster",
   ReleaseAlvor(partOne, alvor, cell, start);
 }
 
-TEST_CASE("A claim without a location is rejected for an ESP NPC and from a "
-          "player who does not see the NPC",
+TEST_CASE("A claim without a location never changes a hoster",
           "[NpcHost][espm][P4]")
 {
-  constexpr uint32_t kServerNpc = 0xff000002;
   auto& partOne = GetNpcHostPartOne();
   auto& alvor = partOne.worldState.GetFormAt<MpActor>(kAlvor);
   const auto cell = CellOf(partOne, alvor);
-  const auto start = alvor.GetPos();
   partOne.worldState.hosters[kAlvor] = 0;
-  partOne.worldState.lastMovUpdateByIdx.clear();
   ConnectClaimer(partOne, alvor, cell);
-  partOne.CreateActor(kServerNpc, start, 0, cell);
+  partOne.CreateActor(kServerNpc, alvor.GetPos(), 0, cell);
   partOne.worldState.GetFormAt<MpActor>(kServerNpc)
     .ForceSubscriptionsUpdate();
   partOne.worldState.hosters[kServerNpc] = 0;
-  auto& claimer = partOne.worldState.GetFormAt<MpActor>(kClaimer);
   const auto claim = [](uint64_t remoteId) {
     return nlohmann::json{ { "t", MsgType::Host }, { "remoteId", remoteId } };
   };
 
   DoMessage(partOne, 0, claim(0x100000000 + kAlvor));
+  DoMessage(partOne, 0, claim(kServerNpc));
+
   REQUIRE(partOne.worldState.hosters[kAlvor] == 0);
-
-  claimer.SetCellOrWorld(
-    FormDesc::FromFormId(kTamriel, partOne.worldState.espmFiles));
-  claimer.SetPos({ 0.f, 0.f, 0.f });
-  DoMessage(partOne, 0, claim(kServerNpc));
   REQUIRE(partOne.worldState.hosters[kServerNpc] == 0);
-
-  claimer.SetCellOrWorld(
-    FormDesc::FromFormId(cell, partOne.worldState.espmFiles));
-  claimer.SetPos(start);
-  DoMessage(partOne, 0, claim(kServerNpc));
-  REQUIRE(partOne.worldState.hosters[kServerNpc] == kClaimer);
 
   partOne.DestroyActor(kServerNpc);
   DisconnectClaimer(partOne);

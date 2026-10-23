@@ -10,6 +10,7 @@ import { ClientListener, CombinedController, Sp } from "./clientListener";
 import { getViewFromStorage, localIdToRemoteId, remoteIdToLocalId } from "../../view/worldViewMisc";
 import { isRelayedSpeak, isTalkTarget, markRelayedSpeak, nextTalk, setTalkTarget } from "../../view/talkEvents";
 import { WorldCleanerService } from "./worldCleanerService";
+import { RemoteServer } from "./remoteServer";
 
 const STOP = -1;
 const MQ_QUICKSTART_GLOBAL = 0x4679e;
@@ -98,19 +99,6 @@ export class CoopService extends ClientListener {
     return this.reporting;
   }
 
-  yieldsHost(actor: Actor): boolean {
-    const party = this.partyState?.party;
-    const owner = party?.members.find((m) => m.followers?.includes(actor.getFormID()))?.actor;
-    if (owner !== undefined) {
-      return owner !== this.partyState?.you;
-    }
-    if (!party || party.leader === this.partyState?.you || !this.isQuestActor(actor)) {
-      return false;
-    }
-    const leader = ObjectReference.from(Game.getFormEx(getViewFromStorage()?.getLocalRefrId(party.leader) ?? 0));
-    return !!leader && ObjectReferenceEx.getWorldOrCell(leader) === ObjectReferenceEx.getWorldOrCell(actor) && leader.getDistance(actor) <= 4096;
-  }
-
   private track(questId: number, stage: number) {
     if (stage === STOP) {
       this.trackedQuests.delete(questId);
@@ -168,6 +156,7 @@ export class CoopService extends ClientListener {
     const loadCount = this.loadCount;
     for (const { entries, replay, followers, questItems } of batches) {
       const before = replay ? this.getLocation(Game.getPlayer()!) : undefined;
+      const teleports = this.controller.lookupListener(RemoteServer).getPlayerTeleports();
       if (replay) {
         this.reporting = false;
       }
@@ -186,7 +175,9 @@ export class CoopService extends ClientListener {
           await this.relinkQuestItems(questItems);
           await Utility.wait(REPLAY_SETTLE_SECONDS);
           if (loadCount === this.loadCount) {
-            this.restoreLocation(Game.getPlayer()!, before);
+            if (teleports === this.controller.lookupListener(RemoteServer).getPlayerTeleports()) {
+              this.restoreLocation(Game.getPlayer()!, before);
+            }
             this.applyFollowers(followers);
           }
         }

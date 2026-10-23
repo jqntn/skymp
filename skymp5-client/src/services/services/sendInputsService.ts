@@ -3,16 +3,17 @@ import { SinglePlayerService } from "./singlePlayerService";
 import { FormModel, WorldModel } from "../../view/model";
 import { MsgType } from "../../messages";
 import { getMovement } from "../../sync/movementGet";
+import { moveActorTo } from "../../sync/movementApply";
+import { Transform } from "../../sync/movement";
 
 // TODO: refactor this out
 import * as worldViewMisc from "../../view/worldViewMisc";
 
-import { Animation, getAnimationSource } from "../../sync/animation";
+import { Animation, getAnimationSource, relayedCombatTargets, relayedSeats } from "../../sync/animation";
 import { Actor, EquipEvent, FormType, SpeakSoundEvent } from "skyrimPlatform";
 import { getAppearance } from "../../sync/appearance";
 import { ActorValues, getActorValues } from "../../sync/actorvalues";
 import { getEquipment } from "../../sync/equipment";
-import { nextHostAttempt, teleportingHosts, tryHost } from "../../view/hostAttempts";
 import { isRelayedSpeak, isTalkTarget } from "../../view/talkEvents";
 import { ObjectReferenceEx } from "../../extensions/objectReferenceEx";
 import { CoopService } from "./coopService";
@@ -32,6 +33,7 @@ const espActorIdOffset = 0x100000000;
 const idleHostedMovementRateMs = 500;
 const idleHostedMovementAfterMs = 3000;
 const hostedSitResendMs = 3000;
+const serverPositionToleranceUnits = 512;
 
 // TODO: split this service into EquipmentService, MovementService, AnimationService, ActorValueService, HostAttemptsService
 export class SendInputsService extends ClientListener {
@@ -43,7 +45,6 @@ export class SendInputsService extends ClientListener {
         this.controller.on("loadGame", () => this.onLoadGame());
         this.controller.on("speakSound", (e) => this.onSpeakSound(e));
         this.controller.emitter.on("hostStartMessage", (e) => this.onHostStart(e.message.target));
-        this.controller.emitter.on("hostStopMessage", (e) => this.onHostStop(e.message.target));
     }
 
     private onSpeakSound(e: SpeakSoundEvent) {
@@ -69,26 +70,73 @@ export class SendInputsService extends ClientListener {
     private applyStartedHosts() {
         this.startedHosts.forEach((remoteId) => {
             const owner = this.getInputOwner(remoteId);
-            if (this.hiddenHosts.delete(remoteId)) {
-                owner?.enableNoWait(false);
-            }
             if (owner && remoteId >= espActorIdOffset) {
+                this.placeAtServerPosition(owner, remoteId);
                 getAnimationSource(owner, true).restart(owner.getSitState() === 0);
                 this.lastSitSent.delete(owner.getFormID().toString(16));
+                const target = relayedCombatTargets.get(owner.getFormID()) ?? 0;
+                logTrace(this, `Host start of ${owner.getFormID().toString(16)}: sit ${owner.getSitState()}, combat target ${target.toString(16)}, at ${[owner.getPositionX(), owner.getPositionY(), owner.getPositionZ()].map(Math.round)}`);
+                if (target) {
+                    this.pendingCombat.set(remoteId, { target, until: Date.now() + 2000 });
+                }
             }
         });
         this.startedHosts.clear();
     }
 
-    private onHostStop(remoteId: number) {
-        if (remoteId >= espActorIdOffset) {
-            this.stoppedHosts.set(remoteId, Date.now());
+    private placeAtServerPosition(owner: Actor, remoteId: number) {
+        const m = this.getForm(remoteId, this.controller.lookupListener(RemoteServer).getWorldModel())?.movement;
+        if (!m || (ObjectReferenceEx.getWorldOrCell(owner) === m.worldOrCell
+            && Math.hypot(owner.getPositionX() - m.pos[0], owner.getPositionY() - m.pos[1], owner.getPositionZ() - m.pos[2]) <= serverPositionToleranceUnits)) {
+            return;
         }
+        this.placingHosts.set(remoteId, { at: 0, tries: 0 });
+    }
+
+    private isPlacing(remoteId: number, owner: Actor, m?: Transform) {
+        const placing = this.placingHosts.get(remoteId);
+        if (placing === undefined) {
+            return false;
+        }
+        if (!m || (ObjectReferenceEx.getWorldOrCell(owner) === m.worldOrCell
+            && Math.hypot(owner.getPositionX() - m.pos[0], owner.getPositionY() - m.pos[1]) <= serverPositionToleranceUnits)) {
+            this.placingHosts.delete(remoteId);
+            return false;
+        }
+        if (Date.now() - placing.at > 1000) {
+            this.placingHosts.set(remoteId, { at: Date.now(), tries: placing.tries + 1 });
+            if (placing.tries < 3) {
+                logTrace(this, `Placing ${owner.getFormID().toString(16)} from ${ObjectReferenceEx.getWorldOrCell(owner).toString(16)} ${[owner.getPositionX(), owner.getPositionY(), owner.getPositionZ()].map(Math.round)} to ${m.worldOrCell.toString(16)} ${m.pos.map(Math.round)}, player in ${ObjectReferenceEx.getWorldOrCell(this.sp.Game.getPlayer()!).toString(16)}`);
+            }
+            moveActorTo(owner, m, placing.tries % 2 === 1);
+        }
+        return true;
+    }
+
+    private applyPendingCombat() {
+        const myRemoteId = this.controller.lookupListener(RemoteServer).getMyRemoteRefrId();
+        this.pendingCombat.forEach(({ target, until }, remoteId) => {
+            const owner = this.getInputOwner(remoteId);
+            if (!owner || Date.now() > until) {
+                this.pendingCombat.delete(remoteId);
+                return;
+            }
+            if (!owner.isAIEnabled()) {
+                return;
+            }
+            this.pendingCombat.delete(remoteId);
+            const local = !target ? 0 : target === myRemoteId ? playerFormId : worldViewMisc.remoteIdToLocalId(target);
+            const enemy = local ? this.sp.Actor.from(this.sp.Game.getFormEx(local)) : null;
+            if (enemy && !enemy.isDead() && !owner.isDead()) {
+                owner.startCombat(enemy);
+            }
+        });
     }
 
     private onUpdate() {
         if (!this.singlePlayerService.isSinglePlayer) {
             this.applyStartedHosts();
+            this.applyPendingCombat();
             this.applyPendingSpeaks();
             this.sendInputs();
             this.updatePapyrusEventsAllowedForms();
@@ -160,8 +208,7 @@ export class SendInputsService extends ClientListener {
     private sendInputs() {
         const reporting = this.controller.lookupListener(CoopService).isReporting();
         if (reporting) {
-            this.releaseLostHosts();
-            this.updateHiddenHosts();
+            this.reportDisabledHosts();
         }
         const hosted =
             reporting && typeof this.sp.storage['hosted'] === typeof [] ? this.sp.storage['hosted'] : [];
@@ -179,13 +226,16 @@ export class SendInputsService extends ClientListener {
             this.sendEquipment(target);
             this.sendActorValuePercentage(target, targetFormModel);
         });
-        this.sendHostAttempts();
     }
 
     private sendMovement(_refrId?: number, form?: FormModel) {
         const owner = this.getInputOwner(_refrId);
         if (!owner) {
           return;
+        }
+
+        if (_refrId && this.isPlacing(_refrId, owner, form?.movement)) {
+            return;
         }
 
         const refrIdStr = `${_refrId}`;
@@ -211,7 +261,7 @@ export class SendInputsService extends ClientListener {
             };
             this.controller.emitter.emit("sendMessageWithRefrId", {
                 message,
-                reliability: "unreliable"
+                reliability: _refrId ? "reliable" : "unreliable"
             });
             this.lastSentMovement.set(refrIdStr, { key, at: now, changedAt });
         }
@@ -295,17 +345,26 @@ export class SendInputsService extends ClientListener {
             const sitState = owner.getSitState();
             if (sitState === 0 && this.lastSitState.get(refrIdStr)) {
                 animSource.addStand();
+                relayedSeats.delete(owner.getFormID());
             }
             if (sitState === 0) {
                 this.lastSitSent.delete(refrIdStr);
             } else if (sitState === 3 && Date.now() - (this.lastSitSent.get(refrIdStr) ?? 0) > hostedSitResendMs) {
-                const furniture = owner.getFurnitureReference();
+                const inherited = relayedSeats.get(owner.getFormID());
+                const furniture = owner.getFurnitureReference()?.getFormID() ?? inherited?.furniture;
                 if (furniture) {
-                    animSource.addSit(furniture.getFormID());
+                    animSource.addSit(furniture, inherited?.enter);
                     this.lastSitSent.set(refrIdStr, Date.now());
                 }
             }
             this.lastSitState.set(refrIdStr, sitState);
+            const enemy = owner.isInCombat() ? owner.getCombatTarget() : null;
+            const target = enemy ? worldViewMisc.localIdToRemoteId(enemy.getFormID(), true) : 0;
+            const lastCombat = this.lastCombatSent.get(refrIdStr);
+            if (!lastCombat || lastCombat.target !== target || (target && Date.now() - lastCombat.at > hostedSitResendMs)) {
+                animSource.addCombat(target);
+                this.lastCombatSent.set(refrIdStr, { target, at: Date.now() });
+            }
             if (!owner.isDead() && owner.getFlyingState() !== 0 && Date.now() - (this.lastFlySent.get(refrIdStr) ?? 0) > 3000) {
                 animSource.addFly();
                 this.lastFlySent.set(refrIdStr, Date.now());
@@ -386,103 +445,28 @@ export class SendInputsService extends ClientListener {
         }
     }
 
-    private sendHostAttempts() {
-        const remoteId = nextHostAttempt();
-        if (!remoteId || !this.controller.lookupListener(CoopService).isReporting()) {
-          return;
-        }
-
-        if (remoteId < espActorIdOffset) {
-            this.controller.emitter.emit("sendMessage", {
-                message: {
-                    t: MsgType.Host,
-                    remoteId
-                },
-                reliability: "unreliable"
-            });
-            return;
-        }
-
-        const actor = this.getInputOwner(remoteId);
-        const player = this.sp.Game.getPlayer()!;
-        const hidden = this.hiddenHosts.has(remoteId);
-        if (
-            !actor || actor.isDead() || (!hidden && (!actor.is3DLoaded() || actor.isDisabled()))
-            || ObjectReferenceEx.getWorldOrCell(actor) !== ObjectReferenceEx.getWorldOrCell(player)
-            || actor.getDistance(player) > 4096
-            || Date.now() - (this.yieldedAt.get(remoteId) ?? 0) < 10000
-            || teleportingHosts.has(remoteId)
-            || this.controller.lookupListener(CoopService).yieldsHost(actor)
-        ) {
-            return;
-        }
-
-        this.controller.emitter.emit("sendMessage", {
-            message: {
-                t: MsgType.Host,
-                remoteId,
-                worldOrCell: ObjectReferenceEx.getWorldOrCell(actor),
-                pos: [actor.getPositionX(), actor.getPositionY(), actor.getPositionZ()],
-                rot: [actor.getAngleX(), actor.getAngleY(), actor.getAngleZ()]
-            },
-            reliability: "unreliable"
-        });
-    }
-
-    private releaseLostHosts() {
+    private reportDisabledHosts() {
         const hosted = this.sp.storage['hosted'];
         if (!Array.isArray(hosted)) {
             return;
         }
         const now = Date.now();
         hosted.filter((remoteId: number) => remoteId >= espActorIdOffset).forEach((remoteId: number) => {
-            const actor = this.getInputOwner(remoteId);
-            const yields = !!actor && this.controller.lookupListener(CoopService).yieldsHost(actor);
-            if (actor && actor.is3DLoaded() && !actor.isDisabled() && !yields) {
-                this.lostHostSince.delete(remoteId);
+            if (!this.getInputOwner(remoteId)?.isDisabled()) {
+                this.disabledHostSince.delete(remoteId);
                 return;
             }
-            const since = this.lostHostSince.get(remoteId) ?? now;
-            this.lostHostSince.set(remoteId, since);
+            const since = this.disabledHostSince.get(remoteId) ?? now;
+            this.disabledHostSince.set(remoteId, since);
             if (now - since < 2000) {
                 return;
             }
-            this.lostHostSince.delete(remoteId);
-            if (yields) {
-                this.yieldedAt.set(remoteId, now);
-            }
+            this.disabledHostSince.delete(remoteId);
             this.controller.emitter.emit("sendMessage", {
-                message: { t: MsgType.Host, remoteId, release: true, disabled: !!actor && actor.isDisabled() },
+                message: { t: MsgType.Host, remoteId, release: true, disabled: true },
                 reliability: "reliable"
             });
             this.sp.storage['hosted'] = (this.sp.storage['hosted'] as number[]).filter((x) => x !== remoteId);
-        });
-    }
-
-    private updateHiddenHosts() {
-        const now = Date.now();
-        this.stoppedHosts.forEach((at, remoteId) => {
-            if (now - at < 1000) {
-                return;
-            }
-            this.stoppedHosts.delete(remoteId);
-            const actor = this.getInputOwner(remoteId);
-            if (actor && actor.is3DLoaded() && !worldViewMisc.getViewFromStorage()?.getLocalRefrId(remoteId)) {
-                actor.disableNoWait(false);
-                this.hiddenHosts.set(remoteId, now);
-            }
-        });
-        this.hiddenHosts.forEach((at, remoteId) => {
-            if (worldViewMisc.getViewFromStorage()?.getLocalRefrId(remoteId)) {
-                this.hiddenHosts.delete(remoteId);
-                this.getInputOwner(remoteId)?.enableNoWait(false);
-                return;
-            }
-            if (now - at < 5000) {
-                return;
-            }
-            this.hiddenHosts.set(remoteId, now);
-            tryHost(remoteId);
         });
     }
 
@@ -519,6 +503,9 @@ export class SendInputsService extends ClientListener {
     private lastSitState = new Map<string, number>();
     private lastSitSent = new Map<string, number>();
     private lastFlySent = new Map<string, number>();
+    private lastCombatSent = new Map<string, { target: number, at: number }>();
+    private pendingCombat = new Map<number, { target: number, until: number }>();
+    private placingHosts = new Map<number, { at: number, tries: number }>();
     private actorValuesNeedUpdate = false;
     private isRaceSexMenuShown = false;
     private equipmentChanged = false;
@@ -526,11 +513,8 @@ export class SendInputsService extends ClientListener {
     private prevValues: ActorValues = { health: 0, stamina: 0, magicka: 0 };
     private prevActorValuesUpdateTime = 0;
     private prevCastingDetectedTime = 0;
-    private lostHostSince = new Map<number, number>();
-    private yieldedAt = new Map<number, number>();
-    private hiddenHosts = new Map<number, number>();
+    private disabledHostSince = new Map<number, number>();
     private startedHosts = new Set<number>();
     private pendingSpeaks = new Array<SpeakSoundEvent>();
-    private stoppedHosts = new Map<number, number>();
     private papyrusEventsAllowedKey = "";
 }

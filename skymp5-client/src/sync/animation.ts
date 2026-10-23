@@ -39,11 +39,14 @@ export interface AnimationApplyState {
 const allowedIdles = new Array<[number, string]>();
 const lastAnimEvents = new Map<number, string>();
 const lastFurnitureIdles = new Map<number, string>();
+export const relayedCombatTargets = new Map<number, number>();
+export const relayedSeats = new Map<number, { furniture: number, enter: string }>();
 
 export const standAnimEventName = "SkympStand";
 export const flyAnimEventName = "SkympFly";
 export const speakAnimPrefix = "SkympSpeak:";
 export const sitAnimPrefix = "SkympSit_";
+export const combatAnimPrefix = "SkympCombat_";
 
 export const isFurnitureIdle = (animEventName: string | undefined): boolean =>
   !!animEventName && !/^idlestop/i.test(animEventName) && (animOverridesLowerCase[animEventName.toLowerCase()] !== undefined
@@ -203,10 +206,17 @@ export const applyAnimation = (
       state.standTries = 0;
     }
     state.seat = seat;
+    relayedSeats.set(refr.getFormID(), seat);
+    return;
+  }
+
+  if (anim.animEventName.startsWith(combatAnimPrefix)) {
+    relayedCombatTargets.set(refr.getFormID(), parseInt(anim.animEventName.slice(combatAnimPrefix.length), 16) || 0);
     return;
   }
 
   if (anim.animEventName === standAnimEventName) {
+    relayedSeats.delete(refr.getFormID());
     state.seat = null;
     state.ownSeat = false;
     state.standTries = 0;
@@ -323,8 +333,12 @@ export class AnimationSource {
     this.onSendAnimationEvent(flyAnimEventName);
   }
 
-  addSit(furniture: number): void {
-    this.enqueue(`${sitAnimPrefix}${furniture.toString(16)}_${lastFurnitureIdles.get(this.refrId) ?? ""}`);
+  addSit(furniture: number, enter = ""): void {
+    this.enqueue(`${sitAnimPrefix}${furniture.toString(16)}_${lastFurnitureIdles.get(this.refrId) ?? enter}`);
+  }
+
+  addCombat(target: number): void {
+    this.enqueue(combatAnimPrefix + target.toString(16));
   }
 
   addSpeak(voiceFile: string): void {

@@ -61,5 +61,7 @@ public:
   virtual std::string GetIp(UserId userId) const = 0;
 
   virtual void CloseConnection(UserId userId) = 0;
+
+  virtual int GetAveragePing(UserId userId) const = 0;
 };
 }

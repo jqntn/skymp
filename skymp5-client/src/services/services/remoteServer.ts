@@ -58,7 +58,6 @@ import {
   remoteIdToLocalId,
 } from '../../view/worldViewMisc';
 import { TimeService } from './timeService';
-import { teleportingHosts } from '../../view/hostAttempts';
 import { logTrace, logError } from '../../logging';
 
 import { SpellCastMessage } from '../messages/spellCastMessage';
@@ -264,9 +263,8 @@ export class RemoteServer extends ClientListener {
     const msg = event.message;
     const id = ("idx" in msg && typeof msg.idx === "number") ? this.getIdManager().getId(msg.idx) : this.getMyActorIndex();
     const localRefrId = getViewFromStorage()?.getFormViews().getNthFormView(id)?.getLocalRefrId() || 0;
-    const heldHost = id !== this.getMyActorIndex() && localRefrId > 0 && localRefrId < 0xff000000 ? localRefrId + 0x100000000 : 0;
-    if (heldHost) {
-      teleportingHosts.add(heldHost);
+    if (id === this.getMyActorIndex()) {
+      this.playerTeleports++;
     }
     once('update', () => {
       const refr = id === this.getMyActorIndex() ? Game.getPlayer() : ObjectReference.from(Game.getFormEx(localRefrId));
@@ -292,7 +290,6 @@ export class RemoteServer extends ClientListener {
           msg.rot[1],
           msg.rot[2],
         );
-        teleportingHosts.delete(heldHost);
       };
       const actor = Actor.from(refr);
       if (actor /*&& actor.getFormID() === 0x14*/) {
@@ -910,6 +907,10 @@ export class RemoteServer extends ClientListener {
     return this.worldModel.playerCharacterFormIdx;
   }
 
+  getPlayerTeleports(): number {
+    return this.playerTeleports;
+  }
+
   getMyRemoteRefrId(): number {
     return this.worldModel.playerCharacterRefrId;
   }
@@ -1031,4 +1032,5 @@ export class RemoteServer extends ClientListener {
   }
 
   private numSetInventory = 0;
+  private playerTeleports = 0;
 }

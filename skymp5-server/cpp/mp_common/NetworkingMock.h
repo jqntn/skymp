@@ -20,6 +20,8 @@ public:
 
   void CloseConnection(UserId userId) override;
 
+  int GetAveragePing(UserId userId) const override { return -1; }
+
 private:
   struct Impl;
   std::shared_ptr<Impl> pImpl;

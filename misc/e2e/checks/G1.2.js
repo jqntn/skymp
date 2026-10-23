@@ -29,22 +29,12 @@ module.exports = {
     ctx.evidence.push(`start: server Alvor in ${start.cell} at ${round(start.pos)}, hoster ${hex(start.hoster)}`);
     ctx.assert.ok(!start.cell.startsWith("3c:"), `Alvor does not start in his house: ${start.cell}`);
     const house = parseInt(start.cell, 16);
-    const away = await local(ALVOR);
-    if (away.cell === house) {
-      await ctx.drv(`${npc(ALVOR)} const w = sp.Game.getFormEx(0x3c); sp.TESModPlatform.moveRefrToPosition(a, sp.Cell.from(w), sp.WorldSpace.from(w), ${FORGE.join(", ")}, 0, 0, 0); return 0;`);
-    }
     await ctx.drv(`sp.Cell.from(sp.Game.getFormEx(${house})).setPublic(true); return 0;`);
     await teleport({ cellOrWorldDesc: start.cell, pos: HOUSE_LOWER_FLOOR, rot: [0, 0, 0] });
     await ctx.waitFor(() => ctx.drv(`const c = sp.Game.getPlayer().getParentCell(); return !!c && c.getFormID() === ${house} && c.isAttached();`).catch(() => false), 120000, "the player is in Alvor's house");
-    await ctx.waitFor(() => local(ALVOR).then((l) => !l.ai).catch(() => false), 30000, "the client applied its view of Alvor (AI off for an NPC that nobody hosts)");
-    await ctx.sleep(2000);
-    const engine = await local(ALVOR);
-    ctx.evidence.push(`before the player came, the client had Alvor in ${hex(away.cell)} at ${round(away.pos)}, AI ${away.ai}${away.cell === house ? ", so the check moved him to the forge" : ""}; 2 s after the client applied its view of him (AI off), the client has him in ${hex(engine.cell)} at ${round(engine.pos)}`);
-    ctx.assert.ok(engine.cell !== house, `the client moved Alvor, whom nobody hosts, from its own position to the stale server position in his house (${round(engine.pos)})`);
-    await ctx.drv(`${npc(ALVOR)} const h = sp.Game.getFormEx(${house}); sp.TESModPlatform.moveRefrToPosition(a, sp.Cell.from(h), sp.WorldSpace.from(h), ${start.pos.join(", ")}, 0, 0, 0); return 0;`);
-    await ctx.waitFor(() => local(ALVOR).then((l) => l.loaded && l.cell === house).catch(() => false), 120000, "Alvor is loaded in his house");
+    await ctx.waitFor(() => local(ALVOR).then((l) => l.loaded && l.cell === house).catch(() => false), 120000, "Alvor is loaded in his house at the server position");
     const before = await local(ALVOR);
-    ctx.evidence.push(`in the house on the lower floor, out of his way (set public so the teleported player is no trespasser): game hour ${before.hour.toFixed(3)}, the check moved Alvor home for the start state; local Alvor cell ${hex(before.cell)} package ${hex(before.pkg)}`);
+    ctx.evidence.push(`in the house on the lower floor, out of his way (set public so the teleported player is no trespasser): game hour ${before.hour.toFixed(3)}, local Alvor cell ${hex(before.cell)} package ${hex(before.pkg)}`);
 
     const cells = [];
     const hosters = new Set();

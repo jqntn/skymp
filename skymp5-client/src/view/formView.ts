@@ -10,7 +10,6 @@ import { SpawnProcess } from "./spawnProcess";
 import { ObjectReferenceEx } from "../extensions/objectReferenceEx";
 import { PlayerCharacterDataHolder } from "./playerCharacterDataHolder";
 import { getMovement } from "../sync/movementGet";
-import { lastTryHost, tryHost } from "./hostAttempts";
 import { ModelApplyUtils } from "./modelApplyUtils";
 import { Inventory } from "../sync/inventory";
 import { localIdToRemoteId } from "./worldViewMisc";
@@ -373,7 +372,10 @@ export class FormView {
       if (realActor) {
         const ac = Actor.from(Game.getFormEx(refrId));
         ac?.clearKeepOffsetFromActor();
-        ac?.enableAI(false);
+        const hosted = storage['hosted'];
+        if (!(Array.isArray(hosted) && hosted.includes(refrId + espActorIdOffset))) {
+          ac?.enableAI(false);
+        }
         if (pendingEnable) {
           ac?.enableNoWait(false);
         }
@@ -494,42 +496,14 @@ export class FormView {
     if (model.movement && this.hostedHere) {
       this.movState.lastNumChanges = +(model.numMovementChanges as number);
       this.movState.lastApply = Date.now();
-      this.movState.everApplied = true;
     } else if (model.movement) {
-      let ac = Actor.from(refr);
-      if (
-        this.movState.lastApply &&
-        Date.now() - this.movState.lastApply > 1500
-      ) {
-        if (Date.now() - this.movState.lastRehost > 1000) {
-          this.movState.lastRehost = Date.now();
-          const remoteId = this.remoteRefrId;
-          if (ac && ac.is3DLoaded()) {
-            this.tryHostIfNeed(ac, remoteId as number);
-            printConsole("tryHostIfNeed - reason: not seeing movement for long time");
-          }
-        }
-      }
-
       if (
         +(model.numMovementChanges as number) !==
         this.movState.lastNumChanges ||
         Date.now() - this.movState.lastApply > 2000
       ) {
         this.movState.lastApply = Date.now();
-        if (talksToPlayer && model.isHostedByOther) {
-          this.movState.lastNumChanges = +(model.numMovementChanges as number);
-        } else if (
-          this.realActor && ac && ac.is3DLoaded() && !model.isHostedByOther && !model.isDead && !this.movState.everApplied
-          && ObjectReferenceEx.getWorldOrCell(ac) === ObjectReferenceEx.getWorldOrCell(Game.getPlayer() as Actor)
-        ) {
-          this.movState.lastNumChanges = +(model.numMovementChanges as number);
-          this.movState.everApplied = true;
-          this.tryHostIfNeed(ac, this.remoteRefrId as number);
-        } else if (this.realActor && !model.isHostedByOther && !model.isDead && !this.movState.everApplied) {
-          this.movState.lastNumChanges = +(model.numMovementChanges as number);
-          this.movState.everApplied = true;
-        } else if (model.isHostedByOther || !this.movState.everApplied) {
+        if (!(talksToPlayer && model.isHostedByOther)) {
           const backup = model.movement.isWeapDrawn;
           if (forcedWeapDrawn === true || forcedWeapDrawn === false) {
             model.movement.isWeapDrawn = forcedWeapDrawn;
@@ -548,44 +522,14 @@ export class FormView {
             }
           }
           model.movement.isWeapDrawn = backup;
-
-          this.movState.lastNumChanges = +(model.numMovementChanges as number);
-          this.movState.everApplied = true;
-        } else {
-          const remoteId = this.remoteRefrId;
-          if (ac && remoteId && ac.is3DLoaded()) {
-            ac.clearKeepOffsetFromActor();
-
-            // TODO: make host service
-            const hosted = storage['hosted'];
-            let alreadyHosted = false;
-            if (Array.isArray(hosted)) {
-              const remoteId = localIdToRemoteId(ac.getFormID());
-              if (hosted.includes(remoteId) || hosted.includes(remoteId + 0x100000000)) {
-                alreadyHosted = true;
-              }
-            }
-
-            if (!alreadyHosted) {
-              if (this.tryHostIfNeed(ac, remoteId)) {
-
-                // previously, we did this cleanup on each update
-                // but I guess it's too expensive and can possibly hurt FPS
-                TESModPlatform.setWeaponDrawnMode(ac, -1);
-              }
-            }
-          }
         }
+        this.movState.lastNumChanges = +(model.numMovementChanges as number);
       }
     }
 
     const ac = Actor.from(refr);
     if (this.realActor && ac) {
       const wantAI = this.hostedHere || talksToPlayer;
-      if (this.hostedHere && this.wasHostedByOther && !ac.isAIEnabled() && !ac.isOnMount() && ac.getSitState() !== 0) {
-        ac.disableNoWait(false);
-        this.enableAt = Date.now() + 300;
-      }
       const deadOnServer = !!model.isDead || !!model.movement?.isDead;
       const serverPos = !this.hostedHere ? model.movement?.pos : undefined;
       if (!deadOnServer) {
@@ -885,22 +829,6 @@ export class FormView {
     return { lastNumChanges: 0, useAnimOverrides: true, seat: undefined as { furniture: number, enter: string } | null | undefined, ownSeat: false, seatTries: 0, standTries: 0, postureAt: 0, seatWaitFrom: Date.now(), applyAfter: 0, followUpAnimEventName: undefined as string | undefined, overriddenAnimEventName: undefined as string | undefined };
   };
 
-  private tryHostIfNeed(ac: Actor, remoteId: number) {
-    const last = lastTryHost[remoteId];
-    if (!last || Date.now() - last >= 1000) {
-      lastTryHost[remoteId] = Date.now();
-
-      if (
-        getMovement(ac).worldOrCell ===
-        getMovement(Game.getPlayer() as Actor).worldOrCell
-      ) {
-        tryHost(remoteId);
-        return true;
-      }
-    }
-    return false;
-  };
-
   getLocalRefrId(): number {
     return this.refrId;
   }
@@ -921,8 +849,6 @@ export class FormView {
   private movState = {
     lastNumChanges: 0,
     lastApply: 0,
-    lastRehost: 0,
-    everApplied: false,
     talksToPlayer: false,
     talkSentAt: 0,
   };

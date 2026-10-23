@@ -49,17 +49,23 @@ module.exports = {
 
     const doors = await ctx.drv(`const c = sp.Game.getPlayer().getParentCell(); const out = []; for (let i = 0, n = c.getNumRefs(29); i < n; i++) { const r = c.getNthRef(i, 29); if (r && r.getFormID() < 0xff000000) out.push(r.getFormID()); } return out;`, 1);
     const door = (await ctx.probe(`return ${JSON.stringify(doors)}.filter((id) => { const r = mp.lookupEspmRecordById(id).record; return r && !r.fields.some((f) => f.type === "XTEL"); });`))[0];
-    const openBefore = door ? await ctx.probe(`return mp.get(${door}, "isOpen");`) : null;
-    if (door) await ctx.drv(`sp.ObjectReference.from(sp.Game.getFormEx(${door})).activate(${npc(ORGNAR)}, false); return 0;`, 1);
-    const toggled = door ? await ctx.waitFor(async () => (await ctx.probe(`return mp.get(${door}, "isOpen");`)) !== openBefore, 10000, "the server toggles the door").catch(() => false) : false;
+    let openBefore = null;
+    let toggled = false;
+    for (let attempt = 0; door && attempt < 3 && !toggled; attempt++) {
+      await ctx.waitFor(() => ctx.drv(`const s = sp.ObjectReference.from(sp.Game.getFormEx(${door})).getOpenState(); return s === 1 || s === 3;`, 1), 10000, "the door is not moving").catch(() => 0);
+      openBefore = await ctx.probe(`return mp.get(${door}, "isOpen");`);
+      await ctx.drv(`sp.ObjectReference.from(sp.Game.getFormEx(${door})).activate(${npc(ORGNAR)}, false); return 0;`, 1);
+      toggled = await ctx.waitFor(async () => (await ctx.probe(`return mp.get(${door}, "isOpen");`)) !== openBefore, 5000, "the server toggles the door").then(() => true).catch(() => false);
+    }
     ctx.evidence.push(`the hosted Orgnar activates the inn door ${door ? hex(door) : "none"} on engine 1: server isOpen ${openBefore} -> toggled ${toggled}`);
 
     await ctx.probe(`mp.set(${ORGNAR}, "isDead", true); return 0;`);
-    await ctx.waitFor(() => ctx.drv(`return ${npc(ORGNAR)}.isDead();`, 1), 15000, "Orgnar dies on engine 1").catch(() => {});
+    const died = await ctx.waitFor(() => ctx.drv(`return ${npc(ORGNAR)}.isDead();`, 1), 15000, "Orgnar dies on engine 1").then(() => true).catch(() => false);
     await ctx.probe(`mp.set(${ORGNAR}, "isDead", false); return 0;`);
     await ctx.sleep(5000);
     const revived = await ctx.drv(`const a = ${npc(ORGNAR)}; return a ? { dead: a.isDead(), disabled: a.isDisabled(), deleted: a.isDeleted(), loaded: a.is3DLoaded() } : null;`, 1);
-    ctx.evidence.push(`after the server killed and revived Orgnar: ${JSON.stringify(revived)}`);
+    ctx.evidence.push(`the server killed Orgnar: dead on engine 1 ${died}; after the server revived him: ${JSON.stringify(revived)}`);
+    ctx.assert.ok(died, "not exercised: the server's kill of Orgnar did not reach engine 1");
 
     const death = fs.readFileSync(path.join(SERVICES, "deathService.ts"), "utf8");
     const killMoveForAll = /[\s(]0,\s*0xffffffff,\s*"KillMove\*"/.test(death);

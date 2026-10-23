@@ -132,7 +132,13 @@ bool IsEssentialEspmNpc(MpActor& actor)
 void ActionListener::OnUpdateMovement(const RawMessageData& rawMsgData,
                                       const UpdateMovementMessage& msg)
 {
-  auto actor = SendToNeighbours(msg.idx, rawMsgData);
+  MpActor* myActor = partOne.serverState.ActorByUser(rawMsgData.userId);
+  auto actor = SendToNeighbours(msg.idx, rawMsgData,
+                                myActor && msg.idx != myActor->GetIdx());
+  if (myActor && msg.idx == myActor->GetIdx()) {
+    partOne.serverState.userInfo[rawMsgData.userId]->lastMovementAt =
+      std::chrono::steady_clock::now();
+  }
   if (actor) {
     bool teleportFlag = actor->GetTeleportFlag();
     actor->SetTeleportFlag(false);
@@ -227,12 +233,6 @@ void ActionListener::OnUpdateMovement(const RawMessageData& rawMsgData,
       }
     }
 
-    if (partOne.worldState.lastMovUpdateByIdx.size() <= msg.idx) {
-      auto newSize = static_cast<size_t>(msg.idx) + 1;
-      partOne.worldState.lastMovUpdateByIdx.resize(newSize);
-    }
-    partOne.worldState.lastMovUpdateByIdx[msg.idx] =
-      std::chrono::system_clock::now();
   }
 }
 
@@ -251,7 +251,8 @@ void ActionListener::OnUpdateAnimation(const RawMessageData& rawMsgData,
     return;
   }
 
-  if (!msg.data.animEventName.starts_with("SkympSpeak:")) {
+  if (!msg.data.animEventName.starts_with("SkympSpeak:") &&
+      !msg.data.animEventName.starts_with("SkympCombat_")) {
     targetActor->SetLastAnimEvent(msg.data);
   }
 
@@ -727,143 +728,84 @@ void ActionListener::OnHostAttempt(const RawMessageData& rawMsgData,
     return;
   }
 
-  auto& hoster = partOne.worldState.hosters[remoteId];
-  const uint32_t prevHoster = hoster;
+  const auto hosterIt = partOne.worldState.hosters.find(remoteId);
+  const uint32_t hoster =
+    hosterIt == partOne.worldState.hosters.end() ? 0 : hosterIt->second;
 
   if (msg.release.value_or(false)) {
-    if (hoster == me->GetFormId()) {
-      partOne.GetLogger().info("Hoster cleared on {:x}: was {:x} (released{})",
-                               remoteId, hoster,
-                               msg.disabled.value_or(false) ? ", disabled"
-                                                            : "");
-      hoster = 0;
-      remote.UpdateHoster(0);
-      if (msg.disabled.value_or(false)) {
-        remote.Disable();
-      }
+    if (hoster == me->GetFormId() && msg.disabled.value_or(false)) {
+      partOne.GetLogger().info("NPC {:x} disabled at the report of its "
+                               "hoster {:x}",
+                               remoteId, hoster);
+      remote.Disable();
+      partOne.RefreshHoster(remote);
     }
     return;
   }
 
-  if (!msg.worldOrCell &&
-      (remoteId < 0xff000000 || !remote.GetListeners().count(me))) {
-    partOne.GetLogger().warn("Rejected host claim on {:x} by {:x}: no "
-                             "location, {}",
-                             remoteId, me->GetFormId(),
-                             remoteId < 0xff000000
-                               ? "and the target is an ESP form"
-                               : "and the claimer does not see the target");
+  const char* reason = nullptr;
+  auto& worldState = partOne.worldState;
+  auto lookup = msg.worldOrCell && worldState.HasEspm()
+    ? worldState.GetEspm().GetBrowser().LookupById(*msg.worldOrCell)
+    : espm::LookupResult();
+  if (!msg.worldOrCell) {
+    reason = "no location";
+  } else if (!remote.AsActor() || !remote.IsEspmForm()) {
+    reason = "the target is not an ESP NPC";
+  } else if (!lookup.rec ||
+             (lookup.rec->GetType() != "CELL" &&
+              lookup.rec->GetType() != "WRLD")) {
+    reason = "the location is not a cell or a worldspace";
+  } else if (me->GetCellOrWorld().ToFormId(worldState.espmFiles) !=
+             *msg.worldOrCell) {
+    reason = "the claimer is in another cell";
+  } else if (!msg.pos ||
+             !std::all_of(msg.pos->begin(), msg.pos->end(),
+                          [](float v) { return std::isfinite(v); }) ||
+             (NiPoint3((*msg.pos)[0], (*msg.pos)[1], (*msg.pos)[2]) -
+              me->GetPos())
+                 .Length() > 4096.f) {
+    reason = "the position is missing, not finite, or more than 4096 "
+             "units from the claimer";
+  } else if (msg.rot &&
+             !std::all_of(msg.rot->begin(), msg.rot->end(),
+                          [](float v) { return std::isfinite(v); })) {
+    reason = "the rotation is not finite";
+  }
+  if (reason) {
+    partOne.GetLogger().warn("Rejected host claim on {:x} by {:x}: {}",
+                             remoteId, me->GetFormId(), reason);
+    return;
+  }
+  if (remote.IsDisabled() && remote.IsDisabledInPlay()) {
+    partOne.GetLogger().warn("Rejected host claim on {:x} by {:x}: disabled "
+                             "during play",
+                             remoteId, me->GetFormId());
+    return;
+  }
+  const auto ownerIt = worldState.hostOwners.find(remoteId);
+  const bool fromOwner = ownerIt != worldState.hostOwners.end() &&
+    ownerIt->second == me->GetFormId();
+  if (!remote.IsDisabled() &&
+      (remote.AsActor()->IsDead() ||
+       (!fromOwner && (hoster || partOne.IsSeen(remote))))) {
+    partOne.GetLogger().debug("Ignored host claim on {:x} by {:x}: the "
+                              "server copy is run, dead or seen",
+                              remoteId, me->GetFormId());
     return;
   }
 
-  if (msg.worldOrCell) {
-    auto& worldState = partOne.worldState;
-    auto lookup = worldState.HasEspm()
-      ? worldState.GetEspm().GetBrowser().LookupById(*msg.worldOrCell)
-      : espm::LookupResult();
-    const char* reason = nullptr;
-    if (!remote.AsActor()) {
-      reason = "the target is not an NPC";
-    } else if (!lookup.rec ||
-        (lookup.rec->GetType() != "CELL" && lookup.rec->GetType() != "WRLD")) {
-      reason = "the location is not a cell or a worldspace";
-    } else if (me->GetCellOrWorld().ToFormId(worldState.espmFiles) !=
-               *msg.worldOrCell) {
-      reason = "the claimer is in another cell";
-    } else if (!msg.pos ||
-               !std::all_of(msg.pos->begin(), msg.pos->end(),
-                            [](float v) { return std::isfinite(v); }) ||
-               (NiPoint3((*msg.pos)[0], (*msg.pos)[1], (*msg.pos)[2]) -
-                me->GetPos())
-                   .Length() > 4096.f) {
-      reason = "the position is missing, not finite, or more than 4096 "
-               "units from the claimer";
-    }
-    if (reason) {
-      partOne.GetLogger().warn("Rejected host claim on {:x} by {:x}: {}",
-                               remoteId, me->GetFormId(), reason);
-      return;
-    }
+  partOne.GetLogger().info("NPC {:x} {} at the report of {:x}", remoteId,
+                           remote.IsDisabled() ? "enabled" : "moved",
+                           me->GetFormId());
+  remote.SetCellOrWorld(
+    FormDesc::FromFormId(*msg.worldOrCell, worldState.espmFiles));
+  remote.SetPos({ (*msg.pos)[0], (*msg.pos)[1], (*msg.pos)[2] });
+  if (msg.rot) {
+    remote.SetAngle({ (*msg.rot)[0], (*msg.rot)[1], (*msg.rot)[2] });
   }
-
-  auto remoteIdx = remote.GetIdx();
-
-  std::optional<std::chrono::system_clock::time_point> lastRemoteUpdate;
-  if (partOne.worldState.lastMovUpdateByIdx.size() > remoteIdx) {
-    lastRemoteUpdate = partOne.worldState.lastMovUpdateByIdx[remoteIdx];
-  }
-
-  const auto hostResetTimeout = std::chrono::seconds(2);
-
-  if (hoster == 0 || !lastRemoteUpdate ||
-      std::chrono::system_clock::now() - *lastRemoteUpdate >
-        hostResetTimeout) {
-    partOne.GetLogger().info("Hoster changed from {:x} to {:x} on {:x}",
-                             prevHoster, me->GetFormId(), remoteId);
-    hoster = me->GetFormId();
-    if (msg.worldOrCell) {
-      remote.Enable();
-      remote.SetCellOrWorld(
-        FormDesc::FromFormId(*msg.worldOrCell, partOne.worldState.espmFiles));
-      remote.SetPos({ (*msg.pos)[0], (*msg.pos)[1], (*msg.pos)[2] });
-      if (msg.rot) {
-        remote.SetAngle({ (*msg.rot)[0], (*msg.rot)[1], (*msg.rot)[2] });
-      }
-    }
-    remote.UpdateHoster(hoster);
-
-    // Prevents too fast host switch
-    if (partOne.worldState.lastMovUpdateByIdx.size() <= remoteIdx) {
-      partOne.worldState.lastMovUpdateByIdx.resize(
-        static_cast<size_t>(remoteIdx) + 1);
-    }
-    partOne.worldState.lastMovUpdateByIdx[remoteIdx] =
-      std::chrono::system_clock::now();
-
-    auto remoteAsActor = remote.AsActor();
-    if (remoteAsActor) {
-      remoteAsActor->EquipBestWeapon();
-    }
-
-    uint64_t longFormId = remote.GetFormId();
-    if (remoteAsActor && longFormId < 0xff000000) {
-      longFormId += 0x100000000;
-    }
-
-    HostStartMessage message;
-    message.target = longFormId;
-    partOne.GetSendTarget().Send(rawMsgData.userId, message, true);
-
-    // Otherwise, health percentage would remain unsynced until someone hits
-    // npc
-    auto formId = remote.GetFormId();
-    partOne.worldState.SetTimer(std::chrono::seconds(1))
-      .Then([this, formId](Viet::Void) {
-        // Check if form is still here
-        auto& remote = partOne.worldState.GetFormAt<MpActor>(formId);
-
-        auto changeForm = remote.GetChangeForm();
-
-        ChangeValuesMessage msg;
-        msg.idx = remote.GetIdx();
-        msg.data.health = changeForm.actorValues.healthPercentage;
-        msg.data.magicka = changeForm.actorValues.magickaPercentage;
-        msg.data.stamina = changeForm.actorValues.staminaPercentage;
-        remote.GetActorToSendTo().SendToUser(msg, true);
-      });
-
-    auto& prevHosterForm = partOne.worldState.LookupFormById(prevHoster);
-    if (MpActor* prevHosterActor =
-          prevHosterForm ? prevHosterForm->AsActor() : nullptr) {
-      auto prevHosterUser = partOne.serverState.UserByActor(prevHosterActor);
-      if (prevHosterUser != Networking::InvalidUserId &&
-          prevHosterUser != rawMsgData.userId) {
-        HostStopMessage message;
-        message.target = longFormId;
-        partOne.GetSendTarget().Send(prevHosterUser, message, true);
-      }
-    }
-  }
+  remote.Enable();
+  partOne.RefreshHoster(remote);
 }
 
 void ActionListener::OnCustomEvent(const RawMessageData& rawMsgData,

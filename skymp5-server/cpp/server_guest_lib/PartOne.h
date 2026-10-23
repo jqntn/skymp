@@ -18,6 +18,7 @@
 #include <save_storages/ISaveStorage.h>
 #include <set>
 #include <simdjson.h>
+#include <tuple>
 #include <spdlog/logger.h>
 
 using ProfileId = int32_t;
@@ -132,6 +133,13 @@ public:
   void SendHostStop(Networking::UserId badHosterUserId,
                     MpObjectReference& remote);
 
+  using HostCell = std::tuple<uint32_t, int16_t, int16_t>;
+  using PingSource = std::function<int(Networking::UserId)>;
+  void SetPingSource(PingSource pingSource);
+  void RefreshHoster(MpObjectReference& npc,
+                     MpObjectReference* leavingListener = nullptr);
+  bool IsSeen(MpObjectReference& refr);
+
   static MessageSerializer& GetMessageSerializerInstance();
 
 private:
@@ -153,7 +161,13 @@ private:
 
   void TickPacketHistoryPlaybacks();
   void TickDeferredMessages();
-  void TickStaleHosters();
+  void TickHosters();
+  int PingOf(Networking::UserId userId);
+  bool IsLive(MpActor& player);
+  bool IsVisitor(MpActor& player, const HostCell& cell);
+  uint32_t AuthorityOf(const HostCell& cell);
+  void SetHoster(MpObjectReference& npc, uint32_t hosterId,
+                 const char* reason);
 
   std::string SignJavaScriptSources(const std::string& src) const;
 

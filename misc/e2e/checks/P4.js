@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 const BANDIT = 0x1ebf6;
+const INITIALLY_DISABLED = 0x215d7;
 const IRON_SWORD = 0x12eb7;
 const GOLD = 0xf;
 const INTERIOR = 0x165a8;
@@ -63,7 +64,7 @@ module.exports = {
     await expect("claim on the actor of a player", rejected(player, "the target is a player"), 1, claim(player, world, at(-250).pos), [playerState]);
     await expect("claim with an ACHR id as the cell", rejected(BANDIT, "the location is not a cell or a worldspace"), 1, claim(BANDIT, BANDIT, at(300).pos), [bandit]);
     await expect("claim with an unknown id as the cell", rejected(BANDIT, "the location is not a cell or a worldspace"), 1, claim(BANDIT, 0x7ffff0, at(300).pos), [bandit]);
-    await expect("claim without a location from 300 units", rejected(BANDIT, "no location, and the target is an ESP form"), 1, claim(BANDIT), [bandit]);
+    await expect("claim without a location from 300 units", rejected(BANDIT, "no location"), 1, claim(BANDIT), [bandit]);
     await place(claimer, 40000);
     await ctx.sleep(1000);
     await expect("claim without a location from 40000 units", rejected(BANDIT, "no location"), 1, claim(BANDIT), [bandit]);
@@ -84,7 +85,15 @@ module.exports = {
     const wrong = log().filter((l) => /Rejected custom packet/.test(l) && !/"espAnim"/.test(l));
     ctx.evidence.push(`handled packets logged as rejected: ${wrong.length}`);
     if (wrong.length) fails.push(`handled packets were logged as rejected: ${wrong.slice(0, 3).join(" | ")}`);
-    await expect("control: a valid claim", new RegExp(`Hoster changed from 0 to ${hex(claimer)}`), 1, claim(BANDIT, world, loc.pos), []);
+    await ctx.probe(`mp.set(${BANDIT}, "isDisabled", true); return 0;`);
+    await expect("claim on an NPC disabled during play", rejected(BANDIT, "disabled during play"), 1, claim(BANDIT, world, loc.pos), [bandit]);
+    const guard = await ctx.probe(`return mp.get(${INITIALLY_DISABLED}, "locationalData");`);
+    await ctx.probe(`mp.set(${claimer}, "locationalData", ${JSON.stringify({ ...guard, pos: [guard.pos[0] + 100, guard.pos[1], guard.pos[2]] })}); return 0;`);
+    await ctx.sleep(1000);
+    await expect("control: a valid claim on an initially disabled NPC", new RegExp(`NPC ${hex(INITIALLY_DISABLED)} enabled at the report of ${hex(claimer)}`), 1, claim(INITIALLY_DISABLED, parseInt(guard.cellOrWorldDesc.split(":")[0], 16), guard.pos), []);
+    const enabled = !(await ctx.probe(`return mp.get(${INITIALLY_DISABLED}, "isDisabled");`));
+    ctx.evidence.push(`control: the initially disabled guard ${hex(INITIALLY_DISABLED)} is enabled after the valid claim: ${enabled}`);
+    if (!enabled) fails.push("control: a valid claim did not enable the initially disabled guard");
 
     ctx.assert.ok(!fails.length, fails.join("; "));
   },

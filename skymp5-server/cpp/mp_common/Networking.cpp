@@ -136,7 +136,7 @@ private:
 class Server : public Networking::IServer
 {
 public:
-  constexpr static int timeoutTimeMs = 60000;
+  constexpr static int timeoutTimeMs = 10000;
 
   Server(const char* listenAddress, unsigned short port_,
          unsigned short maxConnections_, const char* password_,
@@ -231,6 +231,12 @@ public:
     }
 
     metrics.connectedClientsGauge.Set(connectedCount);
+  }
+
+  int GetAveragePing(Networking::UserId userId) const override
+  {
+    const auto guid = idManager->find(userId);
+    return guid == RakNetGUID(-1) ? 0 : std::max(0, peer->GetAveragePing(guid));
   }
 
   std::string GetIp(Networking::UserId userId) const override

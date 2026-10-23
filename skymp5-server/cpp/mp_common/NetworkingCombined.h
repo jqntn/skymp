@@ -98,6 +98,16 @@ public:
     childs[serverIdx]->CloseConnection(userId);
   }
 
+  int GetAveragePing(Networking::UserId userId) const override
+  {
+    if (realIdByCombined.size() <= userId ||
+        realIdByCombined[userId].second == Networking::InvalidUserId) {
+      return -1;
+    }
+    auto& p = realIdByCombined[userId];
+    return childs[p.first]->GetAveragePing(p.second);
+  }
+
   Networking::UserId GetCombinedUserId(size_t serverIdx,
                                        Networking::UserId realUserId) const
   {

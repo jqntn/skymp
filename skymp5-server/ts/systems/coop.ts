@@ -326,6 +326,7 @@ export class Coop implements System {
       party.members.filter((m) => m !== actor).forEach((m) => this.notice(ctx, m, `${this.name(ctx, actor)} is back`));
     }
     this.sendState(ctx, actor);
+    this.claimFollowers(ctx, actor);
     const log = this.questLog(ctx, actor);
     this.log(`Coop: replay of ${log.length} quest log entries to ${hex(actor)}`);
     this.send(ctx, actor, { customPacketType: "questApply", entries: log, replay: true, followers: this.followers(ctx, actor), questItems: this.replayQuestItems(ctx, actor, log) });
@@ -411,6 +412,20 @@ export class Coop implements System {
     return Array.isArray(stored) && stored.length === FOLLOWER_SLOTS && stored.every((ref) => ref === 0 || isFormId(ref)) ? (stored as number[]) : new Array(FOLLOWER_SLOTS).fill(0);
   }
 
+  private setFollowers(ctx: SystemContext, actor: number, refs: number[]): void {
+    for (const ref of this.followers(ctx, actor)) {
+      if (ref && !refs.includes(ref) && ctx.svr.get(ref, "hostOwner") === actor) {
+        ctx.svr.set(ref, "hostOwner", 0);
+      }
+    }
+    ctx.svr.set(actor, FOLLOWERS_PROPERTY, refs);
+    this.claimFollowers(ctx, actor);
+  }
+
+  private claimFollowers(ctx: SystemContext, actor: number): void {
+    this.followers(ctx, actor).filter((ref) => ref).forEach((ref) => ctx.svr.set(ref, "hostOwner", actor));
+  }
+
   private onFollowers(ctx: SystemContext, actor: number, refs: unknown): void {
     const isNpcRef = (ref: unknown) => {
       try {
@@ -423,13 +438,24 @@ export class Coop implements System {
       this.log(`Coop: followers of ${hex(actor)} rejected (${JSON.stringify(refs)})`);
       return;
     }
-    const kept = refs.map((ref) => (isNpcRef(ref) ? (ref as number) : 0));
-    ctx.svr.set(actor, FOLLOWERS_PROPERTY, kept);
+    const previous = this.followers(ctx, actor);
+    const nearActor = (ref: number) => {
+      try {
+        const a = ctx.svr.getActorPos(actor);
+        const r = ctx.svr.getActorPos(ref);
+        return previous.includes(ref) || ctx.svr.get(ref, "hoster") === actor
+          || (ctx.svr.getActorCellOrWorld(actor) === ctx.svr.getActorCellOrWorld(ref) && Math.hypot(a[0] - r[0], a[1] - r[1]) <= 4096);
+      } catch {
+        return false;
+      }
+    };
+    const kept = refs.map((ref) => (isNpcRef(ref) && nearActor(ref as number) ? (ref as number) : 0));
+    this.setFollowers(ctx, actor, kept);
     for (const other of this.parties.partyOf(actor)?.members.filter((m) => m !== actor) ?? []) {
       const theirs = this.followers(ctx, other);
       const lost = theirs.filter((ref) => ref && kept.includes(ref));
       if (lost.length) {
-        ctx.svr.set(other, FOLLOWERS_PROPERTY, theirs.map((ref) => (lost.includes(ref) ? 0 : ref)));
+        this.setFollowers(ctx, other, theirs.map((ref) => (lost.includes(ref) ? 0 : ref)));
         this.log(`Coop: followers of ${hex(other)} lose ${lost.map(hex).join(", ")} to ${hex(actor)}`);
       }
     }

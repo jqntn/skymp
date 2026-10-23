@@ -1,6 +1,7 @@
 const NPCS = [["Gerdur", 0x13489], ["Alvor", 0x13482]];
 const M = "Dialogue Menu";
 const R = "_root.DialogueMenu_mc";
+const ALVOR_FORGE = { cellOrWorldDesc: "3c:Skyrim.esm", pos: [20587, -45137, -82], rot: [0, 0, 0] };
 
 module.exports = {
   engines: 2,
@@ -52,6 +53,7 @@ module.exports = {
     };
 
     for (const [name, id] of NPCS) {
+      if (id === 0x13482) await ctx.probe(`mp.set(${id}, "locationalData", ${JSON.stringify(ALVOR_FORGE)}); return 0;`);
       const loc = await ctx.npcLocation(id);
       for (const actor of actors) await ctx.probe(`mp.set(${actor}, "locationalData", ${JSON.stringify(loc)}); return 0;`);
       for (const n of [1, 2]) {

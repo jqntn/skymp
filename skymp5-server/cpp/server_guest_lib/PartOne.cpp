@@ -8,6 +8,8 @@
 #include "CreateActorMessage.h"
 #include "CustomPacketMessage.h"
 #include "DestroyActorMessage.h"
+#include "ChangeValuesMessage.h"
+#include "HostStartMessage.h"
 #include "HostStopMessage.h"
 #include "SetRaceMenuOpenMessage.h"
 #include "UpdateGameModeDataMessage.h"
@@ -82,7 +84,16 @@ struct PartOne::Impl
   std::shared_ptr<PacketParser> packetParser;
   std::shared_ptr<ActionListener> actionListener;
 
-  std::chrono::steady_clock::time_point lastStaleHosterSweep;
+  std::chrono::steady_clock::time_point lastHosterTick;
+  struct CellAuthority
+  {
+    uint32_t id = 0;
+    std::chrono::steady_clock::time_point takeoverAt;
+  };
+  std::map<PartOne::HostCell, CellAuthority> cellAuthorities;
+  std::unordered_map<Networking::UserId, int> pings;
+  std::unordered_map<uint32_t, PartOne::HostCell> playerCells;
+  PartOne::PingSource pingSource = [](Networking::UserId) { return 0; };
 
   std::shared_ptr<spdlog::logger> logger;
 
@@ -149,39 +160,303 @@ void PartOne::Tick()
 {
   TickPacketHistoryPlaybacks();
   TickDeferredMessages();
-  TickStaleHosters();
+  TickHosters();
   worldState.Tick();
 }
 
-void PartOne::TickStaleHosters()
+namespace {
+PartOne::HostCell HostCellOf(WorldState& worldState, MpObjectReference& refr)
 {
-  constexpr auto kStaleHosterTimeout = std::chrono::seconds(3);
-  constexpr auto kStaleHosterSweepInterval = std::chrono::milliseconds(250);
-  const auto sweepAt = std::chrono::steady_clock::now();
-  if (sweepAt - pImpl->lastStaleHosterSweep < kStaleHosterSweepInterval) {
+  const auto& pos = refr.GetPos();
+  return { refr.GetCellOrWorld().ToFormId(worldState.espmFiles),
+           int16_t(pos.x / 4096), int16_t(pos.y / 4096) };
+}
+
+bool IsNear(const PartOne::HostCell& a, const PartOne::HostCell& b)
+{
+  return std::get<0>(a) == std::get<0>(b) &&
+    std::abs(std::get<1>(a) - std::get<1>(b)) <= 1 &&
+    std::abs(std::get<2>(a) - std::get<2>(b)) <= 1;
+}
+}
+
+void PartOne::SetPingSource(PingSource pingSource)
+{
+  pImpl->pingSource = std::move(pingSource);
+  pImpl->pings.clear();
+}
+
+int PartOne::PingOf(Networking::UserId userId)
+{
+  auto [it, inserted] = pImpl->pings.try_emplace(userId, 0);
+  if (inserted) {
+    it->second = pImpl->pingSource(userId);
+  }
+  return it->second;
+}
+
+bool PartOne::IsLive(MpActor& player)
+{
+  constexpr auto kSilenceTimeout = std::chrono::seconds(3);
+  auto userId = serverState.UserByActor(&player);
+  return userId != Networking::InvalidUserId &&
+    userId != serverState.disconnectingUserId &&
+    serverState.userInfo[userId] && PingOf(userId) >= 0 &&
+    !player.IsDisabled() &&
+    std::chrono::steady_clock::now() -
+        serverState.userInfo[userId]->lastMovementAt <=
+      kSilenceTimeout;
+}
+
+bool PartOne::IsVisitor(MpActor& player, const HostCell& cell)
+{
+  return IsLive(player) && IsNear(HostCellOf(worldState, player), cell);
+}
+
+bool PartOne::IsSeen(MpObjectReference& refr)
+{
+  return AuthorityOf(HostCellOf(worldState, refr)) != 0;
+}
+
+uint32_t PartOne::AuthorityOf(const HostCell& cell)
+{
+  auto& authorities = pImpl->cellAuthorities;
+  auto it = authorities.find(cell);
+  const uint32_t previous = it == authorities.end() ? 0 : it->second.id;
+  if (previous) {
+    auto& form = worldState.LookupFormById(previous);
+    if (auto player = form ? form->AsActor() : nullptr;
+        player && IsVisitor(*player, cell)) {
+      return previous;
+    }
+  }
+  uint32_t best = 0;
+  int bestPing = 0;
+  for (Networking::UserId userId = 0; userId <= serverState.maxConnectedId;
+       ++userId) {
+    auto player = serverState.ActorByUser(userId);
+    if (!player || !IsVisitor(*player, cell)) {
+      continue;
+    }
+    const int ping = PingOf(userId);
+    if (!best || ping < bestPing ||
+        (ping == bestPing && player->GetFormId() < best)) {
+      best = player->GetFormId();
+      bestPing = ping;
+    }
+  }
+  if (best) {
+    authorities[cell].id = best;
+  } else {
+    authorities.erase(cell);
+  }
+  if (previous && best != previous) {
+    GetLogger().info("Authority of cell {:x} ({}, {}) changed from {:x} to "
+                     "{:x} (the authority left)",
+                     std::get<0>(cell), std::get<1>(cell), std::get<2>(cell),
+                     previous, best);
+  }
+  return best;
+}
+
+void PartOne::SetHoster(MpObjectReference& npc, uint32_t hosterId,
+                        const char* reason)
+{
+  const auto it = worldState.hosters.find(npc.GetFormId());
+  const uint32_t previous = it == worldState.hosters.end() ? 0 : it->second;
+  if (previous == hosterId) {
     return;
   }
-  pImpl->lastStaleHosterSweep = sweepAt;
-  const auto now = std::chrono::system_clock::now();
+  GetLogger().info("Hoster changed from {:x} to {:x} on {:x} ({})", previous,
+                   hosterId, npc.GetFormId(), reason);
+  if (hosterId) {
+    worldState.hosters[npc.GetFormId()] = hosterId;
+  } else {
+    worldState.hosters.erase(it);
+  }
+
+  uint64_t longFormId = npc.GetFormId();
+  if (npc.AsActor() && longFormId < 0xff000000) {
+    longFormId += 0x100000000;
+  }
+  auto userOf = [&](uint32_t actorId) {
+    auto& form = worldState.LookupFormById(actorId);
+    auto actor = form ? form->AsActor() : nullptr;
+    auto userId =
+      actor ? serverState.UserByActor(actor) : Networking::InvalidUserId;
+    return userId == serverState.disconnectingUserId ? Networking::InvalidUserId
+                                                     : userId;
+  };
+  if (auto userId = previous ? userOf(previous) : Networking::InvalidUserId;
+      userId != Networking::InvalidUserId) {
+    HostStopMessage message;
+    message.target = longFormId;
+    GetSendTarget().Send(userId, message, true);
+  }
+  if (auto userId = hosterId ? userOf(hosterId) : Networking::InvalidUserId;
+      userId != Networking::InvalidUserId) {
+    auto actor = npc.AsActor();
+    if (actor) {
+      actor->EquipBestWeapon();
+    }
+    HostStartMessage message;
+    message.target = longFormId;
+    GetSendTarget().Send(userId, message, true);
+    if (actor) {
+      const auto& actorValues = actor->GetActorValues();
+      ChangeValuesMessage values;
+      values.idx = actor->GetIdx();
+      values.data.health = actorValues.healthPercentage;
+      values.data.magicka = actorValues.magickaPercentage;
+      values.data.stamina = actorValues.staminaPercentage;
+      GetSendTarget().Send(userId, values, true);
+    }
+  }
+  npc.UpdateHoster(hosterId);
+}
+
+void PartOne::RefreshHoster(MpObjectReference& npc,
+                            MpObjectReference* leavingListener)
+{
+  auto actor = npc.AsActor();
+  if (!actor || serverState.UserByActor(actor) != Networking::InvalidUserId) {
+    return;
+  }
+  if (npc.IsDisabled()) {
+    return SetHoster(npc, 0, "disabled");
+  }
+  auto playerOf = [&](uint32_t playerId) {
+    auto& form = worldState.LookupFormByIdNoLoad(playerId);
+    return form ? form->AsActor() : nullptr;
+  };
+  const auto& listeners = npc.GetListeners();
+  auto canHost = [&](uint32_t playerId) {
+    auto player = playerOf(playerId);
+    return player && player != leavingListener && listeners.count(player) &&
+      IsLive(*player);
+  };
+  const auto ownerIt = worldState.hostOwners.find(npc.GetFormId());
+  if (ownerIt != worldState.hostOwners.end() && ownerIt->second) {
+    if (auto owner = playerOf(ownerIt->second); owner && IsLive(*owner)) {
+      return SetHoster(npc, ownerIt->second, "follower owner");
+    }
+  }
+  const auto cell = HostCellOf(worldState, npc);
+  const uint32_t authority = AuthorityOf(cell);
+  const auto hosterIt = worldState.hosters.find(npc.GetFormId());
+  const uint32_t current =
+    hosterIt == worldState.hosters.end() ? 0 : hosterIt->second;
+  if (current && canHost(current) &&
+      (!authority || IsVisitor(*playerOf(current), cell))) {
+    return;
+  }
+  if (authority && canHost(authority)) {
+    return SetHoster(npc, authority, "cell authority");
+  }
+  SetHoster(npc, 0, leavingListener ? "the hoster left" : "no visitor");
+}
+
+void PartOne::TickHosters()
+{
+  constexpr auto kInterval = std::chrono::milliseconds(250);
+  constexpr int kPingDifferenceRequiredForAuthority = 40;
+  constexpr auto kTakeoverCooldown = std::chrono::seconds(10);
+  const auto now = std::chrono::steady_clock::now();
+  if (now - pImpl->lastHosterTick < kInterval) {
+    return;
+  }
+  pImpl->lastHosterTick = now;
+  pImpl->pings.clear();
+
+  std::vector<HostCell> cells;
+  for (auto& [cell, authority] : pImpl->cellAuthorities) {
+    cells.push_back(cell);
+  }
+  for (auto& cell : cells) {
+    AuthorityOf(cell);
+  }
+
+  std::set<MpObjectReference*> npcs;
+  std::unordered_map<uint32_t, HostCell> playerCells;
+  for (Networking::UserId userId = 0; userId <= serverState.maxConnectedId;
+       ++userId) {
+    auto player = serverState.ActorByUser(userId);
+    if (!player) {
+      continue;
+    }
+    const auto cell = HostCellOf(worldState, *player);
+    if (!IsVisitor(*player, cell)) {
+      continue;
+    }
+    playerCells[player->GetFormId()] = cell;
+    auto previous = pImpl->playerCells.find(player->GetFormId());
+    if (previous == pImpl->playerCells.end() || previous->second != cell) {
+      for (int dx = -1; dx <= 1; ++dx) {
+        for (int dy = -1; dy <= 1; ++dy) {
+          const HostCell visited{ std::get<0>(cell),
+                                  int16_t(std::get<1>(cell) + dx),
+                                  int16_t(std::get<2>(cell) + dy) };
+          if (previous != pImpl->playerCells.end() &&
+              IsNear(previous->second, visited)) {
+            continue;
+          }
+          const uint32_t authority = AuthorityOf(visited);
+          if (!authority || authority == player->GetFormId()) {
+            continue;
+          }
+          auto& form = worldState.LookupFormById(authority);
+          auto authorityActor = form ? form->AsActor() : nullptr;
+          auto authorityUser = authorityActor
+            ? serverState.UserByActor(authorityActor)
+            : Networking::InvalidUserId;
+          auto& cellAuthority = pImpl->cellAuthorities[visited];
+          if (authorityUser != Networking::InvalidUserId &&
+              now - cellAuthority.takeoverAt >= kTakeoverCooldown &&
+              PingOf(userId) + kPingDifferenceRequiredForAuthority <
+                PingOf(authorityUser)) {
+            cellAuthority = { player->GetFormId(), now };
+            GetLogger().info("Authority of cell {:x} ({}, {}) changed from "
+                             "{:x} to {:x} (lower ping)",
+                             std::get<0>(visited), std::get<1>(visited),
+                             std::get<2>(visited), authority,
+                             player->GetFormId());
+            for (auto emitter : player->GetEmitters()) {
+              auto it = worldState.hosters.find(emitter->GetFormId());
+              if (it != worldState.hosters.end() && it->second == authority &&
+                  !worldState.hostOwners.count(emitter->GetFormId()) &&
+                  HostCellOf(worldState, *emitter) == visited) {
+                SetHoster(*emitter, player->GetFormId(), "lower ping");
+              }
+            }
+          }
+        }
+      }
+    }
+    for (auto emitter : player->GetEmitters()) {
+      if (auto actor = emitter->AsActor(); actor &&
+          serverState.UserByActor(actor) == Networking::InvalidUserId) {
+        npcs.insert(emitter);
+      }
+    }
+  }
+  pImpl->playerCells = std::move(playerCells);
   for (auto& [npcId, hosterId] : worldState.hosters) {
-    if (hosterId == 0) {
+    if (!hosterId) {
       continue;
     }
     auto& npc = worldState.LookupFormByIdNoLoad(npcId);
-    auto refr = npc ? npc->AsObjectReference() : nullptr;
-    if (!refr) {
-      continue;
+    if (auto refr = npc ? npc->AsObjectReference() : nullptr) {
+      npcs.insert(refr);
     }
-    const auto idx = refr->GetIdx();
-    const auto& updates = worldState.lastMovUpdateByIdx;
-    if (updates.size() > idx && updates[idx] &&
-        now - *updates[idx] < kStaleHosterTimeout) {
-      continue;
+  }
+  for (auto& [npcId, ownerId] : worldState.hostOwners) {
+    auto& npc = worldState.LookupFormById(npcId);
+    if (auto refr = npc ? npc->AsObjectReference() : nullptr) {
+      npcs.insert(refr);
     }
-    GetLogger().info("Hoster cleared on {:x}: was {:x} (no movement for 3 s)",
-                     npcId, hosterId);
-    hosterId = 0;
-    refr->UpdateHoster(0);
+  }
+  for (auto npc : npcs) {
+    RefreshHoster(*npc);
   }
 }
 
@@ -490,17 +765,18 @@ void PartOne::HandlePacket(void* partOneInstance, Networking::UserId userId,
           // TODO: apply dependency inversion here: connection handling code
           // should not depend on animation system
           this_->animationSystem.ClearInfo(actor);
+          this_->pImpl->playerCells.erase(actor->GetFormId());
+          this_->pImpl->pings.erase(userId);
+          std::vector<uint32_t> hosted;
           for (auto& [npcId, hosterId] : this_->worldState.hosters) {
-            if (hosterId != actor->GetFormId()) {
-              continue;
+            if (hosterId == actor->GetFormId()) {
+              hosted.push_back(npcId);
             }
-            this_->GetLogger().info(
-              "Hoster cleared on {:x}: was {:x} (disconnected)", npcId,
-              hosterId);
-            hosterId = 0;
+          }
+          for (auto npcId : hosted) {
             auto& npc = this_->worldState.LookupFormByIdNoLoad(npcId);
             if (auto refr = npc ? npc->AsObjectReference() : nullptr) {
-              refr->UpdateHoster(0);
+              this_->RefreshHoster(*refr);
             }
           }
         }
@@ -941,13 +1217,7 @@ void PartOne::Init()
     auto hoster = worldState.hosters.find(emitter->GetFormId());
     if (hoster != worldState.hosters.end() &&
         hoster->second == listener->GetFormId()) {
-      GetLogger().info("Hoster cleared on {:x}: was {:x} (unsubscribed)",
-                       emitter->GetFormId(), hoster->second);
-      hoster->second = 0;
-      emitter->UpdateHoster(0);
-      if (listenerOnline) {
-        SendHostStop(listenerUserId, *emitter);
-      }
+      RefreshHoster(*emitter, listener);
     }
 
     if (listenerOnline) {

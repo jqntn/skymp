@@ -515,8 +515,12 @@ void MpObjectReference::Disable()
     return;
   }
 
-  EditChangeForm(
-    [&](MpChangeFormREFR& changeForm) { changeForm.isDisabled = true; });
+  EditChangeForm([&](MpChangeFormREFR& changeForm) {
+    changeForm.isDisabled = true;
+    if (AsActor() && IsEspmForm()) {
+      changeForm.dynamicFields.SetValueDump(kDisabledInPlay, "true");
+    }
+  });
 
   if (IsEspmForm()) {
     SendMessageToActorListeners(
@@ -779,6 +783,11 @@ void MpObjectReference::SetPrimitive(const NiPoint3& boundsDiv2)
   auto vertices = Primitive::GetVertices(GetPos(), GetAngle(), boundsDiv2);
   pImpl->primitive =
     PrimitiveData{ boundsDiv2, Primitive::CreateGeoPolygonProc(vertices) };
+}
+
+bool MpObjectReference::IsDisabledInPlay() const
+{
+  return ChangeForm().dynamicFields.GetValueDump(kDisabledInPlay) == "true";
 }
 
 void MpObjectReference::UpdateHoster(uint32_t newHosterId)

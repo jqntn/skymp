@@ -353,6 +353,9 @@ ScampServer::ScampServer(const Napi::CallbackInfo& info)
     server = Networking::CreateCombinedServer({ realServer, serverMock });
 
     partOne->SetSendTarget(server.get());
+    partOne->SetPingSource([server = server](Networking::UserId userId) {
+      return server->GetAveragePing(userId);
+    });
 
     const auto conditionFunctionMap =
       ConditionFunctionFactory::CreateConditionFunctions();
