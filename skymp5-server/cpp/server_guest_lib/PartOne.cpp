@@ -178,6 +178,8 @@ void PartOne::TickStaleHosters()
         now - *updates[idx] < kStaleHosterTimeout) {
       continue;
     }
+    GetLogger().info("Hoster cleared on {:x}: was {:x} (no movement for 3 s)",
+                     npcId, hosterId);
     hosterId = 0;
     refr->UpdateHoster(0);
   }
@@ -492,6 +494,9 @@ void PartOne::HandlePacket(void* partOneInstance, Networking::UserId userId,
             if (hosterId != actor->GetFormId()) {
               continue;
             }
+            this_->GetLogger().info(
+              "Hoster cleared on {:x}: was {:x} (disconnected)", npcId,
+              hosterId);
             hosterId = 0;
             auto& npc = this_->worldState.LookupFormByIdNoLoad(npcId);
             if (auto refr = npc ? npc->AsObjectReference() : nullptr) {
@@ -936,6 +941,8 @@ void PartOne::Init()
     auto hoster = worldState.hosters.find(emitter->GetFormId());
     if (hoster != worldState.hosters.end() &&
         hoster->second == listener->GetFormId()) {
+      GetLogger().info("Hoster cleared on {:x}: was {:x} (unsubscribed)",
+                       emitter->GetFormId(), hoster->second);
       hoster->second = 0;
       emitter->UpdateHoster(0);
       if (listenerOnline) {

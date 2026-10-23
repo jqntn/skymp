@@ -732,6 +732,10 @@ void ActionListener::OnHostAttempt(const RawMessageData& rawMsgData,
 
   if (msg.release.value_or(false)) {
     if (hoster == me->GetFormId()) {
+      partOne.GetLogger().info("Hoster cleared on {:x}: was {:x} (released{})",
+                               remoteId, hoster,
+                               msg.disabled.value_or(false) ? ", disabled"
+                                                            : "");
       hoster = 0;
       remote.UpdateHoster(0);
       if (msg.disabled.value_or(false)) {
@@ -794,8 +798,8 @@ void ActionListener::OnHostAttempt(const RawMessageData& rawMsgData,
   if (hoster == 0 || !lastRemoteUpdate ||
       std::chrono::system_clock::now() - *lastRemoteUpdate >
         hostResetTimeout) {
-    partOne.GetLogger().info("Hoster changed from {:x} to {:x}", prevHoster,
-                             me->GetFormId());
+    partOne.GetLogger().info("Hoster changed from {:x} to {:x} on {:x}",
+                             prevHoster, me->GetFormId(), remoteId);
     hoster = me->GetFormId();
     if (msg.worldOrCell) {
       remote.Enable();
