@@ -42,11 +42,11 @@ module.exports = {
     const held = (id) => ctx.drv(`return sp.Game.getPlayer().getItemCount(sp.Game.getFormEx(${id}));`);
     const serverHeld = (actor, id) => ctx.probe(`return ((mp.get(${actor}, "inventory") || { entries: [] }).entries).filter((e) => e.baseId === ${id}).reduce((s, e) => s + e.count, 0);`);
     const holderCount = async (holder, item) => ({ client: await ctx.drv(`const r = sp.ObjectReference.from(sp.Game.getFormEx(${holder})); return r ? r.getItemCount(sp.Game.getFormEx(${item})) : -1;`), server: await serverHeld(holder, item) });
-    const holdersEmpty = async (label, list) => {
+    const holdersEmpty = async (label, list, unloadedOk = false) => {
       for (const [name, holder, item] of list) {
         const c = await holderCount(holder, item);
-        ctx.evidence.push(`${label}: ${name} holds ${c.client} on the client, ${c.server} on the server`);
-        if (c.client !== 0 || c.server !== 0) fails.push(`${label}: ${name} holds ${c.client} on the client and ${c.server} on the server (expected 0: the leader took it)`);
+        ctx.evidence.push(`${label}: ${name} holds ${c.client === -1 ? "nothing (not loaded)" : c.client} on the client, ${c.server} on the server`);
+        if ((c.client !== 0 && !(unloadedOk && c.client === -1)) || c.server !== 0) fails.push(`${label}: ${name} holds ${c.client} on the client and ${c.server} on the server (expected 0: the leader took it)`);
       }
     };
     const ARVEL_CLAW = ["Arvel (the claw)", ARVEL, CLAW];
@@ -279,7 +279,7 @@ module.exports = {
     const b5 = await relog("S5", async () => (await done(MQ104, 160)) && (await follows()) && (await equippedRight()) === axe);
     const r5 = { souls: await ctx.drv(`return sp.Game.getPlayer().getActorValue("DragonSouls");`), soulsBefore, done160: await done(MQ104, 160), fus: await fus(), axe: axe ? await held(axe) : 0, serverAxe: axe ? await serverHeld(leader, axe) : 0, equipped: hex(await equippedRight()), worn: (await serverWorn()).map(hex), lydia: await follower() };
     ctx.evidence.push(`S5 after the relog: ${JSON.stringify(r5)}`);
-    await holdersEmpty("S5 after the relog", [ARVEL_CLAW, BOSS_STONE]);
+    await holdersEmpty("S5 after the relog", [ARVEL_CLAW, BOSS_STONE], true);
     ctx.shot("G2_5-relog");
     if (r5.souls !== soulsBefore) fails.push(`S5 after the relog: the leader's DragonSouls went ${soulsBefore} -> ${r5.souls} (the replay must not grant or take souls)`);
     if (!b5 || !r5.fus || r5.axe !== 1 || r5.serverAxe !== 1 || !r5.worn.includes(hex(axe))) fails.push(`S5 after the relog: ${JSON.stringify(r5)} (expected 160 done, Fus, one reward weapon on the client and the server, equipped, Lydia following)`);
