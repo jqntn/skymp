@@ -59,13 +59,6 @@ module.exports = {
     };
 
     await put(1, AWAY);
-    const loc = await ctx.npcLocation(BANDIT[1], 2);
-    await put(2, { ...loc, pos: [loc.pos[0] + 300, loc.pos[1], loc.pos[2] + 50] });
-    await loaded(BANDIT[1], 2);
-    if (!(await ctx.waitFor(() => server(BANDIT[1]).then((s) => s.hoster === actors[1] && !s.dead), 60000, "engine 2 hosts the living bandit").then(() => true).catch(() => false))) fails.push("bandit: not exercised, engine 2 does not host a living bandit");
-    else await fight(...BANDIT, "");
-
-    await put(1, AWAY);
     const gloc = await ctx.npcLocation(SITTER[1], 2);
     await put(2, { ...gloc, pos: [gloc.pos[0] + 300, gloc.pos[1], gloc.pos[2] + 50] });
     await loaded(SITTER[1], 2);
@@ -86,6 +79,13 @@ module.exports = {
       await ctx.sleep(5000);
       await fight(...SITTER, " (seated on engine 2 when the fight starts)");
     }
+    await put(1, AWAY);
+    const loc = await ctx.npcLocation(BANDIT[1], 2);
+    await put(2, { ...loc, pos: [loc.pos[0] + 300, loc.pos[1], loc.pos[2] + 50] });
+    await loaded(BANDIT[1], 2);
+    if (!(await ctx.waitFor(() => server(BANDIT[1]).then((s) => s.hoster === actors[1] && !s.dead), 60000, "engine 2 hosts the living bandit").then(() => true).catch(() => false))) fails.push("bandit: not exercised, engine 2 does not host a living bandit");
+    else await fight(...BANDIT, "");
+
     ctx.assert.ok(!fails.length, fails.join("; "));
   },
 };

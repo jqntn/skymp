@@ -41,6 +41,23 @@ const lastAnimEvents = new Map<number, string>();
 const lastFurnitureIdles = new Map<number, string>();
 export const relayedCombatTargets = new Map<number, number>();
 export const relayedSeats = new Map<number, { furniture: number, enter: string }>();
+const refusedAttacks = new Map<number, { name: string, until: number }>();
+let relaying: { id: number, name: string, refused: boolean } | null = null;
+
+const sendRelayed = (refr: ObjectReference, name: string): boolean => {
+  relaying = { id: refr.getFormID(), name, refused: false };
+  Debug.sendAnimationEvent(refr, name);
+  const refused = relaying.refused;
+  relaying = null;
+  return !refused;
+};
+
+export const retryRefusedAttack = (refr: ObjectReference): void => {
+  const pending = refusedAttacks.get(refr.getFormID());
+  if (pending && (Date.now() > pending.until || sendRelayed(refr, pending.name))) {
+    refusedAttacks.delete(refr.getFormID());
+  }
+};
 
 export const standAnimEventName = "SkympStand";
 export const flyAnimEventName = "SkympFly";
@@ -253,7 +270,11 @@ export const applyAnimation = (
   }
 
   const standing = !ac || ac.getSitState() === 0;
-  Debug.sendAnimationEvent(refr, anim.animEventName);
+  if (sendRelayed(refr, anim.animEventName)) {
+    refusedAttacks.delete(refr.getFormID());
+  } else if (/^attackstart/i.test(anim.animEventName)) {
+    refusedAttacks.set(refr.getFormID(), { name: anim.animEventName, until: Date.now() + 500 });
+  }
 
   if (standing && isFurnitureIdle(anim.animEventName)) {
     state.ownSeat = true;
@@ -478,6 +499,9 @@ export const setupHooks = (): void => {
       }
     },
     leave: (ctx) => {
+      if (relaying && ctx.selfId === relaying.id && !ctx.animationSucceeded) {
+        relaying.refused = true;
+      }
       if (ctx.selfId < 0xff000000 && ctx.animationSucceeded && !ignoredAnims.has(ctx.animEventName)) {
         lastAnimEvents.set(ctx.selfId, ctx.animEventName);
         if (isFurnitureIdle(ctx.animEventName)) {

@@ -1,5 +1,5 @@
 import { Actor, ActorBase, createText, Debug, destroyText, Form, FormType, Game, isAnimationGraphReady, Keyword, NetImmerse, ObjectReference, once, printConsole, setTextPos, setTextSize, setTextString, storage, TESModPlatform, Utility, worldPointToScreenPoint } from "skyrimPlatform";
-import { setDefaultAnimsDisabled, applyAnimation, standUp, instantEnter } from "../sync/animation";
+import { setDefaultAnimsDisabled, applyAnimation, standUp, instantEnter, retryRefusedAttack } from "../sync/animation";
 import { pushTalk } from "./talkEvents";
 import { Appearance, applyAppearance } from "../sync/appearance";
 import { isBadMenuShown, applyEquipment } from "../sync/equipment";
@@ -642,6 +642,9 @@ export class FormView {
           this.animState.ownSeat = true;
           Debug.sendAnimationEvent(ac, instantEnter(seat.enter));
         }
+      }
+      if (!this.hostedHere) {
+        retryRefusedAttack(refr);
       }
       const queued = model.animationQueue?.splice(0) ?? [];
       const lastNumChanges = this.animState.lastNumChanges;
