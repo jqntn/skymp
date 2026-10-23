@@ -47,7 +47,7 @@ export class WorldCleanerService extends ClientListener {
   }
 
   private onUpdate() {
-    this.sp.updateAnimations(Array.from(movingActors));
+    this.sp.updateAnimations(Array.from(movingActors.keys()));
     this.processOneActor();
   }
 

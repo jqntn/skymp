@@ -5,7 +5,8 @@ import {
   Game,
   TESModPlatform,
   Debug,
-  WorldSpace
+  WorldSpace,
+  isAnimationGraphReady
 } from "skyrimPlatform";
 import { RespawnNeededError } from "../lib/errors";
 import { Movement, RunMode, AnimationVariables, Transform, NiPoint3 } from "./movement";
@@ -16,6 +17,7 @@ const sqr = (x: number) => x * x;
 
 export const applyMovement = (refr: ObjectReference, m: Movement, isMyClone?: boolean, deadOnServer?: boolean): void => {
   if (teleportIfNeed(refr, m)) {
+    movingActors.delete(refr.getFormID());
     return;
   }
 
@@ -104,16 +106,20 @@ const keepOffsetFromActor = (ac: Actor, m: Movement) => {
   );
 };
 
-export const movingActors = new Set<number>();
+export const movingActors = new Map<number, RunMode>();
 
 const applyLocomotion = (ac: Actor, m: Movement) => {
   const id = ac.getFormID();
+  if (!isAnimationGraphReady(id)) {
+    movingActors.delete(id);
+    return;
+  }
   const moving = m.runMode !== "Standing";
   if (moving) {
-    if ((!movingActors.has(id) || ac.getAnimationVariableBool("bAnimationDriven")) && !ac.isWeaponDrawn()) {
+    if ((movingActors.get(id) !== m.runMode || ac.getAnimationVariableBool("bAnimationDriven")) && !ac.isWeaponDrawn()) {
       Debug.sendAnimationEvent(ac, "IdleForceDefaultState");
     }
-    movingActors.add(id);
+    movingActors.set(id, m.runMode);
     Debug.sendAnimationEvent(ac, "moveStart");
   } else if (movingActors.delete(id)) {
     Debug.sendAnimationEvent(ac, "moveStop");
