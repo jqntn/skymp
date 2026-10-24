@@ -116,7 +116,7 @@ const applyLocomotion = (ac: Actor, m: Movement) => {
   }
   const moving = m.runMode !== "Standing";
   if (moving) {
-    if ((movingActors.get(id) !== m.runMode || ac.getAnimationVariableBool("bAnimationDriven")) && !ac.isWeaponDrawn()) {
+    if ((movingActors.get(id) !== m.runMode || ac.getAnimationVariableBool("bAnimationDriven")) && !ac.isWeaponDrawn() && !m.isWeapDrawn) {
       Debug.sendAnimationEvent(ac, "IdleForceDefaultState");
     }
     movingActors.set(id, m.runMode);

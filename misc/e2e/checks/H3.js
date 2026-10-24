@@ -93,11 +93,14 @@ module.exports = {
     await near(2, true);
     await ctx.sleep(3000);
     ctx.assert.ok((await server()).hoster === actors[0], "not exercised: engine 1 no longer runs Gerdur before the combat transfer");
+    await record(1);
     const target = await ctx.drv(`for (let id = 0xff000000; id < 0xff004000; id++) { let o = null; try { const f = sp.Game.getFormEx(id); o = f && f.getType() === 62 ? sp.Actor.from(f) : null; } catch (e) {} if (o && o.getDisplayName() === "${names[1]}") { ${npc} a.startCombat(o); return id; } } return 0;`, 1);
     ctx.assert.ok(target, "not exercised: engine 1 does not show engine 2's player");
     const fighting = await ctx.waitFor(async () => { await heal(1); await heal(2); return ctx.drv(`${npc} const t = a && a.isInCombat() ? a.getCombatTarget() : null; return !!t && t.getDisplayName() === "${names[1]}";`, 1); }, 15000, "Gerdur fights engine 2's player on engine 1").then(() => true).catch(() => false);
     ctx.assert.ok(fighting, "not exercised: Gerdur does not fight engine 2's player on engine 1");
     for (let i = 0; i < 4; i++) { await heal(2); await ctx.sleep(1000); }
+    const fightZ = (await ctx.drv(`return globalThis.e2eH3.s;`, 1)).filter((x, i) => i % 15 === 0).map((x) => [Math.round((x[0] - Date.now()) / 100) / 10, ...x.slice(1, 4).map(Math.round), x[4], x[9]]);
+    ctx.evidence.push(`combat: Gerdur on engine 1 during the fight, every 15th sample (s before the transfer, x, y, z, sit, player z): ${JSON.stringify(fightZ)}`);
     const fought = await transfer("combat", 1, 2);
     const engaged = fought.after.find((x) => x[6] === "player");
     ctx.evidence.push(`combat: Gerdur fights engine 2's player on engine 2 ${engaged ? `${engaged[0] - fought.at} ms after the transfer` : "never"}`);
