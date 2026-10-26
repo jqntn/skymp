@@ -387,6 +387,23 @@ void PartOne::TickHosters()
     if (!player) {
       continue;
     }
+    if (auto& info = serverState.userInfo[userId];
+        info &&
+        info->lastMovementAt != std::chrono::steady_clock::time_point{}) {
+      const bool silent = now - info->lastMovementAt > std::chrono::seconds(3);
+      if (silent && !info->silentSince) {
+        info->silentSince = info->lastMovementAt;
+        GetLogger().info("Player {:x} sent no movement for 3 s",
+                         player->GetFormId());
+      } else if (!silent && info->silentSince) {
+        GetLogger().info(
+          "Player {:x} sent movement again after {} ms", player->GetFormId(),
+          std::chrono::duration_cast<std::chrono::milliseconds>(
+            info->lastMovementAt - *info->silentSince)
+            .count());
+        info->silentSince.reset();
+      }
+    }
     const auto cell = HostCellOf(worldState, *player);
     if (!IsVisitor(*player, cell)) {
       continue;

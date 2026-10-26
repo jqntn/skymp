@@ -44,6 +44,7 @@ struct UserInfo
   bool isDisconnecting = false;
 
   std::chrono::steady_clock::time_point lastMovementAt;
+  std::optional<std::chrono::steady_clock::time_point> silentSince;
 
   bool isPacketHistoryRecording = false;
   PacketHistory packetHistory;
