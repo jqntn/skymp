@@ -1,5 +1,6 @@
 import { Actor, ActorBase, createText, Debug, destroyText, Form, FormType, Game, isAnimationGraphReady, Keyword, NetImmerse, ObjectReference, once, printConsole, setTextPos, setTextSize, setTextString, storage, TESModPlatform, Utility, worldPointToScreenPoint } from "skyrimPlatform";
 import { setDefaultAnimsDisabled, applyAnimation, standUp, instantEnter, retryRefusedAttack } from "../sync/animation";
+import { logTrace } from "../logging";
 import { pushTalk } from "./talkEvents";
 import { Appearance, applyAppearance } from "../sync/appearance";
 import { isBadMenuShown, applyEquipment } from "../sync/equipment";
@@ -635,12 +636,14 @@ export class FormView {
           if ((seat === null || (!this.animState.ownSeat && (unknownTooLong || otherFurniture))) && this.animState.standTries < 3) {
             this.animState.standTries++;
             standUp(ac);
+            logTrace("FormView", `Standing up ${ac.getFormID().toString(16)}: seat ${JSON.stringify(seat)}, sit ${ac.getSitState()}`);
           }
         } else if (seat && seat.enter && this.animState.seatTries < 3) {
           this.animState.seatTries++;
           this.animState.postureAt = Date.now() + 2000;
           this.animState.ownSeat = true;
           Debug.sendAnimationEvent(ac, instantEnter(seat.enter));
+          logTrace("FormView", `Re-seating ${ac.getFormID().toString(16)} with ${instantEnter(seat.enter)}, sit ${ac.getSitState()}`);
         }
       }
       if (!this.hostedHere) {

@@ -368,6 +368,9 @@ export class SendInputsService extends ClientListener {
                 if (furniture) {
                     animSource.addSit(furniture, inherited?.enter);
                     this.lastSitSent.set(refrIdStr, Date.now());
+                } else if (this.lastSitSent.get(refrIdStr) !== -1) {
+                    logTrace(this, `No seat to relay for ${refrIdStr}: sit 3, no furniture and no inherited seat`);
+                    this.lastSitSent.set(refrIdStr, -1);
                 }
             }
             this.lastSitState.set(refrIdStr, sitState);

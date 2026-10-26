@@ -13,6 +13,7 @@ import {
   setCollision
 } from "skyrimPlatform";
 import { Movement } from "./movement";
+import { logTrace } from "../logging";
 import { applyWeapDrawn } from "./movementApply";
 import { markRelayedSpeak } from "../view/talkEvents";
 
@@ -232,6 +233,8 @@ export const applyAnimation = (
     const i = rest.indexOf("_");
     const seat = { furniture: parseInt(rest.slice(0, i), 16), enter: rest.slice(i + 1) };
     if (!state.seat || state.seat.furniture !== seat.furniture) {
+
+      logTrace("Animation", `Seat of ${refr.getFormID().toString(16)}: furniture ${seat.furniture.toString(16)}, enter "${seat.enter}"`);
       state.seatTries = 0;
       state.standTries = 0;
     }
