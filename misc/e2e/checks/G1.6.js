@@ -61,7 +61,7 @@ module.exports = {
       if (!up) return { up };
       while (Date.now() - t0 < RESEAT_MS) {
         const hips = await hipsOf(id, p);
-        if ((await sitOf(id, p)) !== 0 && hips !== null && Math.abs(hips - hosterHips) <= POSE_TOLERANCE) return { up, back: Date.now() - t0 };
+        if ((await sitOf(id, p)) === 3 && hips !== null && Math.abs(hips - hosterHips) <= POSE_TOLERANCE) return { up, back: Date.now() - t0 };
         await ctx.sleep(250);
       }
       return { up };

@@ -36,9 +36,10 @@ module.exports = {
     const copies = (n) => ctx.drv(`${npc} const name = a ? a.getDisplayName() : ""; let c = 0; for (let id = 0xff000000; id < 0xff004000; id++) { let o = null; try { const f = sp.Game.getFormEx(id); o = f && f.getType() === 62 ? sp.Actor.from(f) : null; } catch (e) {} if (o && !o.isDisabled() && o.getDisplayName() === name) c++; } return c;`, n);
     const fails = [];
 
-    const transfer = async (label, from, to) => {
+    const transfer = async (label, from, to, ready) => {
       await record(to);
       await ctx.sleep(1500);
+      if (ready) await ready();
       const before = await server();
       await put(from, AWAY);
       const left = Date.now();
@@ -56,7 +57,10 @@ module.exports = {
       ctx.evidence.push(`${label}: samples around the largest step (t from the transfer, x, y, z, sit, furniture, target, dead, AI, player z): ${JSON.stringify(s.slice(Math.max(0, k - 4), k + 4).map((x) => [x[0] - (at || left), ...x.slice(1, 4).map(Math.round), ...x.slice(4)]))}`);
       ctx.evidence.push(`${label}: the first 3 s on engine ${to}, every 8th sample: ${JSON.stringify(after.filter((x, i) => i % 8 === 0 && x[0] - (at || left) <= 3000).map((x) => [x[0] - (at || left), ...x.slice(1, 4).map(Math.round), ...x.slice(4)]))}`);
       ctx.evidence.push(`${label}: engine ${to} runs Gerdur ${at ? at - left : "never"} ms after engine ${from} left; ${s.length} samples on engine ${to}, largest step ${jump.toFixed(0)} units, dead ${after.some((x) => x[7])}, copies ${c}; first after ${JSON.stringify(after[0])}, last ${JSON.stringify(after[after.length - 1])}; server before ${JSON.stringify(before)}`);
+      const gap = after.length ? Math.hypot(after[0][1] - before.pos[0], after[0][2] - before.pos[1], after[0][3] - before.pos[2]) : 0;
+      ctx.evidence.push(`${label}: first sample on engine ${to} is ${gap.toFixed(0)} units from where engine ${from} had Gerdur`);
       if (!at) fails.push(`${label}: engine ${to} did not run Gerdur within 5 s`);
+      if (gap > JUMP) fails.push(`${label}: Gerdur appeared ${gap.toFixed(0)} units from where engine ${from} had her`);
       if (jump > JUMP) fails.push(`${label}: Gerdur jumped ${jump.toFixed(0)} units on engine ${to} at the transfer`);
       if (after.some((x) => x[7])) fails.push(`${label}: Gerdur died on engine ${to}`);
       if (c > 0) fails.push(`${label}: engine ${to} shows ${c} spawned copies of Gerdur besides the real one`);
@@ -84,7 +88,19 @@ module.exports = {
     const seatedOn1 = await ctx.waitFor(() => ctx.drv(`${npc} return !!a && a.getSitState() === 3;`, 1), 30000, "Gerdur is seated on engine 1").then(() => true).catch(() => false);
     ctx.assert.ok(seatedOn1, "not exercised: engine 1 does not show Gerdur seated before the seat transfer");
     ctx.assert.ok((await server()).hoster === actors[1], "not exercised: engine 2 no longer runs Gerdur before the seat transfer");
-    const seated = await transfer("seat", 2, 1);
+    let activatedAt = Date.now();
+    const steady = Date.now();
+    const seatedSteady = () => ctx.waitFor(async () => {
+      if (!(await ctx.drv(`${npc} return !!a && a.getSitState() === 3;`, 2))) {
+        if (Date.now() - activatedAt > 10000) {
+          activatedAt = Date.now();
+          await ctx.drv(`sp.ObjectReference.from(sp.Game.getFormEx(${seat})).activate(sp.Actor.from(sp.Game.getFormEx(${GERDUR})), false); return 0;`, 2);
+        }
+        return false;
+      }
+      return ctx.drv(`const s = globalThis.e2eH3.s; const t = Date.now() - 2000; return s.length > 0 && s[0][0] < t && s.filter((x) => x[0] >= t).every((x) => x[4] === 3);`, 1);
+    }, 40000, "Gerdur is seated on engine 2 and for 2 s on engine 1").then(() => ctx.evidence.push(`seat: seated on both engines ${Date.now() - steady} ms after the wait started`)).catch(() => 0);
+    const seated = await transfer("seat", 2, 1, seatedSteady);
     const window = seated.after.filter((x) => x[0] <= seated.at + SEAT_MS);
     const stood = window.find((x) => x[4] !== 3);
     ctx.evidence.push(`seat: on engine 1 Gerdur ${stood ? `stood up ${stood[0] - seated.at} ms after the transfer (the AI's furniture state does not transfer: activate binds no NPC, Skyrim has no SnapIntoInteraction)` : `stayed seated for ${SEAT_MS / 1000} s`}; furniture at the end ${hex(window.length ? window[window.length - 1][5] : 0)}`);
@@ -102,7 +118,9 @@ module.exports = {
     for (let i = 0; i < 4; i++) { await heal(2); await ctx.sleep(1000); }
     const fightZ = (await ctx.drv(`return globalThis.e2eH3.s;`, 1)).filter((x, i) => i % 15 === 0).map((x) => [Math.round((x[0] - Date.now()) / 100) / 10, ...x.slice(1, 4).map(Math.round), x[4], x[9]]);
     ctx.evidence.push(`combat: Gerdur on engine 1 during the fight, every 15th sample (s before the transfer, x, y, z, sit, player z): ${JSON.stringify(fightZ)}`);
-    const fought = await transfer("combat", 1, 2);
+    const fought = await transfer("combat", 1, 2, async () => {
+      if (!(await ctx.drv(`${npc} const t = a && a.isInCombat() ? a.getCombatTarget() : null; return !!t && t.getDisplayName() === "${names[1]}";`, 1))) fails.push("combat: not exercised, Gerdur no longer fought engine 2's player on engine 1 when engine 1 left");
+    });
     const engaged = fought.after.find((x) => x[6] === "player");
     ctx.evidence.push(`combat: Gerdur fights engine 2's player on engine 2 ${engaged ? `${engaged[0] - fought.at} ms after the transfer` : "never"}`);
     if (!engaged || engaged[0] - fought.at > COMBAT_MS) fails.push(`combat: Gerdur did not fight engine 2's player on engine 2 within ${COMBAT_MS} ms of the transfer`);
