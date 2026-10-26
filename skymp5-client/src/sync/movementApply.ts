@@ -107,6 +107,8 @@ const keepOffsetFromActor = (ac: Actor, m: Movement) => {
 };
 
 export const movingActors = new Map<number, RunMode>();
+const weaponModeSetAt = new Map<number, number>();
+const weaponSettleMs = 2000;
 
 const applyLocomotion = (ac: Actor, m: Movement) => {
   const id = ac.getFormID();
@@ -116,7 +118,7 @@ const applyLocomotion = (ac: Actor, m: Movement) => {
   }
   const moving = m.runMode !== "Standing";
   if (moving) {
-    if ((movingActors.get(id) !== m.runMode || ac.getAnimationVariableBool("bAnimationDriven")) && !ac.isWeaponDrawn() && !m.isWeapDrawn) {
+    if ((movingActors.get(id) !== m.runMode || ac.getAnimationVariableBool("bAnimationDriven")) && !ac.isWeaponDrawn() && !m.isWeapDrawn && Date.now() - (weaponModeSetAt.get(id) ?? 0) > weaponSettleMs) {
       Debug.sendAnimationEvent(ac, "IdleForceDefaultState");
     }
     movingActors.set(id, m.runMode);
@@ -162,6 +164,7 @@ const applySneaking = (ac: Actor, isSneaking: boolean) => {
 export const applyWeapDrawn = (ac: Actor, isWeapDrawn: boolean): void => {
   if (ac.isWeaponDrawn() !== isWeapDrawn) {
     TESModPlatform.setWeaponDrawnMode(ac, isWeapDrawn ? 1 : 0);
+    weaponModeSetAt.set(ac.getFormID(), Date.now());
   }
 };
 
