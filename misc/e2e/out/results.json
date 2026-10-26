@@ -466,12 +466,12 @@
   "G1.2": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 49,
+    "secs": 46,
     "evidence": [
       "run 1: start: server Alvor in 133c8:Skyrim.esm at -515,-154,240, hoster 0",
-      "run 1: in the house on the lower floor, out of his way (set public so the teleported player is no trespasser): game hour 7.986, local Alvor cell 133c8 package 1cb07",
-      "run 1: end: server Alvor in 3c:Skyrim.esm at 20375,-45067,-80, 223 units from the forge marker, hoster ff000000; server cells 133c8:Skyrim.esm -> 3c:Skyrim.esm; hosters seen ff000000; player cell changes 1; local Alvor package 1cb07, game hour 7.990",
-      "run 1: Gerdur (13489) in 3c:Skyrim.esm at 18952,-43634,-138, hoster ff000000: Dialogue Menu open and in dialogue with the player: true",
+      "run 1: in the house on the lower floor, out of his way (set public so the teleported player is no trespasser): game hour 7.994, local Alvor cell 133c8 package 1cb07",
+      "run 1: end: server Alvor in 3c:Skyrim.esm at 20375,-45067,-80, 223 units from the forge marker, hoster ff000000; server cells 133c8:Skyrim.esm -> 3c:Skyrim.esm; hosters seen ff000000; player cell changes 1; local Alvor package 1cb07, game hour 7.996",
+      "run 1: Gerdur (13489) in 3c:Skyrim.esm at 18949,-43636,-138, hoster ff000000: Dialogue Menu open and in dialogue with the player: true",
       "run 1: Alvor (13482) in 3c:Skyrim.esm at 20375,-45067,-80, hoster ff000000: Dialogue Menu open and in dialogue with the player: true"
     ],
     "shots": [
@@ -481,11 +481,11 @@
     ],
     "rtt": {
       "1": {
-        "median": 33,
-        "calls": 35
+        "median": 35,
+        "calls": 31
       }
     },
-    "at": "2026-10-26T19:54:06.934Z"
+    "at": "2026-10-26T23:04:32.226Z"
   },
   "G1.3": {
     "result": "PASS",
@@ -979,10 +979,10 @@
   },
   "P1": {
     "result": "PASS",
-    "reason": "3/3 runs PASS",
-    "secs": 1198,
+    "reason": "2/2 runs PASS",
+    "secs": 780,
     "evidence": [
-      "run 1: S1 party: server killed and restarted, both clients reconnected and got their quest log replay true; race menu open [false,false]; changed: nothing; new quest log entries (quests new to the log) leader 25185:0 25185:1 2522f:0 25231:0 4b2d9:1 2522f:1 25251:0 25250:0 c18e1:0 25251:1 c18e1:1, member 25185:0 25185:1 2522f:0 25231:0 4b2d9:1 2522f:1 25251:0 25250:0 c18e1:0 25251:1 c18e1:1; the leader's 85d40 stage 10 relayed to the member's log true",
+      "run 1: S1 party: server killed and restarted, both clients reconnected and got their quest log replay true; race menu open [false,false]; changed: nothing; new quest log entries (quests new to the log) leader 25185:0 25185:1 25231:0 4b2d9:1 25251:0 c18e1:0 25251:1 c18e1:1, member 25185:0 25185:1 25231:0 4b2d9:1 25251:0 c18e1:0 25251:1 c18e1:1; the leader's 85d40 stage 10 relayed to the member's log true",
       "run 1: S2 quest stages: server killed and restarted, both clients reconnected and got their quest log replay true; race menu open [false,false]; changed: nothing; new quest log entries (quests new to the log) leader none, member none; the leader's d9b64 stage 30 relayed to the member's log true",
       "run 1: S2: MQ104 on the clients after the restart: leader 160, member 160",
       "run 1: S3 follower: server killed and restarted, both clients reconnected and got their quest log replay true; race menu open [false,false]; changed: nothing; new quest log entries (quests new to the log) leader none, member none; the leader's d0800 stage 10 relayed to the member's log true",
@@ -990,23 +990,14 @@
       "run 1: S4: the leader took the Golden Claw from Arvel in the menu true; the server has it in the leader true; MS13 on the leader 40",
       "run 1: S4 quest item: server killed and restarted, both clients reconnected and got their quest log replay true; race menu open [false,false]; changed: nothing; new quest log entries (quests new to the log) leader none, member none; the leader's d9b64 stage 40 relayed to the member's log true",
       "run 1: S4: after the restart the leader's client holds 1 claw, MS13 40",
-      "run 2: engine 1 relaunched after an early exit",
-      "run 2: S1 party: server killed and restarted, both clients reconnected and got their quest log replay true; race menu open [false,false]; changed: nothing; new quest log entries (quests new to the log) leader 25185:0 2522f:0 25185:1 2522f:1 25251:0 25250:0 4b2d9:1 25251:1 25231:0 c18e1:0 c18e1:1, member none; the leader's 85d40 stage 10 relayed to the member's log true",
+      "run 2: S1 party: server killed and restarted, both clients reconnected and got their quest log replay true; race menu open [false,false]; changed: nothing; new quest log entries (quests new to the log) leader 25185:0 25185:1 25231:0 4b2d9:1 2522f:0 2522f:1 25251:0 25250:0 25251:1 c18e1:0 c18e1:1, member 25185:0 25185:1 25231:0 4b2d9:1 2522f:0 2522f:1 25251:0 25250:0 25251:1 c18e1:0 c18e1:1; the leader's 85d40 stage 10 relayed to the member's log true",
       "run 2: S2 quest stages: server killed and restarted, both clients reconnected and got their quest log replay true; race menu open [false,false]; changed: nothing; new quest log entries (quests new to the log) leader none, member none; the leader's d9b64 stage 30 relayed to the member's log true",
       "run 2: S2: MQ104 on the clients after the restart: leader 160, member 160",
       "run 2: S3 follower: server killed and restarted, both clients reconnected and got their quest log replay true; race menu open [false,false]; changed: nothing; new quest log entries (quests new to the log) leader none, member none; the leader's d0800 stage 10 relayed to the member's log true",
       "run 2: S3: after the restart Lydia follows the member on his client true, hoster ff000001",
       "run 2: S4: the leader took the Golden Claw from Arvel in the menu true; the server has it in the leader true; MS13 on the leader 40",
       "run 2: S4 quest item: server killed and restarted, both clients reconnected and got their quest log replay true; race menu open [false,false]; changed: nothing; new quest log entries (quests new to the log) leader none, member none; the leader's d9b64 stage 40 relayed to the member's log true",
-      "run 2: S4: after the restart the leader's client holds 1 claw, MS13 40",
-      "run 3: S1 party: server killed and restarted, both clients reconnected and got their quest log replay true; race menu open [false,false]; changed: nothing; new quest log entries (quests new to the log) leader 25185:0 25185:1 25231:0 4b2d9:1 25251:0 2522f:0 c18e1:0 25251:1 2522f:1 c18e1:1 25250:0, member 25185:0 25185:1 25231:0 4b2d9:1 25251:0 2522f:0 c18e1:0 25251:1 2522f:1 c18e1:1 25250:0; the leader's 85d40 stage 10 relayed to the member's log true",
-      "run 3: S2 quest stages: server killed and restarted, both clients reconnected and got their quest log replay true; race menu open [false,false]; changed: nothing; new quest log entries (quests new to the log) leader none, member none; the leader's d9b64 stage 30 relayed to the member's log true",
-      "run 3: S2: MQ104 on the clients after the restart: leader 160, member 160",
-      "run 3: S3 follower: server killed and restarted, both clients reconnected and got their quest log replay true; race menu open [false,false]; changed: nothing; new quest log entries (quests new to the log) leader none, member none; the leader's d0800 stage 10 relayed to the member's log true",
-      "run 3: S3: after the restart Lydia follows the member on his client true, hoster ff000001",
-      "run 3: S4: the leader took the Golden Claw from Arvel in the menu true; the server has it in the leader true; MS13 on the leader 40",
-      "run 3: S4 quest item: server killed and restarted, both clients reconnected and got their quest log replay true; race menu open [false,false]; changed: nothing; new quest log entries (quests new to the log) leader none, member none; the leader's d9b64 stage 40 relayed to the member's log true",
-      "run 3: S4: after the restart the leader's client holds 1 claw, MS13 40"
+      "run 2: S4: after the restart the leader's client holds 1 claw, MS13 40"
     ],
     "shots": [],
     "rtt": {
@@ -1015,11 +1006,11 @@
         "calls": 36
       },
       "2": {
-        "median": 52,
-        "calls": 28
+        "median": 44,
+        "calls": 29
       }
     },
-    "at": "2026-10-26T21:32:49.924Z"
+    "at": "2026-10-26T21:59:44.778Z"
   },
   "P2": {
     "result": "PASS",
@@ -1369,29 +1360,29 @@
   "S1.6": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 55,
+    "secs": 61,
     "evidence": [
       "run 1: Hadvar on the hoster after the moves: {\"ai\":true,\"combat\":false,\"pkg\":\"4679f\",\"sit\":0,\"scene\":0,\"dialogue\":false}; puppet AI on: false",
-      "run 1: hoster engine 2, Hadvar walked 2887 units on the hoster and 2924 on the puppet; 22 samples with hoster Speed > 20 for 500 ms, puppet Speed > 20 in 22; 33 samples with hoster Speed < 1 for 500 ms, puppet Speed < 20 in 33",
-      "run 1: foot swing (mean change of the left foot minus the right foot along the heading between consecutive samples) per moving stretch: 19 samples: hoster 73.9, puppet 81.1; per standing stretch: 9 samples: hoster 0.2, puppet 3.2; 24 samples: hoster 1.5, puppet 1.7",
-      "run 1: foot stride pairs (hoster/puppet): -44/11 -8/23 -22/45 6/-54 24/19 -58/0 70/-38 -73/53 43/-76 -24/67 -18/-50 32/12 -63/7 72/-43 -70/58 37/-76 -26/68 -7/-60 24/24 -65/4 68/-11 14/-11 13/13 13/13 13/13 13/13 13/13 13/13 13/13 13/13 13/13 0/-5 -67/-5 48/-4 -38/4 3/-18 41/40 43/43 43/43 43/43 43/41 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 13/43 13/38 13/13",
-      "run 1: Speed pairs (hoster/puppet): 80/82 164/81 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 0/361 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 9/0 249/76 144/335 203/352 85/210 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0",
-      "run 1: Hadvar's server hoster during the samples: ff000001"
+      "run 1: hoster engine 1, Hadvar walked 2934 units on the hoster and 2962 on the puppet; 18 samples with hoster Speed > 20 for 500 ms, puppet Speed > 20 in 18; 30 samples with hoster Speed < 1 for 500 ms, puppet Speed < 20 in 29",
+      "run 1: foot swing (mean change of the left foot minus the right foot along the heading between consecutive samples) per moving stretch: 14 samples: hoster 74.8, puppet 71.5; per standing stretch: 6 samples: hoster 0.0, puppet 0.1; 8 samples: hoster 4.3, puppet 0.0",
+      "run 1: foot stride pairs (hoster/puppet): 4/-13 -3/5 -44/14 29/-47 -8/55 -25/2 38/-30 -73/47 71/-75 -48/63 4/-44 18/4 -47/15 57/-50 -76/56 -66/28 71/-72 -61/15 63/-47 -62/47 53/-50 39/26 40/40 41/41 40/41 32/39 13/13 13/13 13/13 13/13 11/13 -16/12 25/38 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 43/43 13/43 13/34 11/33",
+      "run 1: Speed pairs (hoster/puppet): 80/82 191/150 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 361/361 350/361 361/361 196/280 276/290 182/276 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/70 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 3/0 3/0",
+      "run 1: Hadvar's server hoster during the samples: ff000000"
     ],
     "shots": [
       "runs/S1_6/1/S1_6-puppet.png"
     ],
     "rtt": {
       "1": {
-        "median": 31,
-        "calls": 75
+        "median": 30,
+        "calls": 117
       },
       "2": {
-        "median": 27,
-        "calls": 114
+        "median": 30,
+        "calls": 68
       }
     },
-    "at": "2026-10-26T19:46:07.233Z"
+    "at": "2026-10-26T23:04:09.226Z"
   },
   "S1.5": {
     "result": "PASS",
@@ -1421,20 +1412,20 @@
   "G1.6": {
     "result": "PASS",
     "reason": "1/1 runs PASS",
-    "secs": 90,
+    "secs": 89,
     "evidence": [
       "run 1: engine 2 hosts: Faendal ff000001, Alvor ff000001, Hilde ff000001",
-      "run 1: Faendal, hoster engine 2 (server ff000001): hoster motion 62.5, drop 25.2, head 20.1, hips 63.0; puppet engine 1: motion 52.4, drop 25.2, head 16.4, hips 61.7; sit states matched after 156 ms",
-      "run 1: Alvor, hoster engine 2 (server ff000001): hoster motion 88.3, drop 21.2, head 39.3, hips 64.7; puppet engine 1: motion 58.3, drop 27.8, head 44.9, hips 66.5; sit states matched after 150 ms",
-      "run 1: Alvor: the puppet on engine 1, stood up by a script while the hoster sits, sat again after 1.3 s",
-      "run 1: Hilde, hoster engine 2 (server ff000001): hoster motion 8.5, drop 37.3, head 51.8, hips 69.0; puppet engine 1: motion 21.1, drop 36.4, head 51.9, hips 67.6; sit states matched after 189 ms",
+      "run 1: Faendal, hoster engine 2 (server ff000001): hoster motion 61.7, drop 25.1, head 17.6, hips 62.6; puppet engine 1: motion 53.7, drop 24.9, head 16.5, hips 62.2; sit states matched after 157 ms",
+      "run 1: Alvor, hoster engine 2 (server ff000001): hoster motion 45.7, drop 22.1, head 46.7, hips 67.2; puppet engine 1: motion 45.3, drop 28.0, head 44.8, hips 67.2; sit states matched after 170 ms",
+      "run 1: Alvor: the puppet on engine 1, stood up by a script while the hoster sits, sat again after 0.7 s",
+      "run 1: Hilde, hoster engine 2 (server ff000001): hoster motion 9.2, drop 37.8, head 51.7, hips 69.0; puppet engine 1: motion 9.7, drop 37.8, head 51.8, hips 69.1; sit states matched after 157 ms",
       "run 1: 3 NPC(s) moved on the hoster engine 2, so the motion test ran for them; still on engine 1: none",
       "run 1: engine 1 hosts: Faendal ff000000, Alvor ff000000, Hilde ff000000",
-      "run 1: Faendal, hoster engine 1 (server ff000000): hoster motion 25.7, drop 34.2, head 50.5, hips 66.1; puppet engine 2: motion 28.7, drop 34.9, head 50.1, hips 67.1; sit states matched after 185 ms",
-      "run 1: Alvor, hoster engine 1 (server ff000000): hoster motion 17.8, drop 36.2, head 51.4, hips 67.3; puppet engine 2: motion 54.0, drop 12.5, head 43.1, hips 67.4; sit states matched after 162 ms",
-      "run 1: Alvor: the puppet on engine 2, stood up by a script while the hoster sits, sat again after 0.8 s",
-      "run 1: Hilde, hoster engine 1 (server ff000000): hoster motion 3.1, drop 28.2, head 50.6, hips 68.6; puppet engine 2: motion 4.3, drop 37.6, head 51.9, hips 69.0; sit states matched after 161 ms",
-      "run 1: 3 NPC(s) moved on the hoster engine 1, so the motion test ran for them; still on engine 2: none"
+      "run 1: Faendal, hoster engine 1 (server ff000000): hoster motion 25.5, drop 34.6, head 50.5, hips 66.0; puppet engine 2: motion 28.5, drop 33.1, head 50.0, hips 66.4; sit states matched after 260 ms",
+      "run 1: Alvor, hoster engine 1 (server ff000000): hoster motion 0.8, drop 35.9, head 50.2, hips 44.6; puppet engine 2: motion 0.8, drop 34.3, head 50.0, hips 44.6; sit states matched after 2469 ms",
+      "run 1: Alvor: the puppet on engine 2, stood up by a script while the hoster sits, sat again after 2.9 s",
+      "run 1: Hilde, hoster engine 1 (server ff000000): hoster motion 7.5, drop 37.9, head 51.7, hips 69.1; puppet engine 2: motion 4.7, drop 37.7, head 51.8, hips 69.1; sit states matched after 147 ms",
+      "run 1: 2 NPC(s) moved on the hoster engine 1, so the motion test ran for them; still on engine 2: none"
     ],
     "shots": [
       "runs/G1_6/1/G1_6-puppets-engine1.png",
@@ -1442,15 +1433,15 @@
     ],
     "rtt": {
       "1": {
-        "median": 46,
-        "calls": 159
+        "median": 49,
+        "calls": 218
       },
       "2": {
-        "median": 50,
-        "calls": 152
+        "median": 44,
+        "calls": 226
       }
     },
-    "at": "2026-10-26T19:59:02.566Z"
+    "at": "2026-10-26T23:05:38.101Z"
   },
   "G1.7": {
     "result": "FAIL",
@@ -1461,97 +1452,183 @@
     "at": "2026-10-26T19:58:35.684Z"
   },
   "G1.8": {
-    "result": "FAIL",
-    "reason": "2 of 3 runs not PASS; run 2/3: scene: Hilde is hosted by 0 at the end, not by engine 2",
-    "secs": 244,
+    "result": "PASS",
+    "reason": "8/8 runs PASS",
+    "secs": 800,
     "evidence": [
       "run 1: subtitle settings (dialogue, general): engine 1 true,false, engine 2 true,false",
       "run 1: Gerdur hosted by engine 2 talks to engine 2's player: greeting \"D'après Lucan, du Marché de Rivebois, des voleurs se seraient introduits dans sa boutique. Ils n'ont quasiment rien pris, c'est étrange.\", answer \"C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout.\"",
-      "run 1: topic: engine 2 said 7 lines, engine 1 played 7; engine 1 subtitles []; engine 2 subtitles 4",
-      "run 1: topic: Gerdur MS13__00039642_1.wav on engine 1 after 157 ms",
-      "run 1: topic: Gerdur MS13__00039642_1.wav on engine 1 after 130 ms",
-      "run 1: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 162 ms",
-      "run 1: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 128 ms",
-      "run 1: topic: Gerdur DialogueGe_DialogueGeneric_000854CD_1.wav on engine 1 after 163 ms",
-      "run 1: topic: Gerdur DialogueRiverwood_Revised__00045400_1.wav on engine 1 after 126 ms",
-      "run 1: topic: Gerdur DialogueRiverwood_Revised__00045400_1.wav on engine 1 after 95 ms",
-      "run 1: scene: DialogueRiverwoodIntroScene stage 0 on engine 2",
-      "run 1: scene: engine 2 said 13 lines, engine 1 played 14; engine 1 subtitles []; engine 2 subtitles 4",
-      "run 1: scene: Sven DialogueGeneric__000BABE0_1.wav on engine 1 after 102 ms",
-      "run 1: scene: Hilde DialogueGeneric__000BABE0_1.wav on engine 1 after 102 ms",
-      "run 1: scene: Hilde DialogueGeneric__000BABE0_1.wav on engine 1 after 104 ms",
-      "run 1: scene: Sven DialogueGeneric__000BABE0_1.wav on engine 1 after 104 ms",
-      "run 1: scene: Hilde DialogueGeneric__0002A476_1.wav on engine 1 after 104 ms",
-      "run 1: scene: Sven DialogueGe_DialogueGeneric_0008875B_1.wav on engine 1 after 104 ms",
-      "run 1: scene: Hilde DialogueGeneric__0002A46E_1.wav on engine 1 after 103 ms",
-      "run 1: scene: Hilde DialogueGeneric__000854C2_1.wav on engine 1 after 101 ms",
-      "run 1: scene: Hilde DialogueGeneric__000854C2_1.wav on engine 1 after 101 ms",
-      "run 1: scene: Hilde DialogueGeneric__0001770B_1.wav on engine 1 after 101 ms",
-      "run 1: scene: Hilde DialogueGeneric__0001770B_1.wav on engine 1 after 103 ms",
-      "run 1: scene: Sven DialogueGeneric__00013EF0_1.wav on engine 1 after 103 ms",
-      "run 1: scene: Sven DialogueGeneric__00013EF0_1.wav on engine 1 after 104 ms",
-      "run 1: scene: engine 1 also played Hilde DialogueGeneric__000D3614_1.wav, 11397 ms into the part, with no line of engine 2 to match",
+      "run 1: topic: engine 2 said 5 lines, engine 1 played 5; engine 1 subtitles []; engine 2 subtitles 3",
+      "run 1: topic: Gerdur MS13__00039642_1.wav on engine 1 after 166 ms",
+      "run 1: topic: Gerdur MS13__00039642_1.wav on engine 1 after 139 ms",
+      "run 1: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 170 ms",
+      "run 1: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 137 ms",
+      "run 1: topic: Gerdur DialogueGe_DialogueGeneric_00087935_1.wav on engine 1 after 138 ms",
+      "run 1: Hilde: engine 2 goes to where its own game shows the NPC: 3c:Skyrim.esm 20468,-46467,-122",
+      "run 1: scene: DialogueRiverwoodIntroScene stage 10 on engine 2",
+      "run 1: scene: engine 2 said 7 lines, engine 1 played 8; engine 1 subtitles []; engine 2 subtitles 6",
+      "run 1: scene: Sven DialogueRi__000954C6_1.wav on engine 1 after 72 ms",
+      "run 1: scene: Hilde DialogueRi__000954C8_1.wav on engine 1 after 121 ms",
+      "run 1: scene: Sven DialogueRi__000954D3_1.wav on engine 1 after 80 ms",
+      "run 1: scene: Sven DialogueRi__000BB963_1.wav on engine 1 after 120 ms",
+      "run 1: scene: Hilde DialogueRi__000D39A1_1.wav on engine 1 after 91 ms",
+      "run 1: scene: Sven FreeformRiverwood01__0005C832_1.wav on engine 1 after 118 ms",
+      "run 1: scene: Sven FreeformRiverwood01__0005C832_1.wav on engine 1 after 80 ms",
+      "run 1: scene: engine 1 also played Hilde DialogueRi__000954CC_1.wav, 317 ms into the part, with no line of engine 2 to match",
       "run 2: subtitle settings (dialogue, general): engine 1 true,false, engine 2 true,false",
-      "run 2: Gerdur hosted by engine 2 talks to engine 2's player: greeting \"D'après Lucan, du Marché de Rivebois, des voleurs se seraient introduits dans sa boutique. Ils n'ont quasiment rien pris, c'est étrange.\", answer \"C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout.\"",
-      "run 2: topic: engine 2 said 5 lines, engine 1 played 5; engine 1 subtitles []; engine 2 subtitles 3",
-      "run 2: topic: Gerdur MS13__00039642_1.wav on engine 1 after 216 ms",
-      "run 2: topic: Gerdur MS13__00039642_1.wav on engine 1 after 190 ms",
-      "run 2: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 155 ms",
-      "run 2: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 121 ms",
-      "run 2: topic: Gerdur DialogueGe_DialogueGeneric_000854CE_1.wav on engine 1 after 119 ms",
-      "run 2: scene: DialogueRiverwoodIntroScene stage 0 on engine 2",
-      "run 2: scene: engine 2 said 13 lines, engine 1 played 13; engine 1 subtitles []; engine 2 subtitles 4",
-      "run 2: scene: Hilde DialogueGeneric__000BABE1_1.wav on engine 1 after 97 ms",
-      "run 2: scene: Sven DialogueGeneric__000BABE1_1.wav on engine 1 after 97 ms",
-      "run 2: scene: Sven DialogueGeneric__000BABE1_1.wav on engine 1 after 99 ms",
-      "run 2: scene: Hilde DialogueGeneric__000BABE1_1.wav on engine 1 after 99 ms",
-      "run 2: scene: Sven DialogueGeneric__0002A475_1.wav on engine 1 after 128 ms",
-      "run 2: scene: Hilde DialogueGeneric__00034C75_1.wav on engine 1 after 128 ms",
-      "run 2: scene: Sven DialogueGeneric__0002A46F_1.wav on engine 1 after 98 ms",
-      "run 2: scene: Hilde DialogueGeneric__000854C2_1.wav on engine 1 after 132 ms",
-      "run 2: scene: Hilde DialogueGeneric__000854C2_1.wav on engine 1 after 99 ms",
-      "run 2: scene: Hilde DialogueGeneric__00017703_1.wav on engine 1 after 99 ms",
-      "run 2: scene: Hilde DialogueGeneric__00017703_1.wav on engine 1 after 97 ms",
-      "run 2: scene: Sven DialogueGeneric__000176FD_1.wav on engine 1 after 132 ms",
-      "run 2: scene: Sven DialogueGeneric__000176FD_1.wav on engine 1 after 99 ms",
+      "run 2: Gerdur hosted by engine 2 talks to engine 2's player: greeting \"Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.\", answer \"C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout.\"",
+      "run 2: topic: engine 2 said 7 lines, engine 1 played 7; engine 1 subtitles []; engine 2 subtitles 4",
+      "run 2: topic: Gerdur DialogueRiverwood_Revised__000453FF_1.wav on engine 1 after 171 ms",
+      "run 2: topic: Gerdur DialogueRiverwood_Revised__000453FF_1.wav on engine 1 after 145 ms",
+      "run 2: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 178 ms",
+      "run 2: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 144 ms",
+      "run 2: topic: Gerdur DialogueGe_DialogueGeneric_000854CD_1.wav on engine 1 after 146 ms",
+      "run 2: topic: Gerdur MS13__00039642_1.wav on engine 1 after 109 ms",
+      "run 2: topic: Gerdur MS13__00039642_1.wav on engine 1 after 111 ms",
+      "run 2: Hilde: engine 2 goes to where its own game shows the NPC: 3c:Skyrim.esm 20468,-46467,-122",
+      "run 2: scene: DialogueRiverwoodIntroScene stage 10 on engine 2",
+      "run 2: scene: engine 2 said 7 lines, engine 1 played 8; engine 1 subtitles []; engine 2 subtitles 6",
+      "run 2: scene: Sven DialogueRi__000954C6_1.wav on engine 1 after 62 ms",
+      "run 2: scene: Hilde DialogueRi__000954C8_1.wav on engine 1 after 87 ms",
+      "run 2: scene: Sven DialogueRi__000954D3_1.wav on engine 1 after 118 ms",
+      "run 2: scene: Sven DialogueRi__000BB963_1.wav on engine 1 after 81 ms",
+      "run 2: scene: Hilde DialogueRi__000D39A1_1.wav on engine 1 after 116 ms",
+      "run 2: scene: Sven FreeformRiverwood01__0005C832_1.wav on engine 1 after 88 ms",
+      "run 2: scene: Sven FreeformRiverwood01__0005C832_1.wav on engine 1 after 81 ms",
+      "run 2: scene: engine 1 also played Hilde DialogueRi__000954CC_1.wav, 509 ms into the part, with no line of engine 2 to match",
       "run 3: subtitle settings (dialogue, general): engine 1 true,false, engine 2 true,false",
       "run 3: Gerdur hosted by engine 2 talks to engine 2's player: greeting \"D'après Lucan, du Marché de Rivebois, des voleurs se seraient introduits dans sa boutique. Ils n'ont quasiment rien pris, c'est étrange.\", answer \"C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout.\"",
       "run 3: topic: engine 2 said 5 lines, engine 1 played 5; engine 1 subtitles []; engine 2 subtitles 3",
-      "run 3: topic: Gerdur MS13__00039642_1.wav on engine 1 after 174 ms",
-      "run 3: topic: Gerdur MS13__00039642_1.wav on engine 1 after 149 ms",
-      "run 3: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 183 ms",
-      "run 3: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 149 ms",
-      "run 3: topic: Gerdur DialogueGe_DialogueGeneric_000854CC_1.wav on engine 1 after 149 ms",
-      "run 3: scene: DialogueRiverwoodIntroScene stage 0 on engine 2",
-      "run 3: scene: engine 2 said 15 lines, engine 1 played 15; engine 1 subtitles []; engine 2 subtitles 5",
-      "run 3: scene: Sven DialogueGeneric__000BABE0_1.wav on engine 1 after 98 ms",
-      "run 3: scene: Hilde DialogueGeneric__000BABE0_1.wav on engine 1 after 98 ms",
-      "run 3: scene: Sven DialogueGeneric__000BABE0_1.wav on engine 1 after 100 ms",
-      "run 3: scene: Hilde DialogueGeneric__000BABE0_1.wav on engine 1 after 100 ms",
-      "run 3: scene: Sven DialogueGe_DialogueGeneric_0008875B_1.wav on engine 1 after 98 ms",
-      "run 3: scene: Hilde DialogueGeneric__0002A476_1.wav on engine 1 after 98 ms",
-      "run 3: scene: Sven DialogueGeneric__0002A46F_1.wav on engine 1 after 100 ms",
-      "run 3: scene: Sven DialogueGeneric__000854C2_1.wav on engine 1 after 100 ms",
-      "run 3: scene: Sven DialogueGeneric__000854C2_1.wav on engine 1 after 101 ms",
-      "run 3: scene: Hilde DialogueGeneric__0001C1D8_1.wav on engine 1 after 101 ms",
-      "run 3: scene: Hilde DialogueGeneric__0001C1D8_1.wav on engine 1 after 98 ms",
-      "run 3: scene: Hilde DialogueGeneric__00017702_1.wav on engine 1 after 98 ms",
-      "run 3: scene: Hilde DialogueGeneric__00017702_1.wav on engine 1 after 102 ms",
-      "run 3: scene: Sven DialogueGeneric__00013EE6_1.wav on engine 1 after 101 ms",
-      "run 3: scene: Sven DialogueGeneric__00013EE6_1.wav on engine 1 after 98 ms"
+      "run 3: topic: Gerdur MS13__00039642_1.wav on engine 1 after 175 ms",
+      "run 3: topic: Gerdur MS13__00039642_1.wav on engine 1 after 148 ms",
+      "run 3: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 181 ms",
+      "run 3: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 148 ms",
+      "run 3: topic: Gerdur DialogueGe_DialogueGeneric_000854CC_1.wav on engine 1 after 148 ms",
+      "run 3: Hilde: engine 2 goes to where its own game shows the NPC: 3c:Skyrim.esm 20468,-46467,-122",
+      "run 3: scene: DialogueRiverwoodIntroScene stage 10 on engine 2",
+      "run 3: scene: engine 2 said 5 lines, engine 1 played 6; engine 1 subtitles []; engine 2 subtitles 5",
+      "run 3: scene: Sven DialogueRi__000954C6_1.wav on engine 1 after 67 ms",
+      "run 3: scene: Hilde DialogueRi__000954C8_1.wav on engine 1 after 88 ms",
+      "run 3: scene: Sven DialogueRi__000954D3_1.wav on engine 1 after 121 ms",
+      "run 3: scene: Sven DialogueRi__000BB963_1.wav on engine 1 after 111 ms",
+      "run 3: scene: Hilde DialogueRi__000D39A1_1.wav on engine 1 after 104 ms",
+      "run 3: scene: engine 1 also played Hilde DialogueRi__000954CC_1.wav, 260 ms into the part, with no line of engine 2 to match",
+      "run 4: subtitle settings (dialogue, general): engine 1 true,false, engine 2 true,false",
+      "run 4: Gerdur hosted by engine 2 talks to engine 2's player: greeting \"D'après Lucan, du Marché de Rivebois, des voleurs se seraient introduits dans sa boutique. Ils n'ont quasiment rien pris, c'est étrange.\", answer \"C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout.\"",
+      "run 4: topic: engine 2 said 7 lines, engine 1 played 7; engine 1 subtitles []; engine 2 subtitles 4",
+      "run 4: topic: Gerdur MS13__00039642_1.wav on engine 1 after 173 ms",
+      "run 4: topic: Gerdur MS13__00039642_1.wav on engine 1 after 142 ms",
+      "run 4: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 181 ms",
+      "run 4: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 148 ms",
+      "run 4: topic: Gerdur DialogueGe_DialogueGeneric_000854CE_1.wav on engine 1 after 147 ms",
+      "run 4: topic: Gerdur DialogueRiverwood_Revised__00045400_1.wav on engine 1 after 113 ms",
+      "run 4: topic: Gerdur DialogueRiverwood_Revised__00045400_1.wav on engine 1 after 114 ms",
+      "run 4: Hilde: engine 2 goes to where its own game shows the NPC: 3c:Skyrim.esm 20468,-46467,-122",
+      "run 4: scene: DialogueRiverwoodIntroScene stage 10 on engine 2",
+      "run 4: scene: engine 2 said 7 lines, engine 1 played 8; engine 1 subtitles []; engine 2 subtitles 6",
+      "run 4: scene: Sven DialogueRi__000954C6_1.wav on engine 1 after 72 ms",
+      "run 4: scene: Hilde DialogueRi__000954C8_1.wav on engine 1 after 115 ms",
+      "run 4: scene: Sven DialogueRi__000954D3_1.wav on engine 1 after 78 ms",
+      "run 4: scene: Sven DialogueRi__000BB963_1.wav on engine 1 after 116 ms",
+      "run 4: scene: Hilde DialogueRi__000D39A1_1.wav on engine 1 after 119 ms",
+      "run 4: scene: Sven FreeformRiverwood01__0005C832_1.wav on engine 1 after 111 ms",
+      "run 4: scene: Sven FreeformRiverwood01__0005C832_1.wav on engine 1 after 116 ms",
+      "run 4: scene: engine 1 also played Hilde DialogueRi__000954CC_1.wav, 398 ms into the part, with no line of engine 2 to match",
+      "run 5: subtitle settings (dialogue, general): engine 1 true,false, engine 2 true,false",
+      "run 5: Gerdur hosted by engine 2 talks to engine 2's player: greeting \"Notre village tient dans un mouchoir de poche, mais nous travaillons dur pour ne dépendre de personne.\", answer \"C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout.\"",
+      "run 5: topic: engine 2 said 9 lines, engine 1 played 9; engine 1 subtitles []; engine 2 subtitles 5",
+      "run 5: topic: Gerdur MS13__00039642_1.wav on engine 1 after 127 ms",
+      "run 5: topic: Gerdur MS13__00039642_1.wav on engine 1 after 125 ms",
+      "run 5: topic: Gerdur DialogueRiverwood_Revised__00045400_1.wav on engine 1 after 186 ms",
+      "run 5: topic: Gerdur DialogueRiverwood_Revised__00045400_1.wav on engine 1 after 159 ms",
+      "run 5: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 159 ms",
+      "run 5: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 126 ms",
+      "run 5: topic: Gerdur DialogueGe_DialogueGeneric_000854CE_1.wav on engine 1 after 127 ms",
+      "run 5: topic: Gerdur DialogueRiverwood_Revised__00045401_1.wav on engine 1 after 126 ms",
+      "run 5: topic: Gerdur DialogueRiverwood_Revised__00045401_1.wav on engine 1 after 93 ms",
+      "run 5: Hilde: engine 2 goes to where its own game shows the NPC: 3c:Skyrim.esm 20468,-46467,-122",
+      "run 5: scene: DialogueRiverwoodIntroScene stage 10 on engine 2",
+      "run 5: scene: engine 2 said 7 lines, engine 1 played 8; engine 1 subtitles []; engine 2 subtitles 6",
+      "run 5: scene: Sven DialogueRi__000954C6_1.wav on engine 1 after 59 ms",
+      "run 5: scene: Hilde DialogueRi__000954C8_1.wav on engine 1 after 92 ms",
+      "run 5: scene: Sven DialogueRi__000954D3_1.wav on engine 1 after 119 ms",
+      "run 5: scene: Sven DialogueRi__000BB963_1.wav on engine 1 after 129 ms",
+      "run 5: scene: Hilde DialogueRi__000D39A1_1.wav on engine 1 after 92 ms",
+      "run 5: scene: Sven FreeformRiverwood01__0005C832_1.wav on engine 1 after 92 ms",
+      "run 5: scene: Sven FreeformRiverwood01__0005C832_1.wav on engine 1 after 124 ms",
+      "run 5: scene: engine 1 also played Hilde DialogueRi__000954CC_1.wav, 447 ms into the part, with no line of engine 2 to match",
+      "run 6: subtitle settings (dialogue, general): engine 1 true,false, engine 2 true,false",
+      "run 6: Gerdur hosted by engine 2 talks to engine 2's player: greeting \"D'après Lucan, du Marché de Rivebois, des voleurs se seraient introduits dans sa boutique. Ils n'ont quasiment rien pris, c'est étrange.\", answer \"C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout.\"",
+      "run 6: topic: engine 2 said 5 lines, engine 1 played 5; engine 1 subtitles []; engine 2 subtitles 3",
+      "run 6: topic: Gerdur MS13__00039642_1.wav on engine 1 after 161 ms",
+      "run 6: topic: Gerdur MS13__00039642_1.wav on engine 1 after 135 ms",
+      "run 6: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 167 ms",
+      "run 6: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 133 ms",
+      "run 6: topic: Gerdur DialogueGe_DialogueGeneric_000854CE_1.wav on engine 1 after 142 ms",
+      "run 6: Hilde: engine 2 goes to where its own game shows the NPC: 3c:Skyrim.esm 20468,-46467,-122",
+      "run 6: scene: DialogueRiverwoodIntroScene stage 10 on engine 2",
+      "run 6: scene: engine 2 said 7 lines, engine 1 played 8; engine 1 subtitles []; engine 2 subtitles 6",
+      "run 6: scene: Sven DialogueRi__000954C6_1.wav on engine 1 after 54 ms",
+      "run 6: scene: Hilde DialogueRi__000954C8_1.wav on engine 1 after 95 ms",
+      "run 6: scene: Sven DialogueRi__000954D3_1.wav on engine 1 after 102 ms",
+      "run 6: scene: Sven DialogueRi__000BB963_1.wav on engine 1 after 98 ms",
+      "run 6: scene: Hilde DialogueRi__000D39A1_1.wav on engine 1 after 98 ms",
+      "run 6: scene: Sven FreeformRiverwood01__0005C832_1.wav on engine 1 after 103 ms",
+      "run 6: scene: Sven FreeformRiverwood01__0005C832_1.wav on engine 1 after 106 ms",
+      "run 6: scene: engine 1 also played Hilde DialogueRi__000954CC_1.wav, 417 ms into the part, with no line of engine 2 to match",
+      "run 7: subtitle settings (dialogue, general): engine 1 true,false, engine 2 true,false",
+      "run 7: Gerdur hosted by engine 2 talks to engine 2's player: greeting \"D'après Lucan, du Marché de Rivebois, des voleurs se seraient introduits dans sa boutique. Ils n'ont quasiment rien pris, c'est étrange.\", answer \"C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout.\"",
+      "run 7: topic: engine 2 said 7 lines, engine 1 played 7; engine 1 subtitles []; engine 2 subtitles 4",
+      "run 7: topic: Gerdur MS13__00039642_1.wav on engine 1 after 178 ms",
+      "run 7: topic: Gerdur MS13__00039642_1.wav on engine 1 after 151 ms",
+      "run 7: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 184 ms",
+      "run 7: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 151 ms",
+      "run 7: topic: Gerdur DialogueGe_DialogueGeneric_000854CE_1.wav on engine 1 after 151 ms",
+      "run 7: topic: Gerdur DialogueRiverwood_Revised__00045400_1.wav on engine 1 after 85 ms",
+      "run 7: topic: Gerdur DialogueRiverwood_Revised__00045400_1.wav on engine 1 after 119 ms",
+      "run 7: Hilde: engine 2 goes to where its own game shows the NPC: 3c:Skyrim.esm 20468,-46467,-122",
+      "run 7: scene: DialogueRiverwoodIntroScene stage 10 on engine 2",
+      "run 7: scene: engine 2 said 7 lines, engine 1 played 8; engine 1 subtitles []; engine 2 subtitles 6",
+      "run 7: scene: Sven DialogueRi__000954C6_1.wav on engine 1 after 61 ms",
+      "run 7: scene: Hilde DialogueRi__000954C8_1.wav on engine 1 after 118 ms",
+      "run 7: scene: Sven DialogueRi__000954D3_1.wav on engine 1 after 116 ms",
+      "run 7: scene: Sven DialogueRi__000BB963_1.wav on engine 1 after 118 ms",
+      "run 7: scene: Hilde DialogueRi__000D39A1_1.wav on engine 1 after 117 ms",
+      "run 7: scene: Sven FreeformRiverwood01__0005C832_1.wav on engine 1 after 115 ms",
+      "run 7: scene: Sven FreeformRiverwood01__0005C832_1.wav on engine 1 after 115 ms",
+      "run 7: scene: engine 1 also played Hilde DialogueRi__000954CC_1.wav, 457 ms into the part, with no line of engine 2 to match",
+      "run 8: subtitle settings (dialogue, general): engine 1 true,false, engine 2 true,false",
+      "run 8: Gerdur hosted by engine 2 talks to engine 2's player: greeting \"D'après Lucan, du Marché de Rivebois, des voleurs se seraient introduits dans sa boutique. Ils n'ont quasiment rien pris, c'est étrange.\", answer \"C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout.\"",
+      "run 8: topic: engine 2 said 5 lines, engine 1 played 5; engine 1 subtitles []; engine 2 subtitles 3",
+      "run 8: topic: Gerdur MS13__00039642_1.wav on engine 1 after 164 ms",
+      "run 8: topic: Gerdur MS13__00039642_1.wav on engine 1 after 138 ms",
+      "run 8: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 167 ms",
+      "run 8: topic: Gerdur DialogueRi_DialogueRiverwo_000FE2D3_1.wav on engine 1 after 134 ms",
+      "run 8: topic: Gerdur DialogueGe_DialogueGeneric_00014105_1.wav on engine 1 after 131 ms",
+      "run 8: Hilde: engine 2 goes to where its own game shows the NPC: 3c:Skyrim.esm 20468,-46467,-122",
+      "run 8: scene: DialogueRiverwoodIntroScene stage 10 on engine 2",
+      "run 8: scene: engine 2 said 7 lines, engine 1 played 8; engine 1 subtitles []; engine 2 subtitles 6",
+      "run 8: scene: Sven DialogueRi__000954C6_1.wav on engine 1 after 52 ms",
+      "run 8: scene: Hilde DialogueRi__000954C8_1.wav on engine 1 after 118 ms",
+      "run 8: scene: Sven DialogueRi__000954D3_1.wav on engine 1 after 114 ms",
+      "run 8: scene: Sven DialogueRi__000BB963_1.wav on engine 1 after 119 ms",
+      "run 8: scene: Hilde DialogueRi__000D39A1_1.wav on engine 1 after 119 ms",
+      "run 8: scene: Sven FreeformRiverwood01__0005C832_1.wav on engine 1 after 123 ms",
+      "run 8: scene: Sven FreeformRiverwood01__0005C832_1.wav on engine 1 after 120 ms",
+      "run 8: scene: engine 1 also played Hilde DialogueRi__000954CC_1.wav, 348 ms into the part, with no line of engine 2 to match"
     ],
     "shots": [],
     "rtt": {
       "1": {
-        "median": 56,
-        "calls": 14
+        "median": 62,
+        "calls": 13
       },
       "2": {
-        "median": 60,
-        "calls": 79
+        "median": 59,
+        "calls": 92
       }
     },
-    "at": "2026-10-26T21:07:30.987Z"
+    "at": "2026-10-26T23:02:19.100Z"
   },
   "G1.9": {
     "result": "PASS",
@@ -1821,34 +1898,47 @@
     "at": "2026-10-26T20:58:12.772Z"
   },
   "T6": {
-    "result": "FAIL",
-    "reason": "2 of 3 runs not PASS; run 1/3: Gerdur: engine 1 did not play 9 of 9 attack events within 500 ms: attackPowerStartForward at 0 ms: never, attackStart at 2134 ms: never, attackStart at 3300 ms: never, attackStart at 4900 ms: never, attackStart at 7234 ms: never, attackStart at 8868 ms: never, attackStart at 10001 ms: never, attackStart at 14601 ms: never, attackStart at 19035 ms: never",
-    "secs": 320,
+    "result": "PASS",
+    "reason": "8/8 runs PASS",
+    "secs": 848,
     "evidence": [
-      "run 1: Gerdur: seats near her on engine 2 [[\"a035a\",198,\"Invisible Chair Marker\"],[\"5bf91\",257,\"Chaise\"],[\"5bfb9\",324,\"Chaise\"],[\"5bfba\",387,\"Chaise\"]]",
-      "run 1: Gerdur 13489 (seated on engine 2 when the fight starts): sit state on engine 1 at the start 3 (3044 ms after it loaded there); hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events [\"attackPowerStartForward\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\"], engine 1 [], refused by engine 1's graph at [91,2212,2229,2247,2262,2279,2296,2312,2329,2345,2362,2379,2396,2413,2429,2446,2462,2479,2495,2512,2536,2546,2562,2579,2595,2612,2629,2645,2663,2679,2695,2712,3379,3395,3412,3428,3446,3462,3479,3495,3512,3528,3545,3562,3579,3596,3612,3628,3645,3662,3679,3695,3712,3729,3746,3762,3779,3795,3812,3828,3845,3862,3879,4980,4996,5013,5029,5046,5063,5080,5160,5163,5180,5196,5214,5230,5247,5263,5280,5297,5314,5330,5347,5363,5380,5397,5414,5430,5448,5463,5481,7315,7332,7348,7365,7382,7398,7416,7432,7449,7465,7482,7498,7515,7531,7549,7565,7581,7599,7615,7632,7648,7665,7682,7698,7715,7732,7749,7765,7782,7798,7815,8950,8966,9047,9052,9068,9084,9101,9118,9134,9151,9167,9185,9201,9218,9234,9251,9267,9284,9301,9318,9335,9351,9367,9384,9401,9418,9434,10084,10102,10118,10135,10151,10168,10184,10201,10218,10234,10252,10268,10284,10301,10318,10334,10351,10368,10385,10401,10417,10434,10451,10468,10485,10501,10519,10535,10551,10568,10584,14671,14687,14706,14720,14737,14753,14770,14787,14803,14820,14836,14853,14870,14886,14903,14920,14937,14954,15034,15038,15055,15072,15089,15105,15121,15138,15155,15171,19125,19142,19158,19175,19192,19210,19225,19305,19308,19325,19342,19359,19375,19392,19409,19425,19442,19458,19475,19492,19509,19525,19542,19558,19575,19592,19609] ms",
-      "run 1: Gerdur on engine 1 (sit, weapon drawn, AI): 34 state 3,0,0 | 268 IdleStop | 366 IdleChairFrontExit | 371 moveStart | 371 refused moveStart | 872 IdleForceDefaultState | 1070 state 0,0,0 | 1169 CyclicFreeze | 1171 moveStop | 1972 WeapEquip | 2003 IdleHDRightAngry | 2003 refused IdleHDRightAngry | 2170 IdleHDLeft | 2170 refused IdleHDLeft | 2186 IdleHHRight | 2186 refused IdleHHRight | 2439 IdleForceDefaultState | 2440 moveStart | 2589 moveStart | 2589 refused moveStart | 2769 moveStart | 2770 refused moveStart | 2841 moveStart | 2841 refused moveStart | 2991 moveStart | 2991 refused moveStart | 3124 moveStart | 3124 refused moveStart | 3241 moveStart | 3241 refused moveStart | 3390 moveStart | 3391 refused moveStart | 3508 moveStart | 3508 refused moveStart | 3641 moveStart | 3641 refused moveStart | 3843 moveStart | 3843 refused moveStart | 3908 moveStart | 3909 refused moveStart | 4025 attackPowerStartForward | 4025 refused attackPowerStartForward | 4040 IdleHDRight | 4040 refused IdleHDRight | 4043 moveStart | 4043 refused moveStart | 4073 MotionDrivenIdle | 4073 refused MotionDrivenIdle | 4175 moveStart | 4175 refused moveStart | 4309 moveStart | 4309 refused moveStart | 4458 moveStart | 4458 refused moveStart | 4592 moveStart | 4592 refused moveStart | 4709 moveStart | 4709 refused moveStart | 4878 moveStart | 4878 refused moveStart | 4978 moveStart | 4978 refused moveStart | 5128 moveStart | 5128 refused moveStart | 5244 moveStart | 5244 refused moveStart | 5394 moveStop | 6146 attackStart | 6146 refused attackStart | 6163 attackStart | 6163 refused attackStart | 6181 attackStart | 6181 refused attackStart | 6196 attackStart | 6196 refused attackStart | 6213 attackStart | 6213 refused attackStart | 6229 attackStart | 6230 refused attackStart | 6246 attackStart | 6246 refused attackStart | 6263 attackStart | 6263 refused attackStart | 6279 attackStart | 6279 refused attackStart | 6296 attackStart | 6296 refused attackStart | 6313 attackStart | 6313 refused attackStart | 6330 attackStart | 6330 refused attackStart | 6346 attackStart | 6347 refused attackStart | 6363 attackStart | 6363 refused attackStart | 6380 attackStart | 6380 refused attackStart | 6396 attackStart | 6396 refused attackStart | 6413 attackStart | 6413 refused attackStart | 6429 attackStart | 6429 refused attackStart | 6446 attackStart | 6446 refused attackStart | 6470 attackStart | 6470 refused attackStart | 6480 attackStart | 6480 refused attackStart | 6496 attackStart | 6496 refused attackStart | 6513 attackStart | 6513 refused attackStart | 6529 attackStart | 6529 refused attackStart | 6546 attackStart | 6546 refused attackStart | 6563 attackStart | 6563 refused attackStart | 6579 attackStart | 6579 refused attackStart | 6596 attackStart | 6597 refused attackStart | 6613 attackStart | 6613 refused attackStart | 6629 attackStart | 6629 refused attackStart | 6646 attackStart | 6646 refused attackStart | 7313 attackStart | 7313 refused attackStart | 7329 attackStart | 7329 refused attackStart | 7346 attackStart | 7346 refused attackStart | 7362 attackStart | 7362 refused attackStart | 7380 attackStart | 7380 refused attackStart | 7396 attackStart | 7396 refused attackStart | 7413 attackStart | 7413 refused attackStart | 7429 attackStart | 7429 refused attackStart | 7446 attackStart | 7446 refused attackStart | 7462 attackStart | 7462 refused attackStart | 7479 attackStart",
-      "run 1: bandit 1ebf6: sit state on engine 1 at the start 0; hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events [\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackPowerStartInPlace\",\"attackStart\"], engine 1 [\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackPowerStartInPlace\",\"attackStart\"], refused by engine 1's graph at [] ms",
-      "run 2: Gerdur: seats near her on engine 2 [[\"5bf92\",341,\"Chaise\"],[\"5bf91\",352,\"Chaise\"],[\"a035a\",415,\"Invisible Chair Marker\"],[\"5bfb9\",701,\"Chaise\"]]",
-      "run 2: Gerdur 13489 (seated on engine 2 when the fight starts): sit state on engine 1 at the start 3 (11572 ms after it loaded there); hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events [\"attackStart\",\"attackStart\",\"attackStart\",\"attackPowerStartInPlace\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\"], engine 1 [\"attackStart\",\"attackStart\",\"attackStart\",\"attackPowerStartInPlace\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\"], refused by engine 1's graph at [] ms",
-      "run 2: bandit 1ebf6: sit state on engine 1 at the start 0; hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events [\"attackStart\",\"attackStart\",\"attackPowerStartInPlace\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\"], engine 1 [\"attackStart\",\"attackStart\",\"attackPowerStartInPlace\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\"], refused by engine 1's graph at [] ms",
-      "run 3: Gerdur: seats near her on engine 2 [[\"a035a\",190,\"Invisible Chair Marker\"],[\"5bf91\",260,\"Chaise\"],[\"5bfb9\",332,\"Chaise\"],[\"5bfba\",381,\"Chaise\"]]",
-      "run 3: Gerdur 13489 (seated on engine 2 when the fight starts): sit state on engine 1 at the start 3 (8173 ms after it loaded there); hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events [\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackPowerStartInPlace\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\"], engine 1 [], refused by engine 1's graph at [74,90,106,123,140,156,173,190,206,224,240,256,273,290,307,323,340,358,373,390,406,423,440,457,474,490,507,523,540,556,573,1158,1174,1191,1207,1224,1240,1257,1274,1291,1307,1324,1341,1357,1374,1391,1407,1424,1441,1457,1474,1490,1507,1524,1540,1558,1574,1591,1607,1623,1640,1657,1841,1858,1874,1890,1971,1975,1991,2008,2024,2041,2058,2075,2092,2108,2125,2141,2158,2175,2191,2208,2225,2241,2258,2274,2291,2308,2324,3076,3093,3109,3126,3143,3160,3176,3193,3209,3226,3242,3259,3276,3293,3309,3326,3342,3359,3376,3392,3410,3426,3442,3459,3476,3492,3509,3526,3543,3560,3576,4260,4276,4293,4309,4326,4343,4361,4376,4393,4410,4426,4443,4460,4476,4493,4510,4526,4543,4560,4576,4593,4610,4626,4643,4660,4676,4693,4710,4726,4744,4759,5278,5294,5311,5327,5344,5360,5377,5394,5411,5428,5444,5461,5477,5494,5510,5527,5545,5560,5577,5594,5611,5627,5644,5660,5677,5694,5710,5727,5744,5760,5777,5977,5994,6011,6027,6044,6060,6078,6094,6111,6127,6207,6211,6227,6244,6261,6277,6293,6311,6327,6345,6360,6377,6394,6410,6427,6444,6460,6477,6910,6927,6944,6960,6977,6994,7011,7027,7044,7061,7077,7094,7110,7127,7145,7160,7177,7258,7262,7278,7295,7311,7328,7345,7361,7378,7395,10547,10564,10581,10598,10614,10631,10647,10664,10680,10698,10714,10731,10748,10764,10781,10797,10814,10830,10848,10865,10881,10897,10914,10931,10947,10964,10980,10998,11014,11031,11047,12249,12266,12282,12299,12315,12333,12348,12368,12382,12399,12415,12432,12449,12467,12547,12550,12567,12584,12601,12618,12634,12650,12667,12684,12700,12717,12735,13117,15452,15470,15486,15502,15519,15536,15553,15569,15586,15603,15619,15636,15653,15734,15738,15754,15771,15787,15805,15821,15837,15854,15871,15887,15904,15921,15938,16605,16620,16637,16654,16671,16688,16704,16784,16787,16804,16820,16837,16854,16870,16887,16904,16920,16937,16953,16970,16987,17004,17020,17037,17053,17071,17087,17104,18604,18620,18637,18654,18671,18687,18704,18720,18737,18755,18770,18787,18804,18820,18901,18905,18922,18939,18955,18972,18988,19005,19022,19038,19055,19072,19088,19105,19505,19522,19539,19555,19571,19588,19605,19621,19638,19655,19672,19688,19705,19721,19738,19755,19771,19788,19806,19822,19839,19855,19872,19952,19957,19973,19990,20756,20773,20789,20806,20823,20839,20856,20873,20890,20906,20923,21004,21008,21024,21041,21057,21074,21091,21108,21124,21142,21157,21174,21191,21208,21224,21241] ms",
-      "run 3: Gerdur on engine 1 (sit, weapon drawn, AI): 33 state 3,0,0 | 235 IdleStop | 336 IdleChairFrontExit | 352 moveStart | 485 state 0,0,0 | 568 CyclicFreeze | 569 moveStop | 1955 WeapEquip | 1985 IdleHHLeft | 1985 refused IdleHHLeft | 2220 IdleForceDefaultState | 2221 moveStart | 2434 moveStart | 2434 refused moveStart | 2488 moveStart | 2488 refused moveStart | 2638 moveStart | 2638 refused moveStart | 2754 moveStart | 2755 refused moveStart | 2904 moveStart | 2904 refused moveStart | 3038 moveStart | 3038 refused moveStart | 3171 moveStart | 3171 refused moveStart | 3304 moveStart | 3305 refused moveStart | 3488 moveStart | 3488 refused moveStart | 3556 moveStart | 3556 refused moveStart | 3689 moveStart | 3689 refused moveStart | 3689 attackStart | 3689 refused attackStart | 3705 attackStart | 3705 refused attackStart | 3721 attackStart | 3721 refused attackStart | 3738 attackStart | 3738 refused attackStart | 3755 attackStart | 3755 refused attackStart | 3771 attackStart | 3771 refused attackStart | 3788 attackStart | 3788 refused attackStart | 3805 attackStart | 3805 refused attackStart | 3821 attackStart | 3821 refused attackStart | 3838 moveStart | 3838 refused moveStart | 3839 attackStart | 3839 refused attackStart | 3855 attackStart | 3855 refused attackStart | 3871 attackStart | 3871 refused attackStart | 3888 attackStart | 3888 refused attackStart | 3905 attackStart | 3905 refused attackStart | 3922 attackStart | 3922 refused attackStart | 3938 attackStart | 3938 refused attackStart | 3955 attackStart | 3955 refused attackStart | 3972 moveStart | 3972 refused moveStart | 3972 attackStart | 3973 refused attackStart | 3988 attackStart | 3988 refused attackStart | 4005 attackStart | 4005 refused attackStart | 4021 attackStart | 4021 refused attackStart | 4038 attackStart | 4038 refused attackStart | 4055 attackStart | 4055 refused attackStart | 4072 attackStart | 4072 refused attackStart | 4089 moveStart | 4089 refused moveStart | 4089 attackStart | 4089 refused attackStart | 4105 attackStart | 4105 refused attackStart | 4121 attackStart | 4122 refused attackStart | 4138 attackStart | 4138 refused attackStart | 4155 attackStart | 4155 refused attackStart | 4171 attackStart | 4171 refused attackStart | 4188 attackStart | 4188 refused attackStart | 4239 moveStart | 4239 refused moveStart | 4372 moveStart | 4372 refused moveStart | 4540 moveStop | 4773 attackStart | 4773 refused attackStart | 4787 IdleHHRight | 4789 attackStart | 4789 refused attackStart | 4806 attackStart | 4806 refused attackStart | 4821 DialogueNeutral | 4821 refused DialogueNeutral | 4822 attackStart | 4822 refused attackStart | 4839 attackStart | 4839 refused attackStart | 4855 attackStart | 4855 refused attackStart | 4872 attackStart | 4872 refused attackStart | 4889 attackStart | 4889 refused attackStart | 4906 attackStart | 4906 refused attackStart | 4922 attackStart | 4922 refused attackStart | 4939 attackStart | 4939 refused attackStart | 4956 attackStart | 4956 refused attackStart | 4972 attackStart | 4972 refused attackStart | 4989 attackStart | 4989 refused attackStart | 5006 attackStart | 5006 refused attackStart | 5022 attackStart | 5022 refused attackStart | 5039 attackStart | 5039 refused attackStart | 5056 attackStart | 5056 refused attackStart | 5072 attackStart | 5072 refused attackStart | 5089 attackStart | 5089 refused attackStart",
-      "run 3: bandit 1ebf6: sit state on engine 1 at the start 0; hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events [\"attackStart\",\"attackStart\",\"attackPowerStartInPlace\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackPowerStartForward\",\"attackStart\",\"attackStart\"], engine 1 [\"attackStart\",\"attackStart\",\"attackPowerStartInPlace\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackPowerStartForward\",\"attackStart\",\"attackStart\"], refused by engine 1's graph at [] ms"
+      "run 1: Gerdur: seats near her on engine 2 [[\"a035a\",214,\"Invisible Chair Marker\"],[\"5bf91\",245,\"Chaise\"],[\"5bfb9\",315,\"Chaise\"],[\"5bf92\",391,\"Chaise\"]]",
+      "run 1: Gerdur 13489 (seated on engine 2 when the fight starts): sit state on engine 1 at the start 3 (3043 ms after it loaded there); hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events [\"attackStart\",\"attackStart\",\"attackStart\",\"attackPowerStartForward\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackPowerStartForward\"], engine 1 [\"attackStart\",\"attackStart\",\"attackStart\",\"attackPowerStartForward\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackPowerStartForward\"], refused by engine 1's graph at [] ms",
+      "run 1: bandit 1ebf6: sit state on engine 1 at the start 0; hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events [\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\"], engine 1 [\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\"], refused by engine 1's graph at [] ms",
+      "run 2: Gerdur: seats near her on engine 2 [[\"a035a\",211,\"Invisible Chair Marker\"],[\"5bf91\",245,\"Chaise\"],[\"5bfb9\",320,\"Chaise\"],[\"5bfba\",386,\"Chaise\"]]",
+      "run 2: Gerdur 13489 (seated on engine 2 when the fight starts): sit state on engine 1 at the start 3 (3041 ms after it loaded there); hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events [\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackPowerStartInPlace\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\"], engine 1 [\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackPowerStartInPlace\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\"], refused by engine 1's graph at [] ms",
+      "run 2: bandit 1ebf6: sit state on engine 1 at the start 0; hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events [\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\"], engine 1 [\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\"], refused by engine 1's graph at [] ms",
+      "run 3: Gerdur: seats near her on engine 2 [[\"a035a\",196,\"Invisible Chair Marker\"],[\"5bf91\",254,\"Chaise\"],[\"5bfb9\",330,\"Chaise\"],[\"5bfba\",380,\"Chaise\"]]",
+      "run 3: Gerdur 13489 (seated on engine 2 when the fight starts): sit state on engine 1 at the start 3 (3060 ms after it loaded there); hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events [\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackPowerStartForward\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackPowerStartInPlace\",\"attackStart\",\"attackStart\"], engine 1 [\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackPowerStartForward\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackPowerStartInPlace\",\"attackStart\",\"attackStart\"], refused by engine 1's graph at [] ms",
+      "run 3: bandit 1ebf6: sit state on engine 1 at the start 0; hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events [\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\"], engine 1 [\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\"], refused by engine 1's graph at [12067] ms",
+      "run 4: Gerdur: seats near her on engine 2 [[\"38b91\",432,\"Chaise\"],[\"5bf91\",441,\"Chaise\"],[\"a035a\",445,\"Invisible Chair Marker\"],[\"38b93\",559,\"Chaise\"]]",
+      "run 4: Gerdur 13489 (seated on engine 2 when the fight starts): sit state on engine 1 at the start 3 (3063 ms after it loaded there); hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events [\"attackPowerStartForward\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\"], engine 1 [\"attackPowerStartForward\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\"], refused by engine 1's graph at [] ms",
+      "run 4: bandit 1ebf6: sit state on engine 1 at the start 0; hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events [\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\"], engine 1 [\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\"], refused by engine 1's graph at [] ms",
+      "run 5: Gerdur: seats near her on engine 2 [[\"5bf92\",341,\"Chaise\"],[\"5bf91\",352,\"Chaise\"],[\"a035a\",415,\"Invisible Chair Marker\"],[\"5bfb9\",701,\"Chaise\"]]",
+      "run 5: Gerdur 13489 (seated on engine 2 when the fight starts): sit state on engine 1 at the start 3 (11565 ms after it loaded there); hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events [\"attackPowerStartForward\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\"], engine 1 [\"attackPowerStartForward\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\"], refused by engine 1's graph at [] ms",
+      "run 5: bandit 1ebf6: sit state on engine 1 at the start 0; hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events [\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\"], engine 1 [\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\"], refused by engine 1's graph at [] ms",
+      "run 6: Gerdur: seats near her on engine 2 [[\"5bf92\",341,\"Chaise\"],[\"5bf91\",352,\"Chaise\"],[\"a035a\",415,\"Invisible Chair Marker\"],[\"5bfb9\",701,\"Chaise\"]]",
+      "run 6: Gerdur 13489 (seated on engine 2 when the fight starts): sit state on engine 1 at the start 3 (11551 ms after it loaded there); hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events [\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\"], engine 1 [\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\"], refused by engine 1's graph at [] ms",
+      "run 6: bandit 1ebf6: sit state on engine 1 at the start 0; hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events [\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\"], engine 1 [\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\"], refused by engine 1's graph at [] ms",
+      "run 7: Gerdur: seats near her on engine 2 [[\"a035a\",204,\"Invisible Chair Marker\"],[\"5bf91\",263,\"Chaise\"],[\"5bfb9\",305,\"Chaise\"],[\"5bfba\",406,\"Chaise\"]]",
+      "run 7: Gerdur 13489 (seated on engine 2 when the fight starts): sit state on engine 1 at the start 3 (3060 ms after it loaded there); hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events [\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\"], engine 1 [\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\"], refused by engine 1's graph at [] ms",
+      "run 7: bandit 1ebf6: sit state on engine 1 at the start 0; hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events [\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackPowerStartInPlace\",\"attackStart\",\"attackStart\",\"attackStart\"], engine 1 [\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackPowerStartInPlace\",\"attackStart\",\"attackStart\",\"attackStart\"], refused by engine 1's graph at [] ms",
+      "run 8: Gerdur: seats near her on engine 2 [[\"a035a\",196,\"Invisible Chair Marker\"],[\"5bf91\",256,\"Chaise\"],[\"5bfb9\",328,\"Chaise\"],[\"5bfba\",383,\"Chaise\"]]",
+      "run 8: Gerdur 13489 (seated on engine 2 when the fight starts): sit state on engine 1 at the start 3 (3048 ms after it loaded there); hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events [\"attackPowerStartForward\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackPowerStartInPlace\",\"attackPowerStartForward\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\"], engine 1 [\"attackPowerStartForward\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackPowerStartInPlace\",\"attackPowerStartForward\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\"], refused by engine 1's graph at [] ms",
+      "run 8: bandit 1ebf6: sit state on engine 1 at the start 0; hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events [\"bashStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackPowerStartInPlace\",\"attackStart\"], engine 1 [\"bashStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackStart\",\"attackPowerStartInPlace\",\"attackStart\"], refused by engine 1's graph at [] ms"
     ],
     "shots": [],
     "rtt": {
       "1": {
-        "median": 30,
-        "calls": 57
+        "median": 31,
+        "calls": 59
       },
       "2": {
-        "median": 65,
-        "calls": 48
+        "median": 63,
+        "calls": 52
       }
     },
-    "at": "2026-10-26T21:12:51.268Z"
+    "at": "2026-10-26T23:03:07.483Z"
   },
   "T3": {
     "result": "PASS",
@@ -1943,21 +2033,68 @@
   },
   "H3": {
     "result": "PASS",
-    "reason": "1/1 runs PASS",
-    "secs": 60,
+    "reason": "3/3 runs PASS",
+    "secs": 293,
     "evidence": [
-      "run 1: seat: seated on both engines 2263 ms after the wait started",
-      "run 1: seat: samples around the largest step (t from the transfer, x, y, z, sit, furniture, target, dead, AI, player z): [[4233,8,-444,19,0,376722,\"\",0,1,0],[4266,11,-443,19,0,376722,\"\",0,1,0],[4299,13,-442,16,0,376722,\"\",0,1,0],[4333,15,-440,11,0,376722,\"\",0,1,0],[4366,18,-439,2,0,376722,\"\",0,1,0],[4399,20,-438,-1,0,376722,\"\",0,1,0],[4433,22,-437,-1,0,376722,\"\",0,1,0],[4466,23,-436,-1,0,376722,\"\",0,1,0]]",
-      "run 1: seat: the first 3 s on engine 1, every 8th sample: [[0,-14,-465,7,3,0,\"\",0,0,0],[266,-11,-463,15,0,0,\"\",0,0,0],[533,-11,-462,27,0,0,\"\",0,0,0],[799,-11,-462,29,0,0,\"\",0,0,0],[1066,-11,-462,30,0,0,\"\",0,1,0],[1333,-11,-462,31,0,0,\"\",0,1,0],[1600,-11,-462,31,0,0,\"\",0,1,0],[1866,-11,-462,31,0,0,\"\",0,1,0],[2133,-11,-462,31,0,0,\"\",0,1,0],[2399,-11,-462,31,0,0,\"\",0,1,0],[2666,-11,-462,32,0,0,\"\",0,1,0],[2933,-11,-462,32,0,0,\"\",0,1,0]]",
-      "run 1: seat: engine 1 runs Gerdur 11 ms after engine 2 left; 217 samples on engine 1, largest step 9 units, dead false, copies 0; first after [1793044313261,-13.524718284606934,-465.4971923828125,7.309000015258789,3,0,\"\",0,0,0], last [1793044318860,25.018342971801758,-438.327880859375,-1.3397425413131714,2,376722,\"\",0,1,0]; server before {\"dead\":false,\"hoster\":4278190081,\"cell\":\"133c7:Skyrim.esm\",\"pos\":[-18.50971031188965,-470.9197692871094,1.9996998310089111]}",
-      "run 1: seat: first sample on engine 1 is 9 units from where engine 2 had Gerdur",
-      "run 1: seat: on engine 1 Gerdur stood up 266 ms after the transfer (the AI's furniture state does not transfer: activate binds no NPC, Skyrim has no SnapIntoInteraction); furniture at the end 5bf92",
-      "run 1: combat: Gerdur on engine 1 during the fight, every 15th sample (s before the transfer, x, y, z, sit, player z): [[-4.3,-19,-471,2,3,0],[-3.8,-3,-454,2,4,0],[-3.3,13,-436,2,4,0],[-2.8,14,-434,2,4,0],[-2.3,18,-429,0,0,0],[-1.8,40,-353,-1,0,0],[-1.3,33,-264,-1,0,0],[-0.8,27,-183,-1,0,0],[-0.3,25,-142,-1,0,0]]",
-      "run 1: combat: samples around the largest step (t from the transfer, x, y, z, sit, furniture, target, dead, AI, player z): [[2810,-71,-185,0,0,0,\"player\",0,1,0],[2843,-68,-181,0,0,0,\"player\",0,1,0],[2876,-64,-175,0,0,0,\"player\",0,1,0],[2910,-57,-163,0,0,0,\"player\",0,1,0],[2943,-49,-152,0,0,0,\"player\",0,1,0],[2976,-43,-143,0,0,0,\"player\",0,1,0],[3009,-38,-135,0,0,0,\"player\",0,1,0],[3043,-33,-127,0,0,0,\"player\",0,1,0]]",
-      "run 1: combat: the first 3 s on engine 2, every 8th sample: [[9,-39,-123,0,0,0,\"\",0,0,0],[276,-32,-125,0,0,0,\"player\",0,1,0],[543,-32,-125,0,0,0,\"player\",0,1,0],[810,-32,-125,0,0,0,\"player\",0,1,0],[1076,-32,-125,0,0,0,\"player\",0,1,0],[1343,-32,-125,0,0,0,\"player\",0,1,0],[1610,-40,-138,0,0,0,\"player\",0,1,0],[1876,-62,-171,0,0,0,\"player\",0,1,0],[2143,-71,-185,0,0,0,\"player\",0,1,0],[2410,-71,-185,0,0,0,\"player\",0,1,0],[2676,-71,-185,0,0,0,\"player\",0,1,0],[2943,-49,-152,0,0,0,\"player\",0,1,0]]",
-      "run 1: combat: engine 2 runs Gerdur 17 ms after engine 1 left; 198 samples on engine 2, largest step 13 units, dead false, copies 0; first after [1793044328678,-38.86793899536133,-122.60233306884766,-9.406700200997875e-7,0,0,\"\",0,0,0], last [1793044334245,-15.688000679016113,-100.29727935791016,0.0000013979197319713421,0,0,\"player\",0,1,0]; server before {\"dead\":false,\"hoster\":4278190080,\"cell\":\"133c7:Skyrim.esm\",\"pos\":[-31.737680435180664,-125.28992462158203,-0.0000023082727693690686]}",
-      "run 1: combat: first sample on engine 2 is 8 units from where engine 1 had Gerdur",
-      "run 1: combat: Gerdur fights engine 2's player on engine 2 109 ms after the transfer"
+      "run 1: seat: seated on both engines 2239 ms after the wait started",
+      "run 1: seat: samples around the largest step (t from the transfer, x, y, z, sit, furniture, target, dead, AI, player z): [[209,-37,-317,12,3,0,\"\",0,0,0],[243,-35,-318,15,3,0,\"\",0,0,0],[276,-35,-318,16,0,0,\"\",0,0,0],[309,-35,-318,17,0,0,\"\",0,0,0],[343,-30,-319,21,0,0,\"\",0,0,0],[376,-28,-319,23,0,0,\"\",0,0,0],[410,-28,-319,24,0,0,\"\",0,0,0],[442,-28,-319,26,0,0,\"\",0,0,0]]",
+      "run 1: seat: the first 3 s on engine 1, every 8th sample: [[9,-43,-316,2,3,0,\"\",0,0,0],[276,-35,-318,16,0,0,\"\",0,0,0],[543,-28,-319,27,0,0,\"\",0,0,0],[809,-28,-319,30,0,0,\"\",0,0,0],[1076,-28,-319,31,0,0,\"\",0,1,0],[1343,-28,-319,31,0,0,\"\",0,1,0],[1609,-24,-320,31,0,232337,\"\",0,1,0],[1876,-12,-321,13,0,232337,\"\",0,1,0],[2143,0,-322,-1,0,232337,\"\",0,1,0],[2409,12,-321,-1,0,232337,\"\",0,1,0],[2676,24,-314,-1,0,232337,\"\",0,1,0],[2943,35,-298,-1,0,232337,\"\",0,1,0]]",
+      "run 1: seat: engine 1 runs Gerdur 17 ms after engine 2 left; 218 samples on engine 1, largest step 6 units, dead false, copies 0; first after [1793050650477,-43.206302642822266,-315.50018310546875,1.999082326889038,3,0,\"\",0,0,0], last [1793050656077,-88.44420623779297,-149.2921142578125,-0.0339580699801445,0,232337,\"\",0,1,0]; server before {\"dead\":false,\"hoster\":4278190081,\"cell\":\"133c7:Skyrim.esm\",\"pos\":[-43.206302642822266,-315.50018310546875,1.999082326889038]}",
+      "run 1: seat: first sample on engine 1 is 0 units from where engine 2 had Gerdur",
+      "run 1: seat: on engine 1 Gerdur stood up 276 ms after the transfer (the AI's furniture state does not transfer: activate binds no NPC, Skyrim has no SnapIntoInteraction); furniture at the end 38b91",
+      "run 1: combat: Gerdur on engine 1 during the fight, every 15th sample (s before the transfer, x, y, z, sit, player z): [[-4.2,-388,-132,0,0,0],[-3.7,-429,-132,0,0,0],[-3.2,-471,-132,0,0,0],[-2.7,-468,-131,-1,0,0],[-2.2,-378,-124,-1,0,0],[-1.7,-331,-121,0,0,0],[-1.2,-441,-133,-1,0,0],[-0.7,-509,-177,0,0,0],[-0.2,-511,-179,0,0,0]]",
+      "run 1: combat: samples around the largest step (t from the transfer, x, y, z, sit, furniture, target, dead, AI, player z): [[2557,-460,-163,0,0,0,\"player\",0,1,32],[2590,-464,-165,0,0,0,\"player\",0,1,32],[2623,-470,-166,0,0,0,\"player\",0,1,32],[2657,-476,-168,0,0,0,\"player\",0,1,32],[2690,-483,-170,-1,0,0,\"player\",0,1,32],[2723,-489,-172,-1,0,0,\"player\",0,1,32],[2757,-495,-173,-1,0,0,\"player\",0,1,32],[2790,-499,-174,-1,0,0,\"player\",0,1,32]]",
+      "run 1: combat: the first 3 s on engine 2, every 8th sample: [[23,-511,-179,0,0,0,\"\",0,0,32],[290,-511,-179,0,0,0,\"player\",0,1,32],[556,-511,-179,0,0,0,\"player\",0,1,32],[823,-511,-179,0,0,0,\"player\",0,1,32],[1090,-511,-179,0,0,0,\"player\",0,1,32],[1357,-511,-179,0,0,0,\"player\",0,1,32],[1623,-511,-179,0,0,0,\"player\",0,1,32],[1890,-503,-177,0,0,0,\"player\",0,1,32],[2157,-460,-166,-1,0,0,\"player\",0,1,32],[2423,-449,-160,0,0,0,\"player\",0,1,32],[2690,-483,-170,-1,0,0,\"player\",0,1,32],[2957,-511,-177,0,0,0,\"player\",0,1,32]]",
+      "run 1: combat: engine 2 runs Gerdur 13 ms after engine 1 left; 199 samples on engine 2, largest step 7 units, dead false, copies 0; first after [1793050665788,-510.61968994140625,-178.70912170410156,-0.0000022897984308656305,0,0,\"\",0,0,32], last [1793050671355,-510.66436767578125,-177.3881378173828,5.545967951547937e-7,0,0,\"player\",0,1,32]; server before {\"dead\":false,\"hoster\":4278190080,\"cell\":\"133c7:Skyrim.esm\",\"pos\":[-510.61968994140625,-178.70912170410156,-0.0000022714184524375014]}",
+      "run 1: combat: first sample on engine 2 is 0 units from where engine 1 had Gerdur",
+      "run 1: combat: Gerdur fights engine 2's player on engine 2 123 ms after the transfer",
+      "run 2: seat: seated on both engines 2239 ms after the wait started",
+      "run 2: seat: samples around the largest step (t from the transfer, x, y, z, sit, furniture, target, dead, AI, player z): [[2025,-650,-85,33,0,376761,\"\",0,1,0],[2059,-648,-86,33,0,376761,\"\",0,1,0],[2092,-648,-86,33,0,376761,\"\",0,1,0],[2125,-648,-88,26,0,376761,\"\",0,1,0],[2158,-648,-90,17,0,376761,\"\",0,1,0],[2193,-648,-91,11,0,376761,\"\",0,1,0],[2226,-648,-93,7,0,376761,\"\",0,1,0],[2259,-648,-96,4,0,376761,\"\",0,1,0]]",
+      "run 2: seat: the first 3 s on engine 1, every 8th sample: [[25,-647,-70,2,3,0,\"\",0,0,0],[292,-648,-70,9,0,0,\"\",0,0,0],[559,-652,-70,32,0,0,\"\",0,0,0],[825,-652,-70,33,0,0,\"\",0,0,0],[1092,-652,-70,33,0,0,\"\",0,1,0],[1359,-652,-70,33,0,376761,\"\",0,1,0],[1625,-652,-72,33,0,376761,\"\",0,1,0],[1892,-650,-78,33,0,376761,\"\",0,1,0],[2158,-648,-90,17,0,376761,\"\",0,1,0],[2425,-644,-106,1,0,376761,\"\",0,1,0],[2692,-632,-118,0,0,376761,\"\",0,1,0],[2958,-620,-121,0,0,376761,\"\",0,1,0]]",
+      "run 2: seat: engine 1 runs Gerdur 2 ms after engine 2 left; 198 samples on engine 1, largest step 9 units, dead false, copies 0; first after [1793050719113,-647.1532592773438,-70.0962142944336,1.999366044998169,3,0,\"\",0,0,0], last [1793050724680,-601.9835205078125,-113.2358627319336,-0.000002986796744153253,0,376761,\"\",0,1,0]; server before {\"dead\":false,\"hoster\":4278190081,\"cell\":\"133c7:Skyrim.esm\",\"pos\":[-638.832275390625,-70.00318908691406,1.999366044998169]}",
+      "run 2: seat: first sample on engine 1 is 8 units from where engine 2 had Gerdur",
+      "run 2: seat: on engine 1 Gerdur stood up 292 ms after the transfer (the AI's furniture state does not transfer: activate binds no NPC, Skyrim has no SnapIntoInteraction); furniture at the end 5bfb9",
+      "run 2: combat: Gerdur on engine 1 during the fight, every 15th sample (s before the transfer, x, y, z, sit, player z): [[-4.3,-610,-113,0,0,-1],[-3.8,-610,-113,0,0,-1],[-3.3,-610,-113,0,0,0],[-2.8,-588,-105,-1,0,0],[-2.3,-470,-83,-1,0,0],[-1.8,-396,-84,0,0,0],[-1.3,-358,-84,0,0,0],[-0.8,-375,-84,0,0,0],[-0.3,-460,-86,-1,0,0]]",
+      "run 2: combat: samples around the largest step (t from the transfer, x, y, z, sit, furniture, target, dead, AI, player z): [[-637,-312,-84,0,0,0,\"\",0,0,0],[-603,-311,-84,0,0,0,\"\",0,0,0],[-570,-310,-84,0,0,0,\"\",0,0,0],[-536,-305,-84,0,0,0,\"\",0,0,0],[-503,-299,-84,0,0,0,\"\",0,0,0],[-470,-293,-83,0,0,0,\"\",0,0,0],[-436,-289,-83,0,0,0,\"\",0,0,0],[-403,-292,-83,0,0,0,\"\",0,0,0]]",
+      "run 2: combat: the first 3 s on engine 2, every 8th sample: [[30,-310,-84,0,0,0,\"\",0,0,0],[296,-310,-84,0,0,0,\"player\",0,1,0],[563,-310,-84,0,0,0,\"player\",0,1,0],[830,-310,-84,0,0,0,\"player\",0,1,0],[1097,-310,-84,0,0,0,\"player\",0,1,0],[1363,-329,-84,0,0,0,\"player\",0,1,0],[1629,-377,-86,-1,0,0,\"player\",0,1,0],[1896,-425,-88,-1,0,0,\"player\",0,1,0],[2163,-447,-88,0,0,0,\"player\",0,1,0],[2429,-447,-88,0,0,0,\"player\",0,1,0],[2696,-447,-88,0,0,0,\"player\",0,1,0],[2964,-447,-88,0,0,0,\"player\",0,1,0]]",
+      "run 2: combat: engine 2 runs Gerdur 3 ms after engine 1 left; 198 samples on engine 2, largest step 7 units, dead false, copies 0; first after [1793050734482,-310.35400390625,-83.69088745117188,-0.000001059182523022173,0,0,\"\",0,0,0], last [1793050740016,-307.1624755859375,-16.972421646118164,-0.0000024205683075706474,0,0,\"player\",0,1,0]; server before {\"dead\":false,\"hoster\":4278190080,\"cell\":\"133c7:Skyrim.esm\",\"pos\":[-310.3540344238281,-83.69088745117188,-0.0000012481045814638492]}",
+      "run 2: combat: first sample on engine 2 is 0 units from where engine 1 had Gerdur",
+      "run 2: combat: Gerdur fights engine 2's player on engine 2 129 ms after the transfer",
+      "run 3: seat: seated on both engines 2267 ms after the wait started",
+      "run 3: seat: samples around the largest step (t from the transfer, x, y, z, sit, furniture, target, dead, AI, player z): [[-272,-767,-166,2,3,0,\"\",0,0,30],[-239,-767,-166,2,3,0,\"\",0,0,30],[-206,-767,-164,3,3,0,\"\",0,0,30],[-172,-767,-162,4,3,0,\"\",0,0,30],[-139,-766,-159,6,3,0,\"\",0,0,30],[-105,-767,-158,7,3,0,\"\",0,0,30],[-72,-767,-158,8,3,0,\"\",0,0,30],[-38,-767,-158,10,3,0,\"\",0,0,30]]",
+      "run 3: seat: the first 3 s on engine 1, every 8th sample: [[28,-767,-156,12,3,0,\"\",0,0,30],[295,-767,-156,22,0,0,\"\",0,0,31],[561,-767,-156,28,0,0,\"\",0,0,31],[828,-767,-156,30,0,0,\"\",0,0,31],[1095,-767,-156,31,0,0,\"\",0,1,31],[1361,-767,-156,31,0,0,\"\",0,1,31],[1628,-767,-156,31,0,0,\"\",0,1,31],[1894,-767,-156,31,0,0,\"\",0,1,31],[2161,-767,-156,31,0,0,\"\",0,1,31],[2428,-767,-156,31,0,0,\"\",0,1,31],[2694,-767,-156,31,0,0,\"\",0,1,31],[2961,-767,-156,31,0,0,\"\",0,1,31]]",
+      "run 3: seat: engine 1 runs Gerdur 12 ms after engine 2 left; 199 samples on engine 1, largest step 4 units, dead false, copies 0; first after [1793050874562,-766.574462890625,-156.24838256835938,12.440685272216797,3,0,\"\",0,0,30], last [1793050880128,-766.574462890625,-155.77749633789062,31.478443145751953,0,0,\"\",0,1,31]; server before {\"dead\":false,\"hoster\":4278190081,\"cell\":\"133c7:Skyrim.esm\",\"pos\":[-766.8377075195312,-166.0083770751953,1.999307632446289]}",
+      "run 3: seat: first sample on engine 1 is 14 units from where engine 2 had Gerdur",
+      "run 3: seat: on engine 1 Gerdur stood up 295 ms after the transfer (the AI's furniture state does not transfer: activate binds no NPC, Skyrim has no SnapIntoInteraction); furniture at the end 0",
+      "run 3: combat: Gerdur on engine 1 during the fight, every 15th sample (s before the transfer, x, y, z, sit, player z): [[-4.3,-767,-156,31,0,38],[-3.8,-767,-156,31,0,30],[-3.3,-767,-156,31,0,32],[-2.8,-767,-156,30,0,34],[-2.3,-767,-156,31,0,33],[-1.8,-767,-156,31,0,35],[-1.3,-767,-156,31,0,36],[-0.8,-767,-156,32,0,37],[-0.3,-767,-156,32,0,38]]",
+      "run 3: combat: samples around the largest step (t from the transfer, x, y, z, sit, furniture, target, dead, AI, player z): [[988,-767,-156,32,0,0,\"player\",0,1,28],[1021,-767,-156,32,0,0,\"player\",0,1,28],[1055,-767,-156,32,0,0,\"player\",0,1,28],[1088,-767,-153,32,0,0,\"player\",0,1,28],[1121,-769,-144,32,0,0,\"player\",0,1,28],[1154,-772,-139,31,0,0,\"player\",0,1,28],[1188,-774,-139,30,0,0,\"player\",0,1,28],[1221,-777,-139,28,0,0,\"player\",0,1,28]]",
+      "run 3: combat: the first 3 s on engine 2, every 8th sample: [[21,-767,-156,32,0,0,\"\",0,0,28],[288,-767,-156,32,0,0,\"player\",0,1,28],[555,-767,-156,32,0,0,\"player\",0,1,28],[821,-767,-156,32,0,0,\"player\",0,1,28],[1088,-767,-153,32,0,0,\"player\",0,1,28],[1355,-785,-139,29,0,0,\"player\",0,1,28],[1621,-805,-139,28,0,0,\"player\",0,1,28],[1888,-814,-139,26,0,0,\"player\",0,1,28],[2155,-821,-139,26,0,0,\"player\",0,1,28],[2421,-824,-140,24,0,0,\"player\",0,1,28],[2688,-824,-141,22,0,0,\"player\",0,1,28],[2955,-824,-141,21,0,0,\"player\",0,1,28]]",
+      "run 3: combat: engine 2 runs Gerdur 13 ms after engine 1 left; 200 samples on engine 2, largest step 10 units, dead false, copies 0; first after [1793050889886,-766.574462890625,-155.77749633789062,31.50925636291504,0,0,\"\",0,0,28], last [1793050895486,-839.647216796875,-141.4039306640625,21.337398529052734,0,0,\"player\",0,1,28]; server before {\"dead\":false,\"hoster\":4278190080,\"cell\":\"133c7:Skyrim.esm\",\"pos\":[-766.5745239257812,-155.77749633789062,31.506261825561523]}",
+      "run 3: combat: first sample on engine 2 is 0 units from where engine 1 had Gerdur",
+      "run 3: combat: Gerdur fights engine 2's player on engine 2 121 ms after the transfer"
+    ],
+    "shots": [],
+    "rtt": {
+      "1": {
+        "median": 53,
+        "calls": 17
+      },
+      "2": {
+        "median": 66,
+        "calls": 194
+      }
+    },
+    "at": "2026-10-26T21:41:39.033Z"
+  },
+  "H4": {
+    "result": "PASS",
+    "reason": "1/1 runs PASS",
+    "secs": 38,
+    "evidence": [
+      "run 1: unseen: the server has Alvor in his house {\"hoster\":0,\"pos\":[-515,-154,240],\"cell\":\"133c8:Skyrim.esm\"}, nobody there; engine 1 in Riverwood shows him {\"loaded\":true,\"disabled\":false,\"d\":1070,\"cell\":60,\"pos\":[20772,-45188,-81]}",
+      "run 1: unseen: 315 ms after engine 1 showed him, engine 1 {\"loaded\":true,\"disabled\":false,\"d\":1070,\"cell\":60,\"pos\":[20772,-45188,-81]}, server {\"hoster\":4278190080,\"pos\":[20772,-45188,-81],\"cell\":\"3c:Skyrim.esm\"}",
+      "run 1: seen: engine 2 runs Alvor in Riverwood ({\"hoster\":4278190081,\"pos\":[20772,-45188,-81],\"cell\":\"3c:Skyrim.esm\"}); engine 1, near the Helgen exit, shows a stray copy {\"loaded\":true,\"disabled\":false,\"d\":884,\"cell\":60,\"pos\":[12868,-71493,6174]}",
+      "run 1: seen: engine 1 hid the stray after 1184 ms; server {\"hoster\":4278190081,\"pos\":[20772,-45188,-81],\"cell\":\"3c:Skyrim.esm\"}"
     ],
     "shots": [],
     "rtt": {
@@ -1966,33 +2103,10 @@
         "calls": 14
       },
       "2": {
-        "median": 61,
-        "calls": 38
-      }
-    },
-    "at": "2026-10-26T19:52:17.917Z"
-  },
-  "H4": {
-    "result": "PASS",
-    "reason": "1/1 runs PASS",
-    "secs": 33,
-    "evidence": [
-      "run 1: unseen: the server has Alvor in his house {\"hoster\":0,\"pos\":[-515,-154,240],\"cell\":\"133c8:Skyrim.esm\"}, nobody there; engine 1 in Riverwood shows him {\"loaded\":true,\"disabled\":false,\"d\":1054,\"cell\":60,\"pos\":[20375,-45067,-80]}",
-      "run 1: unseen: 17 ms after engine 1 showed him, engine 1 {\"loaded\":true,\"disabled\":false,\"d\":1054,\"cell\":60,\"pos\":[20375,-45067,-80]}, server {\"hoster\":4278190080,\"pos\":[20375,-45067,-80],\"cell\":\"3c:Skyrim.esm\"}",
-      "run 1: seen: engine 2 runs Alvor in Riverwood ({\"hoster\":4278190081,\"pos\":[20375,-45067,-80],\"cell\":\"3c:Skyrim.esm\"}); engine 1, near the Helgen exit, shows a stray copy {\"loaded\":true,\"disabled\":false,\"d\":884,\"cell\":60,\"pos\":[12868,-71493,6174]}",
-      "run 1: seen: engine 1 hid the stray after 1184 ms; server {\"hoster\":4278190081,\"pos\":[20375,-45067,-80],\"cell\":\"3c:Skyrim.esm\"}"
-    ],
-    "shots": [],
-    "rtt": {
-      "1": {
-        "median": 24,
-        "calls": 13
-      },
-      "2": {
-        "median": 60,
+        "median": 69,
         "calls": 10
       }
     },
-    "at": "2026-10-26T19:52:51.201Z"
+    "at": "2026-10-26T23:03:46.384Z"
   }
 }

@@ -188,3 +188,8 @@
 | 2026-10-26 22:40 | F2, 2A.5, P1 | reruns after the revert and the check edits | | F2 3/3, 2A.5 3/3, P1 3/3 | 0 |
 | 2026-10-26 22:40 | G1.8 | Hilde hosted by nobody at the end (4 of 9 today): the host start placement moved her to a stale server position in her house | client: place only into the player's own cell or worldspace | pending | 1 |
 | 2026-10-26 22:40 | T6 | 2 of 3: engine 1's copy of Gerdur refused every relayed event after a chair exit and a weapon draw (14 PASS in a row before 19:28 UTC) | none yet; measuring | pending | 0 |
+| 2026-10-26 23:20 | T6 | A/B of the takeover stand: broad 1/4 (stuck copy once, 2 not exercised), narrow 3/4 (one bandit bash late): not the cause; the stuck copy is the 2026-10-24 signature: the S1.6 locomotion reset fires 265 to 470 ms after the relayed weapon draw, before the hoster's movement says drawn | client: no locomotion reset for 2 s after a puppet's weapon mode was set | pending | 1 |
+| 2026-10-26 23:50 | G1.8 | the placement rule (only into the player's cell) | reverted: S1.6 3 of 4 timeouts (Alvor never loaded), G1.8 still 2 of 4 | S1.6 1/4, G1.8 2/4 | 1 |
+| 2026-10-26 23:50 | T6 | weapon settle hold for the locomotion reset | kept for now; T6 2/4 (one copy never stood up: no seat relayed in that run, one not exercised) | T6 2/4 | 1 |
+| 2026-10-27 | H5 | user decision: NPCs fighting each other under different hosts move to one host (TES3MP shares one host per cell; our sticky hoster can split a fight) | plan: step H.5 and check H5, after the scoreboard work; not in ORDER until written | | 0 |
+| 2026-10-27 00:15 | G1.8, T6 | check fix for G1.8 (engine 2 goes where its game shows Hilde); T6 locomotion reset held 2 s after a weapon mode change | | G1.8 8/8, T6 8/8; S1.6, G1.2, G1.6, H4 1/1 | 1 |
