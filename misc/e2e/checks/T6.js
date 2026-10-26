@@ -50,7 +50,9 @@ module.exports = {
       const viewer = await ctx.drv(`return globalThis.e2eT6;`, 1);
       const s = await server(id);
       const unused = [...viewer.events];
-      const evMissed = hoster.events.filter((m) => { const i = unused.findIndex((t) => t[0] >= m[0] - 50 && t[0] <= m[0] + LAG && t[1] === m[1]); if (i >= 0) unused.splice(i, 1); return i < 0; });
+      const lags = [];
+      const evMissed = hoster.events.filter((m) => { const i = unused.findIndex((t) => t[0] >= m[0] - 50 && t[0] <= m[0] + LAG && t[1] === m[1]); if (i >= 0) lags.push(unused.splice(i, 1)[0][0] - m[0]); return i < 0; });
+      ctx.evidence.push(`${name}: engine 1 lag of each matched attack event (ms): ${JSON.stringify(lags)}`);
       const late = evMissed.map((m) => { const t = viewer.events.find((v) => v[1] === m[1] && v[0] > m[0] + LAG); return `${m[1]} at ${m[0] - hoster.events[0][0]} ms: ${t ? `${t[0] - m[0]} ms late` : "never"}`; });
       ctx.evidence.push(`${name} ${hex(id)}${note}: sit state on engine 1 at the start ${sitOnViewer}${note ? ` (${seatWait} ms after it loaded there)` : ""}; hoster at the end ${hex(s.hoster)} (engine 2 ${hex(actors[1])}), dead ${s.dead}; engine 2 attack events ${JSON.stringify(hoster.events.map((e) => e[1]))}, engine 1 ${JSON.stringify(viewer.events.map((e) => e[1]))}, refused by engine 1's graph at ${JSON.stringify(viewer.refused.map((e) => e[0] - (hoster.events[0] || [e[0]])[0]))} ms`);
       const before = fails.length;

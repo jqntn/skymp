@@ -32,8 +32,11 @@ module.exports = {
     const subs = (n, since) => ctx.drv(`return globalThis.subs.filter((s) => s.t >= ${since});`, n);
     const fails = [];
 
-    const bring = async (list) => {
-      const loc = await ctx.npcLocation(list[0][1], 2);
+    const shown = (id, n) => ctx.drv(`${npc(id)} const c = a && (a.getWorldSpace() || a.getParentCell()); return c ? { cellOrWorldDesc: c.getFormID().toString(16) + ":Skyrim.esm", pos: [a.getPositionX(), a.getPositionY(), a.getPositionZ()], rot: [0, 0, 0] } : null;`, n);
+    const bring = async (list, local = false) => {
+      const own = local ? await shown(list[0][1], 2) : null;
+      const loc = own || await ctx.npcLocation(list[0][1], 2);
+      if (local) ctx.evidence.push(`${list[0][0]}: engine 2 goes to ${own ? "where its own game shows the NPC" : "the server copy (its game does not place the NPC)"}: ${loc.cellOrWorldDesc} ${loc.pos.map(Math.round)}`);
       await ctx.probe(`mp.set(${actors[1]}, "locationalData", ${JSON.stringify({ ...loc, pos: [loc.pos[0] + 200, loc.pos[1], loc.pos[2] + 30] })}); return 0;`);
       for (const [name, id] of list) {
         await ctx.waitFor(() => ctx.drv(`${npc(id)} return !sp.Ui.isMenuOpen("Loading Menu") && !!a && a.is3DLoaded();`, 2).catch(() => false), 120000, `${name} is loaded on engine 2`);
@@ -65,6 +68,7 @@ module.exports = {
       }, 60000, `engine 2 says no new ${label} line for 3 s`).catch(() => {});
       for (const [n, id] of list) {
         const h = await hoster(id);
+        ctx.evidence.push(`${label}: ${n} hosted by ${hex(h)} at the end (engine 2 ${hex(actors[1])})`);
         if (h !== actors[1]) fails.push(`${label}: ${n} is hosted by ${hex(h)} at the end, not by engine 2`);
       }
       const heard = await speaks(1, listIds, since);
@@ -128,7 +132,7 @@ module.exports = {
       }
     }
 
-    if (await bring(SCENE)) {
+    if (await bring(SCENE, true)) {
       const since = Date.now();
       await ctx.drv(`${npc(SCENE[1][1])} const p = sp.Game.getPlayer(); p.setPosition(a.getPositionX() + 150, a.getPositionY(), a.getPositionZ() + 20); return 0;`, 2);
       await ctx.drv(`${npc(SCENE[1][1])} const p = sp.Game.getPlayer(); p.setPosition(a.getPositionX() - 250, a.getPositionY(), a.getPositionZ() + 20); return 0;`, 1);
