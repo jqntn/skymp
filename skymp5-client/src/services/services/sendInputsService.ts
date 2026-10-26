@@ -9,7 +9,7 @@ import { Transform } from "../../sync/movement";
 // TODO: refactor this out
 import * as worldViewMisc from "../../view/worldViewMisc";
 
-import { Animation, getAnimationSource, relayedCombatTargets, relayedSeats } from "../../sync/animation";
+import { Animation, getAnimationSource, relayedCombatTargets, relayedSeats, restoreCollision } from "../../sync/animation";
 import { Actor, EquipEvent, FormType, SpeakSoundEvent } from "skyrimPlatform";
 import { getAppearance } from "../../sync/appearance";
 import { ActorValues, getActorValues } from "../../sync/actorvalues";
@@ -212,6 +212,15 @@ export class SendInputsService extends ClientListener {
         }
         const hosted =
             reporting && typeof this.sp.storage['hosted'] === typeof [] ? this.sp.storage['hosted'] : [];
+        if (reporting && !this.wasReporting) {
+            (hosted as number[]).filter((remoteId) => remoteId >= espActorIdOffset).forEach((remoteId) => {
+                const owner = this.getInputOwner(remoteId);
+                if (owner) {
+                    this.placeAtServerPosition(owner, remoteId);
+                }
+            });
+        }
+        this.wasReporting = reporting;
         const targets = [undefined].concat(hosted as any);
 
         const modelSource = this.controller.lookupListener(RemoteServer);
@@ -232,6 +241,10 @@ export class SendInputsService extends ClientListener {
         const owner = this.getInputOwner(_refrId);
         if (!owner) {
           return;
+        }
+
+        if (_refrId && restoreCollision(owner)) {
+            logTrace(this, `Restored the collision of ${owner.getFormID().toString(16)} at ${[owner.getPositionX(), owner.getPositionY(), owner.getPositionZ()].map(Math.round)}`);
         }
 
         if (_refrId && this.isPlacing(_refrId, owner, form?.movement)) {
@@ -506,6 +519,7 @@ export class SendInputsService extends ClientListener {
     private lastCombatSent = new Map<string, { target: number, at: number }>();
     private pendingCombat = new Map<number, { target: number, until: number }>();
     private placingHosts = new Map<number, { at: number, tries: number }>();
+    private wasReporting = false;
     private actorValuesNeedUpdate = false;
     private isRaceSexMenuShown = false;
     private equipmentChanged = false;

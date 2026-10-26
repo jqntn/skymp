@@ -41,22 +41,35 @@ const lastAnimEvents = new Map<number, string>();
 const lastFurnitureIdles = new Map<number, string>();
 export const relayedCombatTargets = new Map<number, number>();
 export const relayedSeats = new Map<number, { furniture: number, enter: string }>();
-const refusedAttacks = new Map<number, { name: string, until: number }>();
-let relaying: { id: number, name: string, refused: boolean } | null = null;
+const relayedAttacks = new Map<number, { name: string, until: number, inFlight: number }>();
+const isAttackStart = (name: string) => /^attackstart/i.test(name);
 
-const sendRelayed = (refr: ObjectReference, name: string): boolean => {
-  relaying = { id: refr.getFormID(), name, refused: false };
-  Debug.sendAnimationEvent(refr, name);
-  const refused = relaying.refused;
-  relaying = null;
-  return !refused;
+const sendAttack = (refr: ObjectReference, attack: { name: string, inFlight: number }) => {
+  attack.inFlight++;
+  if (refsWithDefaultAnimsDisabled.has(refr.getFormID())) {
+    allowedAnims.add(refr.getFormID() + ":" + attack.name);
+  }
+  Debug.sendAnimationEvent(refr, attack.name);
 };
 
 export const retryRefusedAttack = (refr: ObjectReference): void => {
-  const pending = refusedAttacks.get(refr.getFormID());
-  if (pending && (Date.now() > pending.until || sendRelayed(refr, pending.name))) {
-    refusedAttacks.delete(refr.getFormID());
+  const attack = relayedAttacks.get(refr.getFormID());
+  if (attack && Date.now() > attack.until) {
+    relayedAttacks.delete(refr.getFormID());
+  } else if (attack && !attack.inFlight) {
+    sendAttack(refr, attack);
   }
+};
+
+const collisionOff = new Set<number>();
+
+export const restoreCollision = (ac: Actor): boolean => {
+  if (!collisionOff.has(ac.getFormID()) || ac.getSitState() !== 0) {
+    return false;
+  }
+  collisionOff.delete(ac.getFormID());
+  setCollision(ac.getFormID(), true);
+  return true;
 };
 
 export const standAnimEventName = "SkympStand";
@@ -270,10 +283,12 @@ export const applyAnimation = (
   }
 
   const standing = !ac || ac.getSitState() === 0;
-  if (sendRelayed(refr, anim.animEventName)) {
-    refusedAttacks.delete(refr.getFormID());
-  } else if (/^attackstart/i.test(anim.animEventName)) {
-    refusedAttacks.set(refr.getFormID(), { name: anim.animEventName, until: Date.now() + 500 });
+  if (isAttackStart(anim.animEventName)) {
+    const attack = { name: anim.animEventName, until: Date.now() + 500, inFlight: relayedAttacks.get(refr.getFormID())?.inFlight ?? 0 };
+    relayedAttacks.set(refr.getFormID(), attack);
+    sendAttack(refr, attack);
+  } else {
+    Debug.sendAnimationEvent(refr, anim.animEventName);
   }
 
   if (standing && isFurnitureIdle(anim.animEventName)) {
@@ -292,10 +307,12 @@ export const applyAnimation = (
 
   if (actorSitAnimsLowerCase.find((x) => x === animEventNameLowerCase) !== undefined) {
     setCollision(refr.getFormID(), false);
+    collisionOff.add(refr.getFormID());
   }
 
   if (actorGetUpAnimsLowerCase.find((x) => x === animEventNameLowerCase) !== undefined) {
     setCollision(refr.getFormID(), true);
+    collisionOff.delete(refr.getFormID());
     state.seat = null;
     state.ownSeat = false;
   }
@@ -499,8 +516,11 @@ export const setupHooks = (): void => {
       }
     },
     leave: (ctx) => {
-      if (relaying && ctx.selfId === relaying.id && !ctx.animationSucceeded) {
-        relaying.refused = true;
+      const attack = isAttackStart(ctx.animEventName) ? relayedAttacks.get(ctx.selfId) : undefined;
+      if (attack && ctx.animationSucceeded) {
+        relayedAttacks.delete(ctx.selfId);
+      } else if (attack) {
+        attack.inFlight = Math.max(0, attack.inFlight - 1);
       }
       if (ctx.selfId < 0xff000000 && ctx.animationSucceeded && !ignoredAnims.has(ctx.animEventName)) {
         lastAnimEvents.set(ctx.selfId, ctx.animEventName);
