@@ -56,12 +56,14 @@ module.exports = {
       const before = await snapshot();
       await ctx.sleep(5000);
       const mark = lines().length;
+      const logMarks = [1, 2].map((n) => ctx.clientLog(n).length);
       granted = new Set([...granted, ...grants(lines())]);
       await ctx.restartServer();
       restarts++;
       const back = await ctx.waitFor(() => [leader, member].every((a) => new RegExp(`replay of \\d+ quest log entries to ${hex(a)}`).test(lines().slice(mark))), 240000, `both players log in again after the restart at ${label}`).then(() => true).catch(() => false);
       for (const n of [1, 2]) await ctx.waitFor(() => ctx.drv(`const p = sp.Game.getPlayer(); return !sp.Ui.isMenuOpen("Loading Menu") && !!p && p.is3DLoaded();`, n).catch(() => false), 120000, `engine ${n} is in the world after the restart at ${label}`).catch(() => {});
       await ctx.sleep(15000);
+      const replayed = await ctx.waitFor(() => [1, 2].every((n) => ctx.clientLog(n).slice(logMarks[n - 1]).some((l) => /Quest log replay done/.test(l))), 60000, `both clients finished their quest log replay after the restart at ${label}`).then(() => true).catch(() => false);
       const raceMenu = await Promise.all([1, 2].map((n) => ctx.drv(`return sp.Ui.isMenuOpen("RaceSex Menu");`, n).catch(() => null)));
       const after = await snapshot();
       const changed = diff(before, after);
@@ -73,6 +75,7 @@ module.exports = {
       const relayed = await ctx.waitFor(() => logOf(member).then((l) => l.some((e) => e[0] === q && e[1] === s)), 20000, "the party relays a stage to the member").then(() => true).catch(() => false);
       ctx.evidence.push(`${label}: server killed and restarted, both clients reconnected and got their quest log replay ${back}; race menu open ${JSON.stringify(raceMenu)}; changed: ${changed.join("; ") || "nothing"}; new quest log entries (quests new to the log) ${added}; the leader's ${hex(q)} stage ${s} relayed to the member's log ${relayed}`);
       if (!back) fails.push(`${label}: the players could not log in again after the restart`);
+      if (back && !replayed) fails.push(`${label}: not exercised, a client did not finish its quest log replay within 75 s of the login`);
       if (changed.length) fails.push(`${label}: the state changed across the restart: ${changed.join("; ")}`);
       if (!relayed) fails.push(`${label}: after the restart the party no longer relays the leader's quest stages to the member`);
       return after;

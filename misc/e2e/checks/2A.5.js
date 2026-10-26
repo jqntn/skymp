@@ -73,12 +73,10 @@ module.exports = {
 
     await ctx.sleep(Math.max(0, stageAt + 17000 - Date.now()));
     const quiet = await state(1);
-    await ctx.drv(`sp.Game.getPlayer().addItem(sp.Game.getFormEx(${GOLD}), 50, true); return 0;`, 1);
-    let added = 0;
-    for (const until = Date.now() + 1000; Date.now() < until && added !== quiet.gold.local + 50;) added = Math.max(added, await localCount(1, GOLD));
+    const added = await ctx.drv(`const p = sp.Game.getPlayer(); const g = sp.Game.getFormEx(${GOLD}); p.addItem(g, 50, true); return p.getItemCount(g);`, 1);
     await ctx.sleep(12000);
     const end = await state(1);
-    ctx.evidence.push(`no stage for 17 s, then a script adds 50 gold on engine 1: before ${fmt(quiet)}; highest local gold within 1 s of the add ${added}; 13 s after: ${fmt(end)}`);
+    ctx.evidence.push(`no stage for 17 s, then a script adds 50 gold on engine 1: before ${fmt(quiet)}; local gold right after the add ${added}; 13 s after: ${fmt(end)}`);
     if (added !== quiet.gold.local + 50) fails.push(`the 50 gold add did not run on engine 1 (${quiet.gold.local} -> ${added})`);
     if (end.gold.server !== quiet.gold.server || end.gold.local !== quiet.gold.server) fails.push(`a script gain outside a stage window: server gold ${quiet.gold.server} -> ${end.gold.server}, local ${end.gold.local} (the server must refuse it, the client must drop it, and nothing else may change)`);
 
