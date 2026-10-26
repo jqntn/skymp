@@ -89,12 +89,15 @@ module.exports = {
           await ctx.drv(`const a = sp.Actor.from(sp.Game.getFormEx(${id})); const pl = sp.Game.getPlayer(); if (!a) return 0; const r = (a.getAngleZ() + 90 * ${side}) * Math.PI / 180;
             const x = a.getPositionX() + 250 * Math.sin(r), y = a.getPositionY() + 250 * Math.cos(r); pl.setPosition(x, y, a.getPositionZ() + 20); pl.setAngle(0, 0, Math.atan2(a.getPositionX() - x, a.getPositionY() - y) * 180 / Math.PI); return 0;`, n);
         }
+        const syncFrom = Date.now();
+        const synced = await ctx.waitFor(async () => (await sitOf(id, h)) === (await sitOf(id, p)), 20000, `${name} has the same sit state on both engines`).then(() => true).catch(() => false);
+        const syncMs = Date.now() - syncFrom;
         await ctx.sleep(3000);
         let w = await window(id, h, p);
         for (let k = 0; k < 3 && w.hoster && (w.hoster.motion < HOSTER_MOVES || !w.hoster.settled || !w.puppet?.settled); k++) w = await window(id, h, p);
         const owner = (await hosters())[NPCS.findIndex(([, x]) => x === id)];
         const seated = await ctx.drv(`const a = sp.Actor.from(sp.Game.getFormEx(${id})); return a ? a.getSitState() : -1;`, h);
-        ctx.evidence.push(`${name}, hoster engine ${h} (server ${hex(owner)}): hoster ${round(w.hoster) || "not loaded"}; puppet engine ${p}: ${round(w.puppet) || "not loaded"}`);
+        ctx.evidence.push(`${name}, hoster engine ${h} (server ${hex(owner)}): hoster ${round(w.hoster) || "not loaded"}; puppet engine ${p}: ${round(w.puppet) || "not loaded"}; sit states matched ${synced ? `after ${syncMs} ms` : "never in 20 s"}`);
         if (owner !== actors[h - 1]) fails.push(`${name} changed hoster to ${hex(owner)} during the samples`);
         else if (!w.hoster || !w.puppet) fails.push(`${name} is not loaded on both engines`);
         else {
