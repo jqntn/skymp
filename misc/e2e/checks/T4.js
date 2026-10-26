@@ -64,11 +64,13 @@ module.exports = {
     let worstFacing = 0;
     let engine2Samples = 0;
     let shutAt = 0;
+    const track = [];
     for (const t0 = Date.now(); Date.now() - t0 < TALK_MS;) {
       if (!shutAt && !(await ctx.drv(`return sp.Ui.isMenuOpen("${MENU}");`, 1))) shutAt = Date.now() - t0;
       const s = await server(id);
       const e2 = await local(id, 2);
       farServer = Math.max(farServer, dist(s.pos, start.server));
+      track.push([Date.now() - t0, Math.round(dist(s.pos, start.server)), e2 && start.engine2 ? Math.round(dist(e2.pos, start.engine2)) : -1]);
       if (e2 && start.engine2) {
         engine2Samples++;
         farEngine2 = Math.max(farEngine2, dist(e2.pos, start.engine2));
@@ -85,6 +87,7 @@ module.exports = {
     const resumed = await ctx.waitFor(async () => dist((await server(id)).pos, closedAt) > 60, 30000, `${name} moves again after the dialogue`).then(() => true).catch(() => false);
     const after = await server(id);
     const pkgAfter = (await local(id, 2))?.pkg ?? 0;
+    ctx.evidence.push(`${name} during the dialogue (ms from the open, units from the start on the server, on engine 2): ${JSON.stringify(track)}`);
     ctx.evidence.push(`${name} ${hex(id)} walked on engine 2 (hoster ${hex(hosterAtTalk)}); during ${TALK_MS / 1000} s of dialogue on engine 1 (${shutAt ? `closed by itself after ${shutAt} ms` : "open throughout"}): moved up to ${farServer} units on the server, ${farEngine2} on engine 2; worst facing on engine 2 ${Math.round(worstFacing)} degrees off the talker; moved again within 30 s after the close: ${resumed}, hoster after ${hex(after.hoster)}, package on engine 2 at the close ${hex(pkgBefore)} and 30 s later ${hex(pkgAfter)}; ${engine2Samples} samples on engine 2`);
     const fails = [];
     if (shutAt) fails.push(`the dialogue with ${name} closed by itself on engine 1 after ${shutAt} ms`);

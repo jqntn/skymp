@@ -26,7 +26,9 @@ module.exports = {
       await put(1, { cellOrWorldDesc: at.cell, pos: [at.pos[0], at.pos[1] + 500, at.pos[2] + 50], rot: [0, 0, 180] });
       await loaded(id, 1);
       await ctx.sleep(3000);
+      const seatWaitFrom = Date.now();
       if (note) await ctx.waitFor(() => ctx.drv(`${npc(id)} return !!a && a.getSitState() === 3;`, 1), 20000, `${name} is seated on engine 1`).catch(() => {});
+      const seatWait = Date.now() - seatWaitFrom + 3000;
       for (const n of [1, 2]) {
         await ctx.drv(`const w = globalThis.e2eT6 = { id: ${id}, events: [], refused: [], log: [], t0: Date.now(), last: "" };
           if (globalThis.e2eT6Hook !== undefined) sp.hooks.sendAnimationEvent.remove(globalThis.e2eT6Hook);
@@ -50,7 +52,7 @@ module.exports = {
       const unused = [...viewer.events];
       const evMissed = hoster.events.filter((m) => { const i = unused.findIndex((t) => t[0] >= m[0] - 50 && t[0] <= m[0] + LAG && t[1] === m[1]); if (i >= 0) unused.splice(i, 1); return i < 0; });
       const late = evMissed.map((m) => { const t = viewer.events.find((v) => v[1] === m[1] && v[0] > m[0] + LAG); return `${m[1]} at ${m[0] - hoster.events[0][0]} ms: ${t ? `${t[0] - m[0]} ms late` : "never"}`; });
-      ctx.evidence.push(`${name} ${hex(id)}${note}: sit state on engine 1 at the start ${sitOnViewer}; hoster at the end ${hex(s.hoster)} (engine 2 ${hex(actors[1])}), dead ${s.dead}; engine 2 attack events ${JSON.stringify(hoster.events.map((e) => e[1]))}, engine 1 ${JSON.stringify(viewer.events.map((e) => e[1]))}, refused by engine 1's graph at ${JSON.stringify(viewer.refused.map((e) => e[0] - (hoster.events[0] || [e[0]])[0]))} ms`);
+      ctx.evidence.push(`${name} ${hex(id)}${note}: sit state on engine 1 at the start ${sitOnViewer}${note ? ` (${seatWait} ms after it loaded there)` : ""}; hoster at the end ${hex(s.hoster)} (engine 2 ${hex(actors[1])}), dead ${s.dead}; engine 2 attack events ${JSON.stringify(hoster.events.map((e) => e[1]))}, engine 1 ${JSON.stringify(viewer.events.map((e) => e[1]))}, refused by engine 1's graph at ${JSON.stringify(viewer.refused.map((e) => e[0] - (hoster.events[0] || [e[0]])[0]))} ms`);
       const before = fails.length;
       if (s.hoster !== actors[1]) fails.push(`${name}: hosted by ${hex(s.hoster)} at the end, not engine 2`);
       if (note && sitOnViewer !== 3) fails.push(`${name}: not exercised, not seated on engine 1 when the fight starts (sit state ${sitOnViewer})`);
