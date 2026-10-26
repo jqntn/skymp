@@ -185,6 +185,7 @@ export class CoopService extends ClientListener {
         if (replay && loadCount === this.loadCount) {
           this.reporting = true;
           this.reportUnreported(entries);
+          logTrace(this, "Quest log replay done", entries.length);
           this.controller.lookupListener(WorldCleanerService).pauseUntil(0);
         }
       }
@@ -271,7 +272,7 @@ export class CoopService extends ClientListener {
   private reportUnreported(replayed: QuestLogEntry[]) {
     const unreported = this.unreported;
     this.unreported = [];
-    unreported.filter(([quest, stage]) => !replayed.some(([q, s]) => q === quest && s >= stage)).forEach(([quest, stage]) => this.reportStage(quest, stage));
+    unreported.filter(([quest]) => !replayed.some(([q]) => q === quest)).forEach(([quest, stage]) => this.reportStage(quest, stage));
   }
 
   private onQuestStop(e: QuestStartStopEvent) {
