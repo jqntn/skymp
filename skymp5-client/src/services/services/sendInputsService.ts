@@ -9,7 +9,7 @@ import { Transform } from "../../sync/movement";
 // TODO: refactor this out
 import * as worldViewMisc from "../../view/worldViewMisc";
 
-import { Animation, getAnimationSource, relayedCombatTargets, relayedSeats, restoreCollision } from "../../sync/animation";
+import { Animation, getAnimationSource, relayedCombatTargets, restoreCollision } from "../../sync/animation";
 import { Actor, EquipEvent, FormType, SpeakSoundEvent } from "skyrimPlatform";
 import { getAppearance } from "../../sync/appearance";
 import { ActorValues, getActorValues } from "../../sync/actorvalues";
@@ -358,18 +358,16 @@ export class SendInputsService extends ClientListener {
             const sitState = owner.getSitState();
             if (sitState === 0 && this.lastSitState.get(refrIdStr)) {
                 animSource.addStand();
-                relayedSeats.delete(owner.getFormID());
             }
             if (sitState === 0) {
                 this.lastSitSent.delete(refrIdStr);
             } else if (sitState === 3 && Date.now() - (this.lastSitSent.get(refrIdStr) ?? 0) > hostedSitResendMs) {
-                const inherited = relayedSeats.get(owner.getFormID());
-                const furniture = owner.getFurnitureReference()?.getFormID() ?? inherited?.furniture;
+                const furniture = owner.getFurnitureReference()?.getFormID();
                 if (furniture) {
-                    animSource.addSit(furniture, inherited?.enter);
+                    animSource.addSit(furniture);
                     this.lastSitSent.set(refrIdStr, Date.now());
                 } else if (this.lastSitSent.get(refrIdStr) !== -1) {
-                    logTrace(this, `No seat to relay for ${refrIdStr}: sit 3, no furniture and no inherited seat`);
+                    logTrace(this, `No seat to relay for ${refrIdStr}: sit 3 and no furniture`);
                     this.lastSitSent.set(refrIdStr, -1);
                 }
             }

@@ -410,6 +410,7 @@ export class FormView {
   private corpseInventory?: Inventory;
   private hostedHere = false;
   private enableAt = 0;
+  private hostStandAt = 0;
   private puppetMode?: boolean;
   private savedDamageMult = 1;
   private puppetLethalHit = false;
@@ -577,7 +578,16 @@ export class FormView {
         this.enableAt = 0;
         ac.enableNoWait(false);
       }
-      if (wantAI !== ac.isAIEnabled()) {
+      if (this.hostedHere && !ac.isAIEnabled() && !this.hostStandAt && !ac.isDead() && !ac.isOnMount() && !ac.getFurnitureReference() && ac.getSitState() !== 0) {
+        standUp(ac);
+        this.hostStandAt = Date.now() + 1000;
+        logTrace("FormView", `Standing up ${ac.getFormID().toString(16)} before its AI starts: sit ${ac.getSitState()}`);
+      }
+      if (!this.hostedHere) {
+        this.hostStandAt = 0;
+      }
+      const holdAI = this.hostedHere && Date.now() < this.hostStandAt;
+      if (wantAI !== ac.isAIEnabled() && !holdAI) {
         ac.enableAI(wantAI);
       }
       this.wasHostedByOther = !this.hostedHere && (this.wasHostedByOther || !!model.isHostedByOther);
@@ -631,6 +641,7 @@ export class FormView {
         this.animState.postureAt = Date.now() + 1000;
         const seat = this.animState.seat;
         if (ac.getSitState() !== 0) {
+          this.animState.seatTries = 0;
           const unknownTooLong = seat === undefined && Date.now() - this.animState.seatWaitFrom > seatWaitMs;
           const otherFurniture = !!seat && ac.getFurnitureReference()?.getFormID() !== seat.furniture;
           if ((seat === null || (!this.animState.ownSeat && (unknownTooLong || otherFurniture))) && this.animState.standTries < 3) {

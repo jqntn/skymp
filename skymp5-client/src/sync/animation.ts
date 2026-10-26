@@ -41,7 +41,6 @@ const allowedIdles = new Array<[number, string]>();
 const lastAnimEvents = new Map<number, string>();
 const lastFurnitureIdles = new Map<number, string>();
 export const relayedCombatTargets = new Map<number, number>();
-export const relayedSeats = new Map<number, { furniture: number, enter: string }>();
 const relayedAttacks = new Map<number, { name: string, until: number, inFlight: number }>();
 const isAttackStart = (name: string) => /^attackstart/i.test(name);
 
@@ -239,7 +238,6 @@ export const applyAnimation = (
       state.standTries = 0;
     }
     state.seat = seat;
-    relayedSeats.set(refr.getFormID(), seat);
     return;
   }
 
@@ -249,7 +247,6 @@ export const applyAnimation = (
   }
 
   if (anim.animEventName === standAnimEventName) {
-    relayedSeats.delete(refr.getFormID());
     state.seat = null;
     state.ownSeat = false;
     state.standTries = 0;
