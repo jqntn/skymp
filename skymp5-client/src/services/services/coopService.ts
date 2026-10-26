@@ -756,6 +756,7 @@ export class CoopService extends ClientListener {
       return;
     }
     ac.setDontMove(on);
+    ac.setRestrained(on);
     if (on) {
       ac.setAngle(0, 0, (Math.atan2(pos[0] - ac.getPositionX(), pos[1] - ac.getPositionY()) * 180) / Math.PI);
     } else {
