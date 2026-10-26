@@ -708,6 +708,13 @@ export class CoopService extends ClientListener {
     if (this.subtitleHideAt && Date.now() > this.subtitleHideAt) {
       this.subtitleHideAt = 0;
       Ui.invokeString("HUD Menu", `${HUD_ROOT}.HideSubtitle`, "");
+    } else if (this.subtitleHideAt && Ui.isMenuOpen("HUD Menu")) {
+      const blank = !(Ui.getString("HUD Menu", `${HUD_ROOT}.SubtitleText.text`) || "").trim();
+      if (blank && this.subtitleOnHud) {
+        logTrace(this, "The game cleared the relayed subtitle, showing it again");
+        Ui.invokeString("HUD Menu", `${HUD_ROOT}.ShowSubtitle`, this.subtitleShown);
+      }
+      this.subtitleOnHud = !blank;
     }
   }
 
@@ -732,6 +739,8 @@ export class CoopService extends ClientListener {
       this.subtitleTopicAt = now;
     }
     Ui.invokeString("HUD Menu", `${HUD_ROOT}.ShowSubtitle`, shown);
+    this.subtitleShown = shown;
+    this.subtitleOnHud = false;
     this.subtitleHideAt = now + Math.min(10000, 2000 + shown.length * 60);
   }
 
@@ -785,6 +794,8 @@ export class CoopService extends ClientListener {
   private talkNpc = 0;
   private talkTopic: { id: number, text: string } | undefined;
   private subtitleHideAt = 0;
+  private subtitleShown = "";
+  private subtitleOnHud = false;
   private subtitleTopic = "";
   private subtitleTopicAt = 0;
   private partyKeyDown = false;
