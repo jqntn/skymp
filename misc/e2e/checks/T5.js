@@ -5,6 +5,7 @@ const R = "_root.DialogueMenu_mc";
 const HUD = "_root.HUDMovieBaseInstance.SubtitleText.text";
 const LAG_MS = 1000;
 const TOPIC_MS = 1000;
+const BLINK_MS = 50;
 
 module.exports = {
   engines: 2,
@@ -76,7 +77,19 @@ module.exports = {
       const spoken = dedupe(talker.speaks);
       const heard = dedupe(other.speaks);
       const shown = other.hud.flatMap((x) => x.text.split(/[\r\n]+/)).filter((x) => x);
-      const visible = (line) => { const i = other.hud.findIndex((x) => x.text.split(/[\r\n]+/).includes(line)); if (i < 0) return 0; let j = i; while (j + 1 < other.hud.length && other.hud[j + 1].text.split(/[\r\n]+/).includes(line)) j++; return (j + 1 < other.hud.length ? other.hud[j + 1].t : Date.now()) - other.hud[i].t; };
+      const blinks = [];
+      const visible = (line) => {
+        const has = (x) => x.text.split(/[\r\n]+/).includes(line);
+        const i = other.hud.findIndex(has);
+        if (i < 0) return 0;
+        let j = i;
+        for (;;) {
+          if (j + 1 < other.hud.length && has(other.hud[j + 1])) j++;
+          else if (j + 2 < other.hud.length && !other.hud[j + 1].text && has(other.hud[j + 2]) && other.hud[j + 2].t - other.hud[j + 1].t < BLINK_MS) { blinks.push(other.hud[j + 2].t - other.hud[j + 1].t); j += 2; }
+          else break;
+        }
+        return (j + 1 < other.hud.length ? other.hud[j + 1].t : Date.now()) - other.hud[i].t;
+      };
       ctx.evidence.push(`${label}: hoster ${hex(h)}; topic "${topic}"; engine 1 heard ${spoken.length} lines ${JSON.stringify(spoken.map((s) => s.file.split("\\").pop()))} and subtitled ${JSON.stringify(talker.lines.map((x) => x.text))}; engine 2 played ${heard.length} ${JSON.stringify(heard.map((s) => s.file.split("\\").pop()))}, its HUD showed ${JSON.stringify(shown)}`);
       if (spoken.length < 2) fails.push(`${label}: not exercised, engine 1 heard ${spoken.length} lines of Gerdur (greeting and answer expected)`);
       if (talker.lines.length < 2) fails.push(`${label}: not exercised, engine 1 subtitled ${talker.lines.length} lines of Gerdur`);
@@ -108,8 +121,10 @@ module.exports = {
       if (!topic) fails.push(`${label}: not exercised, no topic text on engine 1`);
       else if (!shown.includes(`${talkerName}: ${topic}`)) fails.push(`${label}: engine 2 did not show "${talkerName}: ${topic}"`);
       else {
-        ctx.evidence.push(`${label}: the topic stayed on engine 2's HUD for ${visible(`${talkerName}: ${topic}`)} ms`);
-        if (visible(`${talkerName}: ${topic}`) < TOPIC_MS) fails.push(`${label}: engine 2 showed "${talkerName}: ${topic}" for ${visible(`${talkerName}: ${topic}`)} ms, under ${TOPIC_MS} ms`);
+        const stayed = visible(`${talkerName}: ${topic}`);
+        ctx.evidence.push(`${label}: the topic stayed on engine 2's HUD for ${stayed} ms${blinks.length ? `, across ${blinks.length} blank HUD readings of ${blinks.join(", ")} ms (the game cleared the subtitle and the client showed it again)` : ""}`);
+        ctx.evidence.push(`${label}: timeline (ms from the activation): engine 2 HUD ${JSON.stringify(other.hud.map((x) => [x.t - t0, x.text.replace(/[\r\n]+/g, " | ").slice(0, 60)]))}; engine 1 speaks ${JSON.stringify(talker.speaks.map((s) => [s.t - t0, s.file.split("\\").pop()]))}; engine 2 speaks ${JSON.stringify(other.speaks.map((s) => [s.t - t0, s.file.split("\\").pop()]))}`);
+        if (stayed < TOPIC_MS) fails.push(`${label}: engine 2 showed "${talkerName}: ${topic}" for ${stayed} ms, under ${TOPIC_MS} ms`);
       }
       return h;
     };

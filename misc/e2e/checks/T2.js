@@ -2,7 +2,6 @@ const fs = require("fs");
 const path = require("path");
 
 const STONES = [["Warrior", 0xe7bdd, [2454, -59142, 1431], 0xe5f4c], ["Mage", 0xe7bd6, [2480, -59477, 1428], 0xe5f47], ["Thief", 0xe7bdc, [2854, -59492, 1435], 0xe5f45]];
-const CHANGE_FORMS = path.join(__dirname, "..", "..", "..", "build", "dist", "e2e-server", "world", "changeForms");
 
 module.exports = {
   engines: 1,
@@ -12,7 +11,7 @@ module.exports = {
     let actor = await ctx.ready(1);
     const hex = (v) => (v >>> 0).toString(16);
     const spells = () => ctx.drv(`const p = sp.Game.getPlayer(); const out = []; for (let i = 0; i < p.getSpellCount(); i++) { const s = p.getNthSpell(i); if (s) out.push(s.getFormID()); } return out;`, 1);
-    const serverSpells = () => { try { return JSON.parse(fs.readFileSync(path.join(CHANGE_FORMS, `${(actor >>> 0) - 0xff000000}.json`), "utf8")).learnedSpells || []; } catch { return null; } };
+    const serverSpells = () => { try { return JSON.parse(fs.readFileSync(path.join(ctx.slot.server, "world", "changeForms", `${(actor >>> 0) - 0xff000000}.json`), "utf8")).learnedSpells || []; } catch { return null; } };
     const answerBoxes = async () => {
       const texts = [];
       for (const t0 = Date.now(); Date.now() - t0 < 8000;) {

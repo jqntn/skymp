@@ -60,7 +60,7 @@ module.exports = {
       if (jump > JUMP) fails.push(`${label}: Gerdur jumped ${jump.toFixed(0)} units on engine ${to} at the transfer`);
       if (after.some((x) => x[7])) fails.push(`${label}: Gerdur died on engine ${to}`);
       if (c > 0) fails.push(`${label}: engine ${to} shows ${c} spawned copies of Gerdur besides the real one`);
-      return { at, after };
+      return { at, after, last: s.filter((x) => x[0] < left).pop() };
     };
 
     await put(1, AWAY);
@@ -89,6 +89,7 @@ module.exports = {
     const stood = window.find((x) => x[4] !== 3);
     ctx.evidence.push(`seat: on engine 1 Gerdur ${stood ? `stood up ${stood[0] - seated.at} ms after the transfer (the AI's furniture state does not transfer: activate binds no NPC, Skyrim has no SnapIntoInteraction)` : `stayed seated for ${SEAT_MS / 1000} s`}; furniture at the end ${hex(window.length ? window[window.length - 1][5] : 0)}`);
     if (!window.length) fails.push("seat: no sample on engine 1 after the transfer");
+    if (!seated.last || seated.last[4] !== 3) fails.push(`seat: not exercised, Gerdur was not seated on engine 1 when engine 2 left (last sample ${JSON.stringify(seated.last)})`);
 
     await near(2, true);
     await ctx.sleep(3000);

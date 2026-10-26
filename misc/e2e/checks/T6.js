@@ -26,6 +26,7 @@ module.exports = {
       await put(1, { cellOrWorldDesc: at.cell, pos: [at.pos[0], at.pos[1] + 500, at.pos[2] + 50], rot: [0, 0, 180] });
       await loaded(id, 1);
       await ctx.sleep(3000);
+      if (note) await ctx.waitFor(() => ctx.drv(`${npc(id)} return !!a && a.getSitState() === 3;`, 1), 20000, `${name} is seated on engine 1`).catch(() => {});
       for (const n of [1, 2]) {
         await ctx.drv(`const w = globalThis.e2eT6 = { id: ${id}, events: [], refused: [], log: [], t0: Date.now(), last: "" };
           if (globalThis.e2eT6Hook !== undefined) sp.hooks.sendAnimationEvent.remove(globalThis.e2eT6Hook);

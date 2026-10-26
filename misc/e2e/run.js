@@ -16,10 +16,16 @@ const BUILD = path.join(REPO, "build");
 let DIST = path.join(BUILD, "dist", "server");
 let ALT_CLIENT = null;
 let TAG = null;
-const SERVER = path.join(BUILD, "dist", "e2e-server");
 const GAME = fs.readFileSync(path.join(BUILD, "CMakeCache.txt"), "utf8").match(/^SKYRIM_DIR:\w+=(.*)$/m)[1].trim();
 const MYGAMES = path.join(os.homedir(), "Documents", "My Games", "Skyrim Special Edition");
-const PORT = { server: 7790, probe: 7792, runner: 7793, proxy: 7794 };
+const PORT = { runner: 7793 };
+const slotOf = (s) => ({
+  index: s,
+  base: 2 * s,
+  port: { server: 7790 + 10 * s, probe: 7792 + 10 * s, proxy: 7794 + 10 * s },
+  server: path.join(BUILD, "dist", s ? `e2e-server-${s + 1}` : "e2e-server"),
+});
+const EXCLUSIVE = ["S0c", "P5", "P7", "1A.1", "1A.2", "1A.3", "1A.4", "1B.3", "2B.5", "H1"];
 const SLOW_ENGINE_MS = 1000;
 const STEAMWEBHELPER_MAX_GB = 10;
 const SKYRIM_VERSION = "1.6.1170.0";
@@ -102,17 +108,21 @@ const procs = (image) => {
 };
 
 const ownPids = () => readJson(PIDS, []);
-const own = (pid, image) => writeJson(PIDS, [...ownPids(), { pid, image }]);
-const killOwned = () => {
-  for (const { pid, image } of ownPids()) {
+const own = (pid, image, slot = 0) => writeJson(PIDS, [...ownPids(), { pid, image, slot }]);
+const killOwned = (slot) => {
+  const mine = (o) => slot === undefined || (o.slot || 0) === slot;
+  for (const { pid, image } of ownPids().filter(mine)) {
     if (procs(image).includes(pid)) spawnSync("taskkill", ["/PID", String(pid), "/T", "/F"]);
   }
-  fs.rmSync(PIDS, { force: true });
+  const rest = ownPids().filter((o) => !mine(o));
+  if (rest.length) writeJson(PIDS, rest);
+  else fs.rmSync(PIDS, { force: true });
 };
 
 const foreignSkyrim = () => procs("SkyrimSE.exe").filter((p) => !ownPids().some((o) => o.pid === p));
 
 const waitNoForeignSkyrim = async () => {
+  await launches;
   for (let t = 0; foreignSkyrim().length; t++) {
     if (t === 0) log("another Skyrim process runs, waiting for it to exit");
     if (t > 240) throw new Env("another Skyrim process ran for more than 2 h");
@@ -180,7 +190,7 @@ const level1 = async () => {
   };
 };
 
-const drivers = { queue: {}, waiter: {}, seen: {}, pending: new Map(), lines: {}, logFile: null, nextId: 1 };
+const drivers = { queue: {}, waiter: {}, seen: {}, pending: new Map(), lines: {}, logFiles: {}, nextId: 1 };
 
 const flush = (engine) => {
   const res = drivers.waiter[engine];
@@ -211,7 +221,7 @@ const runnerServer = () =>
         if (p) msg.ok ? p.resolve(msg.value) : p.reject(new Error(`driver: ${msg.error}`));
       } else if (url.pathname === "/log") {
         (drivers.lines[msg.engine] ||= []).push(...msg.lines);
-        if (drivers.logFile) fs.appendFileSync(drivers.logFile(msg.engine), msg.lines.map((l) => `${new Date().toISOString()} ${l}\n`).join(""));
+        if (drivers.logFiles[msg.engine]) fs.appendFileSync(drivers.logFiles[msg.engine], msg.lines.map((l) => `${new Date().toISOString()} ${l}\n`).join(""));
       }
       res.end("{}");
     });
@@ -253,25 +263,26 @@ const prepareEngineDir = (n) => {
   }
 };
 
-const prepareServer = () => {
-  fs.rmSync(SERVER, { recursive: true, force: true });
+const prepareServer = (slot) => {
+  fs.rmSync(slot.server, { recursive: true, force: true });
   const skip = new Set(["world", "data/client", "gamemode.js", "server-settings-dump.json", "server-settings-merged.json"]);
-  fs.cpSync(DIST, SERVER, { recursive: true, filter: (src) => !skip.has(path.relative(DIST, src).replace(/\\/g, "/").toLowerCase()) });
+  fs.cpSync(DIST, slot.server, { recursive: true, filter: (src) => !skip.has(path.relative(DIST, src).replace(/\\/g, "/").toLowerCase()) });
 };
 
 const startServer = async (check, ctx, keepWorld = false) => {
+  const SERVER = ctx.slot.server;
   if (!keepWorld) fs.rmSync(path.join(SERVER, "world"), { recursive: true, force: true });
   if (check.world && !keepWorld) fs.cpSync(path.join(__dirname, "worlds", check.world), path.join(SERVER, "world", "changeForms"), { recursive: true });
-  const settings = { ...readJson(path.join(BUILD, "server-settings-base.json")), port: PORT.server, name: "e2e", ...(check.settings || {}) };
+  const settings = { ...readJson(path.join(BUILD, "server-settings-base.json")), port: ctx.slot.port.server, name: "e2e", ...(check.settings || {}) };
   writeJson(path.join(SERVER, "server-settings.json"), settings);
   fs.copyFileSync(path.join(__dirname, "probe.js"), path.join(SERVER, "gamemode.js"));
   const fd = fs.openSync(path.join(ctx.dir, "server.log"), "a");
-  const child = spawn("node", ["dist_back/skymp5-server.js"], { cwd: SERVER, stdio: ["ignore", fd, fd], env: { ...process.env, E2E_PROBE_PORT: String(PORT.probe) } });
+  const child = spawn("node", ["dist_back/skymp5-server.js"], { cwd: SERVER, stdio: ["ignore", fd, fd], env: { ...process.env, E2E_PROBE_PORT: String(ctx.slot.port.probe) } });
   fs.closeSync(fd);
   child.on("exit", (code) => fs.appendFileSync(path.join(ctx.dir, "server.log"), `
 [e2e] server exited with code ${code}
 `));
-  own(child.pid, "node.exe");
+  own(child.pid, "node.exe", ctx.slot.index);
   ctx.serverPid = child.pid;
   const startedAt = Date.now();
   await ctx.waitFor(() => ctx.probe("return 1").catch(() => 0), 90000, "the server probe", Env, 100);
@@ -296,6 +307,7 @@ const startProxy = async (ctx, settings = {}) => {
   const unknown = Object.keys(settings).filter((k) => k !== "delayMs" && k !== "loss");
   if (unknown.length) throw new Error(`unknown proxy settings: ${unknown.join(", ")}`);
   const { delayMs = 0, loss = 0 } = settings;
+  const PORT = ctx.slot.port;
   const front = dgram.createSocket("udp4");
   const clients = new Map();
   const stats = {};
@@ -340,27 +352,38 @@ const launchGame = (dir, n = 1) => {
   if (r.status !== 0) throw new Env(`launch failed: ${r.stderr}`);
 };
 
+let launches = Promise.resolve();
+const oneLaunchAtATime = (fn) => {
+  const run = launches.then(fn);
+  launches = run.catch(() => {});
+  return run;
+};
+
 const startGame = async (n, ctx) => {
-  const dir = engineDir(n);
-  prepareEngineDir(n);
+  const g = ctx.slot.base + n;
+  const dir = engineDir(g);
+  prepareEngineDir(g);
   const plugins = path.join(dir, "Data", "Platform", "Plugins");
   const dev = path.join(dir, "Data", "Platform", "PluginsDev");
   const settingsFile = path.join(plugins, "skymp5-client-settings.txt");
   backup(settingsFile);
   const now = new Date();
   const hoursOffset = ((((ctx.gameHour - now.getUTCHours() - now.getUTCMinutes() / 60) % 24) + 24) % 24);
-  writeJson(settingsFile, { gameData: { profileId: profileId(n) }, master: "", "server-ip": "127.0.0.1", "server-master-key": null, "server-port": ctx.proxyStats ? PORT.proxy : PORT.server, hoursOffset });
+  writeJson(settingsFile, { gameData: { profileId: profileId(n) }, master: "", "server-ip": "127.0.0.1", "server-master-key": null, "server-port": ctx.proxyStats ? ctx.slot.port.proxy : ctx.slot.port.server, hoursOffset });
   backup(dev);
   fs.mkdirSync(dev, { recursive: true });
   fs.copyFileSync(path.join(__dirname, "driver.js"), path.join(dev, "e2e-driver.js"));
-  writeJson(path.join(dev, "e2e-driver-settings.txt"), { port: PORT.runner, engine: n });
+  writeJson(path.join(dev, "e2e-driver-settings.txt"), { port: PORT.runner, engine: g });
 
-  const before = new Set(procs("SkyrimSE.exe"));
-  launchGame(dir, n);
-  ctx.launchedAt[n] = Date.now();
-  let pid;
-  await ctx.waitFor(() => (pid = procs("SkyrimSE.exe").find((p) => !before.has(p))), 60000, `SkyrimSE.exe of engine ${n}`, Env, 100);
-  own(pid, "SkyrimSE.exe");
+  const pid = await oneLaunchAtATime(async () => {
+    const before = new Set(procs("SkyrimSE.exe"));
+    launchGame(dir, g);
+    ctx.launchedAt[n] = Date.now();
+    let found;
+    await ctx.waitFor(() => (found = procs("SkyrimSE.exe").find((p) => !before.has(p))), 60000, `SkyrimSE.exe of engine ${n}`, Env, 100);
+    own(found, "SkyrimSE.exe", ctx.slot.index);
+    return found;
+  });
   ctx.gamePids[n] = pid;
   const exitFile = path.join(ctx.dir, `exit-${n}.txt`);
   spawn("powershell", ["-NoProfile", "-Command", `try { $p = Get-Process -Id ${pid} -ErrorAction Stop; $p.WaitForExit(); Add-Content '${exitFile}' "$(Get-Date -Format HH:mm:ss.fff) pid ${pid} exit code $($p.ExitCode)" } catch {}`], { detached: true, stdio: "ignore" }).unref();
@@ -378,9 +401,9 @@ const lowCostMode = () => {
   editIni(path.join(GAME, "Data", "SKSE", "Plugins", "SSEDisplayTweaks.ini"), [["Render", "FramerateLimit", "30"], ["Render", "UIFramerateLimit", "30"], ["Window", "LockCursor", "false"]]);
 };
 
-const makeCtx = (id, dir) => {
+const makeCtx = (id, dir, slot) => {
   const ctx = {
-    id, dir, gamePids: {}, launchedAt: {}, tag: TAG, evidence: [], shots: [], rtt: {}, Env, Blocked, Accepted,
+    id, dir, slot, gamePids: {}, launchedAt: {}, tag: TAG, evidence: [], shots: [], rtt: {}, Env, Blocked, Accepted,
     driverRtt: (engine = 1) => { const a = [...(ctx.rtt[engine] || [])].sort((x, y) => x - y); return a.length ? a[a.length >> 1] : 0; },
     assert: require("assert"),
     sleep,
@@ -392,8 +415,8 @@ const makeCtx = (id, dir) => {
     },
     running: (engine) => procs("SkyrimSE.exe").includes(ctx.gamePids[engine]),
     skyrimPids: () => procs("SkyrimSE.exe"),
-    engineDir,
-    launchGame,
+    engineDir: (n) => engineDir(slot.base + n),
+    launchGame: (dir, n = 1) => launchGame(dir, slot.base + n),
     unit: (spec) => {
       const r = spawnSync(path.join(BUILD, "unit", "Release", "unit.exe"), [spec], { cwd: BUILD, encoding: "utf8", maxBuffer: 1 << 28 });
       const out = `${r.stdout || ""}${r.stderr || ""}`;
@@ -402,7 +425,7 @@ const makeCtx = (id, dir) => {
       ctx.evidence.push(`unit ${spec}: exit ${r.status}; ${summary}`);
       ctx.assert.ok(r.status === 0 && /All tests passed/.test(out), `unit ${spec} failed: ${summary || "no summary"}`);
     },
-    own: (pid) => own(pid, "SkyrimSE.exe"),
+    own: (pid) => own(pid, "SkyrimSE.exe", slot.index),
     talk: async (npc, until, prefer, label, { engine = 1, quest = 0 } = {}) => {
       const M = "Dialogue Menu";
       const R = "_root.DialogueMenu_mc";
@@ -458,7 +481,7 @@ const makeCtx = (id, dir) => {
       }
     },
     probe: async (code) => {
-      const r = await fetch(`http://127.0.0.1:${PORT.probe}/eval`, { method: "POST", body: code, signal: AbortSignal.timeout(15000) });
+      const r = await fetch(`http://127.0.0.1:${slot.port.probe}/eval`, { method: "POST", body: code, signal: AbortSignal.timeout(15000) });
       const j = await r.json();
       if (!j.ok) throw new Error(`probe: ${j.error}`);
       return j.value;
@@ -473,22 +496,22 @@ const makeCtx = (id, dir) => {
         }, ms);
         const sent = Date.now();
         drivers.pending.set(cmdId, { resolve: (v) => (clearTimeout(timer), (ctx.rtt[engine] ||= []).push(Date.now() - sent), resolve(v)), reject: (e) => (clearTimeout(timer), reject(e)) });
-        (drivers.queue[engine] ||= []).push({ id: cmdId, code });
-        flush(engine);
+        (drivers.queue[slot.base + engine] ||= []).push({ id: cmdId, code });
+        flush(slot.base + engine);
       }),
-    clientLog: (engine = 1) => drivers.lines[engine] || [],
+    clientLog: (engine = 1) => drivers.lines[slot.base + engine] || [],
     character: (engine = 1, at = HELGEN_EXIT) => ctx.probe(`return mp.createActor(0, ${JSON.stringify(at.pos)}, ${at.angleZ}, ${at.worldOrCell}, ${profileId(engine)});`),
     npcLocation: (id) => ctx.probe(`return mp.get(${id}, "locationalData");`),
     shot: (name, engine = 1) => {
       const file = path.join(dir, `${name}.png`);
-      const r = spawnSync("powershell", ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", path.join(__dirname, "desktop.ps1"), "-desktop", desktopOf(engine), "-procId", String(ctx.gamePids[engine]), "-out", file], { encoding: "utf8" });
+      const r = spawnSync("powershell", ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", path.join(__dirname, "desktop.ps1"), "-desktop", desktopOf(slot.base + engine), "-procId", String(ctx.gamePids[engine]), "-out", file], { encoding: "utf8" });
       if (r.status !== 0) ctx.log(`screenshot failed: ${r.stderr}`);
       else ctx.shots.push(path.relative(OUT, file).replace(/\\/g, "/"));
     },
     ready: async (engine = 1) => {
       const started = Date.now();
       for (let launch = 0; ; launch++) {
-        const connected = await ctx.waitFor(() => !ctx.running(engine) ? "exited" : (drivers.seen[engine] || 0) > started, 120000, `engine ${engine} driver connects`, Env);
+        const connected = await ctx.waitFor(() => !ctx.running(engine) ? "exited" : (drivers.seen[slot.base + engine] || 0) > started, 120000, `engine ${engine} driver connects`, Env);
         if (connected === true) break;
         if (launch >= 2) throw new Env(`engine ${engine} exited before its driver connected, 3 launches`);
         ctx.log(`engine ${engine} exited before its driver connected, relaunch ${launch + 1}`);
@@ -508,14 +531,19 @@ const makeCtx = (id, dir) => {
   return ctx;
 };
 
-const runOnce = async (id, check, n, attempt) => {
+let activeRuns = 0;
+
+const runOnce = async (id, check, n, attempt, slot) => {
   const dir = path.join(OUT, "runs", id.replace(/\./g, "_"), attempt ? `${n}-retry${attempt}` : String(n));
   fs.rmSync(dir, { recursive: true, force: true });
   fs.mkdirSync(dir, { recursive: true });
-  const ctx = makeCtx(id, dir);
+  const ctx = makeCtx(id, dir, slot);
   ctx.gameHour = check.gameHour ?? 12;
-  drivers.lines = {};
-  drivers.logFile = (engine) => path.join(dir, `client${engine}.log`);
+  for (const e of [1, 2]) {
+    drivers.lines[slot.base + e] = [];
+    drivers.logFiles[slot.base + e] = path.join(dir, `client${e}.log`);
+  }
+  activeRuns++;
   const t = Date.now();
   let result = "PASS";
   let reason = "";
@@ -573,9 +601,9 @@ const runOnce = async (id, check, n, attempt) => {
       ctx.evidence.push(`proxy ${JSON.stringify(check.proxy)}: ${st.length} clients, ${sum("upPackets")} packets up (${sum("upDropped")} dropped), ${sum("downPackets")} down (${sum("downDropped")} dropped)`);
       stopProxy();
     }
-    killOwned();
+    killOwned(slot.index);
     await sleep(2000);
-    restore();
+    if (!--activeRuns) restore();
   }
   const rtt = Object.fromEntries(Object.keys(ctx.rtt).map((e) => [e, { median: ctx.driverRtt(Number(e)), calls: ctx.rtt[e].length }]));
   const slow = Object.entries(rtt).find(([, r]) => r.calls >= 10 && r.median > SLOW_ENGINE_MS);
@@ -604,7 +632,7 @@ const buildStamp = (checkFile, check) => {
 
 const logAttempt = (id, n, attempt, r, build) => fs.appendFileSync(path.join(OUT, "attempts.jsonl"), `${JSON.stringify({ id, run: n, attempt, result: r.result, reason: r.reason, secs: r.secs, evidence: r.evidence, rtt: r.rtt, freeGB: +(os.freemem() / 2 ** 30).toFixed(1), build, at: new Date().toISOString() })}\n`);
 
-const runSuite = async (id, check, n, build) => {
+const runSuite = async (id, check, n, build, slot) => {
   const t = Date.now();
   const parts = [];
   for (const sub of check.suite) {
@@ -613,7 +641,7 @@ const runSuite = async (id, check, n, build) => {
     const subCheck = { ...require(file), proxy: check.proxy };
     let r;
     for (let attempt = 0; attempt < 3; attempt++) {
-      r = await runOnce(`${id}-${sub}`, subCheck, n, attempt);
+      r = await runOnce(`${id}-${sub}`, subCheck, n, attempt, slot);
       log(`${id} ${sub}: ${r.result} ${r.reason}`);
       logAttempt(`${id}-${sub}`, n, attempt, r, build);
       if (r.result !== "ENV" && !notExercised(r)) break;
@@ -631,7 +659,7 @@ const runSuite = async (id, check, n, build) => {
   };
 };
 
-const runCheck = async (id, opts, envStreak) => {
+const runCheck = async (id, opts, envStreak, slot) => {
   const file = opts.adhoc && id === "adhoc" ? path.resolve(opts.adhoc) : path.join(CHECKS, `${id}.js`);
   if (!fs.existsSync(file)) return { result: "FAIL", reason: "no check script", secs: 0, evidence: [], shots: [] };
   delete require.cache[require.resolve(file)];
@@ -645,8 +673,8 @@ const runCheck = async (id, opts, envStreak) => {
     let r;
     let prevReason;
     for (let attempt = 0; attempt < 3; attempt++) {
-      log(`${id} run ${n}/${runs}${attempt ? ` retry ${attempt}` : ""}`);
-      r = check.suite ? await runSuite(id, check, n, build) : await runOnce(id, check, n, attempt);
+      log(`${id} run ${n}/${runs}${attempt ? ` retry ${attempt}` : ""}${slot.index ? ` (slot ${slot.index + 1})` : ""}`);
+      r = check.suite ? await runSuite(id, check, n, build, slot) : await runOnce(id, check, n, attempt, slot);
       log(`${id} run ${n}: ${r.result} ${r.reason}`);
       logAttempt(checkName, n, attempt, r, build);
       envStreak.n = r.result === "ENV" ? envStreak.n + 1 : 0;
@@ -739,19 +767,41 @@ const main = async () => {
       if (results.L1.result !== "PASS") stopped = "level 1 FAIL";
     }
     if (opts.adhoc && !stopped) {
-      prepareServer();
-      const r = await runCheck("adhoc", opts, { n: 0 });
+      prepareServer(slotOf(0));
+      const r = await runCheck("adhoc", opts, { n: 0 }, slotOf(0));
       log(`adhoc: ${r.result} ${r.reason}`);
       for (const e of r.evidence) log(e);
       return;
     }
     if (!stopped) {
-      prepareServer();
+      const slots = Array.from({ length: Math.max(1, Number(arg("--slots")) || 2) }, (_, s) => slotOf(s));
+      slots.forEach(prepareServer);
       const envStreak = { n: 0 };
-      for (const id of ORDER.filter((id) => id !== "L1" && (!only || only.includes(id)) && !skip.includes(id))) {
-        save(id, await runCheck(id, opts, envStreak));
-        if (envStreak.n >= 3) { stopped = `3 ENV results in a row (${id}: ${results[id].reason})`; break; }
-      }
+      const queue = ORDER.filter((id) => id !== "L1" && (!only || only.includes(id)) && !skip.includes(id));
+      let running = 0;
+      let alone = false;
+      const worker = async (slot) => {
+        while (!stopped && queue.length) {
+          const exclusive = EXCLUSIVE.includes(queue[0]);
+          if (alone || (exclusive && running)) {
+            await sleep(2000);
+            continue;
+          }
+          const id = queue.shift();
+          running++;
+          alone = exclusive;
+          try {
+            save(id, await runCheck(id, opts, envStreak, slot));
+            if (envStreak.n >= 3) stopped = `3 ENV results in a row (${id}: ${results[id].reason})`;
+          } catch (e) {
+            stopped = e.message;
+          } finally {
+            running--;
+            if (exclusive) alone = false;
+          }
+        }
+      };
+      await Promise.all(slots.map(worker));
     }
   } catch (e) {
     stopped = e.message;
