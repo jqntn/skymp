@@ -1,7 +1,7 @@
 # Scoreboard
 
 
-First non-PASS in plan order: H3
+First non-PASS in plan order: G1.7
 
 | id | result | secs | at | detail |
 |---|---|---|---|---|
@@ -32,14 +32,14 @@ First non-PASS in plan order: H3
 | 1B.5 | PASS | 44 | 2026-10-26 16:24 | 1/1 runs PASS |
 | H1 | PASS | 8 | 2026-10-26 16:24 | 1/1 runs PASS |
 | H2 | PASS | 120 | 2026-10-26 16:26 | 1/1 runs PASS |
-| H3 | FAIL | 382 | 2026-10-26 18:42 | 1 of 4 runs not PASS; run 3/4: seat: not exercised, Gerdur was not seated on engine 1 when engine 2 left (last sample [1793040037854,-766.7393188476562,-162.613525390625,3.095348834991455,0,0,"",0,0,27]) |
+| H3 | PASS | 274 | 2026-10-26 19:38 | 3/3 runs PASS |
 | H4 | PASS | 34 | 2026-10-26 16:25 | 1/1 runs PASS |
 | G1.1 | PASS | 209 | 2026-10-26 16:29 | 1/1 runs PASS |
 | G1.2 | PASS | 61 | 2026-10-26 16:27 | 1/1 runs PASS |
-| G1.3 | PASS | 80 | 2026-10-26 16:28 | 1/1 runs PASS |
+| G1.3 | PASS | 380 | 2026-10-26 18:58 | 5/5 runs PASS |
 | G1.4 | PASS | 126 | 2026-10-26 16:31 | 1/1 runs PASS |
 | G1.5 | PASS | 116 | 2026-10-26 16:31 | 1/1 runs PASS |
-| G1.6 | FAIL | 388 | 2026-10-26 18:42 | 3 of 4 runs not PASS; run 2/4: Alvor on engine 2 does not hold the hoster's posture: hips 70.5 vs 45.9 |
+| G1.6 | PASS | 282 | 2026-10-26 19:38 | 3/3 runs PASS |
 | G1.7 | FAIL | 0 | 2026-10-26 16:31 | no check script |
 | G1.8 | PASS | 81 | 2026-10-26 16:32 | 1/1 runs PASS |
 | 2A.1 | PASS | 49 | 2026-10-26 16:33 | 1/1 runs PASS |
@@ -79,7 +79,7 @@ First non-PASS in plan order: H3
 | T3 | PASS | 37 | 2026-10-26 16:59 | 1/1 runs PASS |
 | T4 | PASS | 44 | 2026-10-26 17:00 | 1/1 runs PASS |
 | T5 | PASS | 108 | 2026-10-26 17:02 | 1/1 runs PASS |
-| T6 | PASS | 105 | 2026-10-26 17:03 | 1/1 runs PASS |
+| T6 | PASS | 517 | 2026-10-26 19:28 | 5/5 runs PASS |
 
 ## Evidence
 
@@ -230,42 +230,42 @@ First non-PASS in plan order: H3
 - run 1: engine 1 left for Whiterun: every NPC it ran is run by engine 2 after 22 ms
 - run 1: engine 1 back in Riverwood: 29 samples, last [["13482","ff000001","3c:Skyrim.esm,4,-11"],["13483","ff000001","3c:Skyrim.esm,5,-11"],["13484","ff000001","3c:Skyrim.esm,5,-10"],["13489","0","133c7:Skyrim.esm,0,0"],["1348a","ff000001","3c:Skyrim.esm,4,-10"],["1348b","ff000001","3c:Skyrim.esm,5,-10"],["1348c","ff000001","3c:Skyrim.esm,4,-11"],["35534","ff000001","3c:Skyrim.esm,4,-11"],["2bfa2","0","3c:Skyrim.esm,4,-19"],["2bf9e","0","3c:Skyrim.esm,4,-19"]], changes []
 ### H3
-- run 1: seat: samples around the largest step (t from the transfer, x, y, z, sit, furniture, target, dead, AI, player z): [[2955,-639,-70,2,3,0,"",0,1,0],[2988,-639,-70,2,3,0,"",0,1,0],[3023,-639,-70,2,0,376761,"",0,1,0],[3056,-639,-70,1,0,376761,"",0,1,0],[3089,-664,-79,1,0,376761,"",0,1,0],[3122,-663,-79,1,0,376761,"",0,1,0],[3155,-663,-79,0,0,376761,"",0,1,0],[3189,-663,-79,0,0,376761,"",0,1,0]]
-- run 1: seat: the first 3 s on engine 1, every 8th sample: [[22,-640,-70,2,3,0,"",0,0,0],[288,-639,-70,2,3,0,"",0,1,0],[554,-639,-70,2,3,0,"",0,1,0],[821,-639,-70,2,3,0,"",0,1,0],[1088,-639,-70,2,3,0,"",0,1,0],[1355,-639,-70,2,3,0,"",0,1,0],[1622,-639,-70,2,3,0,"",0,1,0],[1888,-639,-70,2,3,0,"",0,1,0],[2155,-639,-70,2,3,0,"",0,1,0],[2422,-639,-70,2,3,0,"",0,1,0],[2689,-639,-70,2,3,0,"",0,1,0],[2955,-639,-70,2,3,0,"",0,1,0]]
-- run 1: seat: engine 1 runs Gerdur 4 ms after engine 2 left; 222 samples on engine 1, largest step 26 units, dead false, copies 0; first after [1793039795238,-640.1121826171875,-70.0040283203125,1.9993451833724976,3,0,"",0,0,0], last [1793039800805,-665.2140502929688,-72.18340301513672,7.763492249068804e-8,0,376761,"",0,1,0]; server before {"dead":false,"hoster":4278190081,"cell":"133c7:Skyrim.esm","pos":[-638.8328247070312,-70.00344848632812,1.9993451833724976]}
-- run 1: seat: on engine 1 Gerdur stood up 3023 ms after the transfer (the AI's furniture state does not transfer: activate binds no NPC, Skyrim has no SnapIntoInteraction); furniture at the end 5bfb9
-- run 1: combat: Gerdur on engine 1 during the fight, every 15th sample (s before the transfer, x, y, z, sit, player z): [[-4.3,-665,-72,0,0,-1],[-3.8,-665,-72,0,0,-1],[-3.3,-665,-72,0,0,0],[-2.8,-664,-72,0,0,0],[-2.3,-663,-97,26,0,0],[-1.8,-640,-137,0,0,0],[-1.3,-581,-123,-1,0,0],[-0.8,-485,-95,-1,0,0],[-0.3,-390,-89,0,0,0]]
-- run 1: combat: samples around the largest step (t from the transfer, x, y, z, sit, furniture, target, dead, AI, player z): [[2317,-354,-64,0,0,0,"player",0,1,0],[2350,-353,-59,0,0,0,"player",0,1,0],[2383,-352,-54,0,0,0,"player",0,1,0],[2416,-351,-48,0,0,0,"player",0,1,0],[2450,-349,-42,0,0,0,"player",0,1,0],[2484,-348,-37,0,0,0,"player",0,1,0],[2516,-347,-32,0,0,0,"player",0,1,0],[2550,-346,-28,0,0,0,"player",0,1,0]]
-- run 1: combat: the first 3 s on engine 2, every 8th sample: [[17,-360,-90,0,0,0,"",0,0,0],[283,-360,-90,0,0,0,"player",0,1,0],[549,-360,-90,0,0,0,"player",0,1,0],[816,-360,-90,0,0,0,"player",0,1,0],[1083,-360,-90,0,0,0,"player",0,1,0],[1350,-360,-90,0,0,0,"player",0,1,0],[1616,-360,-90,0,0,0,"player",0,1,0],[1883,-360,-90,0,0,0,"player",0,1,0],[2150,-359,-84,0,0,0,"player",0,1,0],[2416,-351,-48,0,0,0,"player",0,1,0],[2683,-344,-19,0,0,0,"player",0,1,0],[2950,-345,-22,0,0,0,"player",0,1,0]]
-- run 1: combat: engine 2 runs Gerdur 11 ms after engine 1 left; 198 samples on engine 2, largest step 6 units, dead false, copies 0; first after [1793039810440,-360.28070068359375,-89.75287628173828,-0.000003091664893872803,0,0,"",0,0,0], last [1793039816006,-316.9686279296875,-36.579307556152344,-0.04234231263399124,0,0,"player",0,1,0]; server before {"dead":false,"hoster":4278190080,"cell":"133c7:Skyrim.esm","pos":[-360.28070068359375,-89.75287628173828,-0.0000032568432288826443]}
-- run 1: combat: Gerdur fights engine 2's player on engine 2 116 ms after the transfer
-- run 2: seat: samples around the largest step (t from the transfer, x, y, z, sit, furniture, target, dead, AI, player z): [[-35,-18,-470,2,3,0,"",0,0,0],[-2,-17,-470,2,3,0,"",0,0,0],[35,-17,-469,3,3,0,"",0,1,0],[65,-16,-468,4,3,0,"",0,1,0],[99,-13,-466,6,3,0,"",0,1,0],[131,-13,-465,8,3,0,"",0,1,0],[166,-12,-464,10,3,0,"",0,1,0],[198,-11,-463,13,3,0,"",0,1,0]]
-- run 2: seat: the first 3 s on engine 1, every 8th sample: [[35,-17,-469,3,3,0,"",0,1,0],[298,-9,-461,18,3,0,"",0,1,0],[565,-6,-457,24,3,0,"",0,1,0],[833,-3,-455,29,0,376721,"",0,1,0],[1098,-2,-453,27,0,376721,"",0,1,0],[1365,-1,-452,24,0,376721,"",0,1,0],[1632,0,-452,22,0,376721,"",0,1,0],[1898,1,-451,19,0,376721,"",0,1,0],[2165,1,-450,16,0,376721,"",0,1,0],[2432,1,-450,16,0,376721,"",0,1,0],[2698,1,-450,16,0,376721,"",0,1,0],[2965,1,-450,16,0,376721,"",0,1,0]]
-- run 2: seat: engine 1 runs Gerdur 7 ms after engine 2 left; 264 samples on engine 1, largest step 4 units, dead false, copies 0; first after [1793039858663,-16.913188934326172,-469.33319091796875,2.7851710319519043,3,0,"",0,1,0], last [1793039866225,1.3483980894088745,-449.8663330078125,16.151212692260742,0,376721,"",0,1,0]; server before {"dead":false,"hoster":4278190081,"cell":"133c7:Skyrim.esm","pos":[-18.510446548461914,-470.9197998046875,1.9996622800827026]}
-- run 2: seat: on engine 1 Gerdur stood up 799 ms after the transfer (the AI's furniture state does not transfer: activate binds no NPC, Skyrim has no SnapIntoInteraction); furniture at the end 5bf91
-- run 2: combat: Gerdur on engine 1 during the fight, every 15th sample (s before the transfer, x, y, z, sit, player z): [[-4.7,1,-450,16,0,0],[-4.2,1,-450,16,0,0],[-3.7,1,-450,16,0,0],[-3.2,7,-446,2,0,0],[-2.7,39,-402,-1,0,0],[-2.2,25,-256,-1,0,0],[-1.7,-13,-106,0,0,0],[-1.2,-13,-106,0,0,0],[-0.7,-15,-114,0,0,0],[-0.2,-24,-139,0,0,0]]
-- run 2: combat: samples around the largest step (t from the transfer, x, y, z, sit, furniture, target, dead, AI, player z): [[5279,-41,-110,0,0,0,"player",0,1,0],[5313,-37,-114,0,0,0,"player",0,1,0],[5346,-32,-117,0,0,0,"player",0,1,0],[5380,-27,-121,0,0,0,"player",0,1,0],[5413,-23,-125,-1,0,0,"player",0,1,0],[5446,-18,-129,-1,0,0,"player",0,1,0],[5480,-14,-132,-1,0,0,"player",0,1,0],[5513,-10,-135,0,0,0,"player",0,1,0]]
-- run 2: combat: the first 3 s on engine 2, every 8th sample: [[13,-85,-98,0,0,0,"",0,0,0],[280,-85,-98,0,0,0,"player",0,1,0],[545,-85,-98,0,0,0,"player",0,1,0],[812,-85,-98,0,0,0,"player",0,1,0],[1079,-91,-78,0,0,0,"player",0,1,0],[1346,-102,-40,0,0,0,"player",0,1,0],[1613,-105,-29,0,0,0,"player",0,1,0],[1879,-87,-29,0,0,0,"player",0,1,0],[2146,-78,-29,0,0,0,"player",0,1,0],[2413,-78,-29,0,0,0,"player",0,1,0],[2679,-78,-29,0,0,0,"player",0,1,0],[2946,-78,-29,0,0,0,"player",0,1,0]]
-- run 2: combat: engine 2 runs Gerdur 0 ms after engine 1 left; 212 samples on engine 2, largest step 6 units, dead false, copies 0; first after [1793039877162,-84.75997924804688,-97.79308319091797,-0.0000032825200833030976,0,0,"",0,0,0], last [1793039883195,0.35176581144332886,-143.63568115234375,-0.0000027964824766968377,0,0,"player",0,1,0]; server before {"dead":false,"hoster":4278190080,"cell":"133c7:Skyrim.esm","pos":[-84.75997924804688,-97.79308319091797,-9.72536668086832e-7]}
-- run 2: combat: Gerdur fights engine 2's player on engine 2 113 ms after the transfer
-- run 3: seat: samples around the largest step (t from the transfer, x, y, z, sit, furniture, target, dead, AI, player z): [[-81,-767,-166,2,0,0,"",0,0,27],[-64,-767,-166,2,0,0,"",0,0,27],[-47,-767,-165,2,0,0,"",0,0,27],[-30,-767,-163,3,0,0,"",0,0,27],[-14,-767,-160,4,0,0,"",0,0,27],[3,-767,-159,5,0,0,"",0,0,27],[19,-767,-157,7,0,0,"",0,1,27],[36,-767,-157,7,0,0,"",0,1,28]]
-- run 3: seat: the first 3 s on engine 1, every 8th sample: [[3,-767,-159,5,0,0,"",0,0,27],[136,-767,-156,12,0,0,"",0,1,28],[269,-767,-155,22,0,0,"",0,1,28],[419,-767,-155,25,0,0,"",0,1,29],[687,-767,-155,28,0,0,"",0,1,29],[953,-767,-155,30,0,0,"",0,1,29],[1219,-767,-155,31,0,0,"",0,1,30],[1486,-767,-155,31,0,0,"",0,1,30],[1752,-767,-155,31,0,0,"",0,1,30],[2019,-767,-155,31,0,0,"",0,1,30],[2286,-767,-155,31,0,0,"",0,1,30],[2552,-767,-155,31,0,0,"",0,1,31],[2819,-767,-155,32,0,0,"",0,1,31]]
-- run 3: seat: engine 1 runs Gerdur 14 ms after engine 2 left; 247 samples on engine 1, largest step 3 units, dead false, copies 0; first after [1793040037887,-766.6455688476562,-159.11094665527344,5.458725452423096,0,0,"",0,0,27], last [1793040043670,-779.779541015625,-143.51907348632812,30.279592514038086,0,232339,"",0,1,31]; server before {"dead":false,"hoster":4278190081,"cell":"133c7:Skyrim.esm","pos":[-766.8394165039062,-166.00869750976562,1.9993618726730347]}
-- run 3: seat: on engine 1 Gerdur stood up 3 ms after the transfer (the AI's furniture state does not transfer: activate binds no NPC, Skyrim has no SnapIntoInteraction); furniture at the end 38b93
-- run 3: combat: Gerdur on engine 1 during the fight, every 15th sample (s before the transfer, x, y, z, sit, player z): [[-6.7,-797,-142,13,0,31],[-6.2,-797,-142,13,0,31],[-5.7,-797,-142,13,0,31],[-5.2,-798,-142,12,0,31],[-4.7,-798,-142,12,0,31],[-4.2,-798,-142,12,0,31],[-3.7,-798,-142,12,0,31],[-3.2,-798,-142,12,0,31],[-2.7,-798,-142,12,0,31],[-2.2,-798,-142,12,0,31],[-1.7,-798,-142,12,0,31],[-1.2,-798,-142,12,0,31],[-0.7,-798,-142,12,0,31],[-0.2,-798,-142,12,0,31]]
-- run 3: combat: samples around the largest step (t from the transfer, x, y, z, sit, furniture, target, dead, AI, player z): [[-47,-799,-141,0,0,0,"",0,0,0],[-13,-799,-141,0,0,0,"",0,0,0],[21,-799,-141,0,0,0,"",0,0,0],[55,-799,-141,0,0,0,"",0,1,0],[86,-799,-141,17,0,0,"",0,1,0],[120,-799,-141,17,0,0,"player",0,1,0],[153,-799,-141,11,0,0,"player",0,1,0],[187,-799,-141,7,0,0,"player",0,1,0]]
-- run 3: combat: the first 3 s on engine 2, every 8th sample: [[21,-799,-141,0,0,0,"",0,0,0],[287,-799,-141,2,0,0,"player",0,1,0],[554,-799,-141,0,0,0,"player",0,1,0],[821,-799,-141,0,0,0,"player",0,1,0],[1087,-799,-141,0,0,0,"player",0,1,0],[1354,-799,-141,0,0,0,"player",0,1,0],[1621,-799,-141,0,0,0,"player",0,1,0],[1888,-799,-141,0,0,0,"player",0,1,0],[2154,-799,-141,0,0,0,"player",0,1,0],[2421,-799,-141,0,0,0,"player",0,1,0],[2688,-799,-141,0,0,0,"player",0,1,0],[2955,-799,-141,0,0,0,"player",0,1,0]]
-- run 3: combat: engine 2 runs Gerdur 12 ms after engine 1 left; 227 samples on engine 2, largest step 17 units, dead false, copies 0; first after [1793040055745,-798.6664428710938,-141.41957092285156,0.0000012098207662347704,0,0,"",0,0,0], last [1793040062247,-798.6664428710938,-141.41957092285156,9.740263351432077e-8,0,0,"player",0,1,0]; server before {"dead":false,"hoster":4278190080,"cell":"133c7:Skyrim.esm","pos":[-797.7036743164062,-141.79586791992188,11.749459266662598]}
-- run 3: combat: Gerdur fights engine 2's player on engine 2 120 ms after the transfer
-- run 4: seat: samples around the largest step (t from the transfer, x, y, z, sit, furniture, target, dead, AI, player z): [[-619,305,-365,2,3,0,"",0,0,36],[-585,305,-365,2,3,0,"",0,0,36],[-552,305,-365,2,3,0,"",0,0,36],[-519,304,-365,3,3,0,"",0,0,36],[-485,301,-365,4,3,0,"",0,0,36],[-452,300,-365,5,3,0,"",0,0,36],[-418,301,-365,4,3,0,"",0,0,36],[-385,302,-365,4,3,0,"",0,0,36]]
-- run 4: seat: the first 3 s on engine 1, every 8th sample: [[15,297,-365,11,3,0,"",0,0,36],[282,294,-365,22,0,376761,"",0,1,36],[549,294,-365,24,0,376761,"",0,1,36],[815,294,-365,24,0,376761,"",0,1,36],[1081,294,-365,24,0,376761,"",0,1,36],[1348,294,-365,24,0,376761,"",0,1,36],[1615,294,-365,24,0,376761,"",0,1,36],[1882,294,-365,24,0,376761,"",0,1,36],[2148,294,-365,24,0,376761,"",0,1,36],[2415,294,-365,24,0,376761,"",0,1,36],[2682,294,-365,24,0,376761,"",0,1,36],[2948,294,-365,24,0,376761,"",0,1,36]]
-- run 4: seat: engine 1 runs Gerdur 11 ms after engine 2 left; 205 samples on engine 1, largest step 3 units, dead false, copies 0; first after [1793040108179,297.0440368652344,-365.0498352050781,10.557867050170898,3,0,"",0,0,36], last [1793040113747,293.9788818359375,-365.1063537597656,24.00373077392578,0,376761,"",0,1,36]; server before {"dead":false,"hoster":4278190081,"cell":"133c7:Skyrim.esm","pos":[305.23931884765625,-365.0063171386719,1.99956214427948]}
-- run 4: seat: on engine 1 Gerdur stood up 82 ms after the transfer (the AI's furniture state does not transfer: activate binds no NPC, Skyrim has no SnapIntoInteraction); furniture at the end 5bfb9
-- run 4: combat: Gerdur on engine 1 during the fight, every 15th sample (s before the transfer, x, y, z, sit, player z): [[-4.2,294,-365,24,0,36],[-3.7,294,-365,24,0,36],[-3.2,294,-365,24,0,36],[-2.7,274,-365,15,0,33],[-2.2,256,-380,-1,0,34],[-1.7,225,-480,-1,0,35],[-1.2,136,-496,-1,0,35],[-0.7,89,-455,-1,0,36],[-0.2,81,-290,-1,0,36]]
-- run 4: combat: samples around the largest step (t from the transfer, x, y, z, sit, furniture, target, dead, AI, player z): [[-1000,140,-131,-1,0,0,"",0,0,36],[-967,145,-125,-1,0,0,"",0,0,36],[-933,150,-119,-1,0,0,"",0,0,36],[-900,155,-113,-1,0,0,"",0,0,36],[-867,160,-107,-1,0,0,"",0,0,36],[-833,165,-103,-1,0,0,"",0,0,36],[-800,169,-99,-1,0,0,"",0,0,36],[-767,173,-95,-1,0,0,"",0,0,36]]
-- run 4: combat: the first 3 s on engine 2, every 8th sample: [[1,231,-41,0,0,0,"",0,0,36],[267,231,-41,0,0,0,"player",0,1,36],[534,231,-41,0,0,0,"player",0,1,36],[800,231,-41,0,0,0,"player",0,1,36],[1067,231,-41,0,0,0,"player",0,1,36],[1334,231,-41,0,0,0,"player",0,1,36],[1600,231,-41,0,0,0,"player",0,1,36],[1867,231,-41,0,0,0,"player",0,1,36],[2134,231,-41,0,0,0,"player",0,1,36],[2400,231,-41,0,0,0,"player",0,1,36],[2667,231,-41,0,0,0,"player",0,1,36],[2934,231,-41,0,0,0,"player",0,1,36]]
-- run 4: combat: engine 2 runs Gerdur 3 ms after engine 1 left; 198 samples on engine 2, largest step 8 units, dead false, copies 0; first after [1793040123312,230.5370330810547,-41.191246032714844,-0.000312403601128608,0,0,"",0,0,36], last [1793040128878,253.18968200683594,-17.07714080810547,-0.0000014786972997171688,0,0,"player",0,1,36]; server before {"dead":false,"hoster":4278190080,"cell":"133c7:Skyrim.esm","pos":[230.5370635986328,-41.191246032714844,-0.0000022728595467924606]}
-- run 4: combat: Gerdur fights engine 2's player on engine 2 100 ms after the transfer
+- run 1: seat: seated on both engines 18377 ms after the wait started
+- run 1: seat: samples around the largest step (t from the transfer, x, y, z, sit, furniture, target, dead, AI, player z): [[1091,295,-374,21,0,232339,"",0,1,0],[1125,295,-374,21,0,232339,"",0,1,0],[1158,295,-373,21,0,232339,"",0,1,0],[1191,296,-373,21,0,232339,"",0,1,0],[1224,269,-360,39,0,232339,"",0,1,0],[1257,265,-358,39,0,232339,"",0,1,0],[1291,265,-358,36,0,232339,"",0,1,0],[1324,264,-358,30,0,232339,"",0,1,0]]
+- run 1: seat: the first 3 s on engine 1, every 8th sample: [[24,305,-365,2,3,0,"",0,0,0],[291,305,-365,2,0,0,"",0,0,0],[558,296,-374,19,0,0,"",0,0,0],[824,295,-374,21,0,0,"",0,0,0],[1091,295,-374,21,0,232339,"",0,1,0],[1357,264,-359,22,0,232339,"",0,1,0],[1624,256,-374,-1,0,232339,"",0,1,0],[1891,250,-391,-1,0,232339,"",0,1,0],[2157,244,-412,-1,0,232339,"",0,1,0],[2424,244,-416,-1,0,232339,"",0,1,0],[2691,244,-416,-1,0,232339,"",0,1,0],[2957,244,-416,-1,0,232339,"",0,1,0]]
+- run 1: seat: engine 1 runs Gerdur 2 ms after engine 2 left; 198 samples on engine 1, largest step 35 units, dead false, copies 0; first after [1793043285444,305.2391052246094,-365.0066833496094,1.999653935432434,3,0,"",0,0,0], last [1793043291011,243.63198852539062,-415.5497741699219,-1.399832010269165,0,232339,"",0,1,0]; server before {"dead":false,"hoster":4278190081,"cell":"133c7:Skyrim.esm","pos":[305.2391357421875,-365.0066833496094,1.999653935432434]}
+- run 1: seat: first sample on engine 1 is 0 units from where engine 2 had Gerdur
+- run 1: seat: on engine 1 Gerdur stood up 291 ms after the transfer (the AI's furniture state does not transfer: activate binds no NPC, Skyrim has no SnapIntoInteraction); furniture at the end 38b93
+- run 1: combat: Gerdur on engine 1 during the fight, every 15th sample (s before the transfer, x, y, z, sit, player z): [[-4.2,244,-416,-1,0,0],[-3.7,244,-416,-1,0,0],[-3.2,244,-416,-1,0,0],[-2.7,235,-458,-1,0,0],[-2.2,181,-495,-1,0,0],[-1.7,103,-484,-1,0,0],[-1.2,72,-417,-1,0,0],[-0.7,54,-364,-1,0,0],[-0.2,54,-364,-1,0,0]]
+- run 1: combat: samples around the largest step (t from the transfer, x, y, z, sit, furniture, target, dead, AI, player z): [[-1007,78,-271,-1,0,0,"",0,0,0],[-974,80,-262,-1,0,0,"",0,0,0],[-940,82,-252,-1,0,0,"",0,0,0],[-907,85,-243,-1,0,0,"",0,0,0],[-873,87,-234,-1,0,0,"",0,0,0],[-840,89,-227,-1,0,0,"",0,0,0],[-808,91,-220,-1,0,0,"",0,0,0],[-773,93,-213,-1,0,0,"",0,0,0]]
+- run 1: combat: the first 3 s on engine 2, every 8th sample: [[26,133,-87,-1,0,0,"",0,0,0],[293,138,-79,0,0,0,"player",0,1,0],[559,138,-79,0,0,0,"player",0,1,0],[826,138,-79,0,0,0,"player",0,1,0],[1093,158,-67,0,0,0,"player",0,1,0],[1360,160,-58,0,0,0,"player",0,1,0],[1626,151,-20,0,0,0,"player",0,1,0],[1894,145,4,0,0,0,"player",0,1,0],[2160,145,4,0,0,0,"player",0,1,0],[2427,145,4,0,0,0,"player",0,1,0],[2693,145,4,0,0,0,"player",0,1,0],[2960,145,4,0,0,0,"player",0,1,0]]
+- run 1: combat: engine 2 runs Gerdur 12 ms after engine 1 left; 199 samples on engine 2, largest step 10 units, dead false, copies 0; first after [1793043300776,132.5775146484375,-87.4749755859375,-1.3998239040374756,0,0,"",0,0,0], last [1793043306344,145.22332763671875,4.458973407745361,-0.0000013729459169553593,0,0,"player",0,1,0]; server before {"dead":false,"hoster":4278190080,"cell":"133c7:Skyrim.esm","pos":[147.48300170898438,-70.4952392578125,-1.399832010269165]}
+- run 1: combat: first sample on engine 2 is 23 units from where engine 1 had Gerdur
+- run 1: combat: Gerdur fights engine 2's player on engine 2 126 ms after the transfer
+- run 2: seat: seated on both engines 2198 ms after the wait started
+- run 2: seat: samples around the largest step (t from the transfer, x, y, z, sit, furniture, target, dead, AI, player z): [[-237,-767,-164,3,3,0,"",0,0,29],[-204,-767,-163,3,3,0,"",0,0,29],[-171,-767,-162,4,3,0,"",0,0,29],[-136,-767,-161,5,3,0,"",0,0,29],[-101,-767,-158,7,3,0,"",0,0,29],[-71,-767,-157,9,3,0,"",0,0,29],[-37,-767,-157,10,3,0,"",0,0,29],[-4,-767,-156,12,3,0,"",0,0,29]]
+- run 2: seat: the first 3 s on engine 1, every 8th sample: [[37,-767,-155,14,3,0,"",0,0,29],[298,-767,-155,25,0,0,"",0,0,30],[562,-767,-155,28,0,0,"",0,0,30],[829,-767,-155,30,0,0,"",0,0,30],[1097,-767,-155,31,0,0,"",0,1,30],[1364,-767,-155,31,0,376722,"",0,1,30],[1630,-767,-155,31,0,376722,"",0,1,31],[1898,-767,-155,31,0,376722,"",0,1,31],[2164,-767,-155,31,0,376722,"",0,1,31],[2429,-767,-155,31,0,376722,"",0,1,31],[2698,-767,-155,31,0,376722,"",0,1,31],[2962,-767,-155,31,0,376722,"",0,1,31]]
+- run 2: seat: engine 1 runs Gerdur 10 ms after engine 2 left; 219 samples on engine 1, largest step 4 units, dead false, copies 0; first after [1793043423370,-766.6567993164062,-155.22238159179688,14.326574325561523,3,0,"",0,0,29], last [1793043428928,-766.6566162109375,-155.35301208496094,31.49158477783203,0,376722,"",0,1,31]; server before {"dead":false,"hoster":4278190081,"cell":"133c7:Skyrim.esm","pos":[-766.8377075195312,-166.00839233398438,1.9993410110473633]}
+- run 2: seat: first sample on engine 1 is 16 units from where engine 2 had Gerdur
+- run 2: seat: on engine 1 Gerdur stood up 263 ms after the transfer (the AI's furniture state does not transfer: activate binds no NPC, Skyrim has no SnapIntoInteraction); furniture at the end 5bf92
+- run 2: combat: Gerdur on engine 1 during the fight, every 15th sample (s before the transfer, x, y, z, sit, player z): [[-7.4,-767,-155,31,0,31],[-6.9,-767,-155,31,0,31],[-6.4,-767,-155,31,0,31],[-5.9,-767,-155,30,0,31],[-5.4,-767,-155,31,0,31],[-4.9,-767,-155,31,0,31],[-4.4,-767,-155,31,0,31],[-3.9,-767,-155,32,0,31],[-3.4,-767,-155,32,0,31],[-2.9,-741,-141,33,0,31],[-2.4,-694,-144,-1,0,31],[-1.9,-674,-139,-1,0,31],[-1.4,-660,-126,-1,0,31],[-0.9,-644,-114,-1,0,31],[-0.4,-638,-114,-1,0,31]]
+- run 2: combat: samples around the largest step (t from the transfer, x, y, z, sit, furniture, target, dead, AI, player z): [[2873,-582,-151,-1,0,0,"player",0,1,28],[2906,-575,-152,-1,0,0,"player",0,1,28],[2940,-566,-154,-1,0,0,"player",0,1,28],[2973,-558,-157,-1,0,0,"player",0,1,28],[3007,-549,-159,-1,0,0,"player",0,1,28],[3039,-540,-162,-1,0,0,"player",0,1,28],[3072,-532,-164,-1,0,0,"player",0,1,28],[3106,-526,-166,-1,0,0,"player",0,1,28]]
+- run 2: combat: the first 3 s on engine 2, every 8th sample: [[6,-638,-114,-1,0,0,"",0,0,28],[273,-638,-114,-1,0,0,"player",0,1,28],[539,-638,-114,-1,0,0,"player",0,1,28],[805,-638,-114,-1,0,0,"player",0,1,28],[1072,-638,-114,-1,0,0,"player",0,1,28],[1339,-638,-114,-1,0,0,"player",0,1,28],[1606,-638,-115,-1,0,0,"player",0,1,28],[1873,-638,-115,-1,0,0,"player",0,1,28],[2139,-639,-139,-1,0,0,"player",0,1,28],[2406,-638,-152,-1,0,0,"player",0,1,28],[2673,-611,-146,-1,0,0,"player",0,1,28],[2940,-566,-154,-1,0,0,"player",0,1,28]]
+- run 2: combat: engine 2 runs Gerdur 4 ms after engine 1 left; 215 samples on engine 2, largest step 9 units, dead false, copies 0; first after [1793043442308,-637.5802612304688,-114.09222412109375,-1.399832010269165,0,0,"",0,0,28], last [1793043448441,-500.48602294921875,-177.69715881347656,-1.399832010269165,0,0,"player",0,1,28]; server before {"dead":false,"hoster":4278190080,"cell":"133c7:Skyrim.esm","pos":[-637.580322265625,-114.09224700927734,-1.399832010269165]}
+- run 2: combat: first sample on engine 2 is 0 units from where engine 1 had Gerdur
+- run 2: combat: Gerdur fights engine 2's player on engine 2 106 ms after the transfer
+- run 3: seat: seated on both engines 4115 ms after the wait started
+- run 3: seat: samples around the largest step (t from the transfer, x, y, z, sit, furniture, target, dead, AI, player z): [[-987,-43,-316,2,3,0,"",0,0,0],[-952,-43,-316,2,3,0,"",0,0,0],[-920,-41,-316,3,3,0,"",0,0,0],[-887,-39,-317,4,3,0,"",0,0,0],[-852,-35,-317,8,3,0,"",0,0,0],[-819,-35,-317,8,3,0,"",0,0,0],[-786,-35,-317,8,3,0,"",0,0,0],[-753,-35,-317,8,3,0,"",0,0,0]]
+- run 3: seat: the first 3 s on engine 1, every 8th sample: [[14,-41,-316,4,3,0,"",0,0,0],[281,-36,-317,10,0,0,"",0,0,0],[547,-33,-318,23,0,0,"",0,0,0],[814,-33,-318,27,0,0,"",0,0,0],[1080,-33,-318,30,0,0,"",0,1,0],[1347,-33,-318,31,0,0,"",0,1,0],[1615,-33,-318,31,0,0,"",0,1,0],[1882,-32,-318,31,0,1077368,"",0,1,0],[2148,-23,-319,31,0,1077368,"",0,1,0],[2415,-10,-321,9,0,1077368,"",0,1,0],[2681,4,-322,-1,0,1077368,"",0,1,0],[2947,17,-318,-1,0,1077368,"",0,1,0]]
+- run 3: seat: engine 1 runs Gerdur 3 ms after engine 2 left; 199 samples on engine 1, largest step 5 units, dead false, copies 0; first after [1793043491929,-41.417877197265625,-315.8969421386719,4.1521196365356445,3,0,"",0,0,0], last [1793043497529,-60.88628387451172,-173.2201690673828,-1.399832010269165,0,1077368,"",0,1,0]; server before {"dead":false,"hoster":4278190081,"cell":"133c7:Skyrim.esm","pos":[-43.20637512207031,-315.500244140625,1.999094843864441]}
+- run 3: seat: first sample on engine 1 is 3 units from where engine 2 had Gerdur
+- run 3: seat: on engine 1 Gerdur stood up 281 ms after the transfer (the AI's furniture state does not transfer: activate binds no NPC, Skyrim has no SnapIntoInteraction); furniture at the end 107078
+- run 3: combat: Gerdur on engine 1 during the fight, every 15th sample (s before the transfer, x, y, z, sit, player z): [[-4.2,-329,-25,0,0,0],[-3.7,-366,-8,0,0,0],[-3.2,-404,9,0,0,0],[-2.7,-400,9,0,0,0],[-2.2,-315,-19,-1,0,0],[-1.7,-271,-36,0,0,0],[-1.2,-372,-80,-1,0,0],[-0.7,-485,-157,-1,0,0],[-0.2,-516,-185,0,0,0]]
+- run 3: combat: samples around the largest step (t from the transfer, x, y, z, sit, furniture, target, dead, AI, player z): [[2064,-511,-181,0,0,0,"player",0,1,32],[2098,-509,-179,0,0,0,"player",0,1,32],[2131,-506,-176,0,0,0,"player",0,1,32],[2164,-502,-173,-1,0,0,"player",0,1,32],[2197,-498,-169,-1,0,0,"player",0,1,32],[2230,-494,-166,-1,0,0,"player",0,1,32],[2263,-491,-163,-1,0,0,"player",0,1,32],[2297,-488,-161,-1,0,0,"player",0,1,32]]
+- run 3: combat: the first 3 s on engine 2, every 8th sample: [[33,-515,-184,0,0,0,"",0,1,32],[297,-515,-184,0,0,0,"player",0,1,32],[564,-515,-184,0,0,0,"player",0,1,32],[831,-515,-184,0,0,0,"player",0,1,32],[1098,-515,-184,0,0,0,"player",0,1,32],[1364,-515,-184,0,0,0,"player",0,1,32],[1631,-515,-184,0,0,0,"player",0,1,32],[1898,-515,-184,0,0,0,"player",0,1,32],[2164,-502,-173,-1,0,0,"player",0,1,32],[2431,-483,-156,0,0,0,"player",0,1,32],[2698,-483,-156,0,0,0,"player",0,1,32],[2965,-483,-156,0,0,0,"player",0,1,32]]
+- run 3: combat: engine 2 runs Gerdur 13 ms after engine 1 left; 199 samples on engine 2, largest step 6 units, dead false, copies 0; first after [1793043507212,-514.7745361328125,-184.31411743164062,-0.0000037781167065986665,0,0,"",0,1,32], last [1793043512776,-482.73199462890625,-156.3575897216797,-1.4879083209962118e-7,0,0,"player",0,1,32]; server before {"dead":false,"hoster":4278190080,"cell":"133c7:Skyrim.esm","pos":[-516.0226440429688,-185.48985290527344,0.0000013922356174589368]}
+- run 3: combat: first sample on engine 2 is 2 units from where engine 1 had Gerdur
+- run 3: combat: Gerdur fights engine 2's player on engine 2 98 ms after the transfer
 ### H4
 - run 1: unseen: the server has Alvor in his house {"hoster":0,"pos":[-515,-154,240],"cell":"133c8:Skyrim.esm"}, nobody there; engine 1 in Riverwood shows him {"loaded":true,"disabled":false,"d":1070,"cell":60,"pos":[20772,-45188,-81]}
 - run 1: unseen: 591 ms after engine 1 showed him, engine 1 {"loaded":true,"disabled":false,"d":1070,"cell":60,"pos":[20772,-45188,-81]}, server {"hoster":4278190080,"pos":[20772,-45188,-81],"cell":"3c:Skyrim.esm"}
@@ -291,18 +291,74 @@ First non-PASS in plan order: H3
 ### G1.3
 - run 1: Gerdur (13489) on engine 1 (puppet): greeting "Vous avez perdu votre chemin ?", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
 - run 1: Gerdur on engine 1 (puppet): the dialogue closed: true
-- run 1: Gerdur (13489) on engine 2 (hoster): greeting "D'après Lucan, du Marché de Rivebois, des voleurs se seraient introduits dans sa boutique. Ils n'ont quasiment rien pris, c'est étrange.", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
+- run 1: Gerdur (13489) on engine 2 (hoster): greeting "Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
 - run 1: Gerdur on engine 2 (hoster): the dialogue closed: true
 - run 1: Gerdur: hoster ff000001 (engine 2) before the talks, ff000001 after
 - run 1: Alvor (13482) on engine 1 (puppet): greeting "C'est pas tous les jours qu'on a des visites à Rivebois.", topic "Vous avez besoin d'aide à la forge ?", answer "Tiens, oui. Et si vous me fabriquiez une dague de fer ? Voici tout ce qu'il vous faut. Allez-y."
 - run 1: Alvor on engine 1 (puppet): the dialogue closed: true
-- run 1: Alvor (13482) on engine 2 (hoster): greeting "C'est pas tous les jours qu'on a des visites à Rivebois.", topic "Vous avez besoin d'aide à la forge ?", answer "Tiens, oui. Et si vous me fabriquiez une dague de fer ? Voici tout ce qu'il vous faut. Allez-y."
+- run 1: Alvor (13482) on engine 2 (hoster): greeting "Dites-moi ce qu'il vous faut. Par Ysmir, si c'est simple et solide, je peux le forger.", topic "Vous avez besoin d'aide à la forge ?", answer "Tiens, oui. Et si vous me fabriquiez une dague de fer ? Voici tout ce qu'il vous faut. Allez-y."
 - run 1: Alvor on engine 2 (hoster): the dialogue closed: true
 - run 1: Alvor: hoster ff000001 (engine 2) before the talks, ff000001 after
+- run 2: Gerdur (13489) on engine 2 (puppet): greeting "Vous avez perdu votre chemin ?", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
+- run 2: Gerdur on engine 2 (puppet): the dialogue closed: true
+- run 2: Gerdur (13489) on engine 1 (hoster): greeting "Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
+- run 2: Gerdur on engine 1 (hoster): the dialogue closed: true
+- run 2: Gerdur: hoster ff000000 (engine 1) before the talks, ff000000 after
+- run 2: Alvor (13482) on engine 2 (puppet): greeting "C'est pas tous les jours qu'on a des visites à Rivebois.", topic "Vous avez besoin d'aide à la forge ?", answer "Tiens, oui. Et si vous me fabriquiez une dague de fer ? Voici tout ce qu'il vous faut. Allez-y."
+- run 2: Alvor on engine 2 (puppet): the dialogue closed: true
+- run 2: Alvor (13482) on engine 1 (hoster): greeting "C'est pas tous les jours qu'on a des visites à Rivebois.", topic "Vous avez besoin d'aide à la forge ?", answer "Tiens, oui. Et si vous me fabriquiez une dague de fer ? Voici tout ce qu'il vous faut. Allez-y."
+- run 2: Alvor on engine 1 (hoster): the dialogue closed: true
+- run 2: Alvor: hoster ff000000 (engine 1) before the talks, ff000000 after
+- run 3: Gerdur (13489) on engine 1 (puppet): greeting "Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
+- run 3: Gerdur on engine 1 (puppet): the dialogue closed: true
+- run 3: Gerdur (13489) on engine 2 (hoster): greeting "D'après Lucan, du Marché de Rivebois, des voleurs se seraient introduits dans sa boutique. Ils n'ont quasiment rien pris, c'est étrange.", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
+- run 3: Gerdur on engine 2 (hoster): the dialogue closed: true
+- run 3: Gerdur: hoster ff000001 (engine 2) before the talks, ff000001 after
+- run 3: Alvor (13482) on engine 1 (puppet): greeting "C'est pas tous les jours qu'on a des visites à Rivebois.", topic "Vous avez besoin d'aide à la forge ?", answer "Tiens, oui. Et si vous me fabriquiez une dague de fer ? Voici tout ce qu'il vous faut. Allez-y."
+- run 3: Alvor on engine 1 (puppet): the dialogue closed: true
+- run 3: Alvor (13482) on engine 2 (hoster): greeting "C'est pas tous les jours qu'on a des visites à Rivebois.", topic "Vous avez besoin d'aide à la forge ?", answer "Tiens, oui. Et si vous me fabriquiez une dague de fer ? Voici tout ce qu'il vous faut. Allez-y."
+- run 3: Alvor on engine 2 (hoster): the dialogue closed: true
+- run 3: Alvor: hoster ff000001 (engine 2) before the talks, ff000001 after
+- run 4: Gerdur (13489) on engine 2 (puppet): greeting "Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
+- run 4: Gerdur on engine 2 (puppet): the dialogue closed: true
+- run 4: Gerdur (13489) on engine 1 (hoster): greeting "Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
+- run 4: Gerdur on engine 1 (hoster): the dialogue closed: true
+- run 4: Gerdur: hoster ff000000 (engine 1) before the talks, ff000000 after
+- run 4: Alvor (13482) on engine 2 (puppet): greeting "C'est pas tous les jours qu'on a des visites à Rivebois.", topic "Vous avez besoin d'aide à la forge ?", answer "Tiens, oui. Et si vous me fabriquiez une dague de fer ? Voici tout ce qu'il vous faut. Allez-y."
+- run 4: Alvor on engine 2 (puppet): the dialogue closed: true
+- run 4: Alvor (13482) on engine 1 (hoster): greeting "C'est pas tous les jours qu'on a des visites à Rivebois.", topic "Vous avez besoin d'aide à la forge ?", answer "Tiens, oui. Et si vous me fabriquiez une dague de fer ? Voici tout ce qu'il vous faut. Allez-y."
+- run 4: Alvor on engine 1 (hoster): the dialogue closed: true
+- run 4: Alvor: hoster ff000000 (engine 1) before the talks, ff000000 after
+- run 5: Gerdur (13489) on engine 2 (puppet): greeting "Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
+- run 5: Gerdur on engine 2 (puppet): the dialogue closed: true
+- run 5: Gerdur (13489) on engine 1 (hoster): greeting "Vous venez d'arriver à Rivebois ? Si vous cherchez du travail, allez voir Hod à la scierie.", topic "Que pouvez-vous me dire sur Rivebois ?", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
+- run 5: Gerdur on engine 1 (hoster): the dialogue closed: true
+- run 5: Gerdur: hoster ff000000 (engine 1) before the talks, ff000000 after
+- run 5: Alvor (13482) on engine 2 (puppet): greeting "C'est pas tous les jours qu'on a des visites à Rivebois.", topic "Vous avez besoin d'aide à la forge ?", answer "Tiens, oui. Et si vous me fabriquiez une dague de fer ? Voici tout ce qu'il vous faut. Allez-y."
+- run 5: Alvor on engine 2 (puppet): the dialogue closed: true
+- run 5: Alvor (13482) on engine 1 (hoster): greeting "C'est pas tous les jours qu'on a des visites à Rivebois.", topic "Vous avez besoin d'aide à la forge ?", answer "Tiens, oui. Et si vous me fabriquiez une dague de fer ? Voici tout ce qu'il vous faut. Allez-y."
+- run 5: Alvor on engine 1 (hoster): the dialogue closed: true
+- run 5: Alvor: hoster ff000000 (engine 1) before the talks, ff000000 after
 - ![G1.3](runs/G1_3/1/G1_3-Gerdur-engine1-puppet.png)
 - ![G1.3](runs/G1_3/1/G1_3-Gerdur-engine2-hoster.png)
 - ![G1.3](runs/G1_3/1/G1_3-Alvor-engine1-puppet.png)
 - ![G1.3](runs/G1_3/1/G1_3-Alvor-engine2-hoster.png)
+- ![G1.3](runs/G1_3/2/G1_3-Gerdur-engine2-puppet.png)
+- ![G1.3](runs/G1_3/2/G1_3-Gerdur-engine1-hoster.png)
+- ![G1.3](runs/G1_3/2/G1_3-Alvor-engine2-puppet.png)
+- ![G1.3](runs/G1_3/2/G1_3-Alvor-engine1-hoster.png)
+- ![G1.3](runs/G1_3/3/G1_3-Gerdur-engine1-puppet.png)
+- ![G1.3](runs/G1_3/3/G1_3-Gerdur-engine2-hoster.png)
+- ![G1.3](runs/G1_3/3/G1_3-Alvor-engine1-puppet.png)
+- ![G1.3](runs/G1_3/3/G1_3-Alvor-engine2-hoster.png)
+- ![G1.3](runs/G1_3/4/G1_3-Gerdur-engine2-puppet.png)
+- ![G1.3](runs/G1_3/4/G1_3-Gerdur-engine1-hoster.png)
+- ![G1.3](runs/G1_3/4/G1_3-Alvor-engine2-puppet.png)
+- ![G1.3](runs/G1_3/4/G1_3-Alvor-engine1-hoster.png)
+- ![G1.3](runs/G1_3/5/G1_3-Gerdur-engine2-puppet.png)
+- ![G1.3](runs/G1_3/5/G1_3-Gerdur-engine1-hoster.png)
+- ![G1.3](runs/G1_3/5/G1_3-Alvor-engine2-puppet.png)
+- ![G1.3](runs/G1_3/5/G1_3-Alvor-engine1-hoster.png)
 ### G1.4
 - run 1: bandit 1ebf6 (base b623a NPC_ LvlBanditMeleeAnyAggro1024) in 3c:Skyrim.esm at 7358,-41431,3578; hosted by the player ff000000, server dead false
 - run 1: 31 s after the kill: server dead true, client dead true, disabled false
@@ -321,57 +377,46 @@ First non-PASS in plan order: H3
 - ![G1.5](runs/G1_5/1/G1_5-mq103.png)
 ### G1.6
 - run 1: engine 2 hosts: Faendal ff000001, Alvor ff000001, Hilde ff000001
-- run 1: Faendal, hoster engine 2 (server ff000001): hoster motion 52.6, drop 25.1, head 20.9, hips 63.3; puppet engine 1: motion 61.5, drop 24.4, head 19.8, hips 63.2; sit states matched after 301 ms
-- run 1: Alvor, hoster engine 2 (server ff000001): hoster motion 28.3, drop 35.2, head 50.4, hips 68.2; puppet engine 1: motion 37.5, drop 36.8, head 52.5, hips 70.7; sit states matched after 151 ms
-- run 1: Alvor: the puppet on engine 1, stood up by a script while the hoster sits, sat again after 1.7 s
-- run 1: Hilde, hoster engine 2 (server ff000001): hoster motion 15.0, drop 38.0, head 51.8, hips 68.8; puppet engine 1: motion 11.1, drop 36.8, head 51.3, hips 68.7; sit states matched after 168 ms
+- run 1: Faendal, hoster engine 2 (server ff000001): hoster motion 24.5, drop 25.5, head 50.4, hips 66.1; puppet engine 1: motion 22.8, drop 33.8, head 50.3, hips 65.9; sit states matched after 6616 ms
+- run 1: Alvor, hoster engine 2 (server ff000001): hoster motion 22.7, drop 13.8, head 41.9, hips 67.2; puppet engine 1: motion 55.6, drop 16.5, head 43.1, hips 69.2; sit states matched after 148 ms
+- run 1: Alvor: the puppet on engine 1, stood up by a script while the hoster sits, sat again after 1.4 s
+- run 1: Hilde, hoster engine 2 (server ff000001): hoster motion 4.9, drop 37.6, head 51.9, hips 69.0; puppet engine 1: motion 3.2, drop 37.7, head 51.9, hips 69.0; sit states matched after 162 ms
 - run 1: 3 NPC(s) moved on the hoster engine 2, so the motion test ran for them; still on engine 1: none
 - run 1: engine 1 hosts: Faendal ff000000, Alvor ff000000, Hilde ff000000
-- run 1: Faendal, hoster engine 1 (server ff000000): hoster motion 18.3, drop 34.5, head 50.5, hips 66.3; puppet engine 2: motion 21.1, drop 32.5, head 49.9, hips 66.0; sit states matched after 197 ms
-- run 1: Alvor, hoster engine 1 (server ff000000): hoster motion 0.0, drop 37.5, head 53.0, hips 71.0; puppet engine 2: motion 1.8, drop 36.3, head 51.5, hips 69.0; sit states matched after 169 ms
-- run 1: Hilde, hoster engine 1 (server ff000000): hoster motion 1.7, drop 38.1, head 51.5, hips 68.8; puppet engine 2: motion 3.3, drop 37.7, head 51.9, hips 69.0; sit states matched after 164 ms
-- run 1: 1 NPC(s) moved on the hoster engine 1, so the motion test ran for them; still on engine 2: none
+- run 1: Faendal, hoster engine 1 (server ff000000): hoster motion 25.0, drop 34.7, head 50.5, hips 65.9; puppet engine 2: motion 13.5, drop 35.7, head 50.4, hips 67.3; sit states matched after 171 ms
+- run 1: Alvor, hoster engine 1 (server ff000000): hoster motion 51.9, drop 36.3, head 51.5, hips 68.5; puppet engine 2: motion 34.0, drop 13.7, head 41.8, hips 67.3; sit states matched after 159 ms
+- run 1: Alvor: the puppet on engine 2, stood up by a script while the hoster sits, sat again after 0.9 s
+- run 1: Hilde, hoster engine 1 (server ff000000): hoster motion 6.1, drop 38.0, head 51.7, hips 69.1; puppet engine 2: motion 5.2, drop 37.7, head 51.8, hips 69.1; sit states matched after 160 ms
+- run 1: 3 NPC(s) moved on the hoster engine 1, so the motion test ran for them; still on engine 2: none
 - run 2: engine 2 hosts: Faendal ff000001, Alvor ff000001, Hilde ff000001
-- run 2: Faendal, hoster engine 2 (server ff000001): hoster motion 25.9, drop 24.7, head 50.5, hips 66.4; puppet engine 1: motion 22.9, drop 34.0, head 50.3, hips 65.9; sit states matched after 6091 ms
-- run 2: Alvor, hoster engine 2 (server ff000001): hoster motion 42.0, drop 22.8, head 45.0, hips 44.6; puppet engine 1: motion 1.2, drop 35.4, head 51.5, hips 45.9; sit states matched after 172 ms
-- run 2: Alvor: the puppet on engine 1, stood up by a script while the hoster sits, sat again after 0.8 s
-- run 2: Hilde, hoster engine 2 (server ff000001): hoster motion 16.5, drop 33.8, head 50.9, hips 68.6; puppet engine 1: motion 32.5, drop 36.0, head 51.2, hips 68.6; sit states matched after 158 ms
+- run 2: Faendal, hoster engine 2 (server ff000001): hoster motion 25.7, drop 24.3, head 50.3, hips 66.1; puppet engine 1: motion 22.7, drop 33.7, head 50.3, hips 66.1; sit states matched after 6657 ms
+- run 2: Alvor, hoster engine 2 (server ff000001): hoster motion 19.9, drop 32.1, head 46.8, hips 67.2; puppet engine 1: motion 49.5, drop 15.0, head 42.5, hips 67.2; sit states matched after 162 ms
+- run 2: Alvor: the puppet on engine 1, stood up by a script while the hoster sits, sat again after 0.9 s
+- run 2: Hilde, hoster engine 2 (server ff000001): hoster motion 6.0, drop 37.7, head 51.9, hips 69.1; puppet engine 1: motion 5.1, drop 37.7, head 51.9, hips 69.1; sit states matched after 161 ms
 - run 2: 3 NPC(s) moved on the hoster engine 2, so the motion test ran for them; still on engine 1: none
 - run 2: engine 1 hosts: Faendal ff000000, Alvor ff000000, Hilde ff000000
-- run 2: Faendal, hoster engine 1 (server ff000000): hoster motion 26.8, drop 34.1, head 50.5, hips 66.2; puppet engine 2: motion 10.9, drop 35.4, head 50.4, hips 67.6; sit states matched after 304 ms
-- run 2: Alvor, hoster engine 1 (server ff000000): hoster motion 0.0, drop 35.4, head 51.5, hips 45.9; puppet engine 2: motion 0.0, drop 35.1, head 52.8, hips 70.5; sit states matched after 157 ms
-- run 2: Hilde, hoster engine 1 (server ff000000): hoster motion 4.5, drop 27.8, head 50.5, hips 68.5; puppet engine 2: motion 5.7, drop 37.6, head 51.8, hips 69.0; sit states matched after 159 ms
-- run 2: 2 NPC(s) moved on the hoster engine 1, so the motion test ran for them; still on engine 2: none
+- run 2: Faendal, hoster engine 1 (server ff000000): hoster motion 22.6, drop 34.7, head 50.5, hips 66.0; puppet engine 2: motion 27.4, drop 32.1, head 49.9, hips 66.1; sit states matched after 199 ms
+- run 2: Alvor, hoster engine 1 (server ff000000): hoster motion 6.6, drop 37.8, head 52.7, hips 69.7; puppet engine 2: motion 19.1, drop 35.7, head 51.4, hips 68.9; sit states matched after 158 ms
+- run 2: Hilde, hoster engine 1 (server ff000000): hoster motion 19.9, drop 37.3, head 51.9, hips 67.9; puppet engine 2: motion 4.4, drop 37.7, head 51.8, hips 69.1; sit states matched after 162 ms
+- run 2: 3 NPC(s) moved on the hoster engine 1, so the motion test ran for them; still on engine 2: none
 - run 3: engine 2 hosts: Faendal ff000001, Alvor ff000001, Hilde ff000001
-- run 3: Faendal, hoster engine 2 (server ff000001): hoster motion 60.8, drop 25.1, head 18.6, hips 62.8; puppet engine 1: motion 52.7, drop 24.8, head 15.5, hips 61.7; sit states matched after 279 ms
-- run 3: Alvor, hoster engine 2 (server ff000001): hoster motion 42.6, drop 23.3, head 44.8, hips 44.6; puppet engine 1: motion 1.2, drop 30.4, head 37.3, hips 45.9; sit states matched after 169 ms
-- run 3: Alvor: the puppet on engine 1, stood up by a script while the hoster sits, sat again after 1.5 s
-- run 3: Hilde, hoster engine 2 (server ff000001): hoster motion 3.3, drop 37.7, head 51.8, hips 69.1; puppet engine 1: motion 3.8, drop 37.7, head 51.8, hips 69.1; sit states matched after 147 ms
+- run 3: Faendal, hoster engine 2 (server ff000001): hoster motion 55.8, drop 24.9, head 30.9, hips 64.5; puppet engine 1: motion 52.7, drop 28.6, head 29.0, hips 63.7; sit states matched after 170 ms
+- run 3: Alvor, hoster engine 2 (server ff000001): hoster motion 26.1, drop 26.8, head 47.7, hips 67.6; puppet engine 1: motion 50.4, drop 22.9, head 46.7, hips 69.5; sit states matched after 158 ms
+- run 3: Alvor: the puppet on engine 1, stood up by a script while the hoster sits, sat again after 0.9 s
+- run 3: Hilde, hoster engine 2 (server ff000001): hoster motion 42.8, drop 37.2, head 51.8, hips 69.0; puppet engine 1: motion 59.0, drop 37.1, head 51.8, hips 69.0; sit states matched after 158 ms
 - run 3: 3 NPC(s) moved on the hoster engine 2, so the motion test ran for them; still on engine 1: none
 - run 3: engine 1 hosts: Faendal ff000000, Alvor ff000000, Hilde ff000000
-- run 3: Faendal, hoster engine 1 (server ff000000): hoster motion 23.9, drop 34.6, head 50.5, hips 66.1; puppet engine 2: motion 27.1, drop 32.4, head 49.9, hips 66.3; sit states matched after 150 ms
-- run 3: Alvor, hoster engine 1 (server ff000000): hoster motion 0.0, drop 30.4, head 37.3, hips 45.9; puppet engine 2: motion 0.0, drop 35.2, head 52.8, hips 67.7; sit states matched after 168 ms
-- run 3: Hilde, hoster engine 1 (server ff000000): hoster motion 4.3, drop 38.0, head 51.7, hips 69.1; puppet engine 2: motion 4.8, drop 37.7, head 51.9, hips 69.0; sit states matched after 158 ms
-- run 3: 2 NPC(s) moved on the hoster engine 1, so the motion test ran for them; still on engine 2: none
-- run 4: engine 2 hosts: Faendal ff000001, Alvor ff000001, Hilde ff000001
-- run 4: Faendal, hoster engine 2 (server ff000001): hoster motion 34.6, drop 23.6, head 49.2, hips 65.9; puppet engine 1: motion 22.4, drop 33.9, head 50.3, hips 66.2; sit states matched after 4670 ms
-- run 4: Alvor, hoster engine 2 (server ff000001): hoster motion 42.1, drop 31.9, head 48.9, hips 44.6; puppet engine 1: motion 1.1, drop 35.4, head 51.5, hips 45.9; sit states matched after 171 ms
-- run 4: Alvor: the puppet on engine 1, stood up by a script while the hoster sits, sat again after 1.1 s
-- run 4: Hilde, hoster engine 2 (server ff000001): hoster motion 15.2, drop 37.2, head 51.8, hips 69.0; puppet engine 1: motion 11.3, drop 34.3, head 51.2, hips 68.8; sit states matched after 157 ms
-- run 4: 3 NPC(s) moved on the hoster engine 2, so the motion test ran for them; still on engine 1: none
-- run 4: engine 1 hosts: Faendal ff000000, Alvor ff000000, Hilde ff000000
-- run 4: Faendal, hoster engine 1 (server ff000000): hoster motion 20.3, drop 35.0, head 50.5, hips 66.3; puppet engine 2: motion 18.0, drop 34.5, head 50.3, hips 66.1; sit states matched after 150 ms
-- run 4: Alvor, hoster engine 1 (server ff000000): hoster motion 0.0, drop 35.4, head 51.5, hips 45.9; puppet engine 2: motion 0.0, drop 35.2, head 52.9, hips 67.1; sit states matched after 158 ms
-- run 4: Hilde, hoster engine 1 (server ff000000): hoster motion 6.5, drop 37.9, head 51.7, hips 69.1; puppet engine 2: motion 9.8, drop 37.8, head 51.8, hips 69.0; sit states matched after 159 ms
-- run 4: 2 NPC(s) moved on the hoster engine 1, so the motion test ran for them; still on engine 2: none
+- run 3: Faendal, hoster engine 1 (server ff000000): hoster motion 13.9, drop 34.7, head 50.5, hips 66.2; puppet engine 2: motion 29.6, drop 31.7, head 49.8, hips 65.9; sit states matched after 164 ms
+- run 3: Alvor, hoster engine 1 (server ff000000): hoster motion 5.2, drop 35.9, head 51.6, hips 67.2; puppet engine 2: motion 54.7, drop 28.3, head 44.5, hips 64.9; sit states matched after 167 ms
+- run 3: Alvor: the puppet on engine 2, stood up by a script while the hoster sits, sat again after 1.7 s
+- run 3: Hilde, hoster engine 1 (server ff000000): hoster motion 7.1, drop 28.8, head 50.5, hips 68.7; puppet engine 2: motion 20.3, drop 37.4, head 51.8, hips 69.1; sit states matched after 167 ms
+- run 3: 3 NPC(s) moved on the hoster engine 1, so the motion test ran for them; still on engine 2: none
 - ![G1.6](runs/G1_6/1/G1_6-puppets-engine1.png)
 - ![G1.6](runs/G1_6/1/G1_6-puppets-engine2.png)
 - ![G1.6](runs/G1_6/2/G1_6-puppets-engine1.png)
 - ![G1.6](runs/G1_6/2/G1_6-puppets-engine2.png)
 - ![G1.6](runs/G1_6/3/G1_6-puppets-engine1.png)
 - ![G1.6](runs/G1_6/3/G1_6-puppets-engine2.png)
-- ![G1.6](runs/G1_6/4/G1_6-puppets-engine1.png)
-- ![G1.6](runs/G1_6/4/G1_6-puppets-engine2.png)
 ### G1.8
 - run 1: subtitle settings (dialogue, general): engine 1 true,false, engine 2 true,false
 - run 1: Gerdur hosted by engine 2 talks to engine 2's player: greeting "D'après Lucan, du Marché de Rivebois, des voleurs se seraient introduits dans sa boutique. Ils n'ont quasiment rien pris, c'est étrange.", answer "C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout."
@@ -883,6 +928,18 @@ First non-PASS in plan order: H3
 - run 1: C (engine 2 in another cell): hoster ff000000; topic "Que pouvez-vous me dire sur Rivebois ?"; engine 1 heard 3 lines ["DialogueRiverwood_Revised__00045401_1.wav","DialogueRi_DialogueRiverwo_000FE2D3_1.wav","DialogueGe_DialogueGeneric_000854CC_1.wav"] and subtitled ["Je possède la scierie et je paie bien. Si vous cherchez du travail, allez voir mon mari, Hod.","C'est mon moulin. Certains croient que je possède aussi la ville, mais ce n'est pas le cas. Le jarl de Blancherive possède toutes les terres. Moi, je lui paie un impôt, voilà tout.","Ouais."]; engine 2 played 0 [], its HUD showed []
 - run 1: C (engine 2 in another cell): engine 1 in 133c7:Skyrim.esm, engine 2 in 1a26f:Skyrim.esm on the server after the talk
 ### T6
-- run 1: Gerdur: seats near her on engine 2 [["a035a",202,"Invisible Chair Marker"],["5bf91",255,"Chaise"],["5bfb9",319,"Chaise"],["5bfba",391,"Chaise"]]
-- run 1: Gerdur 13489 (seated on engine 2 when the fight starts): sit state on engine 1 at the start 3 (3061 ms after it loaded there); hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events ["attackPowerStartForward","attackStart","attackStart","attackStart","attackStart","attackStart","attackPowerStartInPlace"], engine 1 ["attackPowerStartForward","attackStart","attackStart","attackStart","attackStart","attackStart","attackPowerStartInPlace"], refused by engine 1's graph at [] ms
-- run 1: bandit 1ebf6: sit state on engine 1 at the start 0; hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events ["attackStart","attackPowerStartInPlace","attackStart","attackStart","attackPowerStartInPlace","attackStart","attackStart","attackStart"], engine 1 ["attackStart","attackPowerStartInPlace","attackStart","attackStart","attackPowerStartInPlace","attackStart","attackStart","attackStart"], refused by engine 1's graph at [] ms
+- run 1: Gerdur: seats near her on engine 2 [["a035a",205,"Invisible Chair Marker"],["5bf91",258,"Chaise"],["5bfb9",310,"Chaise"],["5bfba",399,"Chaise"]]
+- run 1: Gerdur 13489 (seated on engine 2 when the fight starts): sit state on engine 1 at the start 3 (3086 ms after it loaded there); hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events ["attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart"], engine 1 ["attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart"], refused by engine 1's graph at [] ms
+- run 1: bandit 1ebf6: sit state on engine 1 at the start 0; hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events ["attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart"], engine 1 ["attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart"], refused by engine 1's graph at [] ms
+- run 2: Gerdur: seats near her on engine 2 [["38b91",432,"Chaise"],["5bf91",441,"Chaise"],["a035a",445,"Invisible Chair Marker"],["38b93",559,"Chaise"]]
+- run 2: Gerdur 13489 (seated on engine 2 when the fight starts): sit state on engine 1 at the start 3 (3058 ms after it loaded there); hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events ["attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart"], engine 1 ["attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart"], refused by engine 1's graph at [] ms
+- run 2: bandit 1ebf6: sit state on engine 1 at the start 0; hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events ["attackStart","attackStart","attackPowerStartInPlace","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart"], engine 1 ["attackStart","attackStart","attackPowerStartInPlace","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart"], refused by engine 1's graph at [] ms
+- run 3: Gerdur: seats near her on engine 2 [["5bf92",341,"Chaise"],["5bf91",352,"Chaise"],["a035a",415,"Invisible Chair Marker"],["5bfb9",701,"Chaise"]]
+- run 3: Gerdur 13489 (seated on engine 2 when the fight starts): sit state on engine 1 at the start 3 (9166 ms after it loaded there); hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events ["attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart"], engine 1 ["attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart"], refused by engine 1's graph at [] ms
+- run 3: bandit 1ebf6: sit state on engine 1 at the start 0; hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events ["attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart"], engine 1 ["attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart"], refused by engine 1's graph at [] ms
+- run 4: Gerdur: seats near her on engine 2 [["5bf92",341,"Chaise"],["5bf91",352,"Chaise"],["a035a",415,"Invisible Chair Marker"],["5bfb9",701,"Chaise"]]
+- run 4: Gerdur 13489 (seated on engine 2 when the fight starts): sit state on engine 1 at the start 3 (11388 ms after it loaded there); hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events ["attackStart","attackStart","attackStart","attackStart","attackStart","attackPowerStartInPlace","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart"], engine 1 ["attackStart","attackStart","attackStart","attackStart","attackStart","attackPowerStartInPlace","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart"], refused by engine 1's graph at [] ms
+- run 4: bandit 1ebf6: sit state on engine 1 at the start 0; hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events ["attackStart","attackStart","attackStart","attackStart","bashStart","attackStart","attackStart","attackStart","attackStart"], engine 1 ["attackStart","attackStart","attackStart","attackStart","bashStart","attackStart","attackStart","attackStart","attackStart"], refused by engine 1's graph at [] ms
+- run 5: Gerdur: seats near her on engine 2 [["a035a",202,"Invisible Chair Marker"],["5bf91",255,"Chaise"],["5bfb9",320,"Chaise"],["5bfba",390,"Chaise"]]
+- run 5: Gerdur 13489 (seated on engine 2 when the fight starts): sit state on engine 1 at the start 3 (3064 ms after it loaded there); hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events ["attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart"], engine 1 ["attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart"], refused by engine 1's graph at [] ms
+- run 5: bandit 1ebf6: sit state on engine 1 at the start 0; hoster at the end ff000001 (engine 2 ff000001), dead false; engine 2 attack events ["attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart"], engine 1 ["attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart","attackStart"], refused by engine 1's graph at [] ms
