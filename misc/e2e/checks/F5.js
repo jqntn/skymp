@@ -6,6 +6,7 @@ const SPOT = [7572, -39162, 3807];
 const CELL = 4096;
 const SAMPLE_S = 120;
 const MAX_LAG = 1500;
+const MAX_READ_MS = 400;
 
 module.exports = {
   engines: 2,
@@ -50,11 +51,17 @@ module.exports = {
       await heal();
       const t = Math.round((Date.now() - started) / 100) / 10;
       const s = await server();
-      const l = { 1: await local(1), 2: await local(2) };
+      const readAt = Date.now();
+      const l = {};
+      const readMs = {};
+      for (const n of [1, 2]) {
+        l[n] = await local(n);
+        readMs[n] = Date.now() - readAt;
+      }
       const owner = engineOf[s.hoster] || engineOf[hosterOfLast];
       const apart = cellsApart(s.pos, s.players[owner - 1]);
       const own = engineOf[s.hoster] ? l[engineOf[s.hoster]] : null;
-      samples.push({ t, s, l, apart, ownLoaded: !!own && own.loaded, lag: own ? dist(own.pos, s.pos) : -1, toMember: dist(s.pos, s.players[1]) });
+      samples.push({ t, s, l, apart, ownLoaded: !!own && own.loaded, lag: own ? dist(own.pos, s.pos) : -1, readMs: own ? readMs[engineOf[s.hoster]] : 0, toMember: dist(s.pos, s.players[1]) });
       if (s.hoster) hosterOfLast = s.hoster;
       if (s.dead) break;
       if (!forced && engineOf[s.hoster] && apart >= 3) {
@@ -72,18 +79,20 @@ module.exports = {
     const crossed = forced && samples.find((x) => x.t > forced.t && Math.trunc(x.s.players[engineOf[forced.who] - 1][0] / CELL) === Math.trunc(forced.to[0] / CELL));
     ctx.evidence.push(forced ? `B: at ${forced.t} s the hoster ${hex(forced.who)} moved his own player across a cell line, ${JSON.stringify(forced.from)} to ${JSON.stringify(forced.to)}, while the dragon was 3 or more cells away; the server had him there ${crossed ? `at ${crossed.t} s (${JSON.stringify(crossed.s.players[engineOf[forced.who] - 1])}, hoster ${hex(crossed.s.hoster)})` : "never"}; back at ${forced.back} s` : "B: the hoster was never moved (the dragon was never 3 cells from a player hoster)");
     const unhosted = samples.filter((x) => !engineOf[x.s.hoster]);
-    const stale = samples.filter((x) => engineOf[x.s.hoster] && x.lag > MAX_LAG);
+    const slow = samples.filter((x) => engineOf[x.s.hoster] && x.readMs > MAX_READ_MS);
+    const stale = samples.filter((x) => engineOf[x.s.hoster] && x.lag > MAX_LAG && x.readMs <= MAX_READ_MS);
     const unloadedHosted = samples.filter((x) => engineOf[x.s.hoster] && !x.ownLoaded);
     const stuck = samples.filter((x, i) => x.apart >= 2 && i + 1 < samples.length && dist(samples[i + 1].s.pos, x.s.pos) < 50);
     const far = samples.filter((x) => x.apart >= 2);
     const travel = samples.slice(1).reduce((sum, x, i) => sum + dist(x.s.pos, samples[i].s.pos), 0);
-    ctx.evidence.push(`C: ${samples.length} samples; ${far.length} with the dragon 2 or more cells from its hoster (at most ${Math.max(0, ...samples.filter((x) => engineOf[x.s.hoster]).map((x) => x.apart))} while hosted); ${unhosted.length} without a player hoster; ${stale.length} where the server was over ${MAX_LAG} units from the hoster's own copy; ${unloadedHosted.length} hosted samples with the hoster's own copy unloaded (the game still moves it); ${stuck.length} 2-cell samples after which the server's dragon did not move; the server's dragon travelled ${travel} units; hosters seen ${JSON.stringify([...new Set(samples.map((x) => hex(x.s.hoster)))])}`);
+    ctx.evidence.push(`C: ${samples.length} samples; ${far.length} with the dragon 2 or more cells from its hoster (at most ${Math.max(0, ...samples.filter((x) => engineOf[x.s.hoster]).map((x) => x.apart))} while hosted); ${unhosted.length} without a player hoster; ${stale.length} where the server was over ${MAX_LAG} units from the hoster's own copy; ${slow.length} where the hoster's copy was read over ${MAX_READ_MS} ms after the server, not counted for that (${slow.slice(0, 5).map((x) => `${x.t}s read ${x.readMs} ms lag ${x.lag}`).join(", ")}); ${unloadedHosted.length} hosted samples with the hoster's own copy unloaded (the game still moves it); ${stuck.length} 2-cell samples after which the server's dragon did not move; the server's dragon travelled ${travel} units; hosters seen ${JSON.stringify([...new Set(samples.map((x) => hex(x.s.hoster)))])}`);
     if (samples.some((x) => x.s.dead)) fails.push("the dragon died during the window (the check does not kill him)");
     if (samples.some((x) => x.s.playersDead.some(Boolean))) fails.push(`setup not held: a player died at ${samples.find((x) => x.s.playersDead.some(Boolean)).t} s`);
     if (!far.length) fails.push("not exercised: the dragon never flew 2 cells from its hoster");
     else if (!forced) fails.push("not exercised: the dragon was never 3 cells from a player hoster, so the hoster was not moved across a cell line");
     else if (!crossed) fails.push("not exercised: the server never had the hoster across the cell line after his move");
     if (unhosted.length) fails.push(`the server had no player hosting the dragon in ${unhosted.length} of ${samples.length} samples, from ${unhosted[0].t} s (${unhosted[0].apart} cells from the last hoster, ${unhosted[0].toMember} units from the member)`);
+    if (slow.length > samples.length / 10) fails.push(`not exercised: the hoster's copy was read over ${MAX_READ_MS} ms after the server in ${slow.length} of ${samples.length} samples`);
     if (stale.length) fails.push(`the server's dragon was over ${MAX_LAG} units from its hoster's own copy in ${stale.length} samples: ${stale.slice(0, 5).map((x) => `${x.t}s ${x.lag}`).join(", ")}`);
     if (stuck.length) fails.push(`the server's dragon did not move after ${stuck.length} samples 2 cells from its hoster: ${stuck.slice(0, 5).map((x) => `${x.t}s`).join(", ")}`);
     ctx.shot("F5-leader", 1);

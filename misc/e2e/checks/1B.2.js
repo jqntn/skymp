@@ -32,6 +32,8 @@ module.exports = {
 
     await ctx.probe(`mp.set(${actors[1]}, "locationalData", ${JSON.stringify(away)}); return 0;`);
     const newHoster = await ctx.waitFor(async () => (await ctx.probe(`return mp.get(${ALVOR}, "hoster");`)) === actors[0], 30000, "engine 1 takes the host").catch(() => false);
+    const at = await ctx.probe(`return mp.get(${ALVOR}, "locationalData");`);
+    if (!newHoster && at.cellOrWorldDesc !== loc.cellOrWorldDesc) throw new ctx.Env(`Alvor walked from ${loc.cellOrWorldDesc} to ${at.cellOrWorldDesc} on his hoster engine 2, so engine 1 had no host to take`);
     await ctx.sleep(3000);
     const taken = await ctx.drv(state, 1);
     const serverDeadAfter = await ctx.probe(`return mp.get(${ALVOR}, "isDead");`);
