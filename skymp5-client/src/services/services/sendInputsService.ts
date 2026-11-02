@@ -30,7 +30,7 @@ import { logTrace } from "../../logging";
 
 const playerFormId = 0x14;
 const espActorIdOffset = 0x100000000;
-const idleHostedMovementRateMs = 500;
+const idleHostedMovementRateMs = 5000;
 const idleHostedMovementAfterMs = 3000;
 const hostedSitResendMs = 3000;
 const serverPositionToleranceUnits = 512;
@@ -74,6 +74,7 @@ export class SendInputsService extends ClientListener {
                 this.placeAtServerPosition(owner, remoteId);
                 getAnimationSource(owner, true).restart(owner.getSitState() === 0);
                 this.lastSitSent.delete(owner.getFormID().toString(16));
+                this.lastSentMovement.delete(`${remoteId}`);
                 const target = relayedCombatTargets.get(owner.getFormID()) ?? 0;
                 logTrace(this, `Host start of ${owner.getFormID().toString(16)}: sit ${owner.getSitState()}, combat target ${target.toString(16)}, at ${[owner.getPositionX(), owner.getPositionY(), owner.getPositionZ()].map(Math.round)}`);
                 if (target) {

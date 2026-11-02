@@ -36,7 +36,7 @@ const range = (prefix, n) => Array.from({ length: n }, (_, i) => `${prefix}${i +
 const ORDER = [
   "L1", "S0", "S0b", "S0c", "S1.1", "S1.2", "S1.4", "S1.3", "S1.5", "S1.6", "S2", "S3.1", "S3.2", "S3.3", "S3.4",
   ...range("1A.", 5), ...range("1B.", 5), "H1", "H2", "H3", "H4", "H5", ...range("G1.", 8),
-  ...range("2A.", 5), "G1.9", ...range("2B.", 5), "G2.1", "G2.2", "G2.3", "F1", "G2.4", "G2.5", "F4", "F5", "F7", "G2.6", "F6", "F2", "F3", ...range("P", 8), ...range("T", 6),
+  ...range("2A.", 5), "G1.9", ...range("2B.", 5), "G2.1", "G2.2", "G2.3", "F1", "G2.4", "G2.5", "F4", "F5", "F7", "G2.6", "F6", "F2", "F3", "F8", ...range("P", 8), ...range("T", 6),
 ];
 
 const SLOW = ["P5", "P7"];
@@ -375,6 +375,7 @@ const startGame = async (n, ctx) => {
   fs.copyFileSync(path.join(__dirname, "driver.js"), path.join(dev, "e2e-driver.js"));
   writeJson(path.join(dev, "e2e-driver-settings.txt"), { port: PORT.runner, engine: g });
 
+  drivers.queue[g] = [];
   const pid = await oneLaunchAtATime(async () => {
     const before = new Set(procs("SkyrimSE.exe"));
     launchGame(dir, g);
@@ -492,6 +493,8 @@ const makeCtx = (id, dir, slot) => {
         const site = (new Error().stack.split("\n").slice(1).find((l) => l.includes(".js") && !l.includes("run.js") && !l.includes("node:")) || "").trim();
         const timer = setTimeout(() => {
           drivers.pending.delete(cmdId);
+          const queued = drivers.queue[slot.base + engine] || [];
+          if (queued.some((c) => c.id === cmdId)) queued.splice(queued.findIndex((c) => c.id === cmdId), 1);
           reject(new Env(`engine ${engine} driver did not answer in ${ms / 1000} s (${site})`));
         }, ms);
         const sent = Date.now();
@@ -565,7 +568,7 @@ const runOnce = async (id, check, n, attempt, slot) => {
     ctx.relog = async (engine = 1) => {
       const pid = ctx.gamePids[engine];
       const quitAt = Date.now();
-      ctx.drv("sp.Debug.quitGame(); return 0;", engine).catch(() => {});
+      if (ctx.running(engine)) ctx.drv("sp.Debug.quitGame(); return 0;", engine).catch(() => {});
       const quit = await ctx.waitFor(() => !procs("SkyrimSE.exe").includes(pid), 30000, `engine ${engine} quits`).then(() => true).catch(() => false);
       if (!quit) spawnSync("taskkill", ["/PID", String(pid), "/T", "/F"]);
       await ctx.waitFor(() => !procs("SkyrimSE.exe").includes(pid), 30000, `engine ${engine} exits`, Env);

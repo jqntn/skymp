@@ -385,8 +385,8 @@ export class RemoteServer extends ClientListener {
         isSneaking: false,
         isBlocking: false,
         isWeapDrawn: false,
-        isDead: false,
-        healthPercentage: 1.0,
+        isDead: !!msg.isDead,
+        healthPercentage: msg.isDead ? 0 : 1.0,
         speed: 0,
       };
     }
