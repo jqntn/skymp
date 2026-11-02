@@ -27,7 +27,8 @@ module.exports = {
     const near = (n) => ({ ...loc, pos: [loc.pos[0] + (n === 1 ? 300 : -300), loc.pos[1], loc.pos[2] + 50] });
     const goNear = async (n) => {
       await ctx.probe(`mp.set(${actors[n - 1]}, "locationalData", ${JSON.stringify(near(n))}); return 0;`);
-      await ctx.waitFor(async () => (await heal(), ctx.drv(`${npc} return !sp.Ui.isMenuOpen("Loading Menu") && !!a && a.is3DLoaded();`, n).catch(() => false)), 120000, `the bandit is loaded on engine ${n}`);
+      const [x, y] = near(n).pos;
+      await ctx.waitFor(async () => (await heal(), ctx.drv(`${npc} const p = sp.Game.getPlayer(); return !sp.Ui.isMenuOpen("Loading Menu") && Math.hypot(p.getPositionX() - ${x}, p.getPositionY() - ${y}) < 400 && !!a && a.is3DLoaded();`, n).catch(() => false)), 120000, `engine ${n}'s player is near the bandit and the bandit is loaded`);
     };
     const fails = [];
     const takeover = async (label, from, to, cause, quits) => {
@@ -35,6 +36,9 @@ module.exports = {
       const shown = await ctx.waitFor(async () => (await heal(), !!(await view(to))), 30000, `the NPC is shown on engine ${to}`).then(() => true).catch(() => false);
       ctx.evidence.push(`before "${label}": the NPC ${shown ? `shown on engine ${to} after ${((Date.now() - waitAt) / 1000).toFixed(1)} s` : `not shown on engine ${to} within 30 s`}`);
       if (!shown) fails.push(`${label}: engine ${to} did not show the NPC within 30 s before the cause`);
+      const settleAt = Date.now();
+      const settled = await ctx.waitFor(async () => { const [v, srv] = await Promise.all([view(to), server()]); return !!v && dist(v, srv.pos) < 100; }, 10000, `engine ${to}'s copy is at the server's position`).then(() => true).catch(() => false);
+      ctx.evidence.push(`before "${label}": engine ${to}'s copy ${settled ? `within 100 units of the server's position after ${((Date.now() - settleAt) / 1000).toFixed(1)} s` : "not within 100 units of the server's position in 10 s"}`);
       const before = await server();
       ctx.assert.ok(before.hoster === actors[from - 1] && !before.dead, [...fails, `not exercised: before "${label}" the hoster is ${hex(before.hoster)}, not engine ${from}'s player`].join("; "));
       const baseline = await copies(to);
