@@ -1422,3 +1422,157 @@ TEST_CASE("A claim without a location never changes a hoster",
   partOne.DestroyActor(kServerNpc);
   DisconnectClaimer(partOne);
 }
+
+namespace {
+constexpr uint32_t kFighterA = 0xff000004;
+constexpr uint32_t kFighterB = 0xff000005;
+constexpr uint32_t kFighterC = 0xff000006;
+
+MpActor& CreateFighter(PartOne& partOne, uint32_t formId, float x)
+{
+  partOne.CreateActor(formId, { x, kRiverwoodSpot.y, kRiverwoodSpot.z }, 0,
+                      kTamriel);
+  auto& npc = partOne.worldState.GetFormAt<MpActor>(formId);
+  npc.ForceSubscriptionsUpdate();
+  partOne.RefreshHoster(npc);
+  return npc;
+}
+
+void Fight(PartOne& partOne, Networking::UserId hoster, MpActor& npc,
+           uint32_t target)
+{
+  std::stringstream name;
+  name << "SkympCombat_" << std::hex << target;
+  DoMessage(partOne, hoster,
+            nlohmann::json{
+              { "t", MsgType::UpdateAnimation },
+              { "idx", npc.GetIdx() },
+              { "data", { { "animEventName", name.str() },
+                          { "numChanges", 1 } } } });
+}
+
+void ConnectFightPlayers(PartOne& partOne)
+{
+  ConnectPlayer(partOne, 1, kOtherPlayer,
+                { 30720.f, kRiverwoodSpot.y, kRiverwoodSpot.z }, kTamriel);
+  TickHosters(partOne);
+  ConnectPlayer(partOne, 0, kClaimer, kRiverwoodSpot, kTamriel);
+  TickHosters(partOne);
+  partOne.worldState.GetFormAt<MpActor>(kOtherPlayer)
+    .SetPos({ 26000.f, kRiverwoodSpot.y, kRiverwoodSpot.z });
+  TickHosters(partOne);
+}
+
+void EndFight(PartOne& partOne, std::vector<uint32_t> fighters)
+{
+  for (auto id : fighters) {
+    partOne.worldState.hosters.erase(id);
+    partOne.DestroyActor(id);
+  }
+  TickHosters(partOne);
+  DisconnectPlayer(partOne, 1, kOtherPlayer);
+  DisconnectClaimer(partOne);
+}
+}
+
+TEST_CASE("Two NPCs that fight each other move to the hoster of the one "
+          "whose fight started first, a player target changes nothing",
+          "[NpcHost][espm][H5]")
+{
+  auto& partOne = GetNpcHostPartOne();
+  ConnectFightPlayers(partOne);
+  auto& a = CreateFighter(partOne, kFighterA, 24000.f);
+  auto& b = CreateFighter(partOne, kFighterB, 24700.f);
+  REQUIRE(partOne.worldState.hosters[kFighterA] == kClaimer);
+  REQUIRE(partOne.worldState.hosters[kFighterB] == kOtherPlayer);
+
+  Fight(partOne, 0, a, kOtherPlayer);
+  Fight(partOne, 1, b, kOtherPlayer);
+  TickHosters(partOne);
+  REQUIRE(partOne.worldState.hosters[kFighterA] == kClaimer);
+  REQUIRE(partOne.worldState.hosters[kFighterB] == kOtherPlayer);
+  Fight(partOne, 0, a, 0);
+  Fight(partOne, 1, b, 0);
+
+  partOne.Messages().clear();
+  const bool bFirst = GENERATE(false, true);
+  if (bFirst) {
+    Fight(partOne, 1, b, kFighterA);
+  }
+  Fight(partOne, 0, a, kFighterB);
+  if (!bFirst) {
+    Fight(partOne, 1, b, kFighterA);
+  }
+  TickHosters(partOne);
+
+  const uint32_t shared = bFirst ? kOtherPlayer : kClaimer;
+  REQUIRE(partOne.worldState.hosters[kFighterA] == shared);
+  REQUIRE(partOne.worldState.hosters[kFighterB] == shared);
+  const auto moved = bFirst ? kFighterA : kFighterB;
+  REQUIRE(CountSent(partOne, bFirst ? 0 : 1, MsgType::HostStop, moved) == 1);
+  REQUIRE(CountSent(partOne, bFirst ? 1 : 0, MsgType::HostStart, moved) ==
+          1);
+  TickHosters(partOne);
+  REQUIRE(partOne.worldState.hosters[kFighterA] == shared);
+  REQUIRE(partOne.worldState.hosters[kFighterB] == shared);
+
+  EndFight(partOne, { kFighterA, kFighterB });
+}
+
+TEST_CASE("A fight keeps its shared hoster for 10 s when an NPC whose fight "
+          "started earlier joins",
+          "[NpcHost][espm][H5]")
+{
+  auto& partOne = GetNpcHostPartOne();
+  ConnectFightPlayers(partOne);
+  auto& a = CreateFighter(partOne, kFighterA, 24000.f);
+  auto& b = CreateFighter(partOne, kFighterB, 24700.f);
+  auto& c = CreateFighter(partOne, kFighterC, 25000.f);
+  REQUIRE(partOne.worldState.hosters[kFighterC] == kOtherPlayer);
+
+  Fight(partOne, 1, c, kClaimer);
+  Fight(partOne, 0, a, kFighterB);
+  TickHosters(partOne);
+  REQUIRE(partOne.worldState.hosters[kFighterB] == kClaimer);
+
+  Fight(partOne, 1, c, kFighterA);
+  TickHosters(partOne);
+  REQUIRE(partOne.worldState.hosters[kFighterA] == kClaimer);
+  REQUIRE(partOne.worldState.hosters[kFighterB] == kClaimer);
+  REQUIRE(partOne.worldState.hosters[kFighterC] == kClaimer);
+
+  EndFight(partOne, { kFighterA, kFighterB, kFighterC });
+}
+
+TEST_CASE("A fight goes to a follower's owner, and to a hoster that can run "
+          "every fighter",
+          "[NpcHost][espm][H5]")
+{
+  auto& partOne = GetNpcHostPartOne();
+  ConnectFightPlayers(partOne);
+  auto& a = CreateFighter(partOne, kFighterA, 24000.f);
+  const bool follower = GENERATE(false, true);
+  auto& b = CreateFighter(partOne, kFighterB, follower ? 24700.f : 29000.f);
+  if (follower) {
+    partOne.worldState.hostOwners[kFighterA] = kClaimer;
+    partOne.RefreshHoster(a);
+  }
+  REQUIRE(partOne.worldState.hosters[kFighterA] == kClaimer);
+  REQUIRE(partOne.worldState.hosters[kFighterB] == kOtherPlayer);
+
+  if (follower) {
+    Fight(partOne, 1, b, kFighterA);
+  }
+  Fight(partOne, 0, a, kFighterB);
+  if (!follower) {
+    Fight(partOne, 1, b, kFighterA);
+  }
+  TickHosters(partOne);
+
+  const uint32_t shared = follower ? kClaimer : kOtherPlayer;
+  REQUIRE(partOne.worldState.hosters[kFighterA] == shared);
+  REQUIRE(partOne.worldState.hosters[kFighterB] == shared);
+
+  partOne.worldState.hostOwners.erase(kFighterA);
+  EndFight(partOne, { kFighterA, kFighterB });
+}

@@ -257,6 +257,10 @@ void ActionListener::OnUpdateAnimation(const RawMessageData& rawMsgData,
   }
 
   if (targetActor != myActor) {
+    if (msg.data.animEventName.starts_with("SkympCombat_")) {
+      partOne.OnCombatTarget(*targetActor,
+                             msg.data.animEventName.substr(12));
+    }
     return;
   }
 

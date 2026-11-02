@@ -1,6 +1,8 @@
 #include "PartOne.h"
+#include <algorithm>
 #include <array>
 #include <cassert>
+#include <charconv>
 #include <chrono>
 #include <string>
 #include <vector>
@@ -93,6 +95,18 @@ struct PartOne::Impl
   std::map<PartOne::HostCell, CellAuthority> cellAuthorities;
   std::unordered_map<Networking::UserId, int> pings;
   std::unordered_map<uint32_t, PartOne::HostCell> playerCells;
+  struct Fight
+  {
+    uint32_t target = 0;
+    std::chrono::steady_clock::time_point since, seenAt;
+  };
+  std::map<uint32_t, Fight> fights;
+  struct FightHold
+  {
+    uint32_t hoster = 0;
+    std::chrono::steady_clock::time_point until;
+  };
+  std::map<uint32_t, FightHold> fightHolds;
   PartOne::PingSource pingSource = [](Networking::UserId) { return 0; };
 
   std::shared_ptr<spdlog::logger> logger;
@@ -444,6 +458,7 @@ void PartOne::TickHosters()
               auto it = worldState.hosters.find(emitter->GetFormId());
               if (it != worldState.hosters.end() && it->second == authority &&
                   !worldState.hostOwners.count(emitter->GetFormId()) &&
+                  !pImpl->fightHolds.count(emitter->GetFormId()) &&
                   HostCellOf(worldState, *emitter) == visited) {
                 SetHoster(*emitter, player->GetFormId(), "lower ping");
               }
@@ -477,6 +492,142 @@ void PartOne::TickHosters()
   }
   for (auto npc : npcs) {
     RefreshHoster(*npc);
+  }
+  TickFights();
+}
+
+void PartOne::OnCombatTarget(MpObjectReference& npc,
+                             const std::string& targetHex)
+{
+  uint32_t target = 0;
+  std::from_chars(targetHex.data(), targetHex.data() + targetHex.size(),
+                  target, 16);
+  if (!target) {
+    pImpl->fights.erase(npc.GetFormId());
+    return;
+  }
+  const auto now = std::chrono::steady_clock::now();
+  auto [it, inserted] =
+    pImpl->fights.try_emplace(npc.GetFormId(), Impl::Fight{ 0, now, now });
+  if (inserted) {
+    GetLogger().info("Combat of {:x} against {:x} started", npc.GetFormId(),
+                     target);
+  }
+  it->second.target = target;
+  it->second.seenAt = now;
+}
+
+void PartOne::TickFights()
+{
+  constexpr auto kRelayTimeout = std::chrono::seconds(7);
+  constexpr auto kHold = std::chrono::seconds(10);
+  const auto now = std::chrono::steady_clock::now();
+  auto npcOf = [&](uint32_t id) -> MpActor* {
+    auto& form = worldState.LookupFormByIdNoLoad(id);
+    auto actor = form ? form->AsActor() : nullptr;
+    return actor && !actor->IsDead() && !actor->IsDisabled() &&
+        serverState.UserByActor(actor) == Networking::InvalidUserId
+      ? actor
+      : nullptr;
+  };
+  auto hosterOf = [&](uint32_t id) {
+    auto it = worldState.hosters.find(id);
+    return it == worldState.hosters.end() ? 0 : it->second;
+  };
+  std::erase_if(pImpl->fights, [&](auto& fight) {
+    return now - fight.second.seenAt > kRelayTimeout || !npcOf(fight.first);
+  });
+  std::erase_if(pImpl->fightHolds, [&](auto& hold) {
+    return hold.second.until <= now || !npcOf(hold.first);
+  });
+
+  std::map<uint32_t, uint32_t> parent;
+  auto root = [&](uint32_t id) {
+    while (parent[id] != id) {
+      id = parent[id] = parent[parent[id]];
+    }
+    return id;
+  };
+  for (auto& [npc, fight] : pImpl->fights) {
+    if (!npcOf(fight.target)) {
+      continue;
+    }
+    parent.try_emplace(npc, npc);
+    parent.try_emplace(fight.target, fight.target);
+    parent[root(npc)] = root(fight.target);
+  }
+  std::map<uint32_t, std::vector<uint32_t>> groups;
+  for (auto& [id, unused] : parent) {
+    groups[root(id)].push_back(id);
+  }
+
+  for (auto& [unused, members] : groups) {
+    std::set<uint32_t> hosters;
+    for (auto id : members) {
+      if (auto hoster = hosterOf(id)) {
+        hosters.insert(hoster);
+      }
+    }
+    if (hosters.size() < 2) {
+      continue;
+    }
+    auto canHostAll = [&](uint32_t hosterId) {
+      auto& form = worldState.LookupFormByIdNoLoad(hosterId);
+      auto player = form ? form->AsActor() : nullptr;
+      return player &&
+        std::all_of(members.begin(), members.end(), [&](uint32_t id) {
+               auto npc = npcOf(id);
+               return !npc || !hosterOf(id) ||
+                 worldState.hostOwners.count(id) ||
+                 (npc->GetListeners().count(player) &&
+                  IsVisitor(*player, HostCellOf(worldState, *npc)));
+             });
+    };
+    std::vector<uint32_t> candidates;
+    for (auto id : members) {
+      auto owner = worldState.hostOwners.find(id);
+      if (owner != worldState.hostOwners.end() && owner->second &&
+          hosterOf(id) == owner->second) {
+        candidates.push_back(owner->second);
+      }
+    }
+    for (auto id : members) {
+      auto hold = pImpl->fightHolds.find(id);
+      if (hold != pImpl->fightHolds.end() &&
+          hosterOf(id) == hold->second.hoster) {
+        candidates.push_back(hold->second.hoster);
+      }
+    }
+    std::vector<std::pair<std::chrono::steady_clock::time_point, uint32_t>>
+      starts;
+    for (auto id : members) {
+      auto fight = pImpl->fights.find(id);
+      if (fight != pImpl->fights.end() && hosterOf(id)) {
+        starts.push_back({ fight->second.since, hosterOf(id) });
+      }
+    }
+    std::sort(starts.begin(), starts.end());
+    for (auto& [since, hoster] : starts) {
+      candidates.push_back(hoster);
+    }
+    auto shared = std::find_if(candidates.begin(), candidates.end(), canHostAll);
+    if (shared == candidates.end()) {
+      continue;
+    }
+    bool moved = false;
+    for (auto id : members) {
+      auto npc = npcOf(id);
+      if (npc && hosterOf(id) && hosterOf(id) != *shared &&
+          !worldState.hostOwners.count(id)) {
+        SetHoster(*npc, *shared, "shared fight");
+        moved = true;
+      }
+    }
+    for (auto id : members) {
+      if (moved && hosterOf(id) == *shared) {
+        pImpl->fightHolds[id] = { *shared, now + kHold };
+      }
+    }
   }
 }
 

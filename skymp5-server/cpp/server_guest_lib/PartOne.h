@@ -139,6 +139,7 @@ public:
   void RefreshHoster(MpObjectReference& npc,
                      MpObjectReference* leavingListener = nullptr);
   bool IsSeen(MpObjectReference& refr);
+  void OnCombatTarget(MpObjectReference& npc, const std::string& targetHex);
 
   static MessageSerializer& GetMessageSerializerInstance();
 
@@ -162,6 +163,7 @@ private:
   void TickPacketHistoryPlaybacks();
   void TickDeferredMessages();
   void TickHosters();
+  void TickFights();
   int PingOf(Networking::UserId userId);
   bool IsLive(MpActor& player);
   bool IsVisitor(MpActor& player, const HostCell& cell);
