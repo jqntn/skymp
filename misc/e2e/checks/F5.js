@@ -54,7 +54,7 @@ module.exports = {
       const readAt = Date.now();
       const l = {};
       const readMs = {};
-      for (const n of [1, 2]) {
+      for (const n of engineOf[s.hoster] === 2 ? [2, 1] : [1, 2]) {
         l[n] = await local(n);
         readMs[n] = Date.now() - readAt;
       }
@@ -85,7 +85,7 @@ module.exports = {
     const stuck = samples.filter((x, i) => x.apart >= 2 && i + 1 < samples.length && dist(samples[i + 1].s.pos, x.s.pos) < 50);
     const far = samples.filter((x) => x.apart >= 2);
     const travel = samples.slice(1).reduce((sum, x, i) => sum + dist(x.s.pos, samples[i].s.pos), 0);
-    ctx.evidence.push(`C: ${samples.length} samples; ${far.length} with the dragon 2 or more cells from its hoster (at most ${Math.max(0, ...samples.filter((x) => engineOf[x.s.hoster]).map((x) => x.apart))} while hosted); ${unhosted.length} without a player hoster; ${stale.length} where the server was over ${MAX_LAG} units from the hoster's own copy; ${slow.length} where the hoster's copy was read over ${MAX_READ_MS} ms after the server, not counted for that (${slow.slice(0, 5).map((x) => `${x.t}s read ${x.readMs} ms lag ${x.lag}`).join(", ")}); ${unloadedHosted.length} hosted samples with the hoster's own copy unloaded (the game still moves it); ${stuck.length} 2-cell samples after which the server's dragon did not move; the server's dragon travelled ${travel} units; hosters seen ${JSON.stringify([...new Set(samples.map((x) => hex(x.s.hoster)))])}`);
+    ctx.evidence.push(`C: ${samples.length} samples; ${far.length} with the dragon 2 or more cells from its hoster (at most ${Math.max(0, ...samples.filter((x) => engineOf[x.s.hoster]).map((x) => x.apart))} while hosted); ${unhosted.length} without a player hoster; ${stale.length} where the server was over ${MAX_LAG} units from the hoster's own copy; ${slow.length} where the hoster's copy was read over ${MAX_READ_MS} ms after the server, not counted for that (${slow.map((x) => `${x.t}s read ${x.readMs} ms lag ${x.lag}`).join(", ")}); ${unloadedHosted.length} hosted samples with the hoster's own copy unloaded (the game still moves it); ${stuck.length} 2-cell samples after which the server's dragon did not move; the server's dragon travelled ${travel} units; hosters seen ${JSON.stringify([...new Set(samples.map((x) => hex(x.s.hoster)))])}`);
     if (samples.some((x) => x.s.dead)) fails.push("the dragon died during the window (the check does not kill him)");
     if (samples.some((x) => x.s.playersDead.some(Boolean))) fails.push(`setup not held: a player died at ${samples.find((x) => x.s.playersDead.some(Boolean)).t} s`);
     if (!far.length) fails.push("not exercised: the dragon never flew 2 cells from its hoster");
