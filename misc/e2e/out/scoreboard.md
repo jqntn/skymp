@@ -53,7 +53,7 @@ First non-PASS in plan order: G1.7
 | 2B.2 | PASS | 94 | 2026-11-02 19:23 | 1/1 runs PASS |
 | 2B.3 | PASS | 74 | 2026-11-02 19:23 | 1/1 runs PASS |
 | 2B.4 | PASS | 33 | 2026-11-02 19:23 | 1/1 runs PASS |
-| 2B.5 | PASS | 10 | 2026-11-02 19:23 | 1/1 runs PASS |
+| 2B.5 | PASS | 10 | 2026-11-03 10:08 | 1/1 runs PASS |
 | G2.1 | PASS | 40 | 2026-11-02 19:24 | 1/1 runs PASS |
 | G2.2 | PASS | 60 | 2026-11-02 19:24 | 1/1 runs PASS |
 | G2.3 | PASS | 52 | 2026-11-02 19:25 | 1/1 runs PASS |
@@ -436,7 +436,7 @@ First non-PASS in plan order: G1.7
 ### 2B.5
 - run 1: integration_test_coop: exit 0, Test passed!
 - run 1: scenarios in the server log: alias fill creates the claw in Arvel: true; running quest grant creates the necklace in the satchel: true; script items gain accepted: true; script items gain over the cap refused: true; script items loss applied: true; member take of a quest item refused: true
-- run 1: coop lines: 1: [2026-11-02 20:23:44.444] [console] [info] Coop: quest 39645 alias 16 created 39654 in 39655 | 1: [2026-11-02 20:23:44.444] [console] [info] Coop: quest 39645 alias 11 created 39647 in 39655 | 1: [2026-11-02 20:23:45.078] [console] [info] Coop: script items of ff000001: losses -, gains fx400, refused - | 1: [2026-11-02 20:23:45.264] [console] [info] Coop: script items of ff000001: losses -, gains -, refused fx5000 | 1: [2026-11-02 20:23:45.482] [console] [info] Coop: script items of ff000001: losses fx100, gains -, refused - | 1: [2026-11-02 20:23:45.676] [console] [info] Coop: quest d9b64 alias 3 created 663da in d9b78 | 1: [2026-11-02 20:23:46.616] [console] [info] Coop: ff000001 cannot take quest item 663da from d9b78, only the leader can
+- run 1: coop lines: 1: [2026-11-03 11:07:58.489] [console] [info] Coop: quest 39645 alias 16 created 39654 in 39655 | 1: [2026-11-03 11:07:58.489] [console] [info] Coop: quest 39645 alias 11 created 39647 in 39655 | 1: [2026-11-03 11:07:59.120] [console] [info] Coop: script items of ff000001: losses -, gains fx400, refused - | 1: [2026-11-03 11:07:59.322] [console] [info] Coop: script items of ff000001: losses -, gains -, refused fx5000 | 1: [2026-11-03 11:07:59.524] [console] [info] Coop: script items of ff000001: losses fx100, gains -, refused - | 1: [2026-11-03 11:07:59.722] [console] [info] Coop: quest d9b64 alias 3 created 663da in d9b78 | 1: [2026-11-03 11:08:00.660] [console] [info] Coop: ff000001 cannot take quest item 663da from d9b78, only the leader can
 ### G2.1
 - run 1: MS13 stage 10; Arvel 39655 in 371de:Skyrim.esm holds 1 Golden Claw on the client, 1 on the server; GoldenClaw alias ref ff000d51 (alias quests ["39645"], deleted true, in Arvel's inventory true, in the player's false)
 - run 1: Arvel dead: the client corpse holds 1 claw, the server 1; GoldenClaw alias ref ff000d51 (alias quests ["39645"], deleted true, in Arvel's inventory true, in the player's false); MS13 stage 10

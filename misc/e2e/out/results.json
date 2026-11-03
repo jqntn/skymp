@@ -816,11 +816,11 @@
     "evidence": [
       "run 1: integration_test_coop: exit 0, Test passed!",
       "run 1: scenarios in the server log: alias fill creates the claw in Arvel: true; running quest grant creates the necklace in the satchel: true; script items gain accepted: true; script items gain over the cap refused: true; script items loss applied: true; member take of a quest item refused: true",
-      "run 1: coop lines: 1: [2026-11-02 20:23:44.444] [console] [info] Coop: quest 39645 alias 16 created 39654 in 39655 | 1: [2026-11-02 20:23:44.444] [console] [info] Coop: quest 39645 alias 11 created 39647 in 39655 | 1: [2026-11-02 20:23:45.078] [console] [info] Coop: script items of ff000001: losses -, gains fx400, refused - | 1: [2026-11-02 20:23:45.264] [console] [info] Coop: script items of ff000001: losses -, gains -, refused fx5000 | 1: [2026-11-02 20:23:45.482] [console] [info] Coop: script items of ff000001: losses fx100, gains -, refused - | 1: [2026-11-02 20:23:45.676] [console] [info] Coop: quest d9b64 alias 3 created 663da in d9b78 | 1: [2026-11-02 20:23:46.616] [console] [info] Coop: ff000001 cannot take quest item 663da from d9b78, only the leader can"
+      "run 1: coop lines: 1: [2026-11-03 11:07:58.489] [console] [info] Coop: quest 39645 alias 16 created 39654 in 39655 | 1: [2026-11-03 11:07:58.489] [console] [info] Coop: quest 39645 alias 11 created 39647 in 39655 | 1: [2026-11-03 11:07:59.120] [console] [info] Coop: script items of ff000001: losses -, gains fx400, refused - | 1: [2026-11-03 11:07:59.322] [console] [info] Coop: script items of ff000001: losses -, gains -, refused fx5000 | 1: [2026-11-03 11:07:59.524] [console] [info] Coop: script items of ff000001: losses fx100, gains -, refused - | 1: [2026-11-03 11:07:59.722] [console] [info] Coop: quest d9b64 alias 3 created 663da in d9b78 | 1: [2026-11-03 11:08:00.660] [console] [info] Coop: ff000001 cannot take quest item 663da from d9b78, only the leader can"
     ],
     "shots": [],
     "rtt": {},
-    "at": "2026-11-02T19:23:49.970Z"
+    "at": "2026-11-03T10:08:03.995Z"
   },
   "G2.1": {
     "result": "PASS",
