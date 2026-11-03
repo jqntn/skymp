@@ -163,6 +163,8 @@ const dirFiles = (d) => { try { return fs.readdirSync(d).map((f) => path.join(d,
 const ctestStamp = () => JSON.stringify([path.join(BUILD, "unit", "Release", "unit.exe"), path.join(DIST, "scam_native.node"), path.join(BUILD, "server-settings-base.json"), ...dirFiles(path.join(DIST, "dist_back")), ...dirFiles(path.join(REPO, "misc", "tests"))]
   .map((f) => { try { return [f, require("crypto").createHash("sha1").update(fs.readFileSync(f)).digest("hex")]; } catch { return [f]; } }));
 
+const backupCtestFiles = () => { for (const p of ["world", "server-settings.json", "gamemode.js"]) backup(path.join(DIST, p)); };
+
 const level1 = async () => {
   await waitNoForeignSkyrim();
   const steps = [sh("build", "cmake", ["--build", ".", "--config", "Release"], BUILD)];
@@ -172,7 +174,7 @@ const level1 = async () => {
     if (readJson(CTEST_STAMP, null) === stamp) {
       steps.push({ name: "ctest", ok: true, secs: 0, file: "skipped: the unit and server binaries and the integration tests are those of the last green ctest" });
     } else {
-      for (const p of ["world", "server-settings.json", "gamemode.js"]) backup(path.join(DIST, p));
+      backupCtestFiles();
       try {
         const r = sh("ctest", "ctest", ["-C", "Release", "--output-on-failure"], BUILD);
         steps.push(r);
@@ -407,6 +409,7 @@ const makeCtx = (id, dir, slot) => {
     id, dir, slot, gamePids: {}, launchedAt: {}, tag: TAG, evidence: [], shots: [], rtt: {}, Env, Blocked, Accepted,
     driverRtt: (engine = 1) => { const a = [...(ctx.rtt[engine] || [])].sort((x, y) => x - y); return a.length ? a[a.length >> 1] : 0; },
     assert: require("assert"),
+    backupCtestFiles,
     sleep,
     profileId,
     log: (...a) => { log(`${id}:`, ...a); fs.appendFileSync(path.join(dir, "check.log"), `${a.join(" ")}\n`); },
