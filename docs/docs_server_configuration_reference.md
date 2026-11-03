@@ -365,12 +365,12 @@ Enables or disables `/new2024` command that teleports player to SweetPie hall.
 
 ## npcEnabled
 
-Enables npc loading. Default is false.
+Enables npc loading. The generated server-settings.json sets it to true. If the option is missing, npcs are not loaded.
 
 ```json5
 {
   // ...
-  "npcEnabled": false,
+  "npcEnabled": true,
   // ...
 }
 ```
